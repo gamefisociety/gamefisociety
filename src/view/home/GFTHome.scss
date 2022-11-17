@@ -1,0 +1,273 @@
+.bg {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0F0F0F;
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+
+    .head {
+        position: fixed;
+        top: 0;
+        left: 80px;
+        right: 0;
+        height: 60px;
+        background: #191A1B;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+
+        .logo {
+            left: 50px;
+            width: 160px;
+            height: auto;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .man {
+                margin-right: 16px;
+                width: 34px;
+                height: 34px;
+            }
+
+            .message {
+                margin-right: 16px;
+                width: 46px;
+                height: 46px;
+            }
+
+            .wallet_layout {
+                width: 145px;
+                height: 32px;
+                background: #006CF9;
+                border-radius: 16px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-right: 80px;
+
+                .img {
+                    margin-left: 9px;
+                    width: 28px;
+                    height: 28px;
+                }
+
+                .txt {
+                    margin-left: 14px;
+                    width: 64px;
+                    height: 22px;
+                    font-size: 14px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    line-height: 22px;
+                }
+            }
+        }
+    }
+
+    .content {
+
+        position: absolute;
+        left: 90px;
+        top: 80px;
+        padding-left: 5%;
+        padding-right: 5%;
+        right: 0;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .item_tab {
+            width: auto;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+
+            .card_layout {
+                margin-top: 24px;
+                position: relative;
+                width: 187px;
+                height: 98px;
+                background: #4FC5FF;
+                border-radius: 10px;
+
+                .img {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 68px;
+                    height: 68px;
+                }
+
+                .txt {
+                    position: absolute;
+                    bottom: 11px;
+                    left: 16px;
+                    width: auto;
+                    height: auto;
+                    font-size: 20px;
+                    font-family: Saira;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 32px;
+                }
+
+            }
+
+            .right_18 {
+                margin-right: 18px;
+            }
+
+            .mobile_layout {
+                margin-top: 24px;
+                position: relative;
+                width: 187px;
+                height: 98px;
+                background: #FF504F;
+                border-radius: 10px;
+
+                .img {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 68px;
+                    height: 68px;
+                }
+
+                .txt {
+                    position: absolute;
+                    bottom: 11px;
+                    left: 16px;
+                    width: auto;
+                    height: auto;
+                    font-size: 20px;
+                    font-family: Saira;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 32px;
+                    text-align: left;
+                }
+
+                .txt1 {
+                    position: absolute;
+                    bottom: 30px;
+                    left: 16px;
+                    width: auto;
+                    height: auto;
+                    font-size: 20px;
+                    font-family: Saira;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 32px;
+                    text-align: left;
+                }
+
+            }
+
+            .nft_layout {
+                margin-top: 24px;
+                position: relative;
+                width: 345px;
+                height: 98px;
+                background: #FFAC4F;
+                border-radius: 10px;
+
+                .img {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 84px;
+                    height: 84px;
+                }
+
+                .txt {
+                    position: absolute;
+                    bottom: 11px;
+                    left: 16px;
+                    width: auto;
+                    height: auto;
+                    font-size: 20px;
+                    font-family: Saira;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 32px;
+                }
+
+            }
+
+            .battle_layout {
+                margin-top: 24px;
+                position: relative;
+                width: 187px;
+                height: 98px;
+                background: #C54FFF;
+                border-radius: 10px;
+
+                .img {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 68px;
+                    height: 68px;
+                }
+
+                .txt {
+                    position: absolute;
+                    bottom: 11px;
+                    left: 16px;
+                    width: auto;
+                    height: auto;
+                    font-size: 20px;
+                    font-family: Saira;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 32px;
+                }
+
+            }
+        }
+
+        .video_layout {
+            margin-top: 24px;
+            width: auto;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            .video{
+                margin-right: 18px;
+            }
+        }
+    }
+
+    .let_menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 100vh;
+        background: #202123;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .img {
+            margin-top: 29px;
+            width: 40px;
+            height: 40px;
+        }
+
+    }
+}
