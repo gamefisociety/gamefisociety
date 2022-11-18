@@ -1,7 +1,10 @@
+import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
+
+import { getListData } from '../../api/requestData'
 
 import './GFTHome.scss';
 
@@ -20,6 +23,23 @@ import ic_swap from "../../asset/image/home/ic_swap.png"
 
 
 function GFTHome() {
+
+    const [videoList, setVideoList] = React.useState([]);
+    useEffect(() => {
+        requsetData();
+        return () => {
+
+        }
+
+    }, [])
+
+    const requsetData = () => {
+        
+        getListData().then(res => {
+            console.log(res.list, "res");
+            setVideoList(res.list);
+        })
+    }
 
     return (
         <div className='bg'>
@@ -64,23 +84,17 @@ function GFTHome() {
                     </div>
                 </div>
                 <div className='video_layout'>
-                    <iframe className='video'
-                        width="310"
-                        height="173"
-                        src="https://www.youtube.com/embed/V4suXT6xPno" controls="0" allow="fullscreen;"
-                        allowfullscreen></iframe>
-                    <iframe
-                        className='video'
-                        width="310"
-                        height="173"
-                        src="https://www.youtube.com/embed/V4suXT6xPno" allow="fullscreen;"
-                        allowfullscreen></iframe>
-                    <iframe
-                        className='video'
-                        width="310"
-                        height="173"
-                        src="https://www.youtube.com/embed/V4suXT6xPno" allow="fullscreen;"
-                        allowfullscreen></iframe>
+                    {Array.from(videoList).map((item, index) => (
+
+                        <iframe key={"videoKey" + index} className='video'
+                            width="310"
+                            height="173"
+                            src={item.url}
+                            controls="0"
+                            allow="fullscreen;" >
+                        </iframe>
+
+                    ))}
                 </div>
             </div>
         </div>
