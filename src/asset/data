@@ -1,13 +1,64 @@
 {
-    "list": [
+    "List": [
         {
-            "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
+            "name": "Axie Infinity",
+            "chainName": "BNB DEP Chain WAX",
+            "isAd": true,
+            "balance": "$44.14k",
+            "uawSum": "150.37k",
+            "uaw": "6.22%",
+            "volume": "$570.07",
+            "price": "91,393",
+            "percentage": "8.85%"
         },
         {
-            "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
+            "name": "Axie Infinity",
+            "chainName": "BNB DEP Chain WAX",
+            "isAd": false,
+            "balance": "$44.14k",
+            "uawSum": "150.37k",
+            "uaw": "6.22%",
+            "volume": "$570.07",
+            "price": "91,393",
+            "percentage": "8.85%"
         },
         {
-            "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
+            "name": "Axie Infinity",
+            "chainName": "BNB DEP Chain WAX",
+            "isAd": false,
+            "balance": "$44.14k",
+            "uawSum": "150.37k",
+            "uaw": "6.22%",
+            "volume": "$570.07",
+            "price": "91,393",
+            "percentage": "8.85%"
+        },
+        {
+            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
+            "name": "Axie Infinity",
+            "chainName": "BNB DEP Chain WAX",
+            "isAd": false,
+            "balance": "$44.14k",
+            "uawSum": "150.37k",
+            "uaw": "6.22%",
+            "volume": "$570.07",
+            "price": "91,393",
+            "percentage": "8.85%"
+        },
+        {
+            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
+            "name": "Axie Infinity",
+            "chainName": "BNB DEP Chain WAX",
+            "isAd": false,
+            "balance": "$44.14k",
+            "uawSum": "150.37k",
+            "uaw": "6.22%",
+            "volume": "$570.07",
+            "price": "91,393",
+            "percentage": "8.85%"
         }
     ]
 }

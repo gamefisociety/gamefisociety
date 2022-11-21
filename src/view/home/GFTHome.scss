@@ -1,10 +1,12 @@
-.bg {
+.home_bg {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     background-color: #0F0F0F;
     display: flex;
     position: relative;
     box-sizing: border-box;
+    padding-bottom: 40px;
 
     .head {
         position: fixed;
@@ -18,6 +20,7 @@
         align-items: center;
         justify-content: space-between;
         box-sizing: border-box;
+        z-index: 10;
 
         .logo {
             left: 50px;
@@ -73,13 +76,11 @@
     }
 
     .content {
-
-        position: absolute;
-        left: 90px;
-        top: 80px;
+        margin-left: 90px;
+        margin-top: 80px;
         padding-left: 5%;
         padding-right: 5%;
-        right: 0;
+        width: 100%;
         height: auto;
         display: flex;
         flex-direction: column;
@@ -245,8 +246,275 @@
             flex-direction: row;
             align-items: center;
             flex-wrap: wrap;
-            .video{
-                margin-right: 18px;
+
+            .video {
+                width: 306px;
+                height: 170px;
+                margin-right: 14px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+
+        }
+
+        .rank_layout_head {
+            margin-top: 38px;
+            width: 100%;
+            max-width: 960px;
+            height: 38px;
+            background: #161719;
+            border-radius: 15px 15px 0px 0px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-right: 10px;
+            box-sizing: border-box;
+
+            .number {
+                margin-left: 10px;
+                width: 32px;
+                height: 22px;
+                font-size: 14px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #ABABAB;
+                line-height: 22px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            .name {
+                margin-left: 58px;
+                width: 28%;
+                font-size: 12px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #ABABAB;
+                line-height: 19px;
+                text-align: left;
+
+            }
+
+
+            .layout_item {
+                width: 15%;
+                height: auto;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .sort_img {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .balance {
+                    font-size: 12px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #ABABAB;
+                    line-height: 19px;
+                }
+
+                .uaw {
+                    font-size: 12px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #ABABAB;
+                    line-height: 19px;
+                }
+
+                .volume {
+                    font-size: 12px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #ABABAB;
+                    line-height: 19px;
+                }
+
+            }
+
+
+            .social_signa {
+                margin-left:24px ;
+                font-size: 12px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #ABABAB;
+                line-height: 19px;
+            }
+        }
+
+        .rank_layout {
+            margin-top: 1px;
+            width: 100%;
+            max-width: 960px;
+            height: 60px;
+            background: #161719;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-right: 10px;
+            box-sizing: border-box;
+
+            .number_ad {
+                margin-left: 10px;
+                width: 32px;
+                height: 22px;
+                font-size: 14px;
+                font-family: SairaRoman-Medium, SairaRoman;
+                font-weight: 500;
+                color: #FFFFFF;
+                line-height: 22px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                border: 1px solid #545454;
+            }
+
+            .number {
+                margin-left: 10px;
+                width: 32px;
+                height: 22px;
+                font-size: 14px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #fff;
+                line-height: 22px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            .pro_img {
+                margin-left: 12px;
+                width: 32px;
+                height: 32px;
+            }
+
+            .layout_name {
+                margin-left: 13px;
+                width: 28%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: baseline;
+
+                .name {
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    line-height: 22px;
+                }
+
+                .chain_name {
+                    font-size: 9px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #ABABAB;
+                    line-height: 14px;
+                }
+            }
+
+            .balance {
+                width: 15%;
+                font-size: 14px;
+                font-family: SairaRoman-Medium, SairaRoman;
+                font-weight: 500;
+                color: #FFFFFF;
+                line-height: 22px;
+                text-align: left;
+            }
+
+            .layout_uaw {
+                width: 15%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: baseline;
+
+                .uaw {
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    line-height: 22px;
+                }
+
+                .uaw_red {
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #FF0000;
+                    line-height: 22px;
+                }
+
+                .uaw_green {
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #00FF19;
+                    line-height: 22px;
+                }
+            }
+
+            .volume {
+                width: 15%;
+                font-size: 14px;
+                font-family: SairaRoman-Medium, SairaRoman;
+                font-weight: 500;
+                color: #FFFFFF;
+                line-height: 22px;
+                text-align: left;
+            }
+
+            .layout_social_signal {
+                width: auto;
+                height: auto;
+                display: flex;
+                flex-direction: row;
+
+                .img_hot {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .txt_price {
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    line-height: 22px;
+                }
+
+                .txt_up {
+                    margin-left: 8px;
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #00FF19;
+                    line-height: 22px;
+                }
+
+                .txt_down {
+                    margin-left: 8px;
+                    font-size: 14px;
+                    font-family: SairaRoman-Medium, SairaRoman;
+                    font-weight: 500;
+                    color: #FF0000;
+                    line-height: 22px;
+                }
             }
         }
     }
