@@ -1,0 +1,34 @@
+.nft_detail_bg {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 100px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    box-sizing: border-box;
+
+    .tab_layout {
+        margin-top: 21px;
+        width: 100%;
+        max-width: 960px;
+        height: 48px;
+        background: #161719;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        padding-left: 17px;
+        .txt {
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            line-height: 22px;
+            white-space:pre;
+        }
+    }
+}

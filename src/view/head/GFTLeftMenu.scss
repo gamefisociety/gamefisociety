@@ -1,0 +1,16 @@
+.left_menu_bg {        
+    width: 80px;
+    height: 100%;
+    background: #202123;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .img {
+        margin-top: 29px;
+        width: 40px;
+        height: 40px;
+    }
+}

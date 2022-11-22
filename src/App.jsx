@@ -1,7 +1,9 @@
 
 import { HashRouter } from "react-router-dom";
-import Router from './module/router/router'
+
 import { Web3ReactProvider } from '@web3-react/core'
+
+import Router from './module/router/router'
 import Web3 from 'web3'
 import './App.css';
 function getLibrary(provider, connector) {
@@ -15,9 +17,7 @@ function App() {
     <Web3ReactProvider getLibrary={getLibrary}>
       <div className="App">
         <HashRouter>
-          <div className='App'>
-            <Router />
-          </div>
+          <Router />
         </HashRouter>
       </div>
     </Web3ReactProvider>
