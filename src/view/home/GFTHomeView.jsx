@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 
-import { HashRouter, Route, Link ,useNavigate} from 'react-router-dom'
+import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
 
 import {
     getListData,
@@ -84,10 +84,13 @@ function GFTHomeView() {
             <div className='video_layout'>
                 {Array.from(videoList).map((item, index) => (
 
-                    <iframe key={"videoKey" + index} className='video'
+                    <iframe key={"videoKey" + index}
+                        className='video'
+                        title="11.22 赵长鹏与SBF最后一次通话都讲了啥？Ripple欲接盘FTX部分公司；CeFi信任危机与DeFi未来；马斯克力挺特朗普？对冲基金下海加密圈"
                         src={item.url}
+                        frameborder="0" 
                         controls="0"
-                        allow="fullscreen;" >
+                        allow="fullscreen;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" >
                     </iframe>
 
                 ))}

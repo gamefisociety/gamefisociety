@@ -176,6 +176,7 @@ function GFTNFTDetail() {
 
                         <iframe key={"videoKey" + index} className='video'
                             src={item.url}
+                            frameborder="0" 
                             controls="0"
                             allow="fullscreen;" >
                         </iframe>
