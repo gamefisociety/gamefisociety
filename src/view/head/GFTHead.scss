@@ -33,6 +33,7 @@
         }
 
         .wallet_layout {
+            cursor: pointer;
             width: 145px;
             height: 32px;
             background: #006CF9;
@@ -41,6 +42,10 @@
             flex-direction: row;
             align-items: center;
             margin-right: 80px;
+
+            &:hover{
+                transform: scale(1.1);
+            }
 
             .img {
                 margin-left: 9px;
