@@ -3,13 +3,11 @@ import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 
 import { Outlet } from 'react-router-dom'
-import Router from '../../module/router/router'
 
 import './GFTHome.scss';
 import GFTHead from '../head/GFTHead'
 import GFTLeftMenu from '../head/GFTLeftMenu';
-import GFTHomeView  from './GFTHomeView';
-import GFTNFTDetail from './GFTNFTDetail';
+
 
 
 
