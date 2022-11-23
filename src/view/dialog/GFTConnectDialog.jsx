@@ -8,6 +8,7 @@ import {
     setIsOpen,
     isOpen
 } from '../../module/store/features/dialog/GFTDialogSlice';
+import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 
 import './GFTConnectDialog.scss';
 
@@ -15,12 +16,14 @@ import './GFTConnectDialog.scss';
 
 
 function GFTConnectDialog() {
+    const injected = new InjectedConnector({
+        supportedChainIds: [ChainId.MATICTEST],
+    })
+    const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
     const dispatch = useDispatch();
-
-
-
     useEffect(() => {
+        requsetData();
         return () => {
 
         }
@@ -28,6 +31,27 @@ function GFTConnectDialog() {
     }, [])
 
     const requsetData = () => {
+        window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) {
+                deactivate()
+            }
+        })
+
+        window.ethereum.on('disconnect', () => {
+            deactivate()
+        })
+
+        window.ethereum.on('close', () => {
+            deactivate()
+        })
+
+        window.ethereum.on('message', message => {
+            // console.log('message', message)
+        })
+        window.ethereum.on('networkChanged', () => {
+            activateMask();
+
+        })
 
     }
     const cancelDialog = () => {
@@ -35,10 +59,10 @@ function GFTConnectDialog() {
     }
 
     const itemClickOpenWallet = (event, item) => {
-        console.log(item,"wallet");
+        console.log(item, "wallet");
         event.stopPropagation();
         if (item == 'MetaMask') {
-
+            connectedClick();
         } else if (item == "WalletConnect") {
 
         } else if (item == "Coinbase Wallet") {
@@ -46,17 +70,45 @@ function GFTConnectDialog() {
         }
     }
 
+    const activateMask = async () => {
+        try {
+            await activate(injected, undefined, true).then(res => {
+
+            }).catch(error => {
+            })
+        } catch (ex) {
+            console.log(ex, "ex");
+        }
+    }
+
+    const connectedClick = () => {
+        console.log(chainId);
+        if (chainId != ChainId.MATICTEST) {
+            changeNetwork(ChainId.MATICTEST).then(res => {
+                activateMask();
+            })
+            return;
+        }
+        activateMask();
+    }
+
+    const getChainLows = () => {
+        if (account) {
+            return account.substring(0, 5) + "....." + account.substring(account.length - 5, account.length);
+        }
+        return "MetaMask"
+    }
     return (
 
         <div>
             {isOpenConnect ?
                 <div className='dialog_connect_bg' onClick={cancelDialog}>
-                    <div className='layout' onClick={(event)=>{
+                    <div className='layout' onClick={(event) => {
                         event.stopPropagation();
                     }}>
                         <span className='title'>Connect</span>
                         <div className='item' onClick={(event) => itemClickOpenWallet(event, "MetaMask")}>
-                            <span className='name'>MetaMask</span>
+                            <span className='name'>{account ? getChainLows() : 'MetaMask'}</span>
                             <div className='ic_metamask'></div>
                             <div className='ic_menu_right'></div>
                         </div>

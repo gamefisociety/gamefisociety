@@ -20,6 +20,7 @@ import ic_man from "../../asset/image/home/ic_man.png"
 
 
 function GFTHead() {
+    const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
     const dispatch = useDispatch();
 
@@ -38,6 +39,13 @@ function GFTHead() {
         dispatch(setIsOpen(true));
     }
 
+    const getChainLows = () => {
+        if (account) {
+            return account.substring(0, 5) + "....." + account.substring(account.length - 5, account.length);
+        }
+        return "CONNECT"
+    }
+
     return (
 
         <div className='head_bg'>
@@ -47,7 +55,7 @@ function GFTHead() {
                 <img className='message' src={ic_massage}></img>
                 <div className='wallet_layout' onClick={openDialog}>
                     <img className='img' src={ic_wallet} ></img>
-                    <span className='txt'>CONNECT</span>
+                    <span className='txt'>{account ? getChainLows() : 'CONNECT'}</span>
                 </div>
             </div>
         </div>

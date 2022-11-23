@@ -34,7 +34,8 @@
 
         .wallet_layout {
             cursor: pointer;
-            width: 145px;
+            width: auto;
+            padding-right: 20px;
             height: 32px;
             background: #006CF9;
             border-radius: 16px;
@@ -54,8 +55,8 @@
             }
 
             .txt {
-                margin-left: 14px;
-                width: 64px;
+                margin-left: 8px;
+                width: auto;
                 height: 22px;
                 font-size: 14px;
                 font-family: Saira;
