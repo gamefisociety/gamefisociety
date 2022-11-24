@@ -79,7 +79,7 @@ function GFTWalletMenu() {
                             <div className='coin_gfs_bas'>
                                 <div className='coin_gft'>
                                     <div className='img'></div>
-                                    {gstBalance} GFS
+                                    {gstBalance} GST
                                 </div>
                                 <span className='usdtxt'>$ 0.00 USD</span>
                                 <div className='item_coin_swap'>

@@ -49,7 +49,7 @@ function GFTCheckInDialog() {
                     }}>
                         <div className='close' onClick={cancelDialog}></div>
                         <div className='img_icon'></div>
-                        <span className='txt_gts'>12.0453 GFS</span>
+                        <span className='txt_gts'>12.0453 GST</span>
                         <span className='info'>
                             Welcome to the world of GameFi Society
                             <br />
