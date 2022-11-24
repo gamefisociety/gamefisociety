@@ -6,16 +6,15 @@ import {
     setIsOpenWallet,
     isMenuWallet
 } from '../../module/store/features/dialog/GFTDialogSlice';
+import GSTTokenBase from '../../web3/GSTToken';
 import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 import './GFTWalletMenu.scss';
-
-
-
 
 function GFTWalletMenu() {
     const injected = new InjectedConnector({
         supportedChainIds: [ChainId.MATICTEST],
     })
+    const [gstBalance, setGSTBalance] = useState("0");
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenMenu = useSelector(isMenuWallet);
     const dispatch = useDispatch();
@@ -28,9 +27,9 @@ function GFTWalletMenu() {
     }, [])
 
     const requsetData = () => {
-
-
+        getTokenGST();
     }
+
     const cancelDialog = () => {
         dispatch(setIsOpenWallet(false));
     }
@@ -45,6 +44,18 @@ function GFTWalletMenu() {
         deactivate();
         cancelDialog();
     }
+    const getTokenGST = () => {
+        if (account) {
+            GSTTokenBase.getTokenbalanceOf(library, account).then(res => {
+                setGSTBalance(res);
+            }).catch(err => {
+                console.log(err,'err');
+
+            })
+        } else {
+            return 0;
+        }
+    }
     return (
 
         <div>
@@ -53,14 +64,40 @@ function GFTWalletMenu() {
                     <div className='layout' onClick={(event) => {
                         event.stopPropagation();
                     }}>
-                        <div className='title_layout'>
-                            <div className='address_layout'>
-                                <span className='address'>{getChainLows()}</span>
-                                <div className='copy_img'></div>
+                        <div className='wallet_infor_layout'>
+                            <div className='title_layout'>
+                                <div className='address_layout'>
+                                    <span className='address'>{getChainLows()}</span>
+                                    <div className='copy_img'></div>
+                                </div>
+                                <span className='go_pro'>Go PRO</span>
                             </div>
-                            <span className='go_pro'>Go PRO</span>
+                            <div className='wallet_verified'>
+                                <div className='img'></div>
+                                <div className='txt'>Wallet verified</div>
+                            </div>
+                            <div className='coin_gfs_bas'>
+                                <div className='coin_gft'>
+                                    <div className='img'></div>
+                                    {gstBalance} GFS
+                                </div>
+                                <span className='usdtxt'>$ 0.00 USD</span>
+                                <div className='item_coin_swap'>
+                                    <div className='item'>
+                                        <div className='img_buy'></div>
+                                        <span className='txt'>Buy</span>
+                                    </div>
+                                    <div className='item'>
+                                        <div className='img_send'></div>
+                                        <span className='txt'>Send</span>
+                                    </div>
+                                    <div className='item'>
+                                        <div className='img_exchange'></div>
+                                        <span className='txt'>Exchange</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                         <div className='layout_bottom'>
                             <div className='setting_layout'>
                                 <div className='btn_layout'>

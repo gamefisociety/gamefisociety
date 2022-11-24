@@ -24,52 +24,173 @@
         padding-top: 43px;
         padding-bottom: 43px;
 
-        .title_layout {
-            position: relative;
+        .wallet_infor_layout {
             width: 100%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-
-            .address_layout {
+            box-sizing: border-box;
+            .title_layout {
+                position: relative;
+                width: 100%;
                 display: flex;
                 flex-direction: row;
-                justify-content: left;
                 align-items: center;
+                justify-content: space-between;
 
-                .address {
+
+                .address_layout {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: left;
+                    align-items: center;
+
+                    .address {
+                        font-size: 18px;
+                        font-family: Saira;
+                        font-weight: 500;
+                        color: #00B7FF;
+                        line-height: 28px;
+                    }
+
+                    .copy_img {
+                        width: 32px;
+                        height: 32px;
+                        background-size: 100% 100%;
+                        background-image: url(../../asset/image/logo/ic_copy.png);
+                    }
+
+                }
+
+                .go_pro {
+                    width: 114px;
+                    height: 32px;
+                    background: #4900BD;
+                    border-radius: 5px;
                     font-size: 18px;
                     font-family: Saira;
                     font-weight: 500;
-                    color: #00B7FF;
+                    color: #FFFFFF;
                     line-height: 28px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
                 }
-
-                .copy_img {
-                    width: 32px;
-                    height: 32px;
-                    background-size: 100% 100%;
-                    background-image: url(../../asset/image/logo/ic_copy.png);
-                }
-
             }
 
-            .go_pro {
-                width: 114px;
-                height: 32px;
-                background: #4900BD;
-                border-radius: 5px;
-                font-size: 18px;
-                font-family: Saira;
-                font-weight: 500;
-                color: #FFFFFF;
-                line-height: 28px;
+            .wallet_verified {
+                margin-top: 27px;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                box-sizing: border-box;
+
+                .img {
+                    width: 18px;
+                    height: 18px;
+                    background-size: 100% 100%;
+                    background-image: url(../../asset/image/logo/ic_wallet_verified.png);
+                }
+
+                .txt {
+                    margin-left: 8px;
+                    font-size: 12px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #4B8B1F;
+                    line-height: 19px;
+                }
+            }
+
+            .coin_gfs_bas {
+                margin-top: 31px;
+                width: 100%;
+                height: 191px;
+                background: #191A1B;
+                border-radius: 10px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
+                box-sizing:border-box;
+    
+
+                .coin_gft {
+                    width: 100%;
+                    padding-top: 22px;
+                    margin-left: 14px;
+                    font-size: 18px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #FFFFFF;
+                    line-height: 28px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .img {
+                        margin-right: 10px;
+                        width: 28px;
+                        height: 28px;
+                        background-image: url(../../asset/image/logo/ic_gfs_coin.png);
+                        background-size: 100% 100%;
+                    }
+                }
+
+                .usdtxt {
+                    width: 100%;
+                    text-align: left;
+                    margin-left: 52px;
+                    font-size: 12px;
+                    font-family: Saira;
+                    font-weight: 500;
+                    color: #909090;
+                    line-height: 19px;
+                }
+
+                .item_coin_swap {
+                    margin-top: 24px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    width: 100%;
+
+                    .item {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        .img_buy {
+                            width: 44px;
+                            height: 44px;
+                            background-size: 100% 100%;
+                            background-image: url(../../asset/image/logo/ic_buy.png);
+                        }
+                        .img_send {
+                            width: 44px;
+                            height: 44px;
+                            background-size: 100% 100%;
+                            background-image: url(../../asset/image/logo/ic_send.png);
+                        }
+
+                        .img_exchange {
+                            width: 44px;
+                            height: 44px;
+                            background-size: 100% 100%;
+                            background-image: url(../../asset/image/logo/ic_exchange.png);
+                        }
+
+                        .txt {
+                            margin-top: 3px;
+                            font-size: 12px;
+                            font-family: Saira;
+                            font-weight: 500;
+                            color: #FFFFFF;
+                            line-height: 19px;
+                        }
+                    }
+                }
             }
         }
 
@@ -97,11 +218,13 @@
                     flex-direction: row;
                     align-items: center;
                     justify-content: space-between;
+
                     &:hover {
                         background: #32353BCC;
                     }
 
                     .icon_portfolio {
+                        margin-left: 4px;
                         width: 32px;
                         height: 32px;
                         background-size: 100% 100%;
@@ -109,6 +232,7 @@
                     }
 
                     .icon_setting {
+                        margin-left: 4px;
                         width: 32px;
                         height: 32px;
                         background-size: 100% 100%;
@@ -141,7 +265,7 @@
                 background: #32353B;
                 border-radius: 5px;
                 font-size: 16px;
-                font-family: SairaRoman;
+                font-family: Saira;
                 font-weight: 500;
                 color: #FFFFFF;
                 line-height: 25px;
@@ -149,6 +273,7 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
+
                 &:hover {
                     background: #32353BCC;
                 }

@@ -1,11 +1,17 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useLocation, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
-import './GFTNFTDetail.scss';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import MenuUnstyled from '@mui/base/MenuUnstyled';
+import {StyledListbox,StyledMenuItem,Popper} from '../menu/GFTMenuPopStyle'
 
+
+import './GFTNFTDetail.scss';
 import down_drop_icon from "../../asset/image/detail/down_drop_icon.png"
 import opensea_icon from "../../asset/image/detail/opensea_icon.png"
 import img_swiper from "../../asset/image/detail/img_swiper.png"
@@ -14,15 +20,20 @@ import ic_report from "../../asset/image/logo/ic_report.png"
 import ic_share from "../../asset/image/logo/ic_share.png"
 
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+
+
+
 
 
 function GFTNFTDetail() {
 
     let location = useLocation();
-    const [videoList, setVideoList] = useState([1,2,3,4,5,6,7,8,9,10]);
+    const [videoList, setVideoList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const buttonRef = useRef(null);
+    const menuActions = useRef(null);
+    const preventReopen = useRef(false);
+    const isOpen = Boolean(anchorEl);
 
     useEffect(() => {
         requsetData();
@@ -36,6 +47,13 @@ function GFTNFTDetail() {
         console.log(location);
 
     }
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+         setAnchorEl(null);
+    };
 
     return (
         <div className='nft_detail_bg'>
@@ -54,11 +72,24 @@ function GFTNFTDetail() {
                             <span className='title'>OpenSea</span>
                             <div className='data'>
                                 <span className='txt'>Showing data for</span>
-                                <div className='info_chain_layout'>
+                                <div id='basic-button' className='info_chain_layout' onClick={handleClick}>
                                     <span className='number'>7</span>
                                     <span className='chain'>All chains</span>
                                     <img className='img' src={down_drop_icon}></img>
                                 </div>
+                                <MenuUnstyled
+                                    actions={menuActions}
+                                    open={isOpen}
+                                    onClose={handleClose}
+                                    anchorEl={anchorEl}
+                                    slots={{ root: Popper, listbox: StyledListbox }}
+                                    slotProps={{ listbox: { id: 'simple-menu' } }}
+                                >
+                                    <StyledMenuItem>
+                                        <img className='detail_menu_img' src={ic_share}></img>
+                                        Profile
+                                    </StyledMenuItem>
+                                </MenuUnstyled>
                             </div>
                         </div>
                     </div>
@@ -176,7 +207,7 @@ function GFTNFTDetail() {
 
                         <iframe key={"videoKey" + index} className='video'
                             src={item.url}
-                            frameborder="0" 
+                            frameborder="0"
                             controls="0"
                             allow="fullscreen;" >
                         </iframe>
