@@ -3,6 +3,7 @@ import { fetchOpen } from './GFTDialogAPi';
 
 const initialState = {
   isOpenConnect:false,
+  isOpenMenuWallet:false,
   status:'idle'
 };
 
@@ -29,6 +30,10 @@ export const diloagSlice = createSlice({
     setIsOpen: (state, action) => {
       state.isOpenConnect = action.payload;
     },
+    
+    setIsOpenWallet: (state, action) => {
+      state.isOpenMenuWallet = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -43,10 +48,10 @@ export const diloagSlice = createSlice({
   },
 });
 
-export const { increment, decrement, setIsOpen } = diloagSlice.actions;
+export const { increment, decrement, setIsOpen,setIsOpenWallet } = diloagSlice.actions;
 
 
 export const isOpen = (state) => state.dialog.isOpenConnect;
-
+export const isMenuWallet = (state) => state.dialog.isOpenMenuWallet;
 
 export default diloagSlice.reducer;

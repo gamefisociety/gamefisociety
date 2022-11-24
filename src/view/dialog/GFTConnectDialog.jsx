@@ -74,6 +74,7 @@ function GFTConnectDialog() {
         try {
             await activate(injected, undefined, true).then(res => {
 
+                cancelDialog();
             }).catch(error => {
             })
         } catch (ex) {

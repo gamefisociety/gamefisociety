@@ -6,6 +6,7 @@ import {
     decrement,
     increment,
     setIsOpen,
+    setIsOpenWallet,
     isOpen
 } from '../../module/store/features/dialog/GFTDialogSlice';
 
@@ -36,7 +37,12 @@ function GFTHead() {
 
     }
     const openDialog = () => {
-        dispatch(setIsOpen(true));
+        if(account){
+            dispatch(setIsOpenWallet(true));
+        }else{
+            dispatch(setIsOpen(true));
+        }
+       
     }
 
     const getChainLows = () => {
