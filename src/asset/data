@@ -38,6 +38,151 @@
                 "name": "Optimism",
                 "data": ""
             }
+        ],
+        "about": "OpenSea is the first and largest peer-to-peer marketplace for crypto collectibles, which include gaming items, digital art, and other virtual goods backed by a blockchain.",
+        "rank_General": 16,
+        "rank_marketplaces": 1,
+        "banner": [
+            {
+                "url": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/OpenSea/img_swiper.png"
+            },
+            {
+                "url": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/OpenSea/img_swiper.png"
+            },
+            {
+                "url": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/OpenSea/img_swiper.png"
+            }
+        ],
+        "social": {
+            "twitter": "https://twitter.com/projectopensea",
+            "meduim": "https://twitter.com/projectopensea",
+            "discord": "https://twitter.com/projectopensea",
+            "reddit": "https://twitter.com/projectopensea",
+            "facebook": "https://twitter.com/projectopensea",
+            "github": "https://twitter.com/projectopensea",
+            "telegram": "https://twitter.com/projectopensea",
+            "ins": "https://twitter.com/projectopensea"
+        },
+        "stats": {
+            "h24": {
+                "uaw": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "transactions": {
+                    "percen": -19.57,
+                    "sum": "21.5k"
+                },
+                "volume": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "balance": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                }
+            },
+            "d7": {
+                "uaw": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "transactions": {
+                    "percen": -19.57,
+                    "sum": "21.5k"
+                },
+                "volume": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "balance": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                }
+            },
+            "d30": {
+                "uaw": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "transactions": {
+                    "percen": -19.57,
+                    "sum": "21.5k"
+                },
+                "volume": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                },
+                "balance": {
+                    "percen": 24,
+                    "sum": "21.5k"
+                }
+            }
+        },
+        "videos": [
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            },
+            {
+                "url": "https://www.youtube.com/embed/V4suXT6xPno"
+            }
         ]
     }
 }

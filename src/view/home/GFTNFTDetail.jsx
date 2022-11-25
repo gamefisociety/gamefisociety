@@ -15,7 +15,6 @@ import {
 
 import './GFTNFTDetail.scss';
 import down_drop_icon from "../../asset/image/detail/down_drop_icon.png"
-import img_swiper from "../../asset/image/detail/img_swiper.png"
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png"
 import ic_report from "../../asset/image/logo/ic_report.png"
 import ic_share from "../../asset/image/logo/ic_share.png"
@@ -29,9 +28,65 @@ import ic_share from "../../asset/image/logo/ic_share.png"
 function GFTNFTDetail() {
 
     let location = useLocation();
-    const [videoList, setVideoList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    const [videoList, setVideoList] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [detailData, setDetailData] = useState({chainList:[]});
+    const [detailData, setDetailData] = useState({
+        chainList: [], banner: [], social: {}, stats: {
+            h24: {
+                uaw: {
+                    percen: 0,
+                    sum: 0
+                },
+                transactions: {
+                    percen: 0,
+                    sum: 0
+                },
+                volume: {
+                    percen: 0,
+                    sum: 0
+                },
+                balance: {
+                    percen: 0,
+                    sum: 0
+                }
+            }, d7: {
+                uaw: {
+                    percen: 0,
+                    sum: 0
+                },
+                transactions: {
+                    percen: 0,
+                    sum: 0
+                },
+                volume: {
+                    percen: 0,
+                    sum: 0
+                },
+                balance: {
+                    percen: 0,
+                    sum: 0
+                }
+            }, d30: {
+                uaw: {
+                    percen: 0,
+                    sum: 0
+                },
+                transactions: {
+                    percen: 0,
+                    sum: 0
+                },
+                volume: {
+                    percen: 0,
+                    sum: 0
+                },
+                balance: {
+                    percen: 0,
+                    sum: 0
+                }
+            }
+        }
+    });
+    const [tabStats, setTabStats] = useState("h24");
     const buttonRef = useRef(null);
     const menuActions = useRef(null);
     const preventReopen = useRef(false);
@@ -50,6 +105,7 @@ function GFTNFTDetail() {
         getDetailData("OpenSea").then(res => {
             console.log(res.data, "res");
             setDetailData(res.data);
+            setVideoList(res.data.videos);
         })
 
     }
@@ -60,6 +116,15 @@ function GFTNFTDetail() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const onClickTab = (name) => {
+        setTabStats(name);
+    }
+    const getBalancesStats = (name, name2) => {
+        return detailData.stats[name][name2].sum;
+    }
+    const getPercentStats = (name, name2) => {
+        return detailData.stats[name][name2].percen;
+    }
 
     return (
         <div className='nft_detail_bg'>
@@ -129,24 +194,49 @@ function GFTNFTDetail() {
                 <div className='info_layout'>
                     <div className='info_content'>
                         <span className='title'>About OpenSea</span>
-                        <span className='desc'>OpenSea is the first and largest peer-to-peer marketplace for crypto collectibles, which include gaming items, digital art, and other virtual goods backed by a blockchain.</span>
+                        <span className='desc'>{detailData.about}</span>
                         <span className='moreBtn'>Read more.</span>
                         <div className='item_fc_layout'>
                             <span className='name'>Rank</span>
-                            <span className='rank_vis'>16 In General</span>
-                            <span className='rank_vis'>#1 in Marketplaces</span>
+                            <span className='rank_vis'>{detailData.rank_General} In General</span>
+                            <span className='rank_vis'>#{detailData.rank_marketplaces} in Marketplaces</span>
                         </div>
                         <div className='item_fc_layout'>
                             <span className='name2'>Social</span>
-                            <div className='icon_twitter'></div>
-                            <div className='icon_meduim'></div>
-                            <div className='icon_discord'></div>
-                            <div className='icon_reddit'></div>
-                            <div className='icon_facebook'></div>
-                            <div className='icon_github'></div>
-                            <div className='icon_telegram'></div>
-                            <div className='icon_youtube'></div>
-                            <div className='icon_ins'></div>
+                            {
+                                detailData.social.twitter && <div className='icon_twitter'></div>
+
+                            }
+                            {
+                                detailData.social.meduim && <div className='icon_meduim'></div>
+
+                            }
+                            {
+                                detailData.social.discord && <div className='icon_discord'></div>
+
+                            }
+                            {
+                                detailData.social.reddit && <div className='icon_facebook'></div>
+
+                            }
+                            {
+                                detailData.social.facebook && <div className='icon_github'></div>
+
+                            }
+                            {
+                                detailData.social.github && <div className='icon_telegram'></div>
+
+                            }
+                            {
+                                detailData.social.telegram && <div className='icon_youtube'></div>
+
+                            }
+                            {
+                                detailData.social.ins && <div className='icon_ins'></div>
+
+                            }
+
+
                         </div>
                     </div>
                     <Swiper
@@ -162,49 +252,44 @@ function GFTNFTDetail() {
                         modules={[Autoplay, Navigation, Pagination, Mousewheel, Keyboard]}
                         className="mySwiper"
                     >
-
-                        <SwiperSlide>
-                            <img className='img' src={img_swiper}></img>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img className='img' src={img_swiper}></img>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img className='img' src={img_swiper}></img>
-                        </SwiperSlide>
+                        {Array.from(detailData.banner).map((item, index) => (
+                            <SwiperSlide key={"swiper_key_" + index}>
+                                <img className='img' src={item.url}></img>
+                            </SwiperSlide>
+                        ))}
                     </Swiper>
 
                 </div>
                 <div className='stats_layout'>
                     <span className='title'>Dapp stats</span>
                     <div className='time_layout'>
-                        <span className='btn_en'>24h</span>
-                        <span className='btn'>7d</span>
-                        <span className='btn'>30d</span>
+                        <span className={tabStats == "h24" ? "btn_en" : 'btn'} onClick={() => onClickTab("h24")}>24h</span>
+                        <span className={tabStats == "d7" ? "btn_en" : 'btn'} onClick={() => onClickTab("d7")}>7d</span>
+                        <span className={tabStats == "d30" ? "btn_en" : 'btn'} onClick={() => onClickTab("d30")}>30d</span>
                     </div>
                     <div className='utvb_layout'>
                         <div className='item_layout'>
                             <span className='t_txt'>UAW</span>
-                            <span className='t_price'>21.5k</span>
-                            <span className='t_up'>2.25%</span>
+                            <span className='t_price'>{getBalancesStats(tabStats, "uaw")}</span>
+                            <span className={getPercentStats(tabStats, "uaw") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "uaw") + "%"}</span>
                             <div className='img'></div>
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Transactions</span>
                             <span className='t_price'>43.82k</span>
-                            <span className='t_down'>-19.57%</span>
+                            <span className={getPercentStats(tabStats, "transactions") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "transactions") + "%"}</span>
                             <div className='img'></div>
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Volume</span>
                             <span className='t_price'>$55.17k</span>
-                            <span className='t_up'>0.78%</span>
+                            <span className={getPercentStats(tabStats, "volume") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "volume") + "%"}</span>
                             <div className='img'></div>
                         </div>
                         <div className='item_layout'>
-                            <span className='t_txt'>UAW</span>
+                            <span className='t_txt'>Balance</span>
                             <span className='t_price'>21.5k</span>
-                            <span className='t_up'>2.25%</span>
+                            <span className={getPercentStats(tabStats, "balance") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "balance") + "%"}</span>
                             <div className='img'></div>
                         </div>
                     </div>
@@ -212,12 +297,12 @@ function GFTNFTDetail() {
                 <div className='video_info_title'>
                     <span className='txt'>Related Videos</span>
                     <span className='txt1'>A collection of videos uploaded by enthusiast users themselves</span>
-                    <span className='txt_sum'>（ 23 videos ）</span>
+                    <span className='txt_sum'>（ {videoList.length} videos ）</span>
                 </div>
                 <div className='video_layout'>
                     {Array.from(videoList).map((item, index) => (
 
-                        <iframe key={"videoKey" + index} className='video'
+                        <iframe key={"video_detail_Key" + index} className='video'
                             src={item.url}
                             frameborder="0"
                             controls="0"
