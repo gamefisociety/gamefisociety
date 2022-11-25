@@ -8,12 +8,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import MenuUnstyled from '@mui/base/MenuUnstyled';
-import {StyledListbox,StyledMenuItem,Popper} from '../menu/GFTMenuPopStyle'
-
+import { StyledListbox, StyledMenuItem, Popper } from '../menu/GFTMenuPopStyle'
+import {
+    getDetailData
+} from '../../api/requestData'
 
 import './GFTNFTDetail.scss';
 import down_drop_icon from "../../asset/image/detail/down_drop_icon.png"
-import opensea_icon from "../../asset/image/detail/opensea_icon.png"
 import img_swiper from "../../asset/image/detail/img_swiper.png"
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png"
 import ic_report from "../../asset/image/logo/ic_report.png"
@@ -30,6 +31,7 @@ function GFTNFTDetail() {
     let location = useLocation();
     const [videoList, setVideoList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [detailData, setDetailData] = useState({chainList:[]});
     const buttonRef = useRef(null);
     const menuActions = useRef(null);
     const preventReopen = useRef(false);
@@ -45,6 +47,10 @@ function GFTNFTDetail() {
 
     const requsetData = () => {
         console.log(location);
+        getDetailData("OpenSea").then(res => {
+            console.log(res.data, "res");
+            setDetailData(res.data);
+        })
 
     }
 
@@ -52,7 +58,7 @@ function GFTNFTDetail() {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-         setAnchorEl(null);
+        setAnchorEl(null);
     };
 
     return (
@@ -63,17 +69,17 @@ function GFTNFTDetail() {
                     <span className='txt'> {'>'}</span>
                     <span className='txt'> Rankings</span>
                     <span className='txt'> {'>'}</span>
-                    <span className='txt'> Alien Worlds </span>
+                    <span className='txt'> {detailData.name} </span>
                 </div>
                 <div className='head_layout'>
                     <div className='product_layout'>
-                        <img className='icon' src={opensea_icon}></img>
+                        <img className='icon' src={detailData.icon}></img>
                         <div className='title_layout'>
                             <span className='title'>OpenSea</span>
                             <div className='data'>
                                 <span className='txt'>Showing data for</span>
                                 <div id='basic-button' className='info_chain_layout' onClick={handleClick}>
-                                    <span className='number'>7</span>
+                                    <span className='number'>{detailData.chainList.length}</span>
                                     <span className='chain'>All chains</span>
                                     <img className='img' src={down_drop_icon}></img>
                                 </div>
@@ -86,9 +92,15 @@ function GFTNFTDetail() {
                                     slotProps={{ listbox: { id: 'simple-menu' } }}
                                 >
                                     <StyledMenuItem>
-                                        <img className='detail_menu_img' src={ic_share}></img>
-                                        Profile
+                                        <span className='detail_menu_number'>{detailData.chainList.length}</span>
+                                        All chains
                                     </StyledMenuItem>
+                                    {Array.from(detailData.chainList).map((item, index) => (
+                                        <StyledMenuItem key={"item_chain_list_" + index}>
+                                            <img className='detail_menu_img' src={item.icon}></img>
+                                            {item.name}
+                                        </StyledMenuItem>
+                                    ))};
                                 </MenuUnstyled>
                             </div>
                         </div>

@@ -1,64 +1,43 @@
 {
-    "List": [
-        {
-            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
-            "name": "Axie Infinity",
-            "chainName": "BNB DEP Chain WAX",
-            "isAd": true,
-            "balance": "$44.14k",
-            "uawSum": "150.37k",
-            "uaw": "6.22%",
-            "volume": "$570.07",
-            "price": "91,393",
-            "percentage": "8.85%"
-        },
-        {
-            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
-            "name": "Axie Infinity",
-            "chainName": "BNB DEP Chain WAX",
-            "isAd": false,
-            "balance": "$44.14k",
-            "uawSum": "150.37k",
-            "uaw": "6.22%",
-            "volume": "$570.07",
-            "price": "91,393",
-            "percentage": "8.85%"
-        },
-        {
-            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
-            "name": "Axie Infinity",
-            "chainName": "BNB DEP Chain WAX",
-            "isAd": false,
-            "balance": "$44.14k",
-            "uawSum": "150.37k",
-            "uaw": "6.22%",
-            "volume": "$570.07",
-            "price": "91,393",
-            "percentage": "8.85%"
-        },
-        {
-            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
-            "name": "Axie Infinity",
-            "chainName": "BNB DEP Chain WAX",
-            "isAd": false,
-            "balance": "$44.14k",
-            "uawSum": "150.37k",
-            "uaw": "6.22%",
-            "volume": "$570.07",
-            "price": "91,393",
-            "percentage": "8.85%"
-        },
-        {
-            "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/axie_infinity/ic_detault_head.png",
-            "name": "Axie Infinity",
-            "chainName": "BNB DEP Chain WAX",
-            "isAd": false,
-            "balance": "$44.14k",
-            "uawSum": "150.37k",
-            "uaw": "6.22%",
-            "volume": "$570.07",
-            "price": "91,393",
-            "percentage": "8.85%"
-        }
-    ]
+    "data": {
+        "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/list_chain/OpenSea/icon_opensea.webp",
+        "name": "OpenSea",
+        "chainList": [
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_ethereum.png",
+                "name": "Ethereum",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_polygon.png",
+                "name": "Polygon",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_solana.png",
+                "name": "Solana",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_avalanche.png",
+                "name": "Avalanche",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_arbitrum.png",
+                "name": "Arbitrum",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_klaytn.png",
+                "name": "Klaytn",
+                "data": ""
+            },
+            {
+                "icon": "https://storageapi.fleek.co/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/icon_chain/ic_optimism.png",
+                "name": "Optimism",
+                "data": ""
+            }
+        ]
+    }
 }
