@@ -129,13 +129,13 @@ function GFTHomeView() {
                     <span className="balance">{item.balance}</span>
                     <div className='layout_uaw'>
                         <span className='uaw'>{item.uawSum}</span>
-                        <span className='uaw_red'>{item.uaw}</span>
+                        <span className='uaw_red'>{item.uaw}%</span>
                     </div>
                     <span className='volume'>{item.volume}</span>
                     <div className='layout_social_signal'>
                         <img className='img_hot' src={ic_item_hot}></img>
                         <span className='txt_price'>{item.price}</span>
-                        <span className='txt_up'>{item.percentage}</span>
+                        <span className='txt_up'>{item.percentage}%</span>
                     </div>
                 </div>
             ))}
