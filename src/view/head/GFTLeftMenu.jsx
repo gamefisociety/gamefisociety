@@ -3,7 +3,8 @@ import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import {
     isCheckIn,
-    setOpenCheckIn
+    setOpenCheckIn,
+    setIsOpen
 } from '../../module/store/features/dialog/GFTDialogSlice';
 import './GFTLeftMenu.scss';
 
@@ -31,7 +32,12 @@ function GFTLeftMenu() {
 
     }
     const openCheckIn = () => {
-        dispatch(setOpenCheckIn(true));
+        if(account){
+            dispatch(setOpenCheckIn(true));
+        }else{
+            dispatch(setIsOpen(true));
+        }
+        
     }
 
     return (

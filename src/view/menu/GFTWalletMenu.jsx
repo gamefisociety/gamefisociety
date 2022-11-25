@@ -47,7 +47,7 @@ function GFTWalletMenu() {
     const getTokenGST = () => {
         if (account) {
             GSTTokenBase.getTokenbalanceOf(library, account).then(res => {
-                setGSTBalance(res);
+                setGSTBalance(res/1000000000000000000.0);
             }).catch(err => {
                 console.log(err,'err');
 

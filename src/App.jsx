@@ -9,7 +9,8 @@ import GFTWalletMenu from "./view/menu/GFTWalletMenu";
 import GFTCheckInDialog from "./view/dialog/GFTCheckInDialog";
 import {
   setIsOpenWallet,
-  isMenuWallet
+  isMenuWallet,
+  isCheckIn
 } from './module/store/features/dialog/GFTDialogSlice';
 import './App.css';
 function getLibrary(provider, connector) {
@@ -20,6 +21,7 @@ function getLibrary(provider, connector) {
 
 function App() {
   const isOpenMenu = useSelector(isMenuWallet);
+  const isOpenCheckIn = useSelector(isCheckIn);
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <div className="App">
@@ -30,7 +32,10 @@ function App() {
           isOpenMenu?<GFTWalletMenu/>:""
         }
         <GFTConnectDialog/>
-        <GFTCheckInDialog/>
+        {
+          isOpenCheckIn?<GFTCheckInDialog/>:""
+        }
+        
         
       </div>
     </Web3ReactProvider>
