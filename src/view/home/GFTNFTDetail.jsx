@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useRef } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { useLocation, Link,useSearchParams } from 'react-router-dom'
+import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
 import "swiper/css";
@@ -278,19 +278,19 @@ function GFTNFTDetail() {
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Transactions</span>
-                            <span className='t_price'>43.82k</span>
+                            <span className='t_price'>{getBalancesStats(tabStats, "transactions") }</span>
                             <span className={getPercentStats(tabStats, "transactions") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "transactions") + "%"}</span>
                             <div className='img'></div>
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Volume</span>
-                            <span className='t_price'>$55.17k</span>
+                            <span className='t_price'>{getBalancesStats(tabStats, "volume")}</span>
                             <span className={getPercentStats(tabStats, "volume") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "volume") + "%"}</span>
                             <div className='img'></div>
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Balance</span>
-                            <span className='t_price'>21.5k</span>
+                            <span className='t_price'>{getBalancesStats(tabStats, "volume")}</span>
                             <span className={getPercentStats(tabStats, "balance") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "balance") + "%"}</span>
                             <div className='img'></div>
                         </div>
@@ -303,19 +303,20 @@ function GFTNFTDetail() {
                 </div>
                 <div className='video_layout'>
                     {Array.from(videoList).map((item, index) => (
-
-                        <iframe key={"video_detail_Key" + index} className='video'
-                            src={item.url}
-                            frameborder="0"
-                            controls="0"
-                            allow="fullscreen;" >
-                        </iframe>
-
+                        <div className='layout'>
+                            <iframe key={"video_detail_Key" + index} className='video'
+                                src={item.url}
+                                frameborder="0"
+                                controls="0"
+                                allow="fullscreen;" >
+                            </iframe>
+                            <span className='txt'>{item.title}</span>
+                        </div>
                     ))}
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 
 }
