@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useRef } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link,useSearchParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
 import "swiper/css";
@@ -28,6 +28,7 @@ import ic_share from "../../asset/image/logo/ic_share.png"
 function GFTNFTDetail() {
 
     let location = useLocation();
+    const [search, setsearch] = useSearchParams()
     const [videoList, setVideoList] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const [detailData, setDetailData] = useState({
@@ -91,6 +92,7 @@ function GFTNFTDetail() {
     const menuActions = useRef(null);
     const preventReopen = useRef(false);
     const isOpen = Boolean(anchorEl);
+    const [pathName, setPathName] = useState(search.get('name'));
 
     useEffect(() => {
         requsetData();
@@ -102,7 +104,7 @@ function GFTNFTDetail() {
 
     const requsetData = () => {
         console.log(location);
-        getDetailData("OpenSea").then(res => {
+        getDetailData(pathName).then(res => {
             console.log(res.data, "res");
             setDetailData(res.data);
             setVideoList(res.data.videos);
@@ -134,13 +136,13 @@ function GFTNFTDetail() {
                     <span className='txt'> {'>'}</span>
                     <span className='txt'> Rankings</span>
                     <span className='txt'> {'>'}</span>
-                    <span className='txt'> {detailData.name} </span>
+                    <span className='txt'> {pathName} </span>
                 </div>
                 <div className='head_layout'>
                     <div className='product_layout'>
                         <img className='icon' src={detailData.icon}></img>
                         <div className='title_layout'>
-                            <span className='title'>OpenSea</span>
+                            <span className='title'>{detailData.name}</span>
                             <div className='data'>
                                 <span className='txt'>Showing data for</span>
                                 <div id='basic-button' className='info_chain_layout' onClick={handleClick}>

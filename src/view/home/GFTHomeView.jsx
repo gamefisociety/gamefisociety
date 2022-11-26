@@ -52,7 +52,7 @@ function GFTHomeView() {
     }
 
     const itemNFTClick = (item) => {
-        navigate('/detail');
+        navigate('/detail?name=' + item.name);
     }
 
 
