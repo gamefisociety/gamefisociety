@@ -28,7 +28,7 @@ import ic_share from "../../asset/image/logo/ic_share.png"
 function GFTNFTDetail() {
 
     let location = useLocation();
-    const [search, setsearch] = useSearchParams()
+    const [search, setsearch] = useSearchParams();
     const [videoList, setVideoList] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const [detailData, setDetailData] = useState({
