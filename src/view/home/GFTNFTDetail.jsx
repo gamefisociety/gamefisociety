@@ -109,7 +109,6 @@ function GFTNFTDetail() {
             setDetailData(res.data);
             setVideoList(res.data.videos);
         })
-
     }
 
     const handleClick = (event) => {
