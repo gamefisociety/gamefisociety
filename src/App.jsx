@@ -1,6 +1,7 @@
 
 import { HashRouter } from "react-router-dom";
 import { Web3ReactProvider } from '@web3-react/core'
+import { SnackbarProvider, useSnackbar } from "notistack";
 import Router from './module/router/router'
 import Web3 from 'web3'
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,20 +25,20 @@ function App() {
   const isOpenCheckIn = useSelector(isCheckIn);
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <div className="App">
-        <HashRouter>
-          <Router />
-        </HashRouter>
-        {
-          isOpenMenu?<GFTWalletMenu/>:""
-        }
-        <GFTConnectDialog/>
-        {
-          isOpenCheckIn?<GFTCheckInDialog/>:""
-        }
-        
-        
-      </div>
+      <SnackbarProvider maxSnack={3}>
+        <div className="App">
+          <HashRouter>
+            <Router />
+          </HashRouter>
+          {
+            isOpenMenu ? <GFTWalletMenu /> : ""
+          }
+          <GFTConnectDialog />
+          {
+            isOpenCheckIn ? <GFTCheckInDialog /> : ""
+          }
+        </div>
+      </SnackbarProvider>
     </Web3ReactProvider>
   );
 }

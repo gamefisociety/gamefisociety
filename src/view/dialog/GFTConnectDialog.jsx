@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from "notistack";
 import {
     decrement,
     increment,
@@ -16,6 +17,7 @@ import './GFTConnectDialog.scss';
 
 
 function GFTConnectDialog() {
+    const { enqueueSnackbar } = useSnackbar();
     const injected = new InjectedConnector({
         supportedChainIds: [ChainId.MATICTEST],
     })
@@ -31,6 +33,9 @@ function GFTConnectDialog() {
     }, [])
 
     const requsetData = () => {
+        if(!window.ethereum){
+            return;
+        }
         window.ethereum.on('accountsChanged', (accounts) => {
             if (accounts.length === 0) {
                 deactivate()
@@ -62,6 +67,7 @@ function GFTConnectDialog() {
         console.log(item, "wallet");
         event.stopPropagation();
         if (item == 'MetaMask') {
+          
             connectedClick();
         } else if (item == "WalletConnect") {
 
@@ -73,11 +79,18 @@ function GFTConnectDialog() {
     const activateMask = async () => {
         try {
             await activate(injected, undefined, true).then(res => {
-
                 cancelDialog();
             }).catch(error => {
+                enqueueSnackbar(error, {
+                    variant: "error",
+                    anchorOrigin: { horizontal: "center", vertical: "top" }
+                  });
             })
         } catch (ex) {
+            enqueueSnackbar(ex, {
+                variant: "error",
+                anchorOrigin: { horizontal: "center", vertical: "top" }
+              });
             console.log(ex, "ex");
         }
     }
