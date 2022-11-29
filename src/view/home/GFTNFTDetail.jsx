@@ -117,14 +117,13 @@ function GFTNFTDetail() {
             setVideoList(res.data.videos);
             let list = [];
             for (let i = 0; i < res.data.videos.length; i++) {
-                console.log(res.data.videos[i].url);
                 list.push(res.data.videos[i].url);
-                
+
             }
             setVideosBox(list);
             let listBanner = [];
             for (let i = 0; i < res.data.banner.length; i++) {
-                listBanner.push(<img src={res.data.banner[i].url}/>);
+                listBanner.push(<img src={res.data.banner[i].url} />);
             }
             setBannerBox(listBanner);
         })
@@ -159,6 +158,10 @@ function GFTNFTDetail() {
             toggles: !togglerBanner.toggles,
             slide: index + 1
         });
+    }
+    const openClickLink = (url) => {
+        console.log(url);
+        window.open(url);
     }
 
     return (
@@ -239,35 +242,35 @@ function GFTNFTDetail() {
                         <div className='item_fc_layout'>
                             <span className='name2'>Social</span>
                             {
-                                detailData.social.twitter && <div className='icon_twitter'></div>
+                                detailData.social.twitter && <div className='icon_twitter' onClick={()=>openClickLink(detailData.social.twitter)}></div>
 
                             }
                             {
-                                detailData.social.meduim && <div className='icon_meduim'></div>
+                                detailData.social.meduim && <div className='icon_meduim' onClick={()=>openClickLink(detailData.social.meduim)}></div>
 
                             }
                             {
-                                detailData.social.discord && <div className='icon_discord'></div>
+                                detailData.social.discord && <div className='icon_discord' onClick={()=>openClickLink(detailData.social.discord)}></div>
 
                             }
                             {
-                                detailData.social.reddit && <div className='icon_facebook'></div>
+                                detailData.social.reddit && <div className='icon_facebook' onClick={()=>openClickLink(detailData.social.reddit)}></div>
 
                             }
                             {
-                                detailData.social.facebook && <div className='icon_github'></div>
+                                detailData.social.facebook && <div className='icon_github' onClick={()=>openClickLink(detailData.social.facebook)}></div>
 
                             }
                             {
-                                detailData.social.github && <div className='icon_telegram'></div>
+                                detailData.social.github && <div className='icon_telegram' onClick={()=>openClickLink(detailData.social.github)}></div>
 
                             }
                             {
-                                detailData.social.telegram && <div className='icon_youtube'></div>
+                                detailData.social.telegram && <div className='icon_youtube' onClick={()=>openClickLink(detailData.social.telegram)}></div>
 
                             }
                             {
-                                detailData.social.ins && <div className='icon_ins'></div>
+                                detailData.social.ins && <div className='icon_ins' onClick={()=>openClickLink(detailData.social.ins)}></div>
 
                             }
 
