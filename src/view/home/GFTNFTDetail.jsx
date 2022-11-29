@@ -217,7 +217,7 @@ function GFTNFTDetail() {
                         </div>
                     </div>
                     <div className='right_layout'>
-                        <div className='btn_open'>
+                        <div className='btn_open' onClick={()=>openClickLink(detailData.officialUrl)}>
                             <img className='img' src={ic_open_dapp}></img>
                             <span className='txt'>Open dapp</span>
                         </div>
