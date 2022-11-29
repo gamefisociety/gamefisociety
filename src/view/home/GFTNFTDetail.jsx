@@ -9,11 +9,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import MenuUnstyled from '@mui/base/MenuUnstyled';
 import { StyledListbox, StyledMenuItem, Popper } from '../menu/GFTMenuPopStyle'
+import { useSnackbar } from "notistack";
 import {
     getDetailData
 } from '../../api/requestData'
 import FsLightbox from 'fslightbox-react';
-
+import copy from 'copy-to-clipboard';
 import './GFTNFTDetail.scss';
 import down_drop_icon from "../../asset/image/detail/down_drop_icon.png"
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png"
@@ -24,7 +25,7 @@ import ic_play_youtube from "../../asset/image/logo/ic_play_youtube.png"
 
 
 function GFTNFTDetail() {
-
+    const { enqueueSnackbar } = useSnackbar();
     let location = useLocation();
     const [search, setsearch] = useSearchParams();
     const [videoList, setVideoList] = useState([]);
@@ -144,7 +145,15 @@ function GFTNFTDetail() {
     const getPercentStats = (name, name2) => {
         return detailData.stats[name][name2].percen;
     }
+    const copyUrlShare =()=>{
+       let url = window.location;
+       copy(url.href);
+       enqueueSnackbar("copy share url success", {
+        variant: "success",
+        anchorOrigin: { horizontal: "center", vertical: "top" }
+      });
 
+    }
     const itemVideo = (index) => {
         console.log(index);
 
@@ -160,7 +169,6 @@ function GFTNFTDetail() {
         });
     }
     const openClickLink = (url) => {
-        console.log(url);
         window.open(url);
     }
 
@@ -214,7 +222,7 @@ function GFTNFTDetail() {
                             <span className='txt'>Open dapp</span>
                         </div>
                         <div className='item_layout'>
-                            <div className='share_btn'>
+                            <div className='share_btn' onClick={copyUrlShare}>
                                 <img className='img' src={ic_share}></img>
                                 <span className='txt'>Share</span>
                             </div>
