@@ -1,15 +1,13 @@
 import { React, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-
 import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
-
 import {
     getListData,
     getListChainData
 } from '../../api/requestData'
-
 import './GFTHomeView.scss';
+import FsLightbox from 'fslightbox-react';
 
 import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_detault_head from "../../asset/image/logo/ic_detault_head.png"
@@ -22,13 +20,17 @@ import ic_mobile from "../../asset/image/home/ic_mobile.png"
 import ic_nft from "../../asset/image/home/ic_nft.png"
 import ic_battle from "../../asset/image/home/ic_battle.png"
 import ic_card from "../../asset/image/home/ic_card.png"
-
+import ic_play_youtube from "../../asset/image/logo/ic_play_youtube.png"
 
 
 function GFTHomeView() {
 
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);
+    const [fsLightList, setFsLightList] = useState([]);
+    const [toggler, setToggler] = useState(false);
+    const [togSlide, setTogSlide] = useState(0);
+    
     const navigate = useNavigate();
     useEffect(() => {
         requsetData();
@@ -41,7 +43,11 @@ function GFTHomeView() {
     const requsetData = () => {
 
         getListData().then(res => {
-            console.log(res.list, "res");
+            let list = [];
+            for (let i = 0; i < res.list.length; i++) {
+                list.push(res.list[i].url);
+            }
+            setFsLightList(list);
             setVideoList(res.list);
         })
 
@@ -54,7 +60,12 @@ function GFTHomeView() {
     const itemNFTClick = (item) => {
         navigate('/detail?name=' + item.name);
     }
-
+    const itemVideo=(index)=>{
+        console.log(index);
+        setTogSlide(index+1);
+        setToggler(!toggler);
+    }
+  
 
     return (
         <div className='content_bg'>
@@ -83,15 +94,13 @@ function GFTHomeView() {
             </div>
             <div className='video_layout'>
                 {Array.from(videoList).map((item, index) => (
+                    <div key={"video_item_" + index} className="layout_item" onClick={()=>itemVideo(index)}>
+                        <img className='video'  src={item.thumb}>
 
-                    <iframe key={"videoKey" + index}
-                        className='video'
-                        title="11.22 赵长鹏与SBF最后一次通话都讲了啥？Ripple欲接盘FTX部分公司；CeFi信任危机与DeFi未来；马斯克力挺特朗普？对冲基金下海加密圈"
-                        src={item.url}
-                        frameborder="0" 
-                        controls="0"
-                        allow="fullscreen;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" >
-                    </iframe>
+                        </img>
+                        <img className='play' src={ic_play_youtube}></img>
+                        <span className="txt">{item.desc}</span>
+                    </div>
 
                 ))}
             </div>
@@ -139,6 +148,11 @@ function GFTHomeView() {
                     </div>
                 </div>
             ))}
+            <FsLightbox
+                toggler={toggler}
+                sources={fsLightList}
+                slide={togSlide}
+            />
         </div>);
 
 }

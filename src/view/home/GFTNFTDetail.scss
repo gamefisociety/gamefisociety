@@ -294,6 +294,7 @@
                 display: flex;
 
                 .img {
+                    cursor: pointer;
                     margin-top: 30px;
                     width: 280px;
                 }
@@ -714,16 +715,29 @@
             margin-left: -8px;
 
             .layout {
+                position: relative;
                 width: auto;
                 height: auto;
                 display: flex;
                 flex-direction: column;
+                cursor: pointer;
 
                 .video {
                     margin-top: 24px;
                     margin-left: 8px;
                     width: 228px;
                     height: 128px;
+                }
+
+                .play {
+                    z-index: 10;
+                    position: absolute;
+                    top: 60px;
+                    right: 0;
+                    left: 0;
+                    margin: auto;
+                    width: 58px;
+                    height: auto;
                 }
 
                 .txt {
@@ -739,9 +753,9 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     text-align: left;
-                    display:-webkit-box;
-                    -webkit-box-orient:vertical;
-                    -webkit-line-clamp:2;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
                 }
 
             }

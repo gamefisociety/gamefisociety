@@ -12,16 +12,14 @@ import { StyledListbox, StyledMenuItem, Popper } from '../menu/GFTMenuPopStyle'
 import {
     getDetailData
 } from '../../api/requestData'
+import FsLightbox from 'fslightbox-react';
 
 import './GFTNFTDetail.scss';
 import down_drop_icon from "../../asset/image/detail/down_drop_icon.png"
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png"
 import ic_report from "../../asset/image/logo/ic_report.png"
 import ic_share from "../../asset/image/logo/ic_share.png"
-
-
-
-
+import ic_play_youtube from "../../asset/image/logo/ic_play_youtube.png"
 
 
 
@@ -93,6 +91,16 @@ function GFTNFTDetail() {
     const preventReopen = useRef(false);
     const isOpen = Boolean(anchorEl);
     const [pathName, setPathName] = useState(search.get('name'));
+    const [videosBox, setVideosBox] = useState([]);
+    const [togglerVideos, setTogglerVideos] = useState({
+        slide: 0,
+        toggles: false
+    });
+    const [bannerBox, setBannerBox] = useState([]);
+    const [togglerBanner, setTogglerBanner] = useState({
+        slide: 0,
+        toggles: false
+    });
 
     useEffect(() => {
         requsetData();
@@ -105,9 +113,19 @@ function GFTNFTDetail() {
     const requsetData = () => {
         console.log(location);
         getDetailData(pathName).then(res => {
-            console.log(res.data, "res");
             setDetailData(res.data);
             setVideoList(res.data.videos);
+            let list = [];
+            for (let i = 0; i < res.data.videos.length; i++) {
+                list.push(res.data.videos[i].url);
+                
+            }
+            setVideosBox(list);
+            let listBanner = [];
+            for (let i = 0; i < res.data.banner.length; i++) {
+                listBanner.push(<img src={res.data.banner[i].url}/>);
+            }
+            setBannerBox(listBanner);
         })
     }
 
@@ -125,6 +143,21 @@ function GFTNFTDetail() {
     }
     const getPercentStats = (name, name2) => {
         return detailData.stats[name][name2].percen;
+    }
+
+    const itemVideo = (index) => {
+        console.log(index);
+
+        setTogglerVideos({
+            toggles: !togglerVideos.toggles,
+            slide: index + 1
+        });
+    }
+    const itemBanner = (index) => {
+        setTogglerBanner({
+            toggles: !togglerBanner.toggles,
+            slide: index + 1
+        });
     }
 
     return (
@@ -255,7 +288,7 @@ function GFTNFTDetail() {
                     >
                         {Array.from(detailData.banner).map((item, index) => (
                             <SwiperSlide key={"swiper_key_" + index}>
-                                <img className='img' src={item.url}></img>
+                                <img className='img' src={item.url} onClick={() => { itemBanner(index) }}></img>
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -277,7 +310,7 @@ function GFTNFTDetail() {
                         </div>
                         <div className='item_layout'>
                             <span className='t_txt'>Transactions</span>
-                            <span className='t_price'>{getBalancesStats(tabStats, "transactions") }</span>
+                            <span className='t_price'>{getBalancesStats(tabStats, "transactions")}</span>
                             <span className={getPercentStats(tabStats, "transactions") >= 0 ? "t_up" : "t_down"}>{getPercentStats(tabStats, "transactions") + "%"}</span>
                             <div className='img'></div>
                         </div>
@@ -300,21 +333,27 @@ function GFTNFTDetail() {
                     <span className='txt1'>A collection of videos uploaded by enthusiast users themselves</span>
                     <span className='txt_sum'>（ {videoList.length} videos ）</span>
                 </div>
-                <div className='video_layout'>
+                <div className='video_layout' >
                     {Array.from(videoList).map((item, index) => (
-                        <div className='layout'>
-                            <iframe key={"video_detail_Key" + index} className='video'
-                                src={item.url}
-                                frameborder="0"
-                                controls="0"
-                                allow="fullscreen;" >
-                            </iframe>
+                        <div key={"video_index_detail" + index} className='layout' onClick={() => itemVideo(index)}>
+                            <img className='video' src={item.thumb}>
+                            </img>
+                            <img className='play' src={ic_play_youtube}></img>
                             <span className='txt'>{item.title}</span>
                         </div>
                     ))}
                 </div>
             </div>
-
+            <FsLightbox
+                toggler={togglerVideos.toggles}
+                sources={videosBox}
+                slide={togglerVideos.slide}
+            />
+            <FsLightbox
+                toggler={togglerBanner.toggles}
+                sources={bannerBox}
+                slide={togglerBanner.slide}
+            />
         </div >
     );
 
