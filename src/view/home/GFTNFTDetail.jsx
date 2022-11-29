@@ -117,6 +117,7 @@ function GFTNFTDetail() {
             setVideoList(res.data.videos);
             let list = [];
             for (let i = 0; i < res.data.videos.length; i++) {
+                console.log(res.data.videos[i].url);
                 list.push(res.data.videos[i].url);
                 
             }
