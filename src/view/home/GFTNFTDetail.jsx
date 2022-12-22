@@ -239,7 +239,7 @@ function GFTNFTDetail() {
                 </div>
                 <div className='info_layout'>
                     <div className='info_content'>
-                        <span className='title'>About OpenSea</span>
+                        <span className='title'>About {detailData.name}</span>
                         <span className='desc'>{detailData.about}</span>
                         <span className='moreBtn'>Read more.</span>
                         <div className='item_fc_layout'>
@@ -266,15 +266,15 @@ function GFTNFTDetail() {
 
                             }
                             {
-                                detailData.social.facebook && <div className='icon_github' onClick={()=>openClickLink(detailData.social.facebook)}></div>
+                                detailData.social.facebook && <div className='icon_facebook' onClick={()=>openClickLink(detailData.social.facebook)}></div>
 
                             }
                             {
-                                detailData.social.github && <div className='icon_telegram' onClick={()=>openClickLink(detailData.social.github)}></div>
+                                detailData.social.github && <div className='icon_github' onClick={()=>openClickLink(detailData.social.github)}></div>
 
                             }
                             {
-                                detailData.social.telegram && <div className='icon_youtube' onClick={()=>openClickLink(detailData.social.telegram)}></div>
+                                detailData.social.telegram && <div className='icon_telegram' onClick={()=>openClickLink(detailData.social.telegram)}></div>
 
                             }
                             {

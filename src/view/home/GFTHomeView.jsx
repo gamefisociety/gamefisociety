@@ -8,6 +8,7 @@ import {
 } from '../../api/requestData'
 import './GFTHomeView.scss';
 import FsLightbox from 'fslightbox-react';
+import GFTFooter from '../footer/GFTFooter';
 
 import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_detault_head from "../../asset/image/logo/ic_detault_head.png"
@@ -30,7 +31,7 @@ function GFTHomeView() {
     const [fsLightList, setFsLightList] = useState([]);
     const [toggler, setToggler] = useState(false);
     const [togSlide, setTogSlide] = useState(0);
-    
+
     const navigate = useNavigate();
     useEffect(() => {
         requsetData();
@@ -60,12 +61,12 @@ function GFTHomeView() {
     const itemNFTClick = (item) => {
         navigate('/detail?name=' + item.name);
     }
-    const itemVideo=(index)=>{
+    const itemVideo = (index) => {
         console.log(index);
-        setTogSlide(index+1);
+        setTogSlide(index + 1);
         setToggler(!toggler);
     }
-  
+
 
     return (
         <div className='content_bg'>
@@ -94,8 +95,8 @@ function GFTHomeView() {
             </div>
             <div className='video_layout'>
                 {Array.from(videoList).map((item, index) => (
-                    <div key={"video_item_" + index} className="layout_item" onClick={()=>itemVideo(index)}>
-                        <img className='video'  src={item.thumb}>
+                    <div key={"video_item_" + index} className="layout_item" onClick={() => itemVideo(index)}>
+                        <img className='video' src={item.thumb}>
 
                         </img>
                         <img className='play' src={ic_play_youtube}></img>
@@ -148,6 +149,7 @@ function GFTHomeView() {
                     </div>
                 </div>
             ))}
+            <GFTFooter></GFTFooter>
             <FsLightbox
                 toggler={toggler}
                 sources={fsLightList}
