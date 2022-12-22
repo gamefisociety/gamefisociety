@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import MenuUnstyled from '@mui/base/MenuUnstyled';
 import { StyledListbox, StyledMenuItem, Popper } from '../menu/GFTMenuPopStyle'
 import { useSnackbar } from "notistack";
+import GFTFooter from '../footer/GFTFooter';
 import {
     getDetailData
 } from '../../api/requestData'
@@ -145,13 +146,13 @@ function GFTNFTDetail() {
     const getPercentStats = (name, name2) => {
         return detailData.stats[name][name2].percen;
     }
-    const copyUrlShare =()=>{
-       let url = window.location;
-       copy(url.href);
-       enqueueSnackbar("copy share url success", {
-        variant: "success",
-        anchorOrigin: { horizontal: "center", vertical: "top" }
-      });
+    const copyUrlShare = () => {
+        let url = window.location;
+        copy(url.href);
+        enqueueSnackbar("copy share url success", {
+            variant: "success",
+            anchorOrigin: { horizontal: "center", vertical: "top" }
+        });
 
     }
     const itemVideo = (index) => {
@@ -217,7 +218,7 @@ function GFTNFTDetail() {
                         </div>
                     </div>
                     <div className='right_layout'>
-                        <div className='btn_open' onClick={()=>openClickLink(detailData.officialUrl)}>
+                        <div className='btn_open' onClick={() => openClickLink(detailData.officialUrl)}>
                             <img className='img' src={ic_open_dapp}></img>
                             <span className='txt'>Open dapp</span>
                         </div>
@@ -250,35 +251,35 @@ function GFTNFTDetail() {
                         <div className='item_fc_layout'>
                             <span className='name2'>Social</span>
                             {
-                                detailData.social.twitter && <div className='icon_twitter' onClick={()=>openClickLink(detailData.social.twitter)}></div>
+                                detailData.social.twitter && <div className='icon_twitter' onClick={() => openClickLink(detailData.social.twitter)}></div>
 
                             }
                             {
-                                detailData.social.meduim && <div className='icon_meduim' onClick={()=>openClickLink(detailData.social.meduim)}></div>
+                                detailData.social.meduim && <div className='icon_meduim' onClick={() => openClickLink(detailData.social.meduim)}></div>
 
                             }
                             {
-                                detailData.social.discord && <div className='icon_discord' onClick={()=>openClickLink(detailData.social.discord)}></div>
+                                detailData.social.discord && <div className='icon_discord' onClick={() => openClickLink(detailData.social.discord)}></div>
 
                             }
                             {
-                                detailData.social.reddit && <div className='icon_facebook' onClick={()=>openClickLink(detailData.social.reddit)}></div>
+                                detailData.social.reddit && <div className='icon_facebook' onClick={() => openClickLink(detailData.social.reddit)}></div>
 
                             }
                             {
-                                detailData.social.facebook && <div className='icon_facebook' onClick={()=>openClickLink(detailData.social.facebook)}></div>
+                                detailData.social.facebook && <div className='icon_facebook' onClick={() => openClickLink(detailData.social.facebook)}></div>
 
                             }
                             {
-                                detailData.social.github && <div className='icon_github' onClick={()=>openClickLink(detailData.social.github)}></div>
+                                detailData.social.github && <div className='icon_github' onClick={() => openClickLink(detailData.social.github)}></div>
 
                             }
                             {
-                                detailData.social.telegram && <div className='icon_telegram' onClick={()=>openClickLink(detailData.social.telegram)}></div>
+                                detailData.social.telegram && <div className='icon_telegram' onClick={() => openClickLink(detailData.social.telegram)}></div>
 
                             }
                             {
-                                detailData.social.ins && <div className='icon_ins' onClick={()=>openClickLink(detailData.social.ins)}></div>
+                                detailData.social.ins && <div className='icon_ins' onClick={() => openClickLink(detailData.social.ins)}></div>
 
                             }
 
@@ -356,6 +357,7 @@ function GFTNFTDetail() {
                     ))}
                 </div>
             </div>
+            <GFTFooter></GFTFooter>
             <FsLightbox
                 toggler={togglerVideos.toggles}
                 sources={videosBox}
