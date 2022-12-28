@@ -15,6 +15,11 @@ import icon_menu_down from "../../asset/image/logo/icon_menu_down.png"
 
 function GFTFooter() {
 
+    const openClickLink = (type) => {
+        if(type === 'twitter'){
+            window.open("https://twitter.com/GameFi_Society");
+        }
+    }
 
     return (
         <div className='footer_bg'>
@@ -34,7 +39,7 @@ function GFTFooter() {
                     <div className='icon_telegram'></div>
                     <div className='icon_youtube'></div>
                     <div className='icon_ins'></div>
-                    <div className='icon_twitter'></div>
+                    <div className='icon_twitter' onClick={()=>openClickLink('twitter')}></div>
                 </div>
             </div>
             <div className='line'></div>
