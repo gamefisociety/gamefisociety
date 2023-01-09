@@ -6,7 +6,8 @@ import {
     setIsOpenWallet,
     isMenuWallet
 } from '../../module/store/features/dialog/GFTDialogSlice';
-import GSTTokenBase from '../../web3/GSTToken';
+// import GSTTokenBase from '../../web3/GSTToken';
+import GSTPointsBase from '../../web3/GSTPoints';
 import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 import './GFTWalletMenu.scss';
 
@@ -27,7 +28,7 @@ function GFTWalletMenu() {
     }, [])
 
     const requsetData = () => {
-        getTokenGST();
+        getGSTPoints();
     }
 
     const cancelDialog = () => {
@@ -44,9 +45,21 @@ function GFTWalletMenu() {
         deactivate();
         cancelDialog();
     }
-    const getTokenGST = () => {
+    // const getTokenGST = () => {
+    //     if (account) {
+    //         GSTTokenBase.getTokenbalanceOf(library, account).then(res => {
+    //             setGSTBalance(res/1000000000000000000.0);
+    //         }).catch(err => {
+    //             console.log(err,'err');
+
+    //         })
+    //     } else {
+    //         return 0;
+    //     }
+    // }
+    const getGSTPoints = () => {
         if (account) {
-            GSTTokenBase.getTokenbalanceOf(library, account).then(res => {
+            GSTPointsBase.getTokenbalanceOf(library, account).then(res => {
                 setGSTBalance(res/1000000000000000000.0);
             }).catch(err => {
                 console.log(err,'err');
