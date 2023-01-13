@@ -71,15 +71,15 @@ function GFTCheckInDialog() {
     }
 
     const checkInClick = () => {
-        if(checkState == 0||checkState == 1){
-            return;
-        }
-        if (checkState == 3) {
+        if(checkState === 0){
+            //nothing
+        }else if(checkState === 1){
+            cancelDialog();
+        }else if(checkState === 2){
+            claimEveryDay();
+        }else if (checkState === 3) {
             requsetData();
-            return;
         }
-        claimEveryDay();
-        
     }
     const getCheckIn = () => {
         if (checkState == 0) {
@@ -103,7 +103,7 @@ function GFTCheckInDialog() {
                     }}>
                         <div className='close' onClick={cancelDialog}></div>
                         <div className='img_icon'></div>
-                        <span className='txt_gts'>1 GST</span>
+                        <span className='txt_gts'>1 GSP</span>
                         <span className='info'>
                             Welcome to the world of GameFi Society
                             <br />

@@ -8,7 +8,7 @@ class GSTClaimBase {
             const _web3 = library;
             let contract = new _web3.eth.Contract(
                 GSTClaim.abi,
-                "0xD93c2C8a854d8D391E0180e874E77730547a08a3"
+                "0xBd240d26aded43162f8517ee96EE84eE23D178Cb"
             );
             try {
                 contract.methods.isClaimable().call({
@@ -29,7 +29,7 @@ class GSTClaimBase {
             const _web3 = library;
             let contract = new _web3.eth.Contract(
                 GSTClaim.abi,
-                "0xD93c2C8a854d8D391E0180e874E77730547a08a3"
+                "0xBd240d26aded43162f8517ee96EE84eE23D178Cb"
             );
             try {
                 contract.methods.claimEveryDay().send({

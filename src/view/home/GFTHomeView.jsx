@@ -6,6 +6,7 @@ import {
     getListData,
     getListChainData
 } from '../../api/requestData'
+import {getALLAssetsForAccount} from '../../api/nftscan'
 import './GFTHomeView.scss';
 import FsLightbox from 'fslightbox-react';
 import GFTFooter from '../footer/GFTFooter';
@@ -35,6 +36,7 @@ function GFTHomeView() {
     const navigate = useNavigate();
     useEffect(() => {
         requsetData();
+        fetchAllNFTs();
         return () => {
 
         }
@@ -56,6 +58,15 @@ function GFTHomeView() {
             console.log(res.list, "res");
             setChainList(res.list);
         })
+    }
+
+    const fetchAllNFTs = () => {
+        getALLAssetsForAccount("0xcE97Ca12A55288f388a09392c6D525eBe94F8617").then(res => {
+            console.log('fetchAllNFTs', res);
+        }).catch((reason) => {
+
+        })
+        
     }
 
     const itemNFTClick = (item) => {
