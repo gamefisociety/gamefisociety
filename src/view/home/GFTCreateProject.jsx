@@ -123,7 +123,7 @@ function GFTCreateProject() {
                 console.log(res,'res');
               
             }).catch(err => {
-             
+                console.log(err,'err');
             })
         } else {
             return 0;
@@ -132,6 +132,7 @@ function GFTCreateProject() {
 
     const uploadBuffer = (data) => {
         stringToBuffer(JSON.stringify(data)).then(buffer => {
+            buffer.name=project.title+"NFT_PROJECT"
             uploadFile(buffer, (event) => {
                 console.log(event);
                 console.log(Math.round(event.loaded / event.total * 100) + '% done');
@@ -196,6 +197,7 @@ function GFTCreateProject() {
                 variant="filled"
                 multiline
                 rows={2}
+                onChange={(e) => onValueScial(e, 'title')}
                 style={{ marginTop: 11 }}
             />
             <RedditTextField
@@ -205,6 +207,7 @@ function GFTCreateProject() {
                 variant="filled"
                 multiline
                 rows={4}
+                onChange={(e) => onValueScial(e, 'description')}
                 style={{ marginTop: 20 }}
             />
             <span className='title_head'> Chain address</span>
@@ -216,6 +219,7 @@ function GFTCreateProject() {
                 variant="filled"
                 multiline
                 rows={2}
+                onChange={(e) => onValueScial(e, 'chainAddress')}
                 style={{ marginTop: 11 }}
             />
             <div className='title_layout'>
