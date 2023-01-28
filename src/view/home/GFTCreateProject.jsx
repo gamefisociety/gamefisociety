@@ -40,7 +40,7 @@ const RedditTextField = styled((props) => (
         },
         '&.Mui-focused': {
             backgroundColor: 'transparent',
-            boxShadow: `${alpha('#fff', 0.25)} 0 0 0 2px`,
+            boxShadow: `${alpha('#fff', 0.25)} 0 0 0 1px`,
             borderColor: `#333`,
             color: `#fff`
         },
@@ -50,7 +50,8 @@ const RedditTextField = styled((props) => (
 function GFTCreateProject() {
 
     const [project, setProject] = useState({
-        thumb: ""
+        thumb: "",
+        banner: []
     });
 
     useEffect(() => {
@@ -71,8 +72,29 @@ function GFTCreateProject() {
                 console.log(res);
                 setProject({ ...project, thumb: ipfsUrl + res.hash })
             })
-
         }
+    }
+
+    const uploadBanner = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            let data = event.target.files[0];
+            uploadFile(data, (event) => {
+                console.log(event);
+                console.log(Math.round(event.loaded / event.total * 100) + '% done');
+            }).then(res => {
+                console.log(res);
+                let obj = { ...project }
+                obj.banner.push({ url: ipfsUrl + res.hash });
+                setProject(obj);
+            })
+        }
+    }
+
+    const delBanner = (index) => {
+        console.log(index);
+        let obj = { ...project };
+        obj.banner.splice(index, 1);
+        setProject(obj);
     }
 
     const uploadFile = (file, callback) => {
@@ -138,10 +160,135 @@ function GFTCreateProject() {
                 rows={2}
                 style={{ marginTop: 11 }}
             />
-
-
-
-        </div >
+            <div className='title_layout'>
+                <span className='thumbnail'>Thumbnail</span>
+                <span className='info'>Upload instructions</span>
+            </div>
+            <div className='layout_img_upload'>
+                {Array.from(project.banner).map((item, index) => (
+                    <div key={"banner" + index} className='box_layout'>
+                        <div className='img_close' onClick={() => delBanner(index)}></div>
+                        <img className='img' src={item.url}></img>
+                    </div>
+                ))}
+                <div className='box_up' >
+                    <input className='upload_banner' onChange={(e) => uploadBanner(e)} id="fileContact1" accept="image/*" multiple type="file" />
+                    <div className='img_up'></div>
+                    <div className='txt'>
+                        UPLOAD
+                        <br />
+                        PRODUCT
+                        <br />
+                        SCREENSHOT
+                    </div>
+                </div>
+            </div>
+            <div className='title_layout'>
+                <span className='thumbnail'>Social</span>
+                <span className='info'>Upload instructions</span>
+            </div>
+            <div className='social_layout'>
+                <div className='item'>
+                    <div className='img_youtube'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Youtube links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_twitter'></div>
+                    <RedditTextField
+                        hiddenLabel
+l                      defaultValue="Enter Twitter links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_dicord'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter dicord links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_reddit'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Reddit links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_facebook'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Facebook links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_telegram'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Telegram links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_github'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Github links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_ins'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter instagram links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+                <div className='item'>
+                    <div className='img_medium'></div>
+                    <RedditTextField
+                        hiddenLabel
+                        defaultValue="Enter Medium links"
+                        id="linked-input"
+                        variant="filled"
+                        rows={1}
+                        style={{ marginTop: 0 ,marginLeft:13}}
+                    />
+                </div>
+            </div>
+        </div>
     );
 
 }
