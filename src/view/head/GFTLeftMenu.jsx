@@ -26,7 +26,6 @@ function GFTLeftMenu() {
     useEffect(() => {
         requsetData();
         return () => {
-
         }
 
     }, [])

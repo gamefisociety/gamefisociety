@@ -7,6 +7,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { OutlinedInputProps } from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import './GFTCreateProject.scss';
+import GSTProjectBase from '../../web3/GSTProject';
 
 const ipfsUrl = "https://ipfs.io/ipfs/";
 
@@ -48,10 +49,22 @@ const RedditTextField = styled((props) => (
 }));
 
 function GFTCreateProject() {
-
+    const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const [project, setProject] = useState({
         thumb: "",
-        banner: []
+        title: "",
+        description: '',
+        chainAddress: '',
+        banner: [],
+        youtube: '',
+        twitter: '',
+        discord: '',
+        facebook: '',
+        reddit: '',
+        telegram: '',
+        github: '',
+        instagram: '',
+        medium: '',
     });
 
     useEffect(() => {
@@ -90,6 +103,45 @@ function GFTCreateProject() {
         }
     }
 
+    function stringToBuffer(str) {
+        return new Promise((resolve) => {
+            var blob = new Blob([str], { type: "text/plain" });
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                const result = event.target.result;
+                // console.log("result",result);
+                resolve(result);
+            };
+            reader.readAsArrayBuffer(blob);
+        });
+    }
+
+    const createNFT = (uri) => {
+   
+        if (account) {
+            GSTProjectBase.creatMintNFT(library, account,uri,project.title).then(res => {
+                console.log(res,'res');
+              
+            }).catch(err => {
+             
+            })
+        } else {
+            return 0;
+        }
+    }
+
+    const uploadBuffer = (data) => {
+        stringToBuffer(JSON.stringify(data)).then(buffer => {
+            uploadFile(buffer, (event) => {
+                console.log(event);
+                console.log(Math.round(event.loaded / event.total * 100) + '% done');
+            }).then(res => {
+                console.log(res);
+                createNFT( ipfsUrl + res.hash);
+            })
+        });
+    }
+
     const delBanner = (index) => {
         console.log(index);
         let obj = { ...project };
@@ -107,7 +159,13 @@ function GFTCreateProject() {
             data: file,
             httpUploadProgressCallback: callback
         });
+    }
 
+    const onValueScial = (e, name) => {
+        setProject({ ...project, [name]: e.target.value });
+    }
+    const clickCreate = () => {
+        uploadBuffer(project);
     }
 
 
@@ -196,29 +254,32 @@ function GFTCreateProject() {
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'youtube')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
                     <div className='img_twitter'></div>
                     <RedditTextField
                         hiddenLabel
-l                      placeholder="Enter Twitter links"
+                        l placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'twitter')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
-                    <div className='img_dicord'></div>
+                    <div className='img_discord'></div>
                     <RedditTextField
                         hiddenLabel
-                        placeholder="Enter dicord links"
+                        placeholder="Enter discord links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'discord')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -229,7 +290,8 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'reddit')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -240,7 +302,8 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'facebook')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -251,7 +314,8 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'telegram')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -262,7 +326,8 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'github')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -273,7 +338,7 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
                 <div className='item'>
@@ -284,9 +349,13 @@ l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
-                        style={{ marginTop: 0 ,marginLeft:13}}
+                        onChange={(e) => onValueScial(e, 'medium')}
+                        style={{ marginTop: 0, marginLeft: 13 }}
                     />
                 </div>
+            </div>
+            <div className='create_btn' onClick={() => clickCreate()}>
+                CREATE
             </div>
         </div>
     );

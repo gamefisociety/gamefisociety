@@ -6,8 +6,9 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow: scroll;
     box-sizing: border-box;
+   
 
     .title_layout {
         margin-top: 57px;
@@ -35,6 +36,7 @@
     }
 
     .upload_tumb {
+        flex-shrink: 0;
         position: relative;
         margin-top: 20px;
         width: 200px;
@@ -178,76 +180,105 @@
         }
     }
 
-    .social_layout{
+    .social_layout {
         width: 100%;
         height: auto;
         display: grid;
         grid-template-columns: repeat(auto-fill, 400px);
         grid-row-gap: 12px;
         grid-column-gap: 12px;
-        .item{
+
+        .item {
             width: 400px;
-            width:auto;
+            width: auto;
             height: auto;
             display: flex;
             flex-direction: row;
             align-items: center;
-            .img_youtube{
+
+            .img_youtube {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_youtube.png);
                 background-size: 100% 100%;
             }
-            .img_twitter{
+
+            .img_twitter {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_twitter.png);
                 background-size: 100% 100%;
             }
-            .img_dicord{
+
+            .img_discord {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_discord.png);
                 background-size: 100% 100%;
             }
-            .img_reddit{
+
+            .img_reddit {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_reddit.png);
                 background-size: 100% 100%;
             }
-            .img_facebook{
+
+            .img_facebook {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_facebook.png);
                 background-size: 100% 100%;
             }
-            .img_telegram{
+
+            .img_telegram {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_telegram.png);
                 background-size: 100% 100%;
             }
-            .img_github{
+
+            .img_github {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_github.png);
                 background-size: 100% 100%;
             }
-            .img_ins{
+
+            .img_ins {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_ins.png);
                 background-size: 100% 100%;
             }
-            .img_medium{
+
+            .img_medium {
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_medium.png);
                 background-size: 100% 100%;
             }
-           
+
         }
+    }
+
+    .create_btn {
+        cursor: pointer;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-top: 57px;
+        width: 352px;
+        height: 48px;
+        background: #006CF9;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     #filled-multiline-static {
@@ -257,7 +288,8 @@
         font-weight: 500;
         color: #FFFFFF;
     }
-    #linked-input{
+
+    #linked-input {
         width: 300px;
         min-width: 100%;
         height: 5px;
