@@ -192,7 +192,7 @@ function GFTCreateProject() {
                     <div className='img_youtube'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Youtube links"
+                        placeholder="Enter Youtube links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -203,7 +203,7 @@ function GFTCreateProject() {
                     <div className='img_twitter'></div>
                     <RedditTextField
                         hiddenLabel
-l                      defaultValue="Enter Twitter links"
+l                      placeholder="Enter Twitter links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -214,7 +214,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_dicord'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter dicord links"
+                        placeholder="Enter dicord links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -225,7 +225,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_reddit'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Reddit links"
+                        placeholder="Enter Reddit links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -236,7 +236,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_facebook'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Facebook links"
+                        placeholder="Enter Facebook links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -247,7 +247,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_telegram'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Telegram links"
+                        placeholder="Enter Telegram links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -258,7 +258,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_github'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Github links"
+                        placeholder="Enter Github links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -269,7 +269,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_ins'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter instagram links"
+                        placeholder="Enter instagram links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
@@ -280,7 +280,7 @@ l                      defaultValue="Enter Twitter links"
                     <div className='img_medium'></div>
                     <RedditTextField
                         hiddenLabel
-                        defaultValue="Enter Medium links"
+                        placeholder="Enter Medium links"
                         id="linked-input"
                         variant="filled"
                         rows={1}
