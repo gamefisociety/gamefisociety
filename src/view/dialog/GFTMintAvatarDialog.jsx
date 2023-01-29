@@ -21,6 +21,28 @@ function GFTMintAvatarDialog() {
     const dispatch = useDispatch();
     const [isLoadSub, setIsLoadSub] = useState(false);
     const [checkState, setCheckState] = useState(0);
+    useEffect(() => {
+        getAvatarBalance();
+        return () => {
+
+        }
+    }, [])
+
+    const getAvatarBalance = () => {
+        if (account) {
+            GSTAvatarNFTBase.getTokenbalanceOf(library, account).then(res => {
+                if(res > 0){
+                    setCheckState(3);
+                }
+            }).catch(err => {
+                setCheckState(2);
+                console.log(err,'err');
+
+            })
+        } else {
+            return 0;
+        }
+    }
 
     const cancelDialog = () => {
         dispatch(setOpenMintAvatar(false));
@@ -53,6 +75,8 @@ function GFTMintAvatarDialog() {
             return "Got An Avatar NFT!"
         } else if (checkState == 2) {
             return "Something Wrong!"
+        }else if (checkState == 3) {
+            return "You already have an avatar!"
         }
     }
 

@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import {
     isCheckIn,
     setOpenCheckIn,
-    setIsOpen
+    setIsOpen,
+    setOpenMintAvatar
 } from '../../module/store/features/dialog/GFTDialogSlice';
 import './GFTLeftMenu.scss';
 
@@ -14,6 +15,7 @@ import ic_eth from "../../asset/image/home/ic_eth.png"
 import ic_swap from "../../asset/image/home/ic_swap.png"
 import ic_polgon from "../../asset/image/home/ic_polgon.png"
 import ic_check_in from "../../asset/image/home/ic_check_in.png"
+import ic_free_nft from "../../asset/image/home/ic_free_nft.png"
 import ic_create from '../../asset/image/home/ic_create.png'
 
 
@@ -41,6 +43,14 @@ function GFTLeftMenu() {
         }
     }
 
+    const mintAvatarHandle = () => {
+        if (account) {
+            dispatch(setOpenMintAvatar(true));
+        } else {
+            dispatch(setIsOpen(true));
+        }
+    }
+
     const clickCreate = () => {
         navigate('/create_project');
     }
@@ -50,6 +60,10 @@ function GFTLeftMenu() {
             <div className='item' onClick={openCheckIn}>
                 <img className='img' src={ic_check_in}></img>
                 <span className='txt'>check in</span>
+            </div>
+            <div className='item' onClick={mintAvatarHandle}>
+                <img className='img' src={ic_free_nft}></img>
+                <span className='txt'>MINT AVATAR</span>
             </div>
             <div className='item'>
                 <img className='img' src={ic_swap}></img>
