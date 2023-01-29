@@ -5,6 +5,7 @@ const initialState = {
   isOpenConnect:false,
   isOpenMenuWallet:false,
   isOpenCheckIn:false,
+  isOpenMintAvatar:false,
   status:'idle'
 };
 
@@ -38,6 +39,9 @@ export const diloagSlice = createSlice({
     setOpenCheckIn: (state, action) => {
       state.isOpenCheckIn = action.payload;
     },
+    setOpenMintAvatar: (state, action) => {
+      state.isOpenMintAvatar = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -52,11 +56,12 @@ export const diloagSlice = createSlice({
   },
 });
 
-export const { increment, decrement, setIsOpen,setIsOpenWallet,setOpenCheckIn } = diloagSlice.actions;
+export const { increment, decrement, setIsOpen,setIsOpenWallet,setOpenCheckIn, setOpenMintAvatar } = diloagSlice.actions;
 
 
 export const isOpen = (state) => state.dialog.isOpenConnect;
 export const isMenuWallet = (state) => state.dialog.isOpenMenuWallet;
 export const isCheckIn = (state) => state.dialog.isOpenCheckIn;
+export const isMintAvatar = (state) => state.dialog.isOpenMintAvatar;
 
 export default diloagSlice.reducer;

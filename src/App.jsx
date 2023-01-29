@@ -8,10 +8,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import GFTConnectDialog from "./view/dialog/GFTConnectDialog";
 import GFTWalletMenu from "./view/menu/GFTWalletMenu";
 import GFTCheckInDialog from "./view/dialog/GFTCheckInDialog";
+import GFTMintAvatarDialog from "./view/dialog/GFTMintAvatarDialog";
 import {
   setIsOpenWallet,
   isMenuWallet,
-  isCheckIn
+  isCheckIn,
+  isMintAvatar
 } from './module/store/features/dialog/GFTDialogSlice';
 import './App.css';
 function getLibrary(provider, connector) {
@@ -23,6 +25,7 @@ function getLibrary(provider, connector) {
 function App() {
   const isOpenMenu = useSelector(isMenuWallet);
   const isOpenCheckIn = useSelector(isCheckIn);
+  const isOpenMintAvatar = useSelector(isMintAvatar);
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <SnackbarProvider maxSnack={3}>
@@ -36,6 +39,9 @@ function App() {
           <GFTConnectDialog />
           {
             isOpenCheckIn ? <GFTCheckInDialog /> : ""
+          }
+          {
+            isOpenMintAvatar ? <GFTMintAvatarDialog /> : ""
           }
         </div>
       </SnackbarProvider>

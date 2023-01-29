@@ -1,73 +1,77 @@
-import { React, useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core'
-import { useSelector, useDispatch } from 'react-redux';
+import { React, useEffect, useState } from "react";
+import { useWeb3React } from "@web3-react/core";
+import { useSelector, useDispatch } from "react-redux";
 import {
-    isCheckIn,
-    setOpenCheckIn,
-    setIsOpen
-} from '../../module/store/features/dialog/GFTDialogSlice';
-import './GFTLeftMenu.scss';
+  isCheckIn,
+  setOpenCheckIn,
+  setIsOpen,
+  setOpenMintAvatar,
+} from "../../module/store/features/dialog/GFTDialogSlice";
+import "./GFTLeftMenu.scss";
 
-import ic_bnb from "../../asset/image/home/ic_bnb.png"
-import ic_eth from "../../asset/image/home/ic_eth.png"
-import ic_swap from "../../asset/image/home/ic_swap.png"
-import ic_polgon from "../../asset/image/home/ic_polgon.png"
-import ic_check_in from "../../asset/image/home/ic_check_in.png"
-
+import ic_bnb from "../../asset/image/home/ic_bnb.png";
+import ic_eth from "../../asset/image/home/ic_eth.png";
+import ic_swap from "../../asset/image/home/ic_swap.png";
+import ic_polgon from "../../asset/image/home/ic_polgon.png";
+import ic_check_in from "../../asset/image/home/ic_check_in.png";
+import ic_free_nft from "../../asset/image/home/ic_free_nft.png";
 
 function GFTLeftMenu() {
-    const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpen = useSelector(isCheckIn);
-    const dispatch = useDispatch();
+  const { activate, account, chainId, active, library, deactivate } =
+    useWeb3React();
+  const isOpen = useSelector(isCheckIn);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        requsetData();
-        return () => {
+  useEffect(() => {
+    requsetData();
+    return () => {};
+  }, []);
 
-        }
-
-    }, [])
-
-    const requsetData = () => {
-
+  const requsetData = () => {};
+  const openCheckIn = () => {
+    if (account) {
+      dispatch(setOpenCheckIn(true));
+    } else {
+      dispatch(setIsOpen(true));
     }
-    const openCheckIn = () => {
-        if(account){
-            dispatch(setOpenCheckIn(true));
-        }else{
-            dispatch(setIsOpen(true));
-        }
-        
+  };
+
+  const getNftHandle = () => {
+    if (account) {
+      dispatch(setOpenMintAvatar(true));
+    } else {
+      dispatch(setIsOpen(true));
     }
+  };
 
-    return (
-
-        <div className='left_menu_bg'>
-            <div className='item' onClick={openCheckIn}>
-                <img className='img' src={ic_check_in}></img>
-                <span className='txt'>check in</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_swap}></img>
-                <span className='txt'>SWAP</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_eth}></img>
-                <span className='txt'>ETH</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_bnb}></img>
-                <span className='txt'>BNB</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_polgon}></img>
-                <span className='txt'>POLYGON</span>
-            </div>
-
-
-        </div>
-
-    );
+  return (
+    <div className="left_menu_bg">
+      <div className="item" onClick={openCheckIn}>
+        <img className="img" src={ic_check_in}></img>
+        <span className="txt">check in</span>
+      </div>
+      <div className="item" onClick={getNftHandle}>
+        <img className="img" src={ic_free_nft}></img>
+        <span className="txt">free nft</span>
+      </div>
+      <div className="item">
+        <img className="img" src={ic_swap}></img>
+        <span className="txt">SWAP</span>
+      </div>
+      <div className="item">
+        <img className="img" src={ic_eth}></img>
+        <span className="txt">ETH</span>
+      </div>
+      <div className="item">
+        <img className="img" src={ic_bnb}></img>
+        <span className="txt">BNB</span>
+      </div>
+      <div className="item">
+        <img className="img" src={ic_polgon}></img>
+        <span className="txt">POLYGON</span>
+      </div>
+    </div>
+  );
 }
 
 export default GFTLeftMenu;
