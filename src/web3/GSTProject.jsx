@@ -13,7 +13,7 @@ class GSTProjectBase {
             );
             
             try {
-                contract.methods.mint(account,_uri,_name).call({
+                contract.methods.mint(account,_uri,_name).send({
                     from: account
                 }).then(res => {
                     resolve(res);
