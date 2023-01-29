@@ -12,8 +12,6 @@ import GFTLeftMenu from '../head/GFTLeftMenu';
 
 
 function GFTHome() {
-
-
     return (
         <div className='home_bg'>
             <GFTHead></GFTHead>

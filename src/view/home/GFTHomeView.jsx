@@ -108,12 +108,10 @@ function GFTHomeView() {
                 {Array.from(videoList).map((item, index) => (
                     <div key={"video_item_" + index} className="layout_item" onClick={() => itemVideo(index)}>
                         <img className='video' src={item.thumb}>
-
                         </img>
                         <img className='play' src={ic_play_youtube}></img>
                         <span className="txt">{item.desc}</span>
                     </div>
-
                 ))}
             </div>
             <div className="rank_layout_head">

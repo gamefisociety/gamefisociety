@@ -44,10 +44,6 @@ class GSTClaimBase {
             }
         })
     }
-
-
-    
-
 }
 
 export default GSTClaimBase;
