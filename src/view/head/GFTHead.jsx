@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
 import {
     decrement,
     increment,
@@ -21,6 +22,7 @@ import ic_man from "../../asset/image/home/ic_man.png"
 
 
 function GFTHead() {
+    const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
     const dispatch = useDispatch();
@@ -37,12 +39,12 @@ function GFTHead() {
 
     }
     const openDialog = () => {
-        if(account){
+        if (account) {
             dispatch(setIsOpenWallet(true));
-        }else{
+        } else {
             dispatch(setIsOpen(true));
         }
-       
+
     }
 
     const getChainLows = () => {
@@ -51,11 +53,14 @@ function GFTHead() {
         }
         return "CONNECT"
     }
+    const clickLogo = () => {
+        navigate('/');
+    }
 
     return (
 
         <div className='head_bg'>
-            <img className="logo" src={ic_logo}></img>
+            <img className="logo" src={ic_logo} onClick={clickLogo}></img>
             <div className='right'>
                 <img className='man' src={ic_man}></img>
                 <img className='message' src={ic_massage}></img>

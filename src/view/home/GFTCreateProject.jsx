@@ -117,7 +117,6 @@ function GFTCreateProject() {
     }
 
     const createNFT = (uri) => {
-   
         if (account) {
             GSTProjectBase.creatMintNFT(library, account,uri,project.title).then(res => {
                 console.log(res,'res');
