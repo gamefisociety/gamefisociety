@@ -83,7 +83,7 @@ function GFTLeftMenu() {
             </div>
             <div className='item'>
                 <img className='img' src={ic_create} onClick={clickCreate}></img>
-                <span className='txt'>CREAT</span>
+                <span className='txt'>CREATE</span>
             </div>
         </div>
 
