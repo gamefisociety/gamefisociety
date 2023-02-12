@@ -12,7 +12,7 @@ import GFTLeftMenu from '../head/GFTLeftMenu';
 function GFTHome() {
     return (
         <div className='home_bg'>
-            <GFTHead01></GFTHead01>
+            <GFTHead01 />
             <div className='bt_layout'>
                 <GFTLeftMenu></GFTLeftMenu>
                 <Outlet/>
