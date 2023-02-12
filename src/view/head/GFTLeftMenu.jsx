@@ -59,7 +59,7 @@ function GFTLeftMenu() {
         <div className='left_menu_bg'>
             <div className='item' onClick={openCheckIn}>
                 <img className='img' src={ic_check_in}></img>
-                <span className='txt'>check in</span>
+                <span className='txt'>CHECK IN</span>
             </div>
             <div className='item' onClick={mintAvatarHandle}>
                 <img className='img' src={ic_free_nft}></img>
