@@ -25,6 +25,9 @@ const UsersSlice = createSlice({
   name: "Users",
   initialState: InitState,
   reducers: {
+    // init: (state, action) => {
+
+    // },
     setUsers(state, action) {
       state.users = action.payload;
     },
