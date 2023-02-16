@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import {
+    generatePrivateKey, getPublicKey, getEventHash, validateEvent,
+    verifySignature,
+    signEvent,
+} from 'nostr-tools';
 //
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
@@ -36,6 +42,7 @@ import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_massage from "../../asset/image/home/ic_massage.png"
 import ic_wallet from "../../asset/image/home/ic_wallet.png"
 import ic_man from "../../asset/image/home/ic_man.png"
+import { Divider } from '../../../node_modules/@mui/material/index';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -83,16 +90,54 @@ const GFTHead01 = () => {
     const isOpenConnect = useSelector(isOpen);
     const dispatch = useDispatch();
 
+    const [loginState, setLoginState] = React.useState(0);
+
+    //
+    const requsetData = () => {
+
+    }
+
+    //logcheck
     useEffect(() => {
-        requsetData();
+        let pubkey = window.localStorage.getItem('pubkey');
+        console.log("pubkey", pubkey);
+        if (pubkey === null || pubkey === undefined) {
+            //走登陆逻辑
+        } else {
+            setLoginState(1);
+        }
         return () => {
 
         }
 
     }, [])
 
-    const requsetData = () => {
-
+    //
+    const newAccount = () => {
+        //create new account
+        let sk = generatePrivateKey() // `sk` is a hex string
+        let pk = getPublicKey(sk) // `pk` is a hex string
+        console.log('prikey', sk);
+        console.log('pubkey', pk);
+        //
+        let event = {
+            kind: 1,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [],
+            content: 'hello! gamefi society',
+            pubkey: pk
+        }
+        event.id = getEventHash(event)
+        event.sig = signEvent(event, sk)
+        let ok = validateEvent(event)
+        let veryOk = verifySignature(event)
+        //
+        console.log('kind1', ok, veryOk, event);
+        //
+        window.localStorage.setItem('prikey', sk);
+        window.localStorage.setItem('pubkey', pk);
+        //
+        setLoginState(1);
     }
 
     const openDialog = () => {
@@ -115,7 +160,6 @@ const GFTHead01 = () => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -155,6 +199,12 @@ const GFTHead01 = () => {
         >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <Divider></Divider>
+            <MenuItem onClick={() => {
+                window.localStorage.removeItem('prikey');
+                window.localStorage.removeItem('pubkey');
+                setLoginState(0);
+            }}>Clear Account</MenuItem>
         </Menu>
     );
 
@@ -224,9 +274,6 @@ const GFTHead01 = () => {
                         <MenuIcon />
                     </IconButton>
                     <img width={160} src={ic_logo} onClick={clickLogo}></img>
-                    {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                        <img width={160} src={ic_logo} onClick={clickLogo}></img>
-                    </IconButton> */}
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -237,45 +284,50 @@ const GFTHead01 = () => {
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <Box className='wallet_layout' onClick={openDialog}>
-                            {/* <img className='img' src={ic_wallet} ></img> */}
-                            {/* <span className='txt'>{account ? getChainLows() : 'CONNECT'}</span> */}
-                            <Typography
-                                variant="h6"
-                                noWrap
-                                component="div"
-                                sx={{ display: { xs: 'none', sm: 'block' } }}
-                            >
-                                {account ? getChainLows() : 'CONNECT'}
-                            </Typography>
-                        </Box>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Box>
+                    {
+                        loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <Button variant="contained" onClick={newAccount}>Sign in</Button>
+                        </Box> :
+                            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                                <Box className='wallet_layout' onClick={openDialog}>
+                                    {/* <img className='img' src={ic_wallet} ></img> */}
+                                    {/* <span className='txt'>{account ? getChainLows() : 'CONNECT'}</span> */}
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="div"
+                                        sx={{ display: { xs: 'none', sm: 'block' } }}
+                                    >
+                                        {account ? getChainLows() : 'CONNECT'}
+                                    </Typography>
+                                </Box>
+                                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                                    <Badge badgeContent={4} color="error">
+                                        <MailIcon />
+                                    </Badge>
+                                </IconButton>
+                                <IconButton
+                                    size="large"
+                                    aria-label="show 17 new notifications"
+                                    color="inherit"
+                                >
+                                    <Badge badgeContent={17} color="error">
+                                        <NotificationsIcon />
+                                    </Badge>
+                                </IconButton>
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                            </Box>
+                    }
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
