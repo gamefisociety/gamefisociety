@@ -1,24 +1,22 @@
 import * as secp from "@noble/secp256k1";
 import { v4 as uuid } from "uuid";
-import { DefaultConnectTimeout } from "Const";
+import { DefaultConnectTimeout } from "nostr/Const";
 import { ClientState, Nips } from "nostr/def";
-import { System } from "nostr/System";
+import { System } from "nostr/NostrSystem";
 import { unwrap } from "nostr/Util";
-
-export var RelaySetting = {
-  read: 1,
-  write: 1
-};
 
 export default class ClientRelay {
 
-  constructor(addr, options) {
+  constructor(addr, read, write) {
     this.Id = uuid();
     this.Address = addr;
     this.Socket = null;
     this.Pending = [];
     this.Subscriptions = new Map();
-    this.Settings = options;
+    this.Settings = {
+      write: write,
+      read: read
+    };
     this.ConnectTimeout = DefaultConnectTimeout;
     this.Stats = new ClientState();
     this.StateHooks = new Map();

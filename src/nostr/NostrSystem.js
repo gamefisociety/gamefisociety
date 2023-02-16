@@ -8,19 +8,19 @@ export class NostrSystem {
     this.Subscriptions = new Map();
     this.PendingSubscriptions = [];
     this.WantsMetadata = new Set();
-    this._FetchMetadata();
+    // this._FetchMetadata();
   }
 
-  ConnectRelay(address, options) {
+  ConnectRelay(address, read, write) {
     try {
       if (!this.ClientRelays.has(address)) {
-        const c = new ClientRelay(address, options);
+        const c = new ClientRelay(address, read, write);
         this.ClientRelays.set(address, c);
         for (const [, s] of this.Subscriptions) {
           c.AddSubscription(s);
         }
       } else {
-        unwrap(this.ClientRelays.get(address)).Settings = options;
+        // unwrap(this.ClientRelays.get(address)).Settings = options;
       }
     } catch (e) {
       console.error(e);
