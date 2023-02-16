@@ -1,4 +1,3 @@
-import { RelaySettings } from "./Connection";
 
 /**
  * Add-on api for snort features
