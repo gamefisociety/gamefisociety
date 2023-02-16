@@ -25,12 +25,6 @@ const SocietySlice = createSlice({
   initialState: InitState,
   reducers: {
     init: (state, action) => {
-      // state.useDb = action.payload;
-      // // notifications
-      // const readNotif = parseInt(window.localStorage.getItem(NotificationsReadItem) ?? "0");
-      // if (!isNaN(readNotif)) {
-      //   state.readNotifications = readNotif;
-      // }
       console.log('SocieSlice init', state.follows);
     },
     setFollows: (state, action) => {

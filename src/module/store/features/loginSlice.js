@@ -4,10 +4,7 @@ import { DefaultRelays } from "nostr/Const";
 
 const PrivateKeyItem = "secret";
 const PublicKeyItem = "pubkey";
-const NotificationsReadItem = "notifications-read";
-const UserPreferencesKey = "preferences";
 const RelayListKey = "last-relays";
-const FollowList = "last-follows";
 
 // export const DefaultImgProxy = {
 //   url: "https://imgproxy.snort.social",
@@ -25,16 +22,6 @@ export const InitState = {
   latestRelays: 0,
 };
 
-var SetRelaysPayload = {
-  relays: new Map(),
-  createdAt: 0,
-}
-
-var SetFollowsPayload = {
-  keys: [],
-  createdAt: 0,
-}
-
 const LoginSlice = createSlice({
   name: "Login",
   initialState: InitState,
@@ -49,43 +36,18 @@ const LoginSlice = createSlice({
       } else {
         state.loggedOut = true;
       }
-
       // check pub key only
       const pubKey = window.localStorage.getItem(PublicKeyItem);
       if (pubKey && !state.privateKey) {
         state.publicKey = pubKey;
         state.loggedOut = false;
       }
-
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       if (lastRelayList) {
         state.relays = JSON.parse(lastRelayList);
       } else {
         state.relays = Object.fromEntries(DefaultRelays.entries());
       }
-
-      const lastFollows = window.localStorage.getItem(FollowList);
-      if (lastFollows) {
-        state.follows = JSON.parse(lastFollows);
-      }
-
-      // notifications
-      const readNotif = parseInt(window.localStorage.getItem(NotificationsReadItem) ?? "0");
-      if (!isNaN(readNotif)) {
-        state.readNotifications = readNotif;
-      }
-
-      // preferences
-      const pref = window.localStorage.getItem(UserPreferencesKey);
-      if (pref) {
-        state.preferences = JSON.parse(pref);
-      }
-
-      // disable reactions for logged out
-      if (state.loggedOut === true) {
-        state.preferences.enableReactions = false;
-      }
-
       console.log('relays init', state.relays);
     },
     setPrivateKey: (state, action) => {
