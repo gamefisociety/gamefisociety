@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as secp from "@noble/secp256k1";
 import { DefaultRelays } from "nostr/Const";
 
-const PrivateKeyItem = "secret";
+const PrivateKeyItem = "prikey";
 const PublicKeyItem = "pubkey";
 const RelayListKey = "last-relays";
 
@@ -13,7 +13,7 @@ const RelayListKey = "last-relays";
 // };
 
 export const InitState = {
-  useDb: "redux", // "indexdDb" | "redux"
+  useDb: "redux",
   loggedOut: undefined,
   publicKey: undefined,
   privateKey: undefined,
@@ -27,28 +27,31 @@ const LoginSlice = createSlice({
   initialState: InitState,
   reducers: {
     init: (state, action) => {
+      // console.log('init login slice', state, action);
       state.useDb = action.payload;
+      //process privatekey
       state.privateKey = window.localStorage.getItem(PrivateKeyItem) ?? undefined;
       if (state.privateKey) {
-        window.localStorage.removeItem(PublicKeyItem); // reset nip07 if using private key
+        window.localStorage.removeItem(PublicKeyItem);
         state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(state.privateKey));
         state.loggedOut = false;
       } else {
         state.loggedOut = true;
       }
-      // check pub key only
+      //process pubkey
       const pubKey = window.localStorage.getItem(PublicKeyItem);
       if (pubKey && !state.privateKey) {
         state.publicKey = pubKey;
         state.loggedOut = false;
       }
+      //process relays
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       if (lastRelayList) {
         state.relays = JSON.parse(lastRelayList);
       } else {
         state.relays = Object.fromEntries(DefaultRelays.entries());
       }
-      console.log('relays init', state.relays);
+      console.log('relays init', state);
     },
     setPrivateKey: (state, action) => {
       state.loggedOut = false;

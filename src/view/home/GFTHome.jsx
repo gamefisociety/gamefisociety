@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom'
 import './GFTHome.scss';
 import { System } from 'nostr/NostrSystem';
+import { init, setRelays } from "module/store/features/loginSlice";
 import { SearchRelays, SnortPubKey } from "nostr/Const";
 
 // import GFTHead from '../head/GFTHead'
@@ -11,22 +12,31 @@ import GFTLeftMenu from '../head/GFTLeftMenu';
 
 const GFTHome = () => {
 
+    const dispatch = useDispatch();
+
     const { relays, publicKey, loggedOut } =
         useSelector((s) => s.login);
 
     useEffect(() => {
-        console.log('GFTHome relays', relays);
         if (relays) {
-            for (const [k, v] of Object.entries(relays)) {
-                System.ConnectRelay(k, v.read, v.write);
+            //connect target relays
+            for (const [addr, v] of Object.entries(relays)) {
+                System.ConnectRelay(addr, v.read, v.write);
             }
-            // for (const [k] of System.Sockets) {
-            //     if (!relays[k] && !SearchRelays.has(k)) {
-            //         System.DisconnectRelay(k);
-            //     }
-            // }
+            //diconnect noneed relays
+            for (const [addr] of System.ClientRelays) {
+                if (!relays[addr] && !SearchRelays.has(addr)) {
+                    System.DisconnectRelay(addr);
+                }
+            }
         }
     }, [relays]);
+
+    //init param form db or others
+    useEffect(() => {
+        console.debug('use db from reduce');
+        dispatch(init('redux'));
+    }, []);
 
     return (
         <div className='home_bg'>

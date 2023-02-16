@@ -14,13 +14,18 @@ export class NostrSystem {
   ConnectRelay(address, read, write) {
     try {
       if (!this.ClientRelays.has(address)) {
-        const c = new ClientRelay(address, read, write);
-        this.ClientRelays.set(address, c);
-        for (const [, s] of this.Subscriptions) {
-          c.AddSubscription(s);
-        }
+        const client = new ClientRelay(address, read, write);
+        let sys = this;
+        client.connect(this.processSubEvent).then(ret => {
+          // console.log('GFTHome relays', ret, address);
+          sys.ClientRelays.set(address, client);
+        });
+        //
       } else {
-        // unwrap(this.ClientRelays.get(address)).Settings = options;
+        unwrap(this.ClientRelays.get(address)).Settings = {
+          read: read,
+          write: write
+        };
       }
     } catch (e) {
       console.error(e);
@@ -35,19 +40,29 @@ export class NostrSystem {
     }
   }
 
+  initSubEvent = (client) => {
+    for (const [, s] of this.Subscriptions) {
+      client.sendSubscription(s);
+    }
+  }
+  //process sub event
+  processSubEvent = (subId, tagged) => {
+    this.Subscriptions(subId)?.OnEvent(tagged);
+  }
+
   AddSubscription(sub) {
     for (const [, tmpRelay] of this.ClientRelays) {
-      tmpRelay.AddSubscription(sub)
+      if (tmpRelay.AddSub(sub.Id, sub)) {
+        tmpRelay.sendSubscription(sub);
+      }
     }
-    //
     this.Subscriptions.set(sub.Id, sub);
   }
 
   RemoveSubscription(subId) {
     for (const [, tmpRelay] of this.ClientRelays) {
-      tmpRelay.RemoveSubscription(subId)
+      tmpRelay.RemoveSub(subId)
     }
-    //
     this.Subscriptions.delete(subId);
   }
 

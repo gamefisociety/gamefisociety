@@ -8,17 +8,21 @@ import { unwrap } from "nostr/Util";
 export default class ClientRelay {
 
   constructor(addr, read, write) {
+    //
+    this.Stats = new ClientState();
+    //
     this.Id = uuid();
     this.Address = addr;
     this.Socket = null;
-    this.Pending = [];
-    this.Subscriptions = new Map();
+    this.PendingList = [];
+    this.SubSupports = new Map();
+    this.SubCallback = null;
+    this.SubInit = null;
     this.Settings = {
+      read: read,
       write: write,
-      read: read
     };
     this.ConnectTimeout = DefaultConnectTimeout;
-    this.Stats = new ClientState();
     this.StateHooks = new Map();
     this.HasStateChange = true;
     this.CurrentState = {
@@ -36,12 +40,12 @@ export default class ClientRelay {
     this.EventsCallback = new Map();
     this.AwaitingAuth = new Map();
     this.Authed = false;
-    this.connect();
   }
 
-  async connect() {
+  connect = async (subInit, subCallback) => {
+    let flag = false;
     try {
-      if (this.Info === undefined) {
+      if (this.RelayInfo === undefined) {
         const u = new URL(this.Address);
         const rsp = await fetch(`https://${u.host}`, {
           headers: {
@@ -55,24 +59,62 @@ export default class ClientRelay {
               data[k] = undefined;
             }
           }
-          this.Info = data;
+          this.RelayInfo = data;
+          this.SubInit = subInit;
+          this.SubCallback = subCallback;
+          flag = true;
+        } else {
+          flag = false;
         }
+        console.log('relay info', this.RelayInfo);
       }
     } catch (e) {
       console.warn("Could not load relay information", e);
+    } finally {
+      if (flag === true) {
+        if (this.IsClosed) {
+          this._UpdateState();
+        } else {
+          this.IsClosed = false;
+          this.Socket = new WebSocket(this.Address);
+          // on open
+          this.Socket.onopen = () => {
+            this.ConnectTimeout = DefaultConnectTimeout;
+            this._InitSubscriptions();
+            console.log(`[${this.Address}] Open!`);
+          };
+          // on error
+          this.Socket.onerror = e => {
+            console.error(e);
+            this._UpdateState();
+          };
+          //on close
+          this.Socket.onclose = e => {
+            if (!this.IsClosed) {
+              this.ConnectTimeout = this.ConnectTimeout * 2;
+              console.log(
+                `[${this.Address}] Closed (${e.reason}), trying again in ${(this.ConnectTimeout / 1000)
+                  .toFixed(0)
+                  .toLocaleString()} sec`
+              );
+              this.ReconnectTimer = setTimeout(() => {
+                this.Connect();
+              }, this.ConnectTimeout);
+              this.Stats.Disconnects++;
+            } else {
+              console.log(`[${this.Address}] Closed!`);
+              this.ReconnectTimer = null;
+            }
+            this._UpdateState();
+          };
+          //
+          this.Socket.onmessage = e => this.OnMessage(e);
+        }
+      }
+      return new Promise((resolve, reject) => {
+        resolve(flag);
+      });
     }
-
-    if (this.IsClosed) {
-      this._UpdateState();
-      return;
-    }
-
-    this.IsClosed = false;
-    this.Socket = new WebSocket(this.Address);
-    this.Socket.onopen = () => this.OnOpen();
-    this.Socket.onmessage = e => this.OnMessage(e);
-    this.Socket.onerror = e => this.OnError(e);
-    this.Socket.onclose = e => this.OnClose(e);
   }
 
   Close() {
@@ -85,78 +127,34 @@ export default class ClientRelay {
     this._UpdateState();
   }
 
-  OnOpen() {
-    this.ConnectTimeout = DefaultConnectTimeout;
-    this._InitSubscriptions();
-    console.log(`[${this.Address}] Open!`);
-  }
-
-  OnClose(closeEv) {
-    if (!this.IsClosed) {
-      this.ConnectTimeout = this.ConnectTimeout * 2;
-      console.log(
-        `[${this.Address}] Closed (${closeEv.reason}), trying again in ${(this.ConnectTimeout / 1000)
-          .toFixed(0)
-          .toLocaleString()} sec`
-      );
-      this.ReconnectTimer = setTimeout(() => {
-        this.Connect();
-      }, this.ConnectTimeout);
-      this.Stats.Disconnects++;
-    } else {
-      console.log(`[${this.Address}] Closed!`);
-      this.ReconnectTimer = null;
-    }
-    this._UpdateState();
-  }
-
-  OnMessage(msgEv) {
-    if (msgEv.data.length > 0) {
-      const msg = JSON.parse(msgEv.data);
+  OnMessage(msg) {
+    if (msg.data.length > 0) {
+      const msg = JSON.parse(msg.data);
       const tag = msg[0];
-      switch (tag) {
-        case "AUTH": {
-          this._OnAuthAsync(msg[1]);
-          this.Stats.EventsReceived++;
-          this._UpdateState();
-          break;
+      if (tag === 'AUTH') {
+        this._OnAuthAsync(msg[1]);
+        this.Stats.EventsReceived++;
+        this._UpdateState();
+      } else if (tag === 'EVENT') {
+        this._OnEvent(msg[1], msg[2]);
+        this.Stats.EventsReceived++;
+        this._UpdateState();
+      } else if (tag === 'EOSE') {
+        this._OnEnd(msg[1]);
+      } else if (tag === 'OK') {
+        console.debug(`${this.Address} OK: `, msg);
+        const id = msg[1];
+        if (this.EventsCallback.has(id)) {
+          const cb = unwrap(this.EventsCallback.get(id));
+          this.EventsCallback.delete(id);
+          cb(msg);
         }
-        case "EVENT": {
-          this._OnEvent(msg[1], msg[2]);
-          this.Stats.EventsReceived++;
-          this._UpdateState();
-          break;
-        }
-        case "EOSE": {
-          this._OnEnd(msg[1]);
-          break;
-        }
-        case "OK": {
-          // feedback to broadcast call
-          console.debug(`${this.Address} OK: `, msg);
-          const id = msg[1];
-          if (this.EventsCallback.has(id)) {
-            const cb = unwrap(this.EventsCallback.get(id));
-            this.EventsCallback.delete(id);
-            cb(msg);
-          }
-          break;
-        }
-        case "NOTICE": {
-          console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
-          break;
-        }
-        default: {
-          console.warn(`Unknown tag: ${tag}`);
-          break;
-        }
+      } else if (tag === 'NOTICE') {
+        console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
+      } else {
+        console.warn(`Unknown tag: ${tag}`);
       }
     }
-  }
-
-  OnError(ev) {
-    console.error(ev);
-    this._UpdateState();
   }
 
   SendEvent(ev) {
@@ -190,29 +188,35 @@ export default class ClientRelay {
     });
   }
 
-  /**
-   * Subscribe to data from this connection
-   */
-  AddSubscription(sub) {
-    if (!this.Settings.read) {
+  sendSubscription(sub) {
+    if (!this.Authed && this.AwaitingAuth.size > 0) {
+      this.PendingList.push(sub.ToObject());
       return;
     }
-    // check relay supports search
-    if (sub.Search && !this.SupportsNip(Nips.Search)) {
-      return;
+    let req = ["REQ", sub.Id, sub.ToObject()];
+    if (sub.OrSubs.length > 0) {
+      req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
     }
-    if (this.Subscriptions.has(sub.Id)) {
-      return;
-    }
-    this._SendSubscription(sub);
-    this.Subscriptions.set(sub.Id, sub);
+    sub.Started.set(this.Address, new Date().getTime());
+    this._SendJson(req);
   }
 
-  /**
-   * Remove a subscription
-   */
-  RemoveSubscription(subId) {
-    if (this.Subscriptions.has(subId)) {
+  AddSub = (subId, sub) => {
+    if (!this.Settings.read) {
+      return false;
+    }
+    if (sub.Search && !this.SupportsNip(Nips.Search)) {
+      return false;
+    }
+    if (this.SubSupports.has(subId)) {
+      return false;
+    }
+    this.SubSupports.set(subId, true);
+    return true;
+  }
+
+  RemoveSub = (subId) => {
+    if (this.SubSupports.has(subId)) {
       const req = ["CLOSE", subId];
       this._SendJson(req);
       this.Subscriptions.delete(subId);
@@ -221,9 +225,6 @@ export default class ClientRelay {
     return false;
   }
 
-  /**
-   * Hook status for connection
-   */
   StatusHook(fnHook) {
     const id = uuid();
     this.StateHooks.set(id, fnHook);
@@ -241,7 +242,7 @@ export default class ClientRelay {
   }
 
   SupportsNip(n) {
-    return this.Info?.supported_nips?.some(a => a === n) ?? false;
+    return this.RelayInfo?.supported_nips?.some(nipId => nipId === n) ?? false;
   }
 
   _UpdateState() {
@@ -251,7 +252,7 @@ export default class ClientRelay {
     this.CurrentState.avgLatency =
       this.Stats.Latency.length > 0 ? this.Stats.Latency.reduce((acc, v) => acc + v, 0) / this.Stats.Latency.length : 0;
     this.CurrentState.disconnects = this.Stats.Disconnects;
-    this.CurrentState.info = this.Info;
+    this.CurrentState.info = this.RelayInfo;
     this.CurrentState.id = this.Id;
     this.Stats.Latency = this.Stats.Latency.slice(-20); // trim
     this.HasStateChange = true;
@@ -266,47 +267,37 @@ export default class ClientRelay {
   }
 
   _InitSubscriptions() {
-    for (const p of this.Pending) {
-      this._SendJson(p);
+    //clear pendingList
+    this.PendingList.map(msg => {
+      this._SendJson(msg);
+    });
+    this.PendingList = [];
+    //
+    if (this.SubInit) {
+      this.SubInit(this);
     }
-    this.Pending = [];
-
-    for (const [, s] of this.Subscriptions) {
-      this._SendSubscription(s);
-    }
+    //
     this._UpdateState();
   }
 
-  _SendSubscription(sub) {
-    if (!this.Authed && this.AwaitingAuth.size > 0) {
-      this.Pending.push(sub.ToObject());
-      return;
-    }
-
-    let req = ["REQ", sub.Id, sub.ToObject()];
-    if (sub.OrSubs.length > 0) {
-      req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
-    }
-    sub.Started.set(this.Address, new Date().getTime());
-    this._SendJson(req);
-  }
-
   _SendJson(obj) {
-    if (this.Socket?.readyState !== WebSocket.OPEN) {
-      this.Pending.push(obj);
-      return;
+    if (this.Socket?.readyState === WebSocket.OPEN) {
+      const json = JSON.stringify(obj);
+      this.Socket.send(json);
+    } else {
+      //push msg in pendingList
+      this.PendingList.push(obj);
     }
-    const json = JSON.stringify(obj);
-    this.Socket.send(json);
   }
 
   _OnEvent(subId, ev) {
-    if (this.Subscriptions.has(subId)) {
+    if (this.Subscriptions.has(subId) && this.SubCallback) {
       const tagged = {
         ...ev,
         relays: [this.Address],
       };
-      this.Subscriptions.get(subId)?.OnEvent(tagged);
+      this.SubCallback(subId, tagged);
+      // this.Subscriptions.get(subId)?.OnEvent(tagged);
     } else {
       // console.warn(`No subscription for event! ${subId}`);
       // ignored for now, track as "dropped event" with connection stats
