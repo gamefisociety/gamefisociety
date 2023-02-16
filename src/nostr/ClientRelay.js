@@ -188,20 +188,7 @@ export default class ClientRelay {
     });
   }
 
-  sendSubscription(sub) {
-    if (!this.Authed && this.AwaitingAuth.size > 0) {
-      this.PendingList.push(sub.ToObject());
-      return;
-    }
-    let req = ["REQ", sub.Id, sub.ToObject()];
-    if (sub.OrSubs.length > 0) {
-      req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
-    }
-    sub.Started.set(this.Address, new Date().getTime());
-    this._SendJson(req);
-  }
-
-  AddSub = (subId, sub) => {
+  AddSub(subId, sub) {
     if (!this.Settings.read) {
       return false;
     }
@@ -212,13 +199,18 @@ export default class ClientRelay {
       return false;
     }
     this.SubSupports.set(subId, true);
+    //send msg
+    if (!this.Authed && this.AwaitingAuth.size > 0) {
+      this.PendingList.push(sub.ToObject());
+      return true;
+    }
+    this._SendJson(sub.reqMsg(this.Address));
     return true;
   }
 
-  RemoveSub = (subId) => {
+  RemoveSub(subId, sub) {
     if (this.SubSupports.has(subId)) {
-      const req = ["CLOSE", subId];
-      this._SendJson(req);
+      this._SendJson(sub.closeMsg);
       this.Subscriptions.delete(subId);
       return true;
     }
@@ -297,7 +289,6 @@ export default class ClientRelay {
         relays: [this.Address],
       };
       this.SubCallback(subId, tagged);
-      // this.Subscriptions.get(subId)?.OnEvent(tagged);
     } else {
       // console.warn(`No subscription for event! ${subId}`);
       // ignored for now, track as "dropped event" with connection stats
@@ -305,6 +296,9 @@ export default class ClientRelay {
   }
 
   async _OnAuthAsync(challenge) {
+    //
+    console.log('auto msg', challenge);
+    //
     const authCleanup = () => {
       this.AwaitingAuth.delete(challenge);
     };

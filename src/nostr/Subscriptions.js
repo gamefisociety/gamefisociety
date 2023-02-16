@@ -73,4 +73,18 @@ export default class Subscriptions {
     return ret;
   }
   //
+  reqMsg(address) {
+    let req = ["REQ", this.Id, this.ToObject()];
+    if (this.OrSubs.length > 0) {
+      req = [...req, ...this.OrSubs.map(o => o.ToObject())];
+    }
+    this.Started.set(address, new Date().getTime());
+    return req;
+  }
+
+  closeMsg() {
+    const req = ["CLOSE", this.Id];
+    return req;
+  }
+  //
 }

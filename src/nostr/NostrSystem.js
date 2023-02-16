@@ -52,18 +52,16 @@ export class NostrSystem {
 
   AddSubscription(sub) {
     for (const [, tmpRelay] of this.ClientRelays) {
-      if (tmpRelay.AddSub(sub.Id, sub)) {
-        tmpRelay.sendSubscription(sub);
-      }
+      tmpRelay.AddSub(sub.Id, sub)
     }
     this.Subscriptions.set(sub.Id, sub);
   }
 
-  RemoveSubscription(subId) {
+  RemoveSubscription(sub) {
     for (const [, tmpRelay] of this.ClientRelays) {
-      tmpRelay.RemoveSub(subId)
+      tmpRelay.RemoveSub(sub.Id, sub)
     }
-    this.Subscriptions.delete(subId);
+    this.Subscriptions.delete(sub.Id);
   }
 
   Broadcast(ev) {
