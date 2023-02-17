@@ -65,6 +65,7 @@ const LoginSlice = createSlice({
       state.privateKey = action.payload;
       window.localStorage.setItem(PrivateKeyItem, action.payload);
       state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(action.payload));
+      console.log('setGeneratedPrivateKey', action.payload);
     },
     setPublicKey: (state, action) => {
       window.localStorage.setItem(PublicKeyItem, action.payload);

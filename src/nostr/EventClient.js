@@ -1,8 +1,7 @@
 import { useSelector } from "react-redux";
-
-import { System } from "./System";
-import { default as NEvent } from "nostr/Event";
-import { DefaultRelays } from "Const";
+import { System } from "nostr/NostrSystem";
+import NostrEvent from "nostr/NostrEvent";
+import { DefaultRelays } from "nostr/Const";
 
 let isNip07Busy = false;
 
@@ -34,7 +33,7 @@ const EventClient = () => {
       if (hasNip07 && !privKey) {
         ev.Id = await ev.CreateId();
         const tmpEv = (await barrierNip07(() => window.nostr.signEvent(ev.ToObject())));
-        return new NEvent(tmpEv);
+        return new NostrEvent(tmpEv);
       } else if (privKey) {
         await ev.Sign(privKey);
       } else {

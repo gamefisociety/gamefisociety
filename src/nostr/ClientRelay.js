@@ -98,7 +98,7 @@ export default class ClientRelay {
                   .toLocaleString()} sec`
               );
               this.ReconnectTimer = setTimeout(() => {
-                this.Connect();
+                this.Connect(this.SubInit, this.SubCallback);
               }, this.ConnectTimeout);
               this.Stats.Disconnects++;
             } else {

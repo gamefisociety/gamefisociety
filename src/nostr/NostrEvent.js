@@ -3,7 +3,7 @@ import * as base64 from "@protobufjs/base64";
 import { EventKind } from "nostr/def";
 import Tag from "nostr/Tag";
 
-export default class Event {
+export default class NostrEvent {
 
   constructor(rewEv) {
     this.Original = rewEv ?? null;
@@ -74,8 +74,8 @@ const CreateId = async (ev) => {
  * @returns True if valid signature
  */
 const Verify = async (event) => {
-  event.id = await CreateId(event);
-  const result = await secp.schnorr.verify(this.Signature, id, this.PubKey);
+  event.Id = await CreateId(event);
+  const result = await secp.schnorr.verify(this.Signature, event.Id, this.PubKey);
   return result;
 }
 

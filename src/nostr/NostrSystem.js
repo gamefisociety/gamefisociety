@@ -8,7 +8,6 @@ export class NostrSystem {
     this.Subscriptions = new Map();
     this.PendingSubscriptions = [];
     this.WantsMetadata = new Set();
-    // this._FetchMetadata();
   }
 
   ConnectRelay(address, read, write) {
@@ -17,7 +16,6 @@ export class NostrSystem {
         const client = new ClientRelay(address, read, write);
         let sys = this;
         client.connect(this.processSubEvent).then(ret => {
-          // console.log('GFTHome relays', ret, address);
           sys.ClientRelays.set(address, client);
         });
         //
@@ -47,7 +45,7 @@ export class NostrSystem {
   }
   //process sub event
   processSubEvent = (subId, tagged) => {
-    this.Subscriptions(subId)?.OnEvent(tagged);
+    this.Subscriptions.get(subId)?.OnEvent(tagged);
   }
 
   AddSubscription(sub) {

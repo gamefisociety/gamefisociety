@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-    generatePrivateKey, getPublicKey, getEventHash, validateEvent,
-    verifySignature,
-    signEvent,
-} from 'nostr-tools';
+import * as secp from "@noble/secp256k1";
+import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
+import EventBuild from 'nostr/EventBuild';
+import EventClient from 'nostr/EventClient';
 //
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -86,58 +84,82 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GFTHead01 = () => {
     const navigate = useNavigate();
+    const { publicKey, privateKey } = useSelector(s => s.login);
+    const dispatch = useDispatch();
+    //
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
-    const dispatch = useDispatch();
-
     const [loginState, setLoginState] = React.useState(0);
-
     //
     const requsetData = () => {
 
     }
 
+    // async function doLogin() {
+    //     try {
+    //       if (key.startsWith("nsec")) {
+    //         const hexKey = bech32ToHex(key);
+    //         if (secp.utils.isValidPrivateKey(hexKey)) {
+    //           dispatch(setPrivateKey(hexKey));
+    //         } else {
+    //           throw new Error("INVALID PRIVATE KEY");
+    //         }
+    //       } else if (key.startsWith("npub")) {
+    //         const hexKey = bech32ToHex(key);
+    //         dispatch(setPublicKey(hexKey));
+    //       } else if (key.match(EmailRegex)) {
+    //         const hexKey = await getNip05PubKey(key);
+    //         dispatch(setPublicKey(hexKey));
+    //       } else {
+    //         if (secp.utils.isValidPrivateKey(key)) {
+    //           dispatch(setPrivateKey(key));
+    //         } else {
+    //           throw new Error("INVALID PRIVATE KEY");
+    //         }
+    //       }
+    //     } catch (e) {
+    //       setError(`Failed to load NIP-05 pub key (${e})`);
+    //       console.error(e);
+    //     }
+    //   }
+
+    // async function doNip07Login() {
+    //     const pubKey = await window.nostr.getPublicKey();
+    //     dispatch(setPublicKey(pubKey));
+
+    //     if ("getRelays" in window.nostr) {
+    //       const relays = await window.nostr.getRelays();
+    //       dispatch(
+    //         setRelays({
+    //           relays: {
+    //             ...relays,
+    //             ...Object.fromEntries(DefaultRelays.entries()),
+    //           },
+    //           createdAt: 1,
+    //         })
+    //       );
+    //     }
+    //   }
+
     //logcheck
     useEffect(() => {
-        let pubkey = window.localStorage.getItem('pubkey');
-        console.log("pubkey", pubkey);
-        if (pubkey === null || pubkey === undefined) {
+        console.log("pubkey", publicKey);
+        if (publicKey === null || publicKey === undefined) {
             //走登陆逻辑
         } else {
-            setLoginState(1);
+            let msg = EventBuild.metadata('hello world!');
+            EventClient.broadcast(msg);
         }
         return () => {
 
         }
 
-    }, [])
+    }, [publicKey])
 
     //
-    const newAccount = () => {
-        //create new account
-        let sk = generatePrivateKey() // `sk` is a hex string
-        let pk = getPublicKey(sk) // `pk` is a hex string
-        console.log('prikey', sk);
-        console.log('pubkey', pk);
-        //
-        let event = {
-            kind: 1,
-            created_at: Math.floor(Date.now() / 1000),
-            tags: [],
-            content: 'hello! gamefi society',
-            pubkey: pk
-        }
-        event.id = getEventHash(event)
-        event.sig = signEvent(event, sk)
-        let ok = validateEvent(event)
-        let veryOk = verifySignature(event)
-        //
-        console.log('kind1', ok, veryOk, event);
-        //
-        window.localStorage.setItem('prikey', sk);
-        window.localStorage.setItem('pubkey', pk);
-        //
-        setLoginState(1);
+    const newAccount = async () => {
+        const newKey = secp.utils.bytesToHex(secp.utils.randomPrivateKey());
+        dispatch(setGeneratedPrivateKey(newKey));
     }
 
     const openDialog = () => {
