@@ -66,7 +66,7 @@ export default class ClientRelay {
         } else {
           flag = false;
         }
-        console.log('relay info', this.RelayInfo);
+        // console.log('relay info', this.RelayInfo);
       }
     } catch (e) {
       console.warn("Could not load relay information", e);
@@ -98,7 +98,7 @@ export default class ClientRelay {
                   .toLocaleString()} sec`
               );
               this.ReconnectTimer = setTimeout(() => {
-                this.Connect(this.SubInit, this.SubCallback);
+                this.connect(this.SubInit, this.SubCallback);
               }, this.ConnectTimeout);
               this.Stats.Disconnects++;
             } else {
@@ -127,9 +127,10 @@ export default class ClientRelay {
     this._UpdateState();
   }
 
-  OnMessage(msg) {
-    if (msg.data.length > 0) {
-      const msg = JSON.parse(msg.data);
+  OnMessage(target) {
+    if (target.data.length > 0) {
+      const msg = JSON.parse(target.data);
+      console.log('OnMessage', msg);
       const tag = msg[0];
       if (tag === 'AUTH') {
         this._OnAuthAsync(msg[1]);
@@ -161,6 +162,7 @@ export default class ClientRelay {
     if (!this.Settings.write) {
       return;
     }
+    // console.log('client SendEvent', ev);
     const req = ["EVENT", ev.ToObject()];
     this._SendJson(req);
     this.Stats.EventsSent++;

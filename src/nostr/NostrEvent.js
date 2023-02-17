@@ -17,6 +17,12 @@ export default class NostrEvent {
     // this.Thread = Thread.ExtractThread(this);
   }
 
+  static Create(pubKey) {
+    const ev = new NostrEvent();
+    ev.PubKey = pubKey;
+    return ev;
+  }
+
   get RootPubKey() {
     const delegation = this.Tags.find(a => a.Key === "delegation");
     if (delegation?.PubKey) {
@@ -39,119 +45,101 @@ export default class NostrEvent {
       sig: this.Signature,
     };
   }
-}
 
-/**
- * Create a new event for a specific pubkey
- */
-const ForPubKey = (pubKey) => {
-  const ev = new Event();
-  ev.PubKey = pubKey;
-  return ev;
-}
-
-const CreateId = async (ev) => {
-  const payload = [
-    0,
-    ev.PubKey,
-    ev.CreatedAt,
-    ev.Kind,
-    ev.Tags.map(a => a.ToObject()).filter(a => a !== null),
-    ev.Content,
-  ];
-  const payloadData = new TextEncoder().encode(JSON.stringify(payload));
-  const data = await secp.utils.sha256(payloadData);
-  const hash = secp.utils.bytesToHex(data);
-  if (this.Id !== "" && hash !== this.Id) {
-    console.debug(payload);
-    throw "ID doesnt match!";
+  async CreateId() {
+    const payload = [
+      0,
+      this.PubKey,
+      this.CreatedAt,
+      this.Kind,
+      this.Tags.map(a => a.ToObject()).filter(a => a !== null),
+      this.Content,
+    ];
+    const payloadData = new TextEncoder().encode(JSON.stringify(payload));
+    const data = await secp.utils.sha256(payloadData);
+    const hash = secp.utils.bytesToHex(data);
+    if (this.Id !== "" && hash !== this.Id) {
+      console.debug(payload);
+      throw "ID doesnt match!";
+    }
+    return hash;
   }
-  return hash;
-}
 
-/**
- * Check the signature of this message
- * @returns True if valid signature
- */
-const Verify = async (event) => {
-  event.Id = await CreateId(event);
-  const result = await secp.schnorr.verify(this.Signature, event.Id, this.PubKey);
-  return result;
-}
-
-/**
- * key : HexKey string
- * Sign this message with a private key
- */
-const Sign = async (key, event) => {
-  event.Id = await this.CreateId();
-  const sig = await secp.schnorr.sign(this.Id, key);
-  event.Signature = secp.utils.bytesToHex(sig);
-  if (!(await Verify(event))) {
-    throw "Signing failed";
+  /**
+   * Check the signature of this message
+   * @returns True if valid signature
+   */
+  async Verify(event) {
+    const tmpId = await this.CreateId();
+    const result = await secp.schnorr.verify(this.Signature, tmpId, this.PubKey);
+    return result;
   }
-}
 
-/**
- * Encrypt the given message content
- * content : string
- * pubkey : string
- * privkey : string
- */
-const EncryptData = async (content, pubkey, privkey) => {
-  const key = await this._GetDmSharedKey(pubkey, privkey);
-  const iv = window.crypto.getRandomValues(new Uint8Array(16));
-  const data = new TextEncoder().encode(content);
-  const result = await window.crypto.subtle.encrypt(
-    {
-      name: "AES-CBC",
-      iv: iv,
-    },
-    key,
-    data
-  );
-  const uData = new Uint8Array(result);
-  return `${base64.encode(uData, 0, result.byteLength)}?iv=${base64.encode(iv, 0, 16)}`;
-}
+  async Sign(key) {
+    this.Id = await this.CreateId();
+    const sig = await secp.schnorr.sign(this.Id, key);
+    this.Signature = secp.utils.bytesToHex(sig);
+    if (!(await this.Verify(this))) {
+      throw "Signing failed";
+    }
+    // console.log('event self sign',this);
+  }
 
+  async EncryptData(content, pubkey, privkey) {
+    const key = await this._GetDmSharedKey(pubkey, privkey);
+    const iv = window.crypto.getRandomValues(new Uint8Array(16));
+    const data = new TextEncoder().encode(content);
+    const result = await window.crypto.subtle.encrypt(
+      {
+        name: "AES-CBC",
+        iv: iv,
+      },
+      key,
+      data
+    );
+    const uData = new Uint8Array(result);
+    return `${base64.encode(uData, 0, result.byteLength)}?iv=${base64.encode(iv, 0, 16)}`;
+  }
 
-/**
- * Encrypt the message content in place
- */
-const EncryptDmForPubkey = async (ev, pubkey, privkey) => {
-  ev.Content = await this.EncryptData(ev.Content, pubkey, privkey);
-}
+  /**
+   * Encrypt the message content in place
+   */
+  async EncryptDmForPubkey(ev, pubkey, privkey) {
+    ev.Content = await this.EncryptData(ev.Content, pubkey, privkey);
+  }
 
-const _GetDmSharedKey = async (pubkey, privkey) => {
-  const sharedPoint = secp.getSharedSecret(privkey, "02" + pubkey);
-  const sharedX = sharedPoint.slice(1, 33);
-  return await window.crypto.subtle.importKey("raw", sharedX, { name: "AES-CBC" }, false, ["encrypt", "decrypt"]);
-}
+  async _GetDmSharedKey(pubkey, privkey) {
+    const sharedPoint = secp.getSharedSecret(privkey, "02" + pubkey);
+    const sharedX = sharedPoint.slice(1, 33);
+    return await window.crypto.subtle.importKey("raw", sharedX, { name: "AES-CBC" }, false, ["encrypt", "decrypt"]);
+  }
 
-/**
- * Decrypt the content of the message
- */
-const DecryptData = async (cyphertext, privkey, pubkey) => {
-  const key = await _GetDmSharedKey(pubkey, privkey);
-  const cSplit = cyphertext.split("?iv=");
-  const data = new Uint8Array(base64.length(cSplit[0]));
-  base64.decode(cSplit[0], data, 0);
-  const iv = new Uint8Array(base64.length(cSplit[1]));
-  base64.decode(cSplit[1], iv, 0);
-  const result = await window.crypto.subtle.decrypt(
-    {
-      name: "AES-CBC",
-      iv: iv,
-    },
-    key,
-    data
-  );
-  return new TextDecoder().decode(result);
-}
+  /**
+   * Decrypt the content of the message
+   */
+  async DecryptData(cyphertext, privkey, pubkey) {
+    const key = await this._GetDmSharedKey(pubkey, privkey);
+    const cSplit = cyphertext.split("?iv=");
+    const data = new Uint8Array(base64.length(cSplit[0]));
+    base64.decode(cSplit[0], data, 0);
+    const iv = new Uint8Array(base64.length(cSplit[1]));
+    base64.decode(cSplit[1], iv, 0);
+    const result = await window.crypto.subtle.decrypt(
+      {
+        name: "AES-CBC",
+        iv: iv,
+      },
+      key,
+      data
+    );
+    return new TextDecoder().decode(result);
+  }
 
-/**
- * Decrypt the content of this message in place
- */
-const DecryptDm = async (ev, privkey, pubkey) => {
-  ev.Content = await DecryptData(ev.Content, privkey, pubkey);
+  /**
+   * Decrypt the content of this message in place
+   */
+  async DecryptDm(ev, privkey, pubkey) {
+    ev.Content = await this.DecryptData(ev.Content, privkey, pubkey);
+  }
+
 }

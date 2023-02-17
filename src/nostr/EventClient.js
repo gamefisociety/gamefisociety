@@ -23,8 +23,7 @@ export const barrierNip07 = async (then) => {
   }
 };
 
-const EventClient = () => {
-  const pubKey = useSelector(s => s.login.publicKey);
+const useEventClient = () => {
   const privKey = useSelector(s => s.login.privateKey);
   const hasNip07 = "nostr" in window;
 
@@ -44,7 +43,7 @@ const EventClient = () => {
     broadcast: (ev) => {
       if (ev) {
         console.debug("Sending event: ", ev);
-        System.BroadcastEvent(ev);
+        System.Broadcast(ev);
       }
     },
     broadcastForBootstrap: (ev) => {
@@ -64,4 +63,4 @@ const EventClient = () => {
   }
 };
 
-export default EventClient;
+export default useEventClient;

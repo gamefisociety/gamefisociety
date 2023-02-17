@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as secp from "@noble/secp256k1";
 import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
-import EventBuild from 'nostr/EventBuild';
-import EventClient from 'nostr/EventClient';
+import useEventBuild from 'nostr/EventBuild';
+import useEventClient from 'nostr/EventClient';
 //
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -86,6 +86,8 @@ const GFTHead01 = () => {
     const navigate = useNavigate();
     const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
+    const eventBuild = useEventBuild();
+    const eventClient = useEventClient();
     //
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
@@ -140,15 +142,18 @@ const GFTHead01 = () => {
     //       );
     //     }
     //   }
+    const loginSuccess = async () => {
+        const ev = await eventBuild.metadata('hello world!');
+        console.log("metadata", ev);
+        eventClient.broadcast(ev);
+    }
 
     //logcheck
     useEffect(() => {
-        console.log("pubkey", publicKey);
         if (publicKey === null || publicKey === undefined) {
             //走登陆逻辑
         } else {
-            let msg = EventBuild.metadata('hello world!');
-            EventClient.broadcast(msg);
+            loginSuccess();
         }
         return () => {
 
