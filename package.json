@@ -11,6 +11,7 @@
     "@mui/lab": "^5.0.0-alpha.109",
     "@mui/material": "^5.11.3",
     "@mui/styled-engine-sc": "^5.10.14",
+    "@noble/secp256k1": "^1.7.1",
     "@protobufjs/base64": "^1.1.2",
     "@reduxjs/toolkit": "^1.9.0",
     "@testing-library/jest-dom": "^5.16.5",

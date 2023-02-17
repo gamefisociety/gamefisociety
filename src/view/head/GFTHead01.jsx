@@ -6,6 +6,7 @@ import * as secp from "@noble/secp256k1";
 import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
 import useEventBuild from 'nostr/EventBuild';
 import useEventClient from 'nostr/EventClient';
+import { bech32ToHex, parseId } from 'nostr/Util';
 //
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -93,42 +94,55 @@ const GFTHead01 = () => {
     const isOpenConnect = useSelector(isOpen);
     const [loginState, setLoginState] = React.useState(0);
     //
-    const requsetData = () => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    }
-
-    // async function doLogin() {
-    //     try {
-    //       if (key.startsWith("nsec")) {
-    //         const hexKey = bech32ToHex(key);
-    //         if (secp.utils.isValidPrivateKey(hexKey)) {
-    //           dispatch(setPrivateKey(hexKey));
-    //         } else {
-    //           throw new Error("INVALID PRIVATE KEY");
+    // const getNip05PubKey = async (addr) => {
+    //     const [username, domain] = addr.split("@");
+    //     const rsp = await fetch(`https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(username)}`);
+    //     if (rsp.ok) {
+    //         const data = await rsp.json();
+    //         const pKey = data.names[username];
+    //         if (pKey) {
+    //             return pKey;
     //         }
-    //       } else if (key.startsWith("npub")) {
-    //         const hexKey = bech32ToHex(key);
-    //         dispatch(setPublicKey(hexKey));
-    //       } else if (key.match(EmailRegex)) {
-    //         const hexKey = await getNip05PubKey(key);
-    //         dispatch(setPublicKey(hexKey));
-    //       } else {
-    //         if (secp.utils.isValidPrivateKey(key)) {
-    //           dispatch(setPrivateKey(key));
-    //         } else {
-    //           throw new Error("INVALID PRIVATE KEY");
-    //         }
-    //       }
-    //     } catch (e) {
-    //       setError(`Failed to load NIP-05 pub key (${e})`);
-    //       console.error(e);
     //     }
-    //   }
+    //     throw new Error("User key not found");
+    // }
+
+    // const doLogin = async () => {
+    //     try {
+    //         if (key.startsWith("nsec")) {
+    //             const hexKey = bech32ToHex(key);
+    //             if (secp.utils.isValidPrivateKey(hexKey)) {
+    //                 dispatch(setPrivateKey(hexKey));
+    //             } else {
+    //                 throw new Error("INVALID PRIVATE KEY");
+    //             }
+    //         } else if (key.startsWith("npub")) {
+    //             const hexKey = bech32ToHex(key);
+    //             dispatch(setPublicKey(hexKey));
+    //         } else if (key.match(EmailRegex)) {
+    //             const hexKey = await getNip05PubKey(key);
+    //             dispatch(setPublicKey(hexKey));
+    //         } else {
+    //             if (secp.utils.isValidPrivateKey(key)) {
+    //                 dispatch(setPrivateKey(key));
+    //             } else {
+    //                 throw new Error("INVALID PRIVATE KEY");
+    //             }
+    //         }
+    //     } catch (e) {
+    //         setError(`Failed to load NIP-05 pub key (${e})`);
+    //         console.error(e);
+    //     }
+    // }
 
     // async function doNip07Login() {
     //     const pubKey = await window.nostr.getPublicKey();
     //     dispatch(setPublicKey(pubKey));
-
     //     if ("getRelays" in window.nostr) {
     //       const relays = await window.nostr.getRelays();
     //       dispatch(
@@ -142,6 +156,7 @@ const GFTHead01 = () => {
     //       );
     //     }
     //   }
+
     const loginSuccess = async () => {
         const ev = await eventBuild.metadata('hello world!');
         console.log("metadata", ev);
@@ -151,21 +166,28 @@ const GFTHead01 = () => {
     //logcheck
     useEffect(() => {
         if (publicKey === null || publicKey === undefined) {
-            //走登陆逻辑
+            //
         } else {
             loginSuccess();
+            // setLoginState(1);
         }
         return () => {
 
         }
-
     }, [publicKey])
 
     //
-    const newAccount = async () => {
+    const newAccount = () => {
         const newKey = secp.utils.bytesToHex(secp.utils.randomPrivateKey());
         dispatch(setGeneratedPrivateKey(newKey));
     }
+
+    const oldAccount = () => {
+        let prikey = parseId('nsec16pvqz6fr89u8u6grvvwtwhs2sfseswhecwfkuu0glykmevx6du9sthk3je');
+        console.log('oldAccount', prikey);
+        dispatch(setPrivateKey(prikey));
+    }
+    // 
 
     const openDialog = () => {
         if (account) {
@@ -184,11 +206,6 @@ const GFTHead01 = () => {
     const clickLogo = () => {
         navigate('/');
     }
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -313,7 +330,8 @@ const GFTHead01 = () => {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <Button variant="contained" onClick={newAccount}>Sign in</Button>
+                            <Button variant="contained" onClick={oldAccount}>Sign in</Button>
+                            {/* newAccount */}
                         </Box> :
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                                 <Box className='wallet_layout' onClick={openDialog}>
