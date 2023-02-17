@@ -183,7 +183,7 @@ const GFTHead01 = () => {
     }
 
     const oldAccount = () => {
-        let prikey = parseId('nsec16pvqz6fr89u8u6grvvwtwhs2sfseswhecwfkuu0glykmevx6du9sthk3je');
+        let prikey = parseId('');
         console.log('oldAccount', prikey);
         dispatch(setPrivateKey(prikey));
     }
@@ -330,7 +330,7 @@ const GFTHead01 = () => {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <Button variant="contained" onClick={oldAccount}>Sign in</Button>
+                            <Button variant="contained" onClick={newAccount}>Sign in</Button>
                             {/* newAccount */}
                         </Box> :
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
