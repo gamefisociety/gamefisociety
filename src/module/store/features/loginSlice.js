@@ -13,7 +13,7 @@ const PublicKeyItem = "pubkey";
 
 export const InitState = {
   useDb: "redux",
-  loggedOut: undefined,
+  loggedOut: true,
   publicKey: undefined,
   privateKey: undefined,
   newUserKey: false,
@@ -42,31 +42,19 @@ const LoginSlice = createSlice({
         state.loggedOut = false;
       }
     },
-    setPrivateKey: (state, action) => {
+    setKeyPairs: (state, action) => {
+      console.log('setKeyPairs', action.payload);
       state.loggedOut = false;
-      state.privateKey = action.payload;
-      window.localStorage.setItem(PrivateKeyItem, action.payload);
-      console.log('setPrivateKey', action.payload);
-      state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(action.payload));
-    },
-    setGeneratedPrivateKey: (state, action) => {
-      state.loggedOut = false;
-      state.newUserKey = true;
-      state.privateKey = action.payload;
-      window.localStorage.setItem(PrivateKeyItem, action.payload);
-      state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(action.payload));
-      // console.log('setGeneratedPrivateKey', action.payload);
-    },
-    setPublicKey: (state, action) => {
-      window.localStorage.setItem(PublicKeyItem, action.payload);
-      state.loggedOut = false;
-      state.publicKey = action.payload;
+      state.privateKey = action.payload.prikey;
+      state.publicKey = action.payload.pubkey;
+      window.localStorage.setItem(PrivateKeyItem, state.privateKey);
+      window.localStorage.setItem(PublicKeyItem, state.publicKey);
     },
     logout: state => {
       // const relays = { ...state.relays };
-      // Object.assign(state, InitState);
-      // state.loggedOut = true;
-      // window.localStorage.clear();
+      Object.assign(state, InitState);
+      state.loggedOut = true;
+      window.localStorage.clear();
       // state.relays = relays;
       // window.localStorage.setItem(RelayListKey, JSON.stringify(relays));
     },
@@ -75,9 +63,7 @@ const LoginSlice = createSlice({
 
 export const {
   init,
-  setPrivateKey,
-  setGeneratedPrivateKey,
-  setPublicKey,
+  setKeyPairs,
   logout,
 } = LoginSlice.actions;
 

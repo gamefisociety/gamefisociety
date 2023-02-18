@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
+import { setRelays, logout } from "module/store/features/loginSlice";
 import { setOpenLogin } from "module/store/features/dialogSlice";
 import useEventBuild from 'nostr/EventBuild';
 import useEventClient from 'nostr/EventClient';
@@ -88,15 +88,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GFTHead01 = () => {
     const navigate = useNavigate();
-    const { publicKey, privateKey } = useSelector(s => s.login);
+    const { loggedOut, publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
     const eventBuild = useEventBuild();
     const eventClient = useEventClient();
-    //
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
-    const [loginState, setLoginState] = React.useState(0);
-    //
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -215,9 +212,9 @@ const GFTHead01 = () => {
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             <Divider></Divider>
             <MenuItem onClick={() => {
-                window.localStorage.removeItem('prikey');
-                window.localStorage.removeItem('pubkey');
-                setLoginState(0);
+                setAnchorEl(null);
+                handleMobileMenuClose();
+                dispatch(logout());
             }}>Clear Account</MenuItem>
         </Menu>
     );
@@ -299,7 +296,7 @@ const GFTHead01 = () => {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     {
-                        loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        loggedOut === true ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <IconButton
                                 size="large"
                                 aria-label="relay icon"

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     setOpenLogin
 } from 'module/store/features/dialogSlice';
-import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
+import { setKeyPairs } from "module/store/features/loginSlice";
 import './GLoginDialog.scss';
 //
 import Box from '@mui/material/Box';
@@ -58,35 +58,42 @@ const GLoginDialog = () => {
         const newPubKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(newPriKey));
         setTmpPubKey(newPubKey)
     }
-    // const oldAccount = () => {
-    //     let prikey = parseId('');
-    //     if (prikey) {
-    //         console.log('oldAccount', prikey);
-    //         dispatch(setPrivateKey(prikey));
-    //     }
-    // }
 
     const handleClose = () => {
         dispatch(setOpenLogin(false));
     }
 
     const handleOk = () => {
-        if (isNip19) {
-            let flag = tmpPriKey.startsWith('nsec');
-            if (flag) {
-                let prikey = parseId(tmpPriKey);
-                if (prikey) {
-                    console.log('prikey', prikey);
-                    dispatch(setPrivateKey(prikey));
-                    dispatch(setOpenLogin(false));
-                }
-            } else {
-                //warning
-                setErrorKey(true)
-            }
-            console.log('tmpKey.startsWith', flag);
-        } else {
+        if (gen) {
+            //new
+            dispatch(setKeyPairs({
+                prikey: tmpPriKey,
+                pubkey: tmpPubKey,
+            }));
             dispatch(setOpenLogin(false));
+        } else {
+            //old
+            if (isNip19) {
+                let flag = tmpPriKey.startsWith('nsec');
+                if (flag) {
+                    let prikey = parseId(tmpPriKey);
+                    if (prikey) {
+                        let pubkey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(prikey));
+                        console.log('pubkey', pubkey);
+                        dispatch(setKeyPairs({
+                            prikey: prikey,
+                            pubkey: pubkey,
+                        }));
+                        dispatch(setOpenLogin(false));
+                    }
+                } else {
+                    //warning
+                    setErrorKey(true)
+                }
+                console.log('tmpKey.startsWith', flag);
+            } else {
+                dispatch(setOpenLogin(false));
+            }
         }
     }
 
@@ -159,9 +166,7 @@ const GLoginDialog = () => {
                 {gen ? <Button onClick={() => {
                     setGen(false);
                 }}>Switch</Button> : <Button onClick={() => {
-                    //
                     newKeys();
-                    //
                     setGen(true);
                 }}>Generate</Button>}
                 <Box sx={{ flexGrow: 1 }} />
