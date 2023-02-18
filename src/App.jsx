@@ -14,7 +14,7 @@ import {
   isMenuWallet,
   isCheckIn,
   isMintAvatar
-} from './module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 import './App.css';
 function getLibrary(provider, connector) {
   const web3 = new Web3(provider);

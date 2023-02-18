@@ -46,6 +46,7 @@ const LoginSlice = createSlice({
       state.loggedOut = false;
       state.privateKey = action.payload;
       window.localStorage.setItem(PrivateKeyItem, action.payload);
+      console.log('setPrivateKey', action.payload);
       state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(action.payload));
     },
     setGeneratedPrivateKey: (state, action) => {
@@ -62,12 +63,12 @@ const LoginSlice = createSlice({
       state.publicKey = action.payload;
     },
     logout: state => {
-      const relays = { ...state.relays };
-      Object.assign(state, InitState);
-      state.loggedOut = true;
-      window.localStorage.clear();
-      state.relays = relays;
-      window.localStorage.setItem(RelayListKey, JSON.stringify(relays));
+      // const relays = { ...state.relays };
+      // Object.assign(state, InitState);
+      // state.loggedOut = true;
+      // window.localStorage.clear();
+      // state.relays = relays;
+      // window.localStorage.setItem(RelayListKey, JSON.stringify(relays));
     },
   },
 });

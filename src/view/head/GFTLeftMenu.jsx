@@ -7,7 +7,7 @@ import {
     setOpenCheckIn,
     setIsOpen,
     setOpenMintAvatar
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
 
 import ic_bnb from "../../asset/image/home/ic_bnb.png"

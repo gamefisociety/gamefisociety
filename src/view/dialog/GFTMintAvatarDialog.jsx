@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     isMintAvatar,
     setOpenMintAvatar
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 import './GFTMintAvatarDialog.scss';
 import { BlueLoadButton } from '../utils/GFTStyleButton';
 import CircularProgress from '@mui/material/CircularProgress';

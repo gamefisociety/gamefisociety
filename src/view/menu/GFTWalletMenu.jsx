@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     setIsOpenWallet,
     isMenuWallet
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 // import GSTTokenBase from '../../web3/GSTToken';
 import GSTPointsBase from '../../web3/GSTPoints';
 import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
@@ -60,9 +60,9 @@ function GFTWalletMenu() {
     const getGSTPoints = () => {
         if (account) {
             GSTPointsBase.getTokenbalanceOf(library, account).then(res => {
-                setGSTBalance(res/1000000000000000000.0);
+                setGSTBalance(res / 1000000000000000000.0);
             }).catch(err => {
-                console.log(err,'err');
+                console.log(err, 'err');
 
             })
         } else {

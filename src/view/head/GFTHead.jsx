@@ -9,7 +9,7 @@ import {
     setIsOpen,
     setIsOpenWallet,
     isOpen
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 
 import './GFTHead.scss';
 
@@ -17,9 +17,6 @@ import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_massage from "../../asset/image/home/ic_massage.png"
 import ic_wallet from "../../asset/image/home/ic_wallet.png"
 import ic_man from "../../asset/image/home/ic_man.png"
-
-
-
 
 function GFTHead() {
     const navigate = useNavigate();

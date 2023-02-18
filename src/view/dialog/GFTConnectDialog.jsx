@@ -8,7 +8,7 @@ import {
     increment,
     setIsOpen,
     isOpen
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 
 import './GFTConnectDialog.scss';

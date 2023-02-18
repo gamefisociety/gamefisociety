@@ -2,7 +2,7 @@ import {
   configureStore
 } from '@reduxjs/toolkit';
 import counterReducer from './features/counter/counterSlice';
-import dialogReducer from './features/dialog/GFTDialogSlice';
+import dialogReducer from './features/dialogSlice';
 import userReducer from './features/userSlice';
 import loginReducer from './features/loginSlice';
 

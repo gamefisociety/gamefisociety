@@ -1,20 +1,17 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import {
     isCheckIn,
     setOpenCheckIn
 } from 'module/store/features/dialogSlice';
-import './GFTCheckInDialog.scss';
+import './GLoginDialog.scss';
 import { BlueLoadButton } from '../utils/GFTStyleButton';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import GSTClaimBase from '../../web3/GSTClaim';
 
-
-
-
-function GFTCheckInDialog() {
+const GLoginDialog = () => {
 
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpen = useSelector(isCheckIn);
@@ -36,7 +33,7 @@ function GFTCheckInDialog() {
         console.log("getIsClaimable");
         if (account) {
             GSTClaimBase.isClaimable(library, account).then(res => {
-                console.log(res,'res');
+                console.log(res, 'res');
                 if (res) {
                     setCheckState(2);
                 } else {
@@ -71,13 +68,13 @@ function GFTCheckInDialog() {
     }
 
     const checkInClick = () => {
-        if(checkState === 0){
+        if (checkState === 0) {
             //nothing
-        }else if(checkState === 1){
+        } else if (checkState === 1) {
             cancelDialog();
-        }else if(checkState === 2){
+        } else if (checkState === 2) {
             claimEveryDay();
-        }else if (checkState === 3) {
+        } else if (checkState === 3) {
             requsetData();
         }
     }
@@ -110,7 +107,7 @@ function GFTCheckInDialog() {
                             <br />
                             Sign in and you will receive tokens from the platform
                         </span>
-                        <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub}  loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+                        <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
                             {getCheckIn()}
                         </BlueLoadButton>
                     </div>
@@ -121,4 +118,4 @@ function GFTCheckInDialog() {
     );
 }
 
-export default GFTCheckInDialog;
+export default React.memo(GLoginDialog);

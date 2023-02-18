@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchOpen } from './GFTDialogAPi';
+import { fetchOpen } from './dialog/GFTDialogAPi';
 
 const initialState = {
-  isOpenConnect:false,
-  isOpenMenuWallet:false,
-  isOpenCheckIn:false,
-  isOpenMintAvatar:false,
-  status:'idle'
+  isOpenConnect: false,
+  isOpenMenuWallet: false,
+  isOpenCheckIn: false,
+  isOpenMintAvatar: false,
+  status: 'idle'
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -17,22 +17,22 @@ export const incrementAsync = createAsyncThunk(
   }
 );
 
-export const diloagSlice = createSlice({
+export const dialogSlice = createSlice({
   name: 'Dialog',
   initialState,
   reducers: {
     increment: (state) => {
-      
+
       state.isOpenConnect = true;
     },
     decrement: (state) => {
       state.isOpenConnect = false;
     },
-    
+
     setIsOpen: (state, action) => {
       state.isOpenConnect = action.payload;
     },
-    
+
     setIsOpenWallet: (state, action) => {
       state.isOpenMenuWallet = action.payload;
     },
@@ -56,12 +56,18 @@ export const diloagSlice = createSlice({
   },
 });
 
-export const { increment, decrement, setIsOpen,setIsOpenWallet,setOpenCheckIn, setOpenMintAvatar } = diloagSlice.actions;
-
+export const {
+  increment,
+  decrement,
+  setIsOpen,
+  setIsOpenWallet,
+  setOpenCheckIn,
+  setOpenMintAvatar }
+  = dialogSlice.actions;
 
 export const isOpen = (state) => state.dialog.isOpenConnect;
 export const isMenuWallet = (state) => state.dialog.isOpenMenuWallet;
 export const isCheckIn = (state) => state.dialog.isOpenCheckIn;
 export const isMintAvatar = (state) => state.dialog.isOpenMintAvatar;
 
-export default diloagSlice.reducer;
+export default dialogSlice.reducer;

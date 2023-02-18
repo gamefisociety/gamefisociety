@@ -9,6 +9,7 @@ import useEventClient from 'nostr/EventClient';
 import { bech32ToHex, parseId } from 'nostr/Util';
 //
 import { styled, alpha } from '@mui/material/styles';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -33,7 +34,7 @@ import {
     setIsOpen,
     setIsOpenWallet,
     isOpen
-} from '../../module/store/features/dialog/GFTDialogSlice';
+} from 'module/store/features/dialogSlice';
 
 import './GFTHead01.scss';
 
@@ -158,7 +159,7 @@ const GFTHead01 = () => {
     //   }
 
     const loginSuccess = async () => {
-        const ev = await eventBuild.metadata('hello world!');
+        const ev = await eventBuild.metadata('');
         console.log("metadata", ev);
         eventClient.broadcast(ev);
     }
@@ -168,6 +169,7 @@ const GFTHead01 = () => {
         if (publicKey === null || publicKey === undefined) {
             //
         } else {
+            console.log('loginin');
             loginSuccess();
             // setLoginState(1);
         }
@@ -184,8 +186,10 @@ const GFTHead01 = () => {
 
     const oldAccount = () => {
         let prikey = parseId('');
-        console.log('oldAccount', prikey);
-        dispatch(setPrivateKey(prikey));
+        if (prikey) {
+            console.log('oldAccount', prikey);
+            dispatch(setPrivateKey(prikey));
+        }
     }
     // 
 
@@ -330,7 +334,8 @@ const GFTHead01 = () => {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <Button variant="contained" onClick={newAccount}>Sign in</Button>
+                            <Button sx={{ mx: '12px' }} variant="contained" onClick={oldAccount}>Relay</Button>
+                            <Button variant="contained" onClick={oldAccount}>Sign in</Button>
                             {/* newAccount */}
                         </Box> :
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

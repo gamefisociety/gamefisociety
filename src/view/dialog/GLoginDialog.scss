@@ -1,0 +1,70 @@
+.dialog_check_in_bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(24, 24, 24, 0.96);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+
+    .layout {
+        position: relative;
+        width: 400px;
+        height: auto;
+        background: #0F0F0F;
+        border-radius: 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 50px;
+
+        .close {
+            cursor: pointer;
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            right: 18px;
+            top: 18px;
+            background-image: url(../../asset/image/home/img_dialog_close.png);
+            background-size: 100% 100%;
+            &:hover{
+                transform: scale(1.2);
+            }
+        }
+
+        .img_icon {
+            margin-top: 50px;
+            width: 100px;
+            height: 100px;
+            background-image: url(../../asset/image/home/ic_check_in_img.png);
+            background-size: 100% 100%;
+        }
+
+        .txt_gts {
+            width: 90%;
+            margin-top: 27px;
+            font-size: 28px;
+            font-family: Saira;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 44px;
+        }
+
+        .info {
+            width: 80%;
+            margin-top: 23px;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            line-height: 25px;
+            white-space: pre-wrap;
+
+        }
+
+    }
+}
