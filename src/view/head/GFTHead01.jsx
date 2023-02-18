@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as secp from "@noble/secp256k1";
 import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
+import { setOpenLogin } from "module/store/features/dialogSlice";
 import useEventBuild from 'nostr/EventBuild';
 import useEventClient from 'nostr/EventClient';
 import { bech32ToHex, parseId } from 'nostr/Util';
@@ -335,7 +336,10 @@ const GFTHead01 = () => {
                     {
                         loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <Button sx={{ mx: '12px' }} variant="contained" onClick={oldAccount}>Relay</Button>
-                            <Button variant="contained" onClick={oldAccount}>Sign in</Button>
+                            <Button variant="contained" onClick={() => {
+                                // console.log('setOpenLogin true!');
+                                dispatch(setOpenLogin(true));
+                            }}>Sign in</Button>
                             {/* newAccount */}
                         </Box> :
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

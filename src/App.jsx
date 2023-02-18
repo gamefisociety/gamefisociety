@@ -27,10 +27,10 @@ function App() {
             <Router />
           </HashRouter>
           <GFTConnectDialog />
-          isOpenMenu && <GFTWalletMenu />
-          isOpenCheckIn && <GFTCheckInDialog />
-          isOpenMintAvatar && <GFTMintAvatarDialog />
-          isOpenLogin && <GLoginDialog />
+          {isOpenMenu && <GFTWalletMenu />}
+          {isOpenCheckIn && <GFTCheckInDialog />}
+          {isOpenMintAvatar && <GFTMintAvatarDialog />}
+          {isOpenLogin && <GLoginDialog />}
         </div>
       </SnackbarProvider>
     </Web3ReactProvider>

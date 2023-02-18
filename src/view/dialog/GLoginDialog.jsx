@@ -2,28 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    isCheckIn,
-    setOpenCheckIn
+    setOpenLogin
 } from 'module/store/features/dialogSlice';
 import './GLoginDialog.scss';
 import { BlueLoadButton } from '../utils/GFTStyleButton';
 import CircularProgress from '@mui/material/CircularProgress';
-
 import GSTClaimBase from '../../web3/GSTClaim';
 
 const GLoginDialog = () => {
-
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpen = useSelector(isCheckIn);
+    const { isOpenLogin } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     const [isLoadSub, setIsLoadSub] = useState(false);
     const [checkState, setCheckState] = useState(0);
+    //
     useEffect(() => {
         requsetData();
-        return () => {
-
-        }
-
+        return () => { }
     }, [])
 
     const requsetData = () => {
@@ -48,7 +43,7 @@ const GLoginDialog = () => {
         }
     }
     const cancelDialog = () => {
-        dispatch(setOpenCheckIn(false));
+        dispatch(setOpenLogin(false));
     }
 
     const claimEveryDay = () => {
@@ -91,29 +86,23 @@ const GLoginDialog = () => {
     }
 
     return (
-
-        <div>
-            {isOpen ?
-                <div className='dialog_check_in_bg' onClick={cancelDialog}>
-                    <div className='layout' onClick={(event) => {
-                        event.stopPropagation();
-                    }}>
-                        <div className='close' onClick={cancelDialog}></div>
-                        <div className='img_icon'></div>
-                        <span className='txt_gts'>1 GSP</span>
-                        <span className='info'>
-                            Welcome to the world of GameFi Society
-                            <br />
-                            <br />
-                            Sign in and you will receive tokens from the platform
-                        </span>
-                        <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
-                            {getCheckIn()}
-                        </BlueLoadButton>
-                    </div>
-                </div>
-                : ""
-            }
+        <div className='dialog_check_in_bg' onClick={cancelDialog}>
+            <div className='layout' onClick={(event) => {
+                event.stopPropagation();
+            }}>
+                <div className='close' onClick={cancelDialog}></div>
+                <div className='img_icon'></div>
+                <span className='txt_gts'>1 GSP</span>
+                <span className='info'>
+                    Welcome to the world of GameFi Society
+                    <br />
+                    <br />
+                    Sign in and you will receive tokens from the platform
+                </span>
+                <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+                    {getCheckIn()}
+                </BlueLoadButton>
+            </div>
         </div>
     );
 }
