@@ -55,6 +55,10 @@ function GFTLeftMenu() {
         navigate('/create_project');
     }
 
+    const clickGlobal = () => {
+        navigate('/global');
+    }
+
     return (
         <div className='left_menu_bg'>
             <div className='item' onClick={openCheckIn}>
@@ -86,6 +90,10 @@ function GFTLeftMenu() {
             <div className='item'>
                 <img className='img' src={ic_create} onClick={clickCreate}></img>
                 <span className='txt'>CREATE</span>
+            </div>
+            <div className='item'>
+                <img className='img' src={ic_create} onClick={clickGlobal}></img>
+                <span className='txt'>Global</span>
             </div>
         </div>
 
