@@ -5,12 +5,14 @@ import counterReducer from './features/counter/counterSlice';
 import dialogReducer from './features/dialogSlice';
 import userReducer from './features/userSlice';
 import loginReducer from './features/loginSlice';
+import profileReducer from './features/profileSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     dialog: dialogReducer,
     user: userReducer,
-    login: loginReducer
+    login: loginReducer,
+    profile: profileReducer
   },
 });

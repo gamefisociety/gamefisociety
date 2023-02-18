@@ -21,7 +21,7 @@ const ProfileSlice = createSlice({
   name: "Profile",
   initialState: InitState,
   reducers: {
-    init: (state, action) => {
+    initRelays: (state, action) => {
       //process relays
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       if (lastRelayList) {
@@ -57,7 +57,7 @@ const ProfileSlice = createSlice({
 });
 
 export const {
-  init,
+  initRelays,
   setRelays,
   removeRelay,
 } = ProfileSlice.actions;

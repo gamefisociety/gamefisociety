@@ -1,18 +1,17 @@
 import * as secp from "@noble/secp256k1";
-import { v4 as uuid } from "uuid";
 import { DefaultConnectTimeout } from "nostr/Const";
-import { ClientState, Nips } from "nostr/def";
 import { System } from "nostr/NostrSystem";
 import { unwrap } from "nostr/Util";
 
-const NostrClient = () => {
+const NostrRelay = () => {
 
   return {
-    connect: async (client, subInit, subCallback) => {
+    connect: async (client) => {
       let flag = false;
       try {
-        if (this.RelayInfo === undefined) {
-          const u = new URL(this.Address);
+        // console.log('NostrRelay connect', client.info);
+        if (client.info === null) {
+          const u = new URL(client.addr);
           const rsp = await fetch(`https://${u.host}`, {
             headers: {
               accept: "application/nostr+json",
@@ -25,56 +24,88 @@ const NostrClient = () => {
                 data[k] = undefined;
               }
             }
-            this.RelayInfo = data;
-            this.SubInit = subInit;
-            this.SubCallback = subCallback;
+            client.info = data;
+            // console.log('NostrRelay connect info', data);
             flag = true;
           } else {
             flag = false;
           }
-          // console.log('relay info', this.RelayInfo);
         }
       } catch (e) {
         console.warn("Could not load relay information", e);
       } finally {
         if (flag === true) {
-          if (this.IsClosed) {
-            this._UpdateState();
+          if (client.IsClosed) {
+            this._UpdateState(client);
           } else {
-            this.IsClosed = false;
-            this.Socket = new WebSocket(this.Address);
+            client.IsClosed = false;
+            client.Socket = new WebSocket(client.addr);
             // on open
-            this.Socket.onopen = () => {
-              this.ConnectTimeout = DefaultConnectTimeout;
-              this._InitSubscriptions();
-              console.log(`[${this.Address}] Open!`);
+            client.Socket.onopen = () => {
+              client.ConnectTimeout = DefaultConnectTimeout;
+              console.log(`[${client.addr}] Open!`);
             };
             // on error
-            this.Socket.onerror = e => {
+            client.Socket.onerror = e => {
               console.error(e);
-              this._UpdateState();
+              this._UpdateState(client);
             };
             //on close
-            this.Socket.onclose = e => {
-              if (!this.IsClosed) {
-                this.ConnectTimeout = this.ConnectTimeout * 2;
+            client.Socket.onclose = e => {
+              if (!client.IsClosed) {
+                client.ConnectTimeout = client.ConnectTimeout * 2;
                 console.log(
-                  `[${this.Address}] Closed (${e.reason}), trying again in ${(this.ConnectTimeout / 1000)
+                  `[${client.addr}] Closed (${e.reason}), trying again in ${(client.ConnectTimeout / 1000)
                     .toFixed(0)
                     .toLocaleString()} sec`
                 );
-                this.ReconnectTimer = setTimeout(() => {
-                  this.connect(this.SubInit, this.SubCallback);
-                }, this.ConnectTimeout);
-                this.Stats.Disconnects++;
+                client.ReconnectTimer = setTimeout(() => {
+                  this.connect(client);
+                }, client.ConnectTimeout);
+                client.Stats.Disconnects++;
               } else {
-                console.log(`[${this.Address}] Closed!`);
-                this.ReconnectTimer = null;
+                console.log(`[${client.Address}] Closed!`);
+                client.ReconnectTimer = null;
               }
-              this._UpdateState();
+              this._UpdateState(client);
             };
             //
-            this.Socket.onmessage = e => this.OnMessage(e);
+            client.Socket.onmessage = e => {
+              console.log('relay message', e);
+              if (e.data.length > 0) {
+                const msg = JSON.parse(e.data);
+                console.log('OnMessage', msg);
+                const tag = msg[0];
+                if (tag === 'AUTH') {
+                  // this._OnAuthAsync(msg[1]);
+                  // this.Stats.EventsReceived++;
+                  // this._UpdateState();
+                } else if (tag === 'EVENT') {
+                  // this._OnEvent(msg[1], msg[2]);
+                  // this.Stats.EventsReceived++;
+                  // this._UpdateState();
+                } else if (tag === 'EOSE') {
+                  // this._OnEnd(msg[1]);
+                } else if (tag === 'OK') {
+                  // console.debug(`${this.Address} OK: `, msg);
+                  // const id = msg[1];
+                  // if (this.EventsCallback.has(id)) {
+                  //   const cb = unwrap(this.EventsCallback.get(id));
+                  //   this.EventsCallback.delete(id);
+                  //   cb(msg);
+                  // }
+                } else if (tag === 'NOTICE') {
+                  // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
+                } else {
+                  // console.warn(`Unknown tag: ${tag}`);
+                }
+              }
+              // if (client.listenMessages) {
+              //   // client.listenMessages.map((proc) => {
+              //   //   proc(e);
+              //   // })
+              // }
+            };
           }
         }
         return new Promise((resolve, reject) => {
@@ -83,78 +114,77 @@ const NostrClient = () => {
       }
     },
 
-    // Close() {
-    //   this.IsClosed = true;
-    //   if (this.ReconnectTimer !== null) {
-    //     clearTimeout(this.ReconnectTimer);
-    //     this.ReconnectTimer = null;
-    //   }
-    //   this.Socket?.close();
-    //   this._UpdateState();
-    // }
+    Close: (client) => {
+      client.IsClosed = true;
+      if (client.ReconnectTimer !== null) {
+        clearTimeout(client.ReconnectTimer);
+        client.ReconnectTimer = null;
+      }
+      client.Socket?.close();
+      this._UpdateState(client);
+    },
 
-    // OnMessage(target) {
-    //   if (target.data.length > 0) {
-    //     const msg = JSON.parse(target.data);
-    //     console.log('OnMessage', msg);
-    //     const tag = msg[0];
-    //     if (tag === 'AUTH') {
-    //       this._OnAuthAsync(msg[1]);
-    //       this.Stats.EventsReceived++;
-    //       this._UpdateState();
-    //     } else if (tag === 'EVENT') {
-    //       this._OnEvent(msg[1], msg[2]);
-    //       this.Stats.EventsReceived++;
-    //       this._UpdateState();
-    //     } else if (tag === 'EOSE') {
-    //       this._OnEnd(msg[1]);
-    //     } else if (tag === 'OK') {
-    //       console.debug(`${this.Address} OK: `, msg);
-    //       const id = msg[1];
-    //       if (this.EventsCallback.has(id)) {
-    //         const cb = unwrap(this.EventsCallback.get(id));
-    //         this.EventsCallback.delete(id);
-    //         cb(msg);
-    //       }
-    //     } else if (tag === 'NOTICE') {
-    //       console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
-    //     } else {
-    //       console.warn(`Unknown tag: ${tag}`);
-    //     }
-    //   }
-    // }
 
-    // SendEvent(ev) {
-    //   if (!this.Settings.write) {
-    //     return;
-    //   }
-    //   // console.log('client SendEvent', ev);
-    //   const req = ["EVENT", ev.ToObject()];
-    //   this._SendJson(req);
-    //   this.Stats.EventsSent++;
-    //   this._UpdateState();
-    // }
+    SendEvent: (client, ev) => {
+      if (!client.Settings.write) {
+        return;
+      }
+      const req = ["EVENT", ev.ToObject()];
+      if (client.Socket?.readyState === WebSocket.OPEN) {
+        const json = JSON.stringify(req);
+        client.Socket.send(json);
+      } else {
+        //push msg in pendingList
+        client.PendingList.push(req);
+      }
+      client.Stats.EventsSent++;
+      this._UpdateState(client);
+    },
 
-    // async SendAsync(e, timeout = 5000) {
-    //   return new Promise(resolve => {
-    //     if (!this.Settings.write) {
-    //       resolve();
-    //       return;
-    //     }
-    //     const t = setTimeout(() => {
-    //       resolve();
-    //     }, timeout);
-    //     this.EventsCallback.set(e.Id, () => {
-    //       clearTimeout(t);
-    //       resolve();
-    //     });
+    SendAsync: async (client, ev, timeout = 5000) => {
+      return new Promise(resolve => {
+        if (!client.Settings.write) {
+          resolve();
+          return;
+        }
+        const t = setTimeout(() => {
+          resolve();
+        }, timeout);
+        client.EventsCallback?.set(ev.Id, () => {
+          clearTimeout(t);
+          resolve();
+        });
 
-    //     const req = ["EVENT", e.ToObject()];
-    //     this._SendJson(req);
-    //     this.Stats.EventsSent++;
-    //     this._UpdateState();
-    //   });
-    // }
+        const req = ["EVENT", ev.ToObject()];
+        if (client.Socket?.readyState === WebSocket.OPEN) {
+          const json = JSON.stringify(req);
+          client.Socket.send(json);
+        } else {
+          //push msg in pendingList
+          client.PendingList.push(req);
+        }
+        client.Stats.EventsSent++;
+        this._UpdateState(client);
+      });
+    },
+
+    SupportsNip: (client, n) => {
+      return client.info?.supported_nips?.some(nipId => nipId === n) ?? false;
+    },
+
+    _UpdateState: (client) => {
+      client.CurrentState.connected = client.Socket?.readyState === WebSocket.OPEN;
+      client.CurrentState.events.received = client.Stats.EventsReceived;
+      client.CurrentState.events.send = client.Stats.EventsSent;
+      client.CurrentState.avgLatency =
+        client.Stats.Latency.length > 0 ? client.Stats.Latency.reduce((acc, v) => acc + v, 0) / client.Stats.Latency.length : 0;
+      client.CurrentState.disconnects = client.Stats.Disconnects;
+      client.CurrentState.info = client.info;
+      client.CurrentState.id = client.Id;
+      client.Stats.Latency = client.Stats.Latency.slice(-20); // trim
+      client.HasStateChange = true;
+      client._NotifyState();
+    },
 
     // AddSub(subId, sub) {
     //   if (!this.Settings.read) {
@@ -201,24 +231,6 @@ const NostrClient = () => {
     //   return this.LastState;
     // },
 
-    SupportsNip: (n) => {
-      return this.RelayInfo?.supported_nips?.some(nipId => nipId === n) ?? false;
-    },
-
-    // _UpdateState() {
-    //   this.CurrentState.connected = this.Socket?.readyState === WebSocket.OPEN;
-    //   this.CurrentState.events.received = this.Stats.EventsReceived;
-    //   this.CurrentState.events.send = this.Stats.EventsSent;
-    //   this.CurrentState.avgLatency =
-    //     this.Stats.Latency.length > 0 ? this.Stats.Latency.reduce((acc, v) => acc + v, 0) / this.Stats.Latency.length : 0;
-    //   this.CurrentState.disconnects = this.Stats.Disconnects;
-    //   this.CurrentState.info = this.RelayInfo;
-    //   this.CurrentState.id = this.Id;
-    //   this.Stats.Latency = this.Stats.Latency.slice(-20); // trim
-    //   this.HasStateChange = true;
-    //   this._NotifyState();
-    // }
-
     // _NotifyState() {
     //   const state = this.GetState();
     //   for (const [, h] of this.StateHooks) {
@@ -238,16 +250,6 @@ const NostrClient = () => {
     //   }
     //   //
     //   this._UpdateState();
-    // }
-
-    // _SendJson(obj) {
-    //   if (this.Socket?.readyState === WebSocket.OPEN) {
-    //     const json = JSON.stringify(obj);
-    //     this.Socket.send(json);
-    //   } else {
-    //     //push msg in pendingList
-    //     this.PendingList.push(obj);
-    //   }
     // }
 
     // _OnEvent(subId, ev) {
@@ -339,4 +341,4 @@ const NostrClient = () => {
   }
 };
 
-export default NostrClient;
+export default NostrRelay;

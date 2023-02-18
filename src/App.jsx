@@ -1,10 +1,11 @@
-
+import React, { useEffect, useState } from 'react';
 import { HashRouter } from "react-router-dom";
 import { Web3ReactProvider } from '@web3-react/core'
 import { SnackbarProvider, useSnackbar } from "notistack";
 import Router from './module/router/router'
 import Web3 from 'web3'
 import { useSelector, useDispatch } from 'react-redux';
+//
 import GFTConnectDialog from "view/dialog/GFTConnectDialog";
 import GFTWalletMenu from "view/menu/GFTWalletMenu";
 import GFTCheckInDialog from "view/dialog/GFTCheckInDialog";
@@ -19,6 +20,7 @@ function getLibrary(provider, connector) {
 
 function App() {
   const { isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
+
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <SnackbarProvider maxSnack={3}>

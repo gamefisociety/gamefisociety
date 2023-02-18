@@ -16,7 +16,7 @@ const NostrFactory = {
     return ev;
   },
 
-  createClient: (addr, read, write) => {
+  createRelay: (addr, read, write) => {
     let relay = {};
     relay.Id = uuid();
     relay.status = {};
@@ -25,8 +25,6 @@ const NostrFactory = {
     relay.PendingList = [];
     relay.PendingList = [];
     relay.SubSupports = new Map();
-    relay.SubCallback = null;
-    relay.SubInit = null;
     relay.Settings = {
       read: read,
       write: write,
@@ -43,13 +41,16 @@ const NostrFactory = {
         send: 0,
       },
     };
-    relay.LastState = Object.freeze({ ...this.CurrentState });
+    // relay.LastState = Object.freeze({ ...this.CurrentState });
     relay.IsClosed = false;
     relay.ReconnectTimer = null;
     relay.EventsCallback = new Map();
     relay.AwaitingAuth = new Map();
     relay.Authed = false;
+    relay.info = null;
+    return relay;
   }
+  //!
 }
 
 export default NostrFactory;

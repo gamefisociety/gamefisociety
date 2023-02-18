@@ -1,6 +1,8 @@
-import NostrClient from "nostr/NostrClient";
+import NostrRelay from "nostr/NostrRelay";
 import { unwrap } from "nostr/Util";
 import NostrFactory from "nostr/NostrFactory";
+
+let Relay = NostrRelay();
 
 export class NostrSystem {
 
@@ -10,13 +12,17 @@ export class NostrSystem {
     // this.PendingSubscriptions = [];
   }
 
+  ConnectDefaultRelay() {
+    console.log('ConnectDefaultRelay');
+  }
+
   ConnectRelay(address, read, write) {
     try {
       if (!this.Clients.has(address)) {
-        const client = NostrFactory.createClient(address, read, write);
-        NostrClient.connect(client).then(ret => {
-          console.log('nostr client connect', this);
-          this.Clients.set(address, client);
+        const client = NostrFactory.createRelay(address, read, write);
+        this.Clients.set(address, client);
+        Relay.connect(client).then(ret => {
+          // console.log('nostr client connect', ret);
         });
 
       } else {
