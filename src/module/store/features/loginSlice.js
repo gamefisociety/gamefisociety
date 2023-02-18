@@ -4,7 +4,6 @@ import { DefaultRelays } from "nostr/Const";
 
 const PrivateKeyItem = "prikey";
 const PublicKeyItem = "pubkey";
-const RelayListKey = "last-relays";
 
 // export const DefaultImgProxy = {
 //   url: "https://imgproxy.snort.social",
@@ -18,8 +17,6 @@ export const InitState = {
   publicKey: undefined,
   privateKey: undefined,
   newUserKey: false,
-  relays: {},
-  latestRelays: 0,
 };
 
 const LoginSlice = createSlice({
@@ -44,14 +41,6 @@ const LoginSlice = createSlice({
         state.publicKey = pubKey;
         state.loggedOut = false;
       }
-      //process relays
-      const lastRelayList = window.localStorage.getItem(RelayListKey);
-      if (lastRelayList) {
-        state.relays = JSON.parse(lastRelayList);
-      } else {
-        state.relays = Object.fromEntries(DefaultRelays.entries());
-      }
-      console.log('relays init', state);
     },
     setPrivateKey: (state, action) => {
       state.loggedOut = false;
@@ -65,34 +54,12 @@ const LoginSlice = createSlice({
       state.privateKey = action.payload;
       window.localStorage.setItem(PrivateKeyItem, action.payload);
       state.publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(action.payload));
-      console.log('setGeneratedPrivateKey', action.payload);
+      // console.log('setGeneratedPrivateKey', action.payload);
     },
     setPublicKey: (state, action) => {
       window.localStorage.setItem(PublicKeyItem, action.payload);
       state.loggedOut = false;
       state.publicKey = action.payload;
-    },
-    setRelays: (state, action) => {
-      const relays = action.payload.relays;
-      const createdAt = action.payload.createdAt;
-      if (state.latestRelays > createdAt) {
-        return;
-      }
-      // filter out non-websocket urls
-      const filtered = new Map();
-      for (const [k, v] of Object.entries(relays)) {
-        if (k.startsWith("wss://") || k.startsWith("ws://")) {
-          filtered.set(k, v);
-        }
-      }
-      state.relays = Object.fromEntries(filtered.entries());
-      state.latestRelays = createdAt;
-      window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
-    },
-    removeRelay: (state, action) => {
-      delete state.relays[action.payload];
-      state.relays = { ...state.relays };
-      window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
     },
     logout: state => {
       const relays = { ...state.relays };
@@ -110,8 +77,6 @@ export const {
   setPrivateKey,
   setGeneratedPrivateKey,
   setPublicKey,
-  setRelays,
-  removeRelay,
   logout,
 } = LoginSlice.actions;
 
