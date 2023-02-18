@@ -7,6 +7,7 @@ import { setOpenLogin } from "module/store/features/dialogSlice";
 import useEventBuild from 'nostr/EventBuild';
 import useEventClient from 'nostr/EventClient';
 import { bech32ToHex, parseId } from 'nostr/Util';
+import MetadataEvent from 'nostr/ev/MetadataEvent';
 //
 import { styled, alpha } from '@mui/material/styles';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -90,8 +91,6 @@ const GFTHead01 = () => {
     const navigate = useNavigate();
     const { loggedOut, publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
-    const eventBuild = useEventBuild();
-    const eventClient = useEventClient();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const isOpenConnect = useSelector(isOpen);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -99,6 +98,18 @@ const GFTHead01 = () => {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    useEffect(() => {
+        // console.log('useEffect loggedOut', loggedOut);
+        const MetaData = MetadataEvent();
+        if (loggedOut === false) {
+            //get user msg
+            let ev = MetaData.get(publicKey);
+            console.log('MetadataEvent', ev);
+        }
+        return () => {
+            //
+        }
+    }, [loggedOut]);
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");
     //     const rsp = await fetch(`https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(username)}`);

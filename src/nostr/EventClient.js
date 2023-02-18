@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { System } from "nostr/NostrSystem";
-import NostrEvent from "nostr/NostrEvent";
 import { DefaultRelays } from "nostr/Const";
 
 let isNip07Busy = false;
@@ -30,9 +29,9 @@ const useEventClient = () => {
   return {
     signEvent: async (ev) => {
       if (hasNip07 && !privKey) {
-        ev.Id = await ev.CreateId();
-        const tmpEv = (await barrierNip07(() => window.nostr.signEvent(ev.ToObject())));
-        return new NostrEvent(tmpEv);
+        // ev.Id = await ev.CreateId();
+        // const tmpEv = (await barrierNip07(() => window.nostr.signEvent(ev.ToObject())));
+        // return new NostrEvent(tmpEv);
       } else if (privKey) {
         await ev.Sign(privKey);
       } else {

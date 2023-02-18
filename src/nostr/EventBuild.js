@@ -54,6 +54,21 @@ const useEventBuild = () => {
   }
 
   return {
+    getMetadata: (pub) => {
+      if (pub) {
+        const ev = useNostrEvent.Create(pub);
+        ev.Kind = EventKind.SetMetadata;
+        return ev;
+      }
+    },
+    metadata: async (obj) => {
+      if (pubKey) {
+        const ev = useNostrEvent.Create(pubKey);
+        ev.Kind = EventKind.SetMetadata;
+        ev.Content = JSON.stringify(obj);
+        return await EventClient.signEvent(ev);
+      }
+    },
     nip42Auth: async (challenge, relay) => {
       if (pubKey) {
         const ev = useNostrEvent.Create(pubKey);
@@ -119,15 +134,6 @@ const useEventBuild = () => {
           ev.Tags.push(new Tag(["t", t], ev.Tags.length));
         });
         ev.Content = "";
-        return await EventClient.signEvent(ev);
-      }
-    },
-    metadata: async (obj) => {
-      if (pubKey) {
-        const ev = useNostrEvent.Create(pubKey);
-        ev.Kind = EventKind.SetMetadata;
-        ev.Content = JSON.stringify(obj);
-        // console.log('metadata ev', ev);
         return await EventClient.signEvent(ev);
       }
     },

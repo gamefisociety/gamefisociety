@@ -8,6 +8,7 @@ const useNostrEvent = () => {
     Create: (pubKey) => {
       return NostrFactory.createEvent(pubKey);
     },
+
     CreateId: async (ev) => {
       const payload = [
         0,
@@ -40,7 +41,7 @@ const useNostrEvent = () => {
       if (!(await this.Verify(ev))) {
         throw "Signing failed";
       }
-      // console.log('event self sign',this);
+      console.log('event self sign',this);
     },
 
     EncryptData: async (content, pubkey, privkey) => {
@@ -110,6 +111,10 @@ const useNostrEvent = () => {
     }
   }
 
+};
+
+export default useNostrEvent;
+
   // constructor(rewEv) {
   //   this.Original = rewEv ?? null;
   //   this.Id = rewEv?.id ?? "";
@@ -134,6 +139,3 @@ const useNostrEvent = () => {
   //   }
   //   return this.PubKey;
   // }
-};
-
-export default useNostrEvent;
