@@ -28,8 +28,10 @@ export const EmailRegex =
 function GFTGlobal() {
     const relay = relayInit('wss://relay.damus.io')
     const [data, setData] = useState(new Map());
+    const [inforData, setInforData] = useState(new Map());
     const [pubkey, setPubKey] = useState(null);
     const [privateKey, setPrivateKey] = useState(null);
+    let onlyPost = false;
     useEffect(() => {
         return () => {
             initConnect();
@@ -68,7 +70,53 @@ function GFTGlobal() {
             setData(new Map(data.set(event.id, event)));
         })
         sub.on('eose', () => {
+            console.log('sub list eose event',data)
             sub.unsub()
+
+            let arrayKey = [];
+            for (let key of data.keys()) {
+                inforData.set(data.get(key).pubkey,null);
+            }
+            for(let key of inforData.keys()){
+                arrayKey.push(key);
+            }
+            console.log(arrayKey);
+            setInforData(new Map(inforData));
+            getInfor(arrayKey);
+        })
+
+        sub.off('event', () => {
+            console.log('off event')
+        })
+
+        sub.off('eose', () => {
+            console.log('off eose event')
+        })
+    }
+
+    const getInfor = (pkey) => {
+        let sub = relay.sub([
+            {
+                kinds: [0],
+                authors: pkey
+            }
+        ])
+        sub.on('event', event => {
+            event.contentObj = JSON.parse(event.content);
+            setInforData(new Map(inforData.set(event.pubkey, event)));
+            // sub.unsub()
+        })
+        sub.on('eose', () => {
+            console.log('eose event')
+            sub.unsub()
+        })
+
+        sub.off('event', () => {
+            console.log('off event')
+        })
+
+        sub.off('eose', () => {
+            console.log('off eose event')
         })
     }
 
@@ -143,10 +191,10 @@ function GFTGlobal() {
     return (
         <div className='global_bg'>
             {[...data.keys()].map(k => (
-                <div className='item_list'>
+                <div key={k} className='item_list'>
                     <div className='info'>
-                        <img className='ic' src={ic_gfs_coin}></img>
-                        <div className='name'>{data.get(k).pubkey} time:{data.get(k).created_at}</div>
+                        <img className='ic' src={inforData.get(data.get(k).pubkey)?.contentObj.picture != null ? inforData.get(data.get(k).pubkey)?.contentObj.picture : ic_gfs_coin}></img>
+                        <div className='name'>{inforData.get(data.get(k).pubkey)?.contentObj.name} time:{data.get(k).created_at}</div>
                     </div>
                     <div className='content'>{data.get(k).content}</div>
                 </div>
