@@ -42,7 +42,11 @@ export class NostrSystem {
 
   Broadcast(ev) {
     for (const [, tmpRelay] of this.Clients) {
-      Relay.SendEvent(tmpRelay, ev);
+      if (ev.type === "EVENT") {
+        Relay.SendEvent(tmpRelay, ev);
+      } else if (ev.type === "SUB") {
+        Relay.SendSub(tmpRelay, ev);
+      }
     }
   }
 

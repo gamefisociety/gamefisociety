@@ -97,29 +97,13 @@ const useNostrEvent = () => {
     ev.Content = await DecryptData(ev.Content, privkey, pubkey);
   }
 
-  const formate = (ev) => {
-    // console.log('formate event', ev);
-    return {
-      id: ev.Id,
-      pubkey: ev.PubKey,
-      created_at: ev.CreatedAt,
-      kind: ev.Kind,
-      tags: ev.Tags.sort((a, b) => a.Index - b.Index)
-        .map(a => a.ToObject())
-        .filter(a => a !== null), //<string[][] >
-      content: ev.Content,
-      sig: ev.Signature,
-    };
-  }
-
   return {
     Create: Create,
     CreateId: CreateId,
     Verify: Verify,
     Sign: Sign,
     DecryptData: DecryptData,
-    DecryptDm: DecryptDm,
-    formate: formate
+    DecryptDm: DecryptDm
   }
 
 };

@@ -3,6 +3,7 @@ import { DefaultConnectTimeout } from "nostr/Const";
 import { System } from "nostr/NostrSystem";
 import { unwrap } from "nostr/Util";
 import useNostrEvent from 'nostr/NostrEvent';
+import NostrFactory from 'nostr/NostrFactory';
 
 const NostrRelay = () => {
 
@@ -138,9 +139,10 @@ const NostrRelay = () => {
       client.PendingList = [];
       return;
     }
-    client.PendingList.map(ev => {
-      console.log('pendding event', ev);
-      SendEvent(client, ev);
+    client.PendingList.map(req => {
+      console.log('pendding msg', req);
+      const json = JSON.stringify(req);
+      client.Socket.send(json);
     });
     client.PendingList = [];
   }
@@ -149,14 +151,14 @@ const NostrRelay = () => {
     if (!client.Settings.write) {
       return;
     }
+    const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendEvent direction', ev);
-      const req = ["EVENT", nostrEvent.formate(ev)];
       const json = JSON.stringify(req);
       client.Socket.send(json);
     } else {
       // console.log('SendEvent cache', ev);
-      client.PendingList.push(ev);
+      client.PendingList.push(req);
     }
     client.Stats.EventsSent++;
     _UpdateState(client);
@@ -176,7 +178,7 @@ const NostrRelay = () => {
         resolve();
       });
 
-      const req = ["EVENT", ev.ToObject()];
+      const req = ["EVENT", NostrFactory.formateEvent(ev)];
       if (client.Socket?.readyState === WebSocket.OPEN) {
         const json = JSON.stringify(req);
         client.Socket.send(json);
@@ -188,6 +190,34 @@ const NostrRelay = () => {
       _UpdateState(client);
     });
   }
+
+  const SendSub = (client, sub) => {
+    if (!client.Settings.read) {
+      return;
+    }
+    let req = ["REQ", sub.Id, NostrFactory.formateSub(sub)];
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      console.log('SendSub direction', req);
+      const json = JSON.stringify(req);
+      client.Socket.send(json);
+    } else {
+      console.log('SendSub cache', req);
+      client.PendingList.push(req);
+    }
+    // client.Stats.EventsSent++;
+    // _UpdateState(client);
+  }
+  // if (!this.Authed && this.AwaitingAuth.size > 0) {
+  //   this.Pending.push(sub.ToObject());
+  //   return;
+  // }
+
+  // let req = ["REQ", sub.Id, sub.ToObject()];
+  // if (sub.OrSubs.length > 0) {
+  //   req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
+  // }
+  // sub.Started.set(this.Address, new Date().getTime());
+  // this._SendJson(req);
 
   const SupportsNip = (client, n) => {
     return client.info?.supported_nips?.some(nipId => nipId === n) ?? false;
@@ -363,7 +393,9 @@ const NostrRelay = () => {
   return {
     Connect: Connect,
     Close: Close,
-    SendEvent: SendEvent
+    SendEvent: SendEvent,
+    SendSub: SendSub,
+    SupportsNip: SupportsNip,
   }
 };
 

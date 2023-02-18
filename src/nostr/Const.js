@@ -43,6 +43,7 @@ export const DefaultRelays = new Map([
   ["wss://relay.snort.social", { read: true, write: true }],
   ["wss://eden.nostr.land", { read: true, write: true }],
   ["wss://atlas.nostr.land", { read: true, write: true }],
+  ["wss://nos.lol", { read: true, write: true }],
 ]);
 
 /**

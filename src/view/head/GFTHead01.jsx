@@ -198,9 +198,9 @@ const GFTHead01 = () => {
     };
 
     const fetchProfile = async () => {
-        let ev = await MetaData.get(publicKey);
-        console.log('MetadataEvent', ev);
-        System.Broadcast(ev);
+        let sub = await MetaData.get(publicKey);
+        console.log('MetadataSub', sub);
+        System.Broadcast(sub);
     }
 
     const openProfile = () => {

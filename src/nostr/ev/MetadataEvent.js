@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, NostrList } from "nostr/def";
+import NostrFactory from 'nostr/NostrFactory';
 
 const MetadataEvent = () => {
 
@@ -11,14 +12,16 @@ const MetadataEvent = () => {
   return {
     get: async (pubkey) => {
       if (pubkey) {
-        const ev = nostrEvent.Create(pubkey);
-        ev.Kind = EventKind.SetMetadata;
-        return await nostrEvent.Sign(privKey, ev);
+        const sub = NostrFactory.createSub();
+        sub.Id = `profiles:${sub.Id.slice(0, 8)}`;
+        sub.Kinds = [EventKind.SetMetadata];
+        sub.Authors = [pubkey];
+        return sub;
       }
     },
     send: async (pubKey, obj) => {
       if (pubKey) {
-        const ev = nostrEvent.Create(pubKey);
+        const ev = NostrFactory.createEvent(pubKey);
         ev.Kind = EventKind.SetMetadata;
         ev.Content = JSON.stringify(obj);
         return await nostrEvent.Sign(privKey, ev);
