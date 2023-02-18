@@ -26,6 +26,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import AdbIcon from '@mui/icons-material/Adb';
+import PublicIcon from '@mui/icons-material/Public';
+import LoginIcon from '@mui/icons-material/Login';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
@@ -335,12 +337,18 @@ const GFTHead01 = () => {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         loginState === 0 ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <Button sx={{ mx: '12px' }} variant="contained" onClick={oldAccount}>Relay</Button>
-                            <Button variant="contained" onClick={() => {
-                                // console.log('setOpenLogin true!');
+                            <IconButton
+                                size="large"
+                                aria-label="relay icon"
+                                color="inherit"
+                            >
+                                <PublicIcon />
+                            </IconButton>
+                            <Button variant="contained" endIcon={<LoginIcon />} onClick={() => {
                                 dispatch(setOpenLogin(true));
-                            }}>Sign in</Button>
-                            {/* newAccount */}
+                            }}>
+                                Login
+                            </Button>
                         </Box> :
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                                 <Box className='wallet_layout' onClick={openDialog}>
