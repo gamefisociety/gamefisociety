@@ -23,7 +23,6 @@ const NostrFactory = {
     relay.addr = addr;
     relay.Socket = null;
     relay.PendingList = [];
-    relay.PendingList = [];
     relay.SubSupports = new Map();
     relay.Settings = {
       read: read,

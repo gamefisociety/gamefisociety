@@ -12,16 +12,12 @@ export class NostrSystem {
     // this.PendingSubscriptions = [];
   }
 
-  ConnectDefaultRelay() {
-    console.log('ConnectDefaultRelay');
-  }
-
   ConnectRelay(address, read, write) {
     try {
       if (!this.Clients.has(address)) {
         const client = NostrFactory.createRelay(address, read, write);
         this.Clients.set(address, client);
-        Relay.connect(client).then(ret => {
+        Relay.Connect(client).then(ret => {
           // console.log('nostr client connect', ret);
         });
 
@@ -37,10 +33,10 @@ export class NostrSystem {
   }
 
   DisconnectRelay(address) {
-    const c = this.Clients.get(address);
-    if (c) {
+    const client = this.Clients.get(address);
+    if (client) {
       this.Clients.delete(address);
-      c.Close();
+      Relay.Close(client);
     }
   }
 
