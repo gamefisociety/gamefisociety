@@ -78,8 +78,10 @@ function GFTLeftMenu() {
                 <span className='txt'>BNB</span>
             </div>
             <div className='item'>
-                <img className='img' src={ic_polgon}></img>
-                <span className='txt'>POLYGON</span>
+                <img className='img' src={ic_polgon} onClick={() => {
+                    navigate('/hall');
+                }}></img>
+                <span className='txt' >POLYGON</span>
             </div>
             <div className='item'>
                 <img className='img' src={ic_create} onClick={clickCreate}></img>
