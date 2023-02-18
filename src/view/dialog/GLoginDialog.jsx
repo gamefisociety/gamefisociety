@@ -9,6 +9,9 @@ import { BlueLoadButton } from '../utils/GFTStyleButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import GSTClaimBase from '../../web3/GSTClaim';
 
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+
 const GLoginDialog = () => {
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const { isOpenLogin } = useSelector(s => s.dialog);
@@ -86,24 +89,27 @@ const GLoginDialog = () => {
     }
 
     return (
-        <div className='dialog_check_in_bg' onClick={cancelDialog}>
-            <div className='layout' onClick={(event) => {
-                event.stopPropagation();
-            }}>
-                <div className='close' onClick={cancelDialog}></div>
-                <div className='img_icon'></div>
-                <span className='txt_gts'>1 GSP</span>
-                <span className='info'>
-                    Welcome to the world of GameFi Society
-                    <br />
-                    <br />
-                    Sign in and you will receive tokens from the platform
-                </span>
-                <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
-                    {getCheckIn()}
-                </BlueLoadButton>
-            </div>
-        </div>
+        <Dialog onClose={cancelDialog} open={isOpenLogin}>
+            <DialogTitle>Login</DialogTitle>
+        </Dialog>
+        // <div className='dialog_check_in_bg' onClick={cancelDialog}>
+        //     <div className='layout' onClick={(event) => {
+        //         event.stopPropagation();
+        //     }}>
+        //         <div className='close' onClick={cancelDialog}></div>
+        //         <div className='img_icon'></div>
+        //         <span className='txt_gts'>1 GSP</span>
+        //         <span className='info'>
+        //             Welcome to the world of GameFi Society
+        //             <br />
+        //             <br />
+        //             Sign in and you will receive tokens from the platform
+        //         </span>
+        //         <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+        //             {getCheckIn()}
+        //         </BlueLoadButton>
+        //     </div>
+        // </div>
     );
 }
 
