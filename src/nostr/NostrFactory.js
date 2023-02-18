@@ -31,6 +31,7 @@ const NostrFactory = {
     relay.ConnectTimeout = null;
     relay.StateHooks = new Map();
     relay.HasStateChange = true;
+    relay.Stats = {};
     relay.CurrentState = {
       connected: false,
       disconnects: 0,

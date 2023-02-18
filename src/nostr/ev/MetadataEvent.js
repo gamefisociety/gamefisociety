@@ -1,18 +1,19 @@
+import { useSelector } from "react-redux";
 import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, NostrList } from "nostr/def";
-import Tag from "nostr/Tag";
-import { bech32ToHex, unwrap } from "nostr/Util";
-import { HashtagRegex } from "nostr/Const";
-import NostrEvent from 'nostr/NostrEvent';
 
 const MetadataEvent = () => {
+
+  const privKey = useSelector(s => s.login.privateKey);
+
   const nostrEvent = useNostrEvent();
+
   return {
-    get: (pubkey) => {
+    get: async (pubkey) => {
       if (pubkey) {
         const ev = nostrEvent.Create(pubkey);
         ev.Kind = EventKind.SetMetadata;
-        return ev;
+        return await nostrEvent.Sign(privKey, ev);
       }
     },
     send: async (pubKey, obj) => {
@@ -20,7 +21,7 @@ const MetadataEvent = () => {
         const ev = nostrEvent.Create(pubKey);
         ev.Kind = EventKind.SetMetadata;
         ev.Content = JSON.stringify(obj);
-        return await NostrEvent.signEvent(ev);
+        return await nostrEvent.Sign(privKey, ev);
       }
     },
   }

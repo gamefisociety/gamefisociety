@@ -41,9 +41,8 @@ export class NostrSystem {
   }
 
   Broadcast(ev) {
-    console.log('system Broadcast', ev);
     for (const [, tmpRelay] of this.Clients) {
-      tmpRelay.SendEvent(ev)
+      Relay.SendEvent(tmpRelay, ev);
     }
   }
 

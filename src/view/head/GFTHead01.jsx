@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setRelays, logout } from "module/store/features/loginSlice";
+import { logout } from "module/store/features/loginSlice";
 import { setOpenLogin } from "module/store/features/dialogSlice";
-import useEventBuild from 'nostr/EventBuild';
-import useEventClient from 'nostr/EventClient';
-import { bech32ToHex, parseId } from 'nostr/Util';
 import MetadataEvent from 'nostr/ev/MetadataEvent';
+import { System } from 'nostr/NostrSystem';
 //
 import { styled, alpha } from '@mui/material/styles';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -98,13 +96,14 @@ const GFTHead01 = () => {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    const MetaData = MetadataEvent();
+
     useEffect(() => {
-        // console.log('useEffect loggedOut', loggedOut);
-        const MetaData = MetadataEvent();
+
+        // console.log('useEffect loggedOut', loggedOut)
         if (loggedOut === false) {
             //get user msg
-            let ev = MetaData.get(publicKey);
-            console.log('MetadataEvent', ev);
+            fetchProfile();
         }
         return () => {
             //
@@ -198,6 +197,17 @@ const GFTHead01 = () => {
         handleMobileMenuClose();
     };
 
+    const fetchProfile = async () => {
+        let ev = await MetaData.get(publicKey);
+        console.log('MetadataEvent', ev);
+        System.Broadcast(ev);
+    }
+
+    const openProfile = () => {
+        fetchProfile();
+        handleMenuClose();
+    };
+
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
@@ -219,7 +229,7 @@ const GFTHead01 = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={openProfile}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             <Divider></Divider>
             <MenuItem onClick={() => {
