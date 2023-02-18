@@ -3,11 +3,11 @@ import { lazy } from 'react';
 // project import
 import Loadable from '../../components/Loadable';
 import GFTHome from "../../view/home/GFTHome";
-
 const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
 const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
+const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 // // render - dashboard
 // const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 // //任务服务
@@ -53,6 +53,10 @@ const MainRoutes = {
             element: <GHall />,
 
         },
+        {
+            path:'/global',
+            element: <GFTGlobal/>,
+        }
     ]
 };
 
