@@ -105,6 +105,8 @@ const NostrRelay = () => {
               } else {
                 // console.warn(`Unknown tag: ${tag}`);
               }
+            } else {
+              console.log('no OnMessage');
             }
             // if (client.listenMessages) {
             //   // client.listenMessages.map((proc) => {
