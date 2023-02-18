@@ -18,7 +18,7 @@ export const InitState = {
 };
 
 const ProfileSlice = createSlice({
-  name: "Login",
+  name: "Profile",
   initialState: InitState,
   reducers: {
     init: (state, action) => {

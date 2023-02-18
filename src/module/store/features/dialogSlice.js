@@ -6,6 +6,7 @@ const initialState = {
   isOpenMenuWallet: false,
   isOpenCheckIn: false,
   isOpenMintAvatar: false,
+  isOpenLogin: false,
   status: 'idle'
 };
 
@@ -22,17 +23,14 @@ export const dialogSlice = createSlice({
   initialState,
   reducers: {
     increment: (state) => {
-
       state.isOpenConnect = true;
     },
     decrement: (state) => {
       state.isOpenConnect = false;
     },
-
     setIsOpen: (state, action) => {
       state.isOpenConnect = action.payload;
     },
-
     setIsOpenWallet: (state, action) => {
       state.isOpenMenuWallet = action.payload;
     },
@@ -41,6 +39,9 @@ export const dialogSlice = createSlice({
     },
     setOpenMintAvatar: (state, action) => {
       state.isOpenMintAvatar = action.payload;
+    },
+    setOpenLogin: (state, action) => {
+      state.isOpenLogin = action.payload;
     },
   },
 
@@ -60,6 +61,7 @@ export const {
   increment,
   decrement,
   setIsOpen,
+  setOpenLogin,
   setIsOpenWallet,
   setOpenCheckIn,
   setOpenMintAvatar }

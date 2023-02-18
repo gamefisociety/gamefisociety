@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -31,12 +31,12 @@ function GFTMintAvatarDialog() {
     const getAvatarBalance = () => {
         if (account) {
             GSTAvatarNFTBase.getTokenbalanceOf(library, account).then(res => {
-                if(res > 0){
+                if (res > 0) {
                     setCheckState(3);
                 }
             }).catch(err => {
                 setCheckState(2);
-                console.log(err,'err');
+                console.log(err, 'err');
 
             })
         } else {
@@ -49,7 +49,7 @@ function GFTMintAvatarDialog() {
     }
 
     const mintAvatar = () => {
-        if(checkState !== 0){
+        if (checkState !== 0) {
             return;
         }
         if (account) {
@@ -75,7 +75,7 @@ function GFTMintAvatarDialog() {
             return "Got An Avatar NFT!"
         } else if (checkState == 2) {
             return "Something Wrong!"
-        }else if (checkState == 3) {
+        } else if (checkState == 3) {
             return "You already have an avatar!"
         }
     }
@@ -96,7 +96,7 @@ function GFTMintAvatarDialog() {
                             <br />
                             Mint An Avatar NFT
                         </span>
-                        <BlueLoadButton variant="contained" onClick={() => mintAvatar()} loading={isLoadSub}  loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+                        <BlueLoadButton variant="contained" onClick={() => mintAvatar()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
                             {mintNFTMsg()}
                         </BlueLoadButton>
                     </div>
@@ -107,4 +107,4 @@ function GFTMintAvatarDialog() {
     );
 }
 
-export default GFTMintAvatarDialog;
+export default React.memo(GFTMintAvatarDialog);

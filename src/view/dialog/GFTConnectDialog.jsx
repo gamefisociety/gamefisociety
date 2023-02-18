@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,7 +33,7 @@ function GFTConnectDialog() {
     }, [])
 
     const requsetData = () => {
-        if(!window.ethereum){
+        if (!window.ethereum) {
             return;
         }
         window.ethereum.on('accountsChanged', (accounts) => {
@@ -67,7 +67,7 @@ function GFTConnectDialog() {
         console.log(item, "wallet");
         event.stopPropagation();
         if (item == 'MetaMask') {
-          
+
             connectedClick();
         } else if (item == "WalletConnect") {
 
@@ -84,13 +84,13 @@ function GFTConnectDialog() {
                 enqueueSnackbar(error, {
                     variant: "error",
                     anchorOrigin: { horizontal: "center", vertical: "top" }
-                  });
+                });
             })
         } catch (ex) {
             enqueueSnackbar(ex, {
                 variant: "error",
                 anchorOrigin: { horizontal: "center", vertical: "top" }
-              });
+            });
             console.log(ex, "ex");
         }
     }
@@ -145,4 +145,4 @@ function GFTConnectDialog() {
     );
 }
 
-export default GFTConnectDialog;
+export default React.memo(GFTConnectDialog);
