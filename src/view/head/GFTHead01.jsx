@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import * as secp from "@noble/secp256k1";
 import { setPrivateKey, setPublicKey, setRelays, setGeneratedPrivateKey } from "module/store/features/loginSlice";
 import { setOpenLogin } from "module/store/features/dialogSlice";
 import useEventBuild from 'nostr/EventBuild';
@@ -160,42 +159,6 @@ const GFTHead01 = () => {
     //       );
     //     }
     //   }
-
-    const loginSuccess = async () => {
-        const ev = await eventBuild.metadata('');
-        console.log("metadata", ev);
-        eventClient.broadcast(ev);
-    }
-
-    //logcheck
-    useEffect(() => {
-        if (publicKey === null || publicKey === undefined) {
-            //
-        } else {
-            console.log('loginin');
-            loginSuccess();
-            // setLoginState(1);
-        }
-        return () => {
-
-        }
-    }, [publicKey])
-
-    //
-    const newAccount = () => {
-        const newKey = secp.utils.bytesToHex(secp.utils.randomPrivateKey());
-        dispatch(setGeneratedPrivateKey(newKey));
-    }
-
-    const oldAccount = () => {
-        let prikey = parseId('');
-        if (prikey) {
-            console.log('oldAccount', prikey);
-            dispatch(setPrivateKey(prikey));
-        }
-    }
-    // 
-
     const openDialog = () => {
         if (account) {
             dispatch(setIsOpenWallet(true));
