@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import NostrEvent from "nostr/NostrEvent";
+import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, NostrList } from "nostr/def";
 import Tag from "nostr/Tag";
 import { bech32ToHex, unwrap } from "nostr/Util";
@@ -56,7 +56,7 @@ const useEventBuild = () => {
   return {
     nip42Auth: async (challenge, relay) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.Auth;
         ev.Content = "";
         ev.Tags.push(new Tag(["relay", relay], 0));
@@ -66,7 +66,7 @@ const useEventBuild = () => {
     },
     muted: async (keys, priv) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.PubkeyLists;
         ev.Tags.push(new Tag(["d", NostrList.Muted], ev.Tags.length));
         keys.forEach(p => {
@@ -88,7 +88,7 @@ const useEventBuild = () => {
     },
     pinned: async (notes) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.NoteLists;
         ev.Tags.push(new Tag(["d", NostrList.Pinned], ev.Tags.length));
         notes.forEach(n => {
@@ -100,7 +100,7 @@ const useEventBuild = () => {
     },
     bookmarked: async (notes) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.NoteLists;
         ev.Tags.push(new Tag(["d", NostrList.Bookmarked], ev.Tags.length));
         notes.forEach(n => {
@@ -112,7 +112,7 @@ const useEventBuild = () => {
     },
     tags: async (tags) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.TagLists;
         ev.Tags.push(new Tag(["d", NostrList.Followed], ev.Tags.length));
         tags.forEach(t => {
@@ -124,7 +124,7 @@ const useEventBuild = () => {
     },
     metadata: async (obj) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.SetMetadata;
         ev.Content = JSON.stringify(obj);
         // console.log('metadata ev', ev);
@@ -133,7 +133,7 @@ const useEventBuild = () => {
     },
     note: async (msg) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.TextNote;
         processContent(ev, msg);
         return await EventClient.signEvent(ev);
@@ -141,7 +141,7 @@ const useEventBuild = () => {
     },
     zap: async (author, note, msg) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.ZapRequest;
         if (note) {
           ev.Tags.push(new Tag(["e", note], ev.Tags.length));
@@ -155,7 +155,7 @@ const useEventBuild = () => {
     },
     reply: async (replyTo, msg) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.TextNote;
 
         const thread = replyTo.Thread;
@@ -189,7 +189,7 @@ const useEventBuild = () => {
     },
     react: async (evRef, content = "+") => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.Reaction;
         ev.Content = content;
         ev.Tags.push(new Tag(["e", evRef.Id], 0));
@@ -199,7 +199,7 @@ const useEventBuild = () => {
     },
     saveRelays: async () => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.ContactList;
         ev.Content = JSON.stringify(relays);
         for (const pk of follows) {
@@ -211,7 +211,7 @@ const useEventBuild = () => {
     },
     saveRelaysSettings: async () => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.Relays;
         ev.Content = "";
         for (const [url, settings] of Object.entries(relays)) {
@@ -229,7 +229,7 @@ const useEventBuild = () => {
     },
     addFollow: async (pkAdd, newRelays) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.ContactList;
         ev.Content = JSON.stringify(newRelays ?? relays);
         const temp = new Set(follows);
@@ -250,7 +250,7 @@ const useEventBuild = () => {
     },
     removeFollow: async (pkRemove) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.ContactList;
         ev.Content = JSON.stringify(relays);
         for (const pk of follows) {
@@ -268,7 +268,7 @@ const useEventBuild = () => {
      */
     delete: async (id) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.Deletion;
         ev.Content = "";
         ev.Tags.push(new Tag(["e", id], 0));
@@ -280,7 +280,7 @@ const useEventBuild = () => {
      */
     repost: async (note) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.Repost;
         ev.Content = JSON.stringify(note.Original);
         ev.Tags.push(new Tag(["e", note.Id], 0));
@@ -310,7 +310,7 @@ const useEventBuild = () => {
     },
     sendDm: async (content, to) => {
       if (pubKey) {
-        const ev = NostrEvent.Create(pubKey);
+        const ev = useNostrEvent.Create(pubKey);
         ev.Kind = EventKind.DirectMessage;
         ev.Content = content;
         ev.Tags.push(new Tag(["p", to], 0));

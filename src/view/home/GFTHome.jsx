@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import './GFTHome.scss';
 import { System } from 'nostr/NostrSystem';
 import { init, setRelays } from "module/store/features/loginSlice";
-import { SearchRelays, SnortPubKey } from "nostr/Const";
+import { SearchRelays } from "nostr/Const";
 
 // import GFTHead from '../head/GFTHead'
 import GFTHead01 from '../head/GFTHead01'
