@@ -64,14 +64,13 @@ function GFTHomeView() {
         getALLAssetsForAccount("0xcE97Ca12A55288f388a09392c6D525eBe94F8617").then(res => {
             console.log('fetchAllNFTs', res);
         }).catch((reason) => {
-
         })
-        
     }
 
     const itemNFTClick = (item) => {
         navigate('/detail?name=' + item.name);
     }
+    
     const itemVideo = (index) => {
         console.log(index);
         setTogSlide(index + 1);
