@@ -101,7 +101,7 @@ const GFTHead01 = () => {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const { picture } = useSelector(s => s.profile);
+    const { picture, display_name, nip05 } = useSelector(s => s.profile);
 
     const MetaData = useMetadataPro();
 
@@ -211,7 +211,7 @@ const GFTHead01 = () => {
                     if (msg.kind === 0 && msg.pubkey === publicKey) {
                         let content = JSON.parse(msg.content);
                         dispatch(setProfile(content))
-                        console.log('fetchProfile msgs', content, msg, publicKey);
+                        console.log('fetchProfile msgs', content, msg);
                     }
                 });
             }
@@ -230,9 +230,10 @@ const GFTHead01 = () => {
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
+            sx={{ maxWidth: '300px' }}
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
             }}
             id={menuId}
@@ -244,6 +245,23 @@ const GFTHead01 = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <MenuItem sx={{ dispaly: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ dispaly: 'flex', flexDirection: 'row' }}>
+                    <Avatar
+                        sx={{ width: 32, height: 32, marginLeft: '12px' }}
+                        edge="end"
+                        alt="GameFi Society"
+                        src={picture}
+                    />
+                    <Typography sx={{ marginLeft: '12px' }} color={'primary'} variant={'subtitle2'} >
+                        {display_name}
+                    </Typography>
+                </Box>
+                <Typography sx={{ width: '100%', marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                    {nip05}
+                </Typography>
+            </MenuItem>
+            <Divider></Divider>
             <MenuItem onClick={openProfile}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             <Divider></Divider>
@@ -303,6 +321,18 @@ const GFTHead01 = () => {
                     <AccountCircle />
                 </IconButton>
                 <p>Profile</p>
+            </MenuItem>
+            <MenuItem onClick={handleProfileMenuOpen}>
+                <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="primary-search-account-menu"
+                    aria-haspopup="true"
+                    color="inherit"
+                >
+                    <PublicIcon />
+                </IconButton>
+                <p>Relays</p>
             </MenuItem>
         </Menu>
     );
@@ -385,6 +415,7 @@ const GFTHead01 = () => {
                                 </IconButton>
                                 <Avatar aria-controls={menuId}
                                     sx={{ width: 32, height: 32, marginLeft: '12px' }}
+                                    edge="end"
                                     alt="GameFi Society"
                                     src={picture}
                                     onClick={handleProfileMenuOpen} />
