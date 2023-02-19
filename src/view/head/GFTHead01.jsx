@@ -15,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import CardMedia from '@mui/material/CardMedia';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
@@ -309,7 +310,13 @@ const GFTHead01 = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <img width={160} src={ic_logo} onClick={clickLogo}></img>
+                    <CardMedia
+                        component="img"
+                        sx={{ width: 160 }}
+                        image={ic_logo}
+                        alt="Paella dish"
+                        onClick={clickLogo}
+                    />
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />

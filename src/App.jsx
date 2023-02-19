@@ -4,6 +4,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import { SnackbarProvider, useSnackbar } from "notistack";
 import Router from './module/router/router'
 import Web3 from 'web3'
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
 //
 import GFTConnectDialog from "view/dialog/GFTConnectDialog";
@@ -18,24 +19,28 @@ function getLibrary(provider, connector) {
   return web3 // this will vary according to whether you use e.g. ethers or web3.js
 }
 
+const theme = createTheme();
+
 function App() {
   const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
 
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <SnackbarProvider maxSnack={3}>
-        <div className="App">
-          <HashRouter>
-            <Router />
-          </HashRouter>
-          {isOpenConnect && <GFTConnectDialog />}
-          {isOpenMenu && <GFTWalletMenu />}
-          {isOpenCheckIn && <GFTCheckInDialog />}
-          {isOpenMintAvatar && <GFTMintAvatarDialog />}
-          {isOpenLogin && <GLoginDialog />}
-        </div>
-      </SnackbarProvider>
-    </Web3ReactProvider>
+    <ThemeProvider theme={theme}>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <SnackbarProvider maxSnack={3}>
+          <div className="App">
+            <HashRouter>
+              <Router />
+            </HashRouter>
+            {isOpenConnect && <GFTConnectDialog />}
+            {isOpenMenu && <GFTWalletMenu />}
+            {isOpenCheckIn && <GFTCheckInDialog />}
+            {isOpenMintAvatar && <GFTMintAvatarDialog />}
+            {isOpenLogin && <GLoginDialog />}
+          </div>
+        </SnackbarProvider>
+      </Web3ReactProvider>
+    </ThemeProvider>
   );
 }
 
