@@ -34,7 +34,7 @@ import {
     increment,
     setIsOpen,
     setIsOpenWallet,
-    isOpen
+    setOpenMenuLeft
 } from 'module/store/features/dialogSlice';
 
 import './GFTHead01.scss';
@@ -90,7 +90,7 @@ const GFTHead01 = () => {
     const { loggedOut, publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenConnect } = useSelector(s => s.dialog);
+    const { isOpenMenuLeft, isOpenConnect } = useSelector(s => s.dialog);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -302,6 +302,10 @@ const GFTHead01 = () => {
                         color="inherit"
                         aria-label="open drawer"
                         sx={{ mr: 2 }}
+                        onClick={() => {
+                            console.log('click menu');
+                            dispatch(setOpenMenuLeft(!isOpenMenuLeft));
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>

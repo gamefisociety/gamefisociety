@@ -9,6 +9,7 @@ import {
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
+import { Divider } from '@mui/material/index';
 
 import ic_bnb from "../../asset/image/home/ic_bnb.png"
 import ic_eth from "../../asset/image/home/ic_eth.png"
@@ -21,7 +22,7 @@ import ic_create from '../../asset/image/home/ic_create.png'
 const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenConnect, isOpenCheckIn, isOpenMenuLeft } = useSelector(s => s.dialog);
+    const { isOpenMenuLeft } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -76,6 +77,7 @@ const GFTLeftMenu = () => {
                 <img className='img' src={ic_bnb}></img>
                 <span className='txt'>BNB</span>
             </div>
+            <Divider light />
             <div className='item'>
                 <img className='img' src={ic_polgon} onClick={() => {
                     navigate('/hall');
