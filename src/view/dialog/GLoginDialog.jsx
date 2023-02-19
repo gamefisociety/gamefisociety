@@ -99,37 +99,6 @@ const GLoginDialog = () => {
         }
     }
 
-    const renderGen = () => {
-        return (
-            <DialogContent>
-                <DialogContentText>
-                    {'Your Public Key:'}
-                </DialogContentText>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name-new-pubkey"
-                    fullWidth
-                    multiline={true}
-                    variant="standard"
-                    value={keys.pub}
-                />
-                <DialogContentText>
-                    {'Your Private Key:'}
-                </DialogContentText>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name-new-prikey"
-                    fullWidth
-                    variant="standard"
-                    multiline={true}
-                    value={keys.pri}
-                />
-            </DialogContent>
-        );
-    }
-
     const renderIntroduce = () => {
         return (
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '46px' }} >
@@ -221,6 +190,9 @@ const GLoginDialog = () => {
                 </FormGroup>
                 <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={handleLogin}>
                     {'Let’s go!'}
+                </Button>
+                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" onClick={handleClose}>
+                    {'Cancle'}
                 </Button>
             </DialogContent>
         );
