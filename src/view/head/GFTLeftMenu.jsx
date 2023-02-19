@@ -18,23 +18,18 @@ import ic_check_in from "../../asset/image/home/ic_check_in.png"
 import ic_free_nft from "../../asset/image/home/ic_free_nft.png"
 import ic_create from '../../asset/image/home/ic_create.png'
 
-
-function GFTLeftMenu() {
+const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpen = useSelector(isCheckIn);
+    const { isOpenConnect, isOpenCheckIn, isOpenMenuLeft } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        requsetData();
         return () => {
         }
 
     }, [])
 
-    const requsetData = () => {
-
-    }
     const openCheckIn = () => {
         if (account) {
             dispatch(setOpenCheckIn(true));
@@ -96,7 +91,6 @@ function GFTLeftMenu() {
                 <span className='txt'>Global</span>
             </div>
         </div>
-
     );
 }
 

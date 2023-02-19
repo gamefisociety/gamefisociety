@@ -7,7 +7,8 @@ const initialState = {
   isOpenCheckIn: false,
   isOpenMintAvatar: false,
   isOpenLogin: false,
-  status: 'idle'
+  status: 'idle',
+  isOpenMenuLeft: true,
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -43,6 +44,9 @@ export const dialogSlice = createSlice({
     setOpenLogin: (state, action) => {
       state.isOpenLogin = action.payload;
     },
+    setOpenMenuLeft: (state, action) => {
+      state.isOpenMenuLeft = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -64,12 +68,14 @@ export const {
   setOpenLogin,
   setIsOpenWallet,
   setOpenCheckIn,
-  setOpenMintAvatar }
+  setOpenMintAvatar,
+  setOpenMenuLeft
+}
   = dialogSlice.actions;
 
-export const isOpen = (state) => state.dialog.isOpenConnect;
-export const isMenuWallet = (state) => state.dialog.isOpenMenuWallet;
-export const isCheckIn = (state) => state.dialog.isOpenCheckIn;
-export const isMintAvatar = (state) => state.dialog.isOpenMintAvatar;
+// export const isOpen = (state) => state.dialog.isOpenConnect;
+// export const isMenuWallet = (state) => state.dialog.isOpenMenuWallet;
+// export const isCheckIn = (state) => state.dialog.isOpenCheckIn;
+// export const isMintAvatar = (state) => state.dialog.isOpenMintAvatar;
 
 export default dialogSlice.reducer;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import {
-    isMintAvatar,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTMintAvatarDialog.scss';
@@ -11,13 +10,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import GSTAvatarNFTBase from '../../web3/GSTAvatarNFT';
 
-
-
-
-function GFTMintAvatarDialog() {
+const GFTMintAvatarDialog = () => {
 
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpen = useSelector(isMintAvatar);
+    const { isOpenMintAvatar } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     const [isLoadSub, setIsLoadSub] = useState(false);
     const [checkState, setCheckState] = useState(0);
@@ -81,28 +77,22 @@ function GFTMintAvatarDialog() {
     }
 
     return (
-
-        <div>
-            {isOpen ?
-                <div className='dialog_check_in_bg' onClick={cancelDialog}>
-                    <div className='layout' onClick={(event) => {
-                        event.stopPropagation();
-                    }}>
-                        <div className='close' onClick={cancelDialog}></div>
-                        <div className='img_icon'></div>
-                        <span className='info'>
-                            Welcome to the world of GameFi Society
-                            <br />
-                            <br />
-                            Mint An Avatar NFT
-                        </span>
-                        <BlueLoadButton variant="contained" onClick={() => mintAvatar()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
-                            {mintNFTMsg()}
-                        </BlueLoadButton>
-                    </div>
-                </div>
-                : ""
-            }
+        <div className='dialog_check_in_bg' onClick={cancelDialog}>
+            <div className='layout' onClick={(event) => {
+                event.stopPropagation();
+            }}>
+                <div className='close' onClick={cancelDialog}></div>
+                <div className='img_icon'></div>
+                <span className='info'>
+                    Welcome to the world of GameFi Society
+                    <br />
+                    <br />
+                    Mint An Avatar NFT
+                </span>
+                <BlueLoadButton variant="contained" onClick={() => mintAvatar()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+                    {mintNFTMsg()}
+                </BlueLoadButton>
+            </div>
         </div>
     );
 }

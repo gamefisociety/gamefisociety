@@ -19,7 +19,7 @@ function getLibrary(provider, connector) {
 }
 
 function App() {
-  const { isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
+  const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
@@ -28,7 +28,7 @@ function App() {
           <HashRouter>
             <Router />
           </HashRouter>
-          <GFTConnectDialog />
+          {isOpenConnect && <GFTConnectDialog />}
           {isOpenMenu && <GFTWalletMenu />}
           {isOpenCheckIn && <GFTCheckInDialog />}
           {isOpenMintAvatar && <GFTMintAvatarDialog />}

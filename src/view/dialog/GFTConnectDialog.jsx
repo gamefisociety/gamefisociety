@@ -13,16 +13,13 @@ import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 
 import './GFTConnectDialog.scss';
 
-
-
-
-function GFTConnectDialog() {
+const GFTConnectDialog = () => {
     const { enqueueSnackbar } = useSnackbar();
     const injected = new InjectedConnector({
         supportedChainIds: [ChainId.MATICTEST],
     })
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpenConnect = useSelector(isOpen);
+    const { } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     useEffect(() => {
         requsetData();
@@ -113,34 +110,28 @@ function GFTConnectDialog() {
         return "MetaMask"
     }
     return (
-
-        <div>
-            {isOpenConnect ?
-                <div className='dialog_connect_bg' onClick={cancelDialog}>
-                    <div className='layout' onClick={(event) => {
-                        event.stopPropagation();
-                    }}>
-                        <span className='title'>Connect</span>
-                        <div className='item' onClick={(event) => itemClickOpenWallet(event, "MetaMask")}>
-                            <span className='name'>{account ? getChainLows() : 'MetaMask'}</span>
-                            <div className='ic_metamask'></div>
-                            <div className='ic_menu_right'></div>
-                        </div>
-                        <div className='item'>
-                            <span className='name' onClick={(event) => itemClickOpenWallet(event, "WalletConnect")} >WalletConnect</span>
-                            <div className='ic_walletconnect'></div>
-                            <div className='ic_menu_right'></div>
-                        </div>
-                        <div className='item' onClick={(event) => itemClickOpenWallet(event, "Coinbase Wallet")}>
-                            <span className='name'>Coinbase Wallet</span>
-                            <div className='ic_coinbase'></div>
-                            <div className='ic_menu_right'></div>
-                        </div>
-                        <span className='privacy'>By continuing you agree to GameFi Society’s <span className='privacy_link'>Privacy Policy</span> and <span className='privacy_link'> Terms and Conditions</span></span>
-                    </div>
+        <div className='dialog_connect_bg' onClick={cancelDialog}>
+            <div className='layout' onClick={(event) => {
+                event.stopPropagation();
+            }}>
+                <span className='title'>Connect</span>
+                <div className='item' onClick={(event) => itemClickOpenWallet(event, "MetaMask")}>
+                    <span className='name'>{account ? getChainLows() : 'MetaMask'}</span>
+                    <div className='ic_metamask'></div>
+                    <div className='ic_menu_right'></div>
                 </div>
-                : ""
-            }
+                <div className='item'>
+                    <span className='name' onClick={(event) => itemClickOpenWallet(event, "WalletConnect")} >WalletConnect</span>
+                    <div className='ic_walletconnect'></div>
+                    <div className='ic_menu_right'></div>
+                </div>
+                <div className='item' onClick={(event) => itemClickOpenWallet(event, "Coinbase Wallet")}>
+                    <span className='name'>Coinbase Wallet</span>
+                    <div className='ic_coinbase'></div>
+                    <div className='ic_menu_right'></div>
+                </div>
+                <span className='privacy'>By continuing you agree to GameFi Society’s <span className='privacy_link'>Privacy Policy</span> and <span className='privacy_link'> Terms and Conditions</span></span>
+            </div>
         </div>
     );
 }

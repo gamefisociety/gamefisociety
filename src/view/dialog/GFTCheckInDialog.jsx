@@ -14,7 +14,7 @@ import GSTClaimBase from '../../web3/GSTClaim';
 function GFTCheckInDialog() {
 
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpen = useSelector(isCheckIn);
+    const { isOpenCheckIn } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     const [isLoadSub, setIsLoadSub] = useState(false);
     const [checkState, setCheckState] = useState(0);
@@ -91,29 +91,23 @@ function GFTCheckInDialog() {
     }
 
     return (
-
-        <div>
-            {isOpen ?
-                <div className='dialog_check_in_bg' onClick={cancelDialog}>
-                    <div className='layout' onClick={(event) => {
-                        event.stopPropagation();
-                    }}>
-                        <div className='close' onClick={cancelDialog}></div>
-                        <div className='img_icon'></div>
-                        <span className='txt_gts'>1 GSP</span>
-                        <span className='info'>
-                            Welcome to the world of GameFi Society
-                            <br />
-                            <br />
-                            Sign in and you will receive tokens from the platform
-                        </span>
-                        <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
-                            {getCheckIn()}
-                        </BlueLoadButton>
-                    </div>
-                </div>
-                : ""
-            }
+        <div className='dialog_check_in_bg' onClick={cancelDialog}>
+            <div className='layout' onClick={(event) => {
+                event.stopPropagation();
+            }}>
+                <div className='close' onClick={cancelDialog}></div>
+                <div className='img_icon'></div>
+                <span className='txt_gts'>1 GSP</span>
+                <span className='info'>
+                    Welcome to the world of GameFi Society
+                    <br />
+                    <br />
+                    Sign in and you will receive tokens from the platform
+                </span>
+                <BlueLoadButton variant="contained" onClick={() => checkInClick()} loading={isLoadSub} loadingIndicator={<CircularProgress color={"primary"} size={30} />}>
+                    {getCheckIn()}
+                </BlueLoadButton>
+            </div>
         </div>
     );
 }

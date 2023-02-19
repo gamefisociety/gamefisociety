@@ -90,7 +90,7 @@ const GFTHead01 = () => {
     const { loggedOut, publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const isOpenConnect = useSelector(isOpen);
+    const { isOpenConnect } = useSelector(s => s.dialog);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
