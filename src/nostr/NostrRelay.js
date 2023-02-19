@@ -266,6 +266,22 @@ const NostrRelay = () => {
     // client.Stats.EventsSent++;
     // _UpdateState(client);
   }
+
+  const SendAuth = (client, auth) => {
+    if (!client.Settings.read) {
+      return;
+    }
+    let req = ["AUTH",  NostrFactory.formateSub(auth)];
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      console.log('SendAuth direction', req);
+      _SendReal(client, req);
+    } else {
+      console.log('SendAuth cache', req);
+      client.PendingList.push(req);
+    }
+    // client.Stats.EventsSent++;
+    // _UpdateState(client);
+  }
   // if (!this.Authed && this.AwaitingAuth.size > 0) {
   //   this.Pending.push(sub.ToObject());
   //   return;

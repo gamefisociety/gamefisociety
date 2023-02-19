@@ -124,7 +124,23 @@ const NostrFactory = {
       ret.limit = sub.Limit;
     }
     return ret;
+  },
+
+  formateAuth: (ev) => {
+    let ret = {
+      id: ev.Id,
+      pubkey: ev.PubKey,
+      created_at: ev.CreatedAt,
+      kind: ev.Kind,
+      tags: ev.Tags.sort((a, b) => a.Index - b.Index)
+        .map(a => a.ToObject())
+        .filter(a => a !== null), //<string[][] >
+      content: ev.Content,
+      sig: ev.Signature,
+    }
+    return ret;
   }
+  // NostrFactory.formateSub
   //!
 }
 

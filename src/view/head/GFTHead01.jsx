@@ -12,6 +12,7 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -37,6 +38,10 @@ import {
     setIsOpenWallet,
     setOpenMenuLeft
 } from 'module/store/features/dialogSlice';
+
+import {
+    setProfile,
+} from 'module/store/features/profileSlice';
 
 import './GFTHead01.scss';
 
@@ -96,12 +101,11 @@ const GFTHead01 = () => {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const { picture } = useSelector(s => s.profile);
 
     const MetaData = useMetadataPro();
 
     useEffect(() => {
-
-        // console.log('useEffect loggedOut', loggedOut)
         if (loggedOut === false) {
             //get user msg
             fetchProfile();
@@ -200,9 +204,17 @@ const GFTHead01 = () => {
 
     const fetchProfile = async () => {
         let sub = await MetaData.get(publicKey);
-        console.log('MetadataSub', sub);
+        // console.log('MetadataSub', sub);
         System.Broadcast(sub, 0, (msgs) => {
-            console.log('fetchProfile msgs', msgs);
+            if (msgs) {
+                msgs.map(msg => {
+                    if (msg.kind === 0 && msg.pubkey === publicKey) {
+                        let content = JSON.parse(msg.content);
+                        dispatch(setProfile(content))
+                        console.log('fetchProfile msgs', content, msg, publicKey);
+                    }
+                });
+            }
         });
     }
 
@@ -371,7 +383,12 @@ const GFTHead01 = () => {
                                         <NotificationsIcon />
                                     </Badge>
                                 </IconButton>
-                                <IconButton
+                                <Avatar aria-controls={menuId}
+                                    sx={{ width: 32, height: 32, marginLeft: '12px' }}
+                                    alt="GameFi Society"
+                                    src={picture}
+                                    onClick={handleProfileMenuOpen} />
+                                {/* <IconButton
                                     size="large"
                                     edge="end"
                                     aria-label="account of current user"
@@ -381,7 +398,7 @@ const GFTHead01 = () => {
                                     color="inherit"
                                 >
                                     <AccountCircle />
-                                </IconButton>
+                                </IconButton> */}
                             </Box>
                     }
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
