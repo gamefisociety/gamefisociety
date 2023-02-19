@@ -10,6 +10,7 @@ import './GLoginDialog.scss';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -50,23 +51,7 @@ const GLoginDialog = () => {
     useEffect(() => {
         return () => { }
     }, [])
-    // const loginSuccess = async () => {
-    //     const ev = await eventBuild.metadata('');
-    //     console.log("metadata", ev);
-    //     eventClient.broadcast(ev);
-    // }
-    // //logcheck
-    // useEffect(() => {
-    //     if (publicKey === null || publicKey === undefined) {
-    //         //
-    //     } else {
-    //         console.log('loginin');
-    //         loginSuccess();
-    //         // setLoginState(1);
-    //     }
-    //     return () => {
-    //     }
-    // }, [publicKey])
+    //
     const newKeys = () => {
         const newPriKey = secp.utils.bytesToHex(secp.utils.randomPrivateKey());
         const newPubKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(newPriKey));
@@ -79,37 +64,38 @@ const GLoginDialog = () => {
         dispatch(setOpenLogin(false));
     }
 
-    const handleOk = () => {
-        if (gen) {
-            //new
-            dispatch(setKeyPairs({
-                prikey: keys.pri,
-                pubkey: keys.pub,
-            }));
-            dispatch(setOpenLogin(false));
-        } else {
-            //old
-            if (isNip19) {
-                let flag = keys.pri.startsWith('nsec');
-                if (flag) {
-                    let prikey = parseId(keys.pri);
-                    if (prikey) {
-                        let pubkey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(prikey));
-                        console.log('pubkey', pubkey);
-                        dispatch(setKeyPairs({
-                            prikey: prikey,
-                            pubkey: pubkey,
-                        }));
-                        dispatch(setOpenLogin(false));
-                    }
-                } else {
-                    //warning
-                    setErrorKey(true)
+    const handleCreate = async () => {
+        dispatch(setKeyPairs({
+            prikey: keys.pri,
+            pubkey: keys.pub,
+        }));
+        dispatch(setOpenLogin(false));
+        // const ev = await eventBuild.metadata('');
+        // console.log("metadata", ev);
+        // eventClient.broadcast(ev);
+    }
+
+    const handleLogin = () => {
+        if (isNip19) {
+            let flag = keys.pri.startsWith('nsec');
+            if (flag) {
+                let prikey = parseId(keys.pri);
+                if (prikey) {
+                    let pubkey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(prikey));
+                    console.log('pubkey', pubkey);
+                    dispatch(setKeyPairs({
+                        prikey: prikey,
+                        pubkey: pubkey,
+                    }));
+                    dispatch(setOpenLogin(false));
                 }
-                console.log('tmpKey.startsWith', flag);
             } else {
-                dispatch(setOpenLogin(false));
+                //warning
+                setErrorKey(true)
             }
+            console.log('tmpKey.startsWith', flag);
+        } else {
+            dispatch(setOpenLogin(false));
         }
     }
 
@@ -179,9 +165,11 @@ const GLoginDialog = () => {
     const renderWarning = () => {
         return (
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
-                <Button sx={{ position: 'absolute', left: '0px', top: '0px' }} onClick={() => {
+                <IconButton sx={{ position: 'absolute', left: '10px', top: '10px' }} onClick={() => {
                     setLoginState(0);
-                }}>Back</Button>
+                }}>
+                    <ArrowBackIosIcon />
+                </IconButton>
                 <DialogContentText color={'primary'} variant={'h6'}>
                     You can review the end user agreement before registering
                 </DialogContentText>
@@ -197,9 +185,7 @@ const GLoginDialog = () => {
                 }}>
                     Accept
                 </Button>
-                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} variant="contained" color="primary" onClick={() => {
-                    // setLoginState(100);
-                }}>
+                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} variant="contained" color="primary" onClick={handleClose}>
                     Reject
                 </Button>
             </DialogContent >
@@ -240,9 +226,11 @@ const GLoginDialog = () => {
     const renderProfile = () => {
         return (
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
-                <Button sx={{ position: 'absolute', left: '0px', top: '0px' }} onClick={() => {
+                <IconButton sx={{ position: 'absolute', left: '10px', top: '10px' }} onClick={() => {
                     setLoginState(0);
-                }}>Back</Button>
+                }}>
+                    <ArrowBackIosIcon />
+                </IconButton>
                 <DialogContentText color={'primary'} variant={'h6'}>
                     Create Account
                 </DialogContentText>
@@ -308,9 +296,11 @@ const GLoginDialog = () => {
     const renderKeys = () => {
         return (
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
-                <Button sx={{ position: 'absolute', left: '0px', top: '0px' }} onClick={() => {
-                    // setLoginState(0);
-                }}>Back</Button>
+                <IconButton sx={{ position: 'absolute', left: '10px', top: '10px' }} onClick={() => {
+                    setLoginState(2);
+                }}>
+                    <ArrowBackIosIcon />
+                </IconButton>
                 <DialogContentText color={'primary'} variant={'h6'}>
                     {'Welcome,' + profile.nickname + '!'}
                 </DialogContentText>
@@ -345,10 +335,7 @@ const GLoginDialog = () => {
                         <ContentCopyIcon />
                     </IconButton>
                 </DialogActions>
-                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
-                    // newKeys();
-                    // setLoginState(2);
-                }}>
+                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={handleCreate}>
                     {'Let’s go!'}
                 </Button>
             </DialogContent >
@@ -387,17 +374,6 @@ const GLoginDialog = () => {
                 },
             }}>
             {renderContent()}
-            {/* <DialogActions disableSpacing={true}>
-                {gen ? <Button onClick={() => {
-                    setGen(false);
-                }}>Switch</Button> : <Button onClick={() => {
-                    newKeys();
-                    setGen(true);
-                }}>Generate</Button>}
-                <Box sx={{ flexGrow: 1 }} />
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleOk}>Ensure</Button>
-            </DialogActions> */}
         </Dialog>
     );
 }
