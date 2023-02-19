@@ -11,13 +11,13 @@ import {
 import './GFTLeftMenu.scss';
 import { Divider } from '@mui/material/index';
 
-import ic_bnb from "../../asset/image/home/ic_bnb.png"
-import ic_eth from "../../asset/image/home/ic_eth.png"
-import ic_swap from "../../asset/image/home/ic_swap.png"
-import ic_polgon from "../../asset/image/home/ic_polgon.png"
-import ic_check_in from "../../asset/image/home/ic_check_in.png"
-import ic_free_nft from "../../asset/image/home/ic_free_nft.png"
-import ic_create from '../../asset/image/home/ic_create.png'
+import ic_bnb from "asset/image/home/ic_bnb.png"
+import ic_eth from "asset/image/home/ic_eth.png"
+import ic_swap from "asset/image/home/ic_swap.png"
+import ic_polgon from "asset/image/home/ic_polgon.png"
+import ic_check_in from "asset/image/home/ic_check_in.png"
+import ic_free_nft from "asset/image/home/ic_free_nft.png"
+import ic_create from 'asset/image/home/ic_create.png'
 
 const GFTLeftMenu = () => {
     const navigate = useNavigate();

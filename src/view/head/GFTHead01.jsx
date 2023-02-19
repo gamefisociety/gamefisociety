@@ -321,7 +321,7 @@ const GFTHead01 = () => {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     {
-                        loggedOut === true ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        loggedOut === true ? <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
                             <IconButton
                                 size="large"
                                 aria-label="relay icon"
@@ -329,24 +329,17 @@ const GFTHead01 = () => {
                             >
                                 <PublicIcon />
                             </IconButton>
-                            <Button variant="contained" endIcon={<LoginIcon />} onClick={() => {
+                            <Button sx={{ px: '24px', backgroundColor: 'rgba(255, 72, 100, 1)', color: 'white', borderRadius: '24px' }} endIcon={<AccountCircle />} onClick={() => {
                                 dispatch(setOpenLogin(true));
                             }}>
                                 Login
                             </Button>
                         </Box> :
-                            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
                                 <Box className='wallet_layout' onClick={openDialog}>
-                                    {/* <img className='img' src={ic_wallet} ></img> */}
-                                    {/* <span className='txt'>{account ? getChainLows() : 'CONNECT'}</span> */}
-                                    <Typography
-                                        variant="h6"
-                                        noWrap
-                                        component="div"
-                                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                                    >
+                                    <Button sx={{ px: '24px', backgroundColor: 'rgba(0, 108, 249, 1)', color: 'white', borderRadius: '24px' }} startIcon={<AdbIcon />} >
                                         {account ? getChainLows() : 'CONNECT'}
-                                    </Typography>
+                                    </Button>
                                 </Box>
                                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                                     <Badge badgeContent={4} color="error">
