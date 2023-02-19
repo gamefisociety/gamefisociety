@@ -88,8 +88,8 @@ const GFTLeftMenu = () => {
                 <img className='img' src={ic_create} onClick={clickCreate}></img>
                 <span className='txt'>CREATE</span>
             </div>
-            <div className='item'>
-                <img className='img' src={ic_create} onClick={clickGlobal}></img>
+            <div className='item' onClick={clickGlobal}>
+                <img className='img' src={ic_create}></img>
                 <span className='txt'>Global</span>
             </div>
         </div>

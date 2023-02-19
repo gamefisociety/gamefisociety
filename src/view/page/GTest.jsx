@@ -12,7 +12,6 @@ function GTest() {
         return () => {
 
         }
-
     }, [])
 
     return (
