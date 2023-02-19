@@ -125,17 +125,12 @@ const NostrRelay = () => {
               } else if (tag === 'OK') {
                 console.log(`${client.addr} OK: `, msg);
                 if (procer) {
-                  procer.callback(procer.cache);
+                  procer.callback(msg);
                   procer.cache = [];
                   if (procer.once === 0) {
                     removeListen(procer);
                   }
                 }
-                // if (this.EventsCallback.has(id)) {
-                //   const cb = unwrap(this.EventsCallback.get(id));
-                //   this.EventsCallback.delete(id);
-                //   cb(msg);
-                // }
               } else if (tag === 'NOTICE') {
                 // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
               } else {
