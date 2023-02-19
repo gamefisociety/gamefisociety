@@ -1,13 +1,33 @@
 import * as secp from "@noble/secp256k1";
 import { DefaultConnectTimeout } from "nostr/Const";
-import { System } from "nostr/NostrSystem";
-import { unwrap } from "nostr/Util";
-import useNostrEvent from 'nostr/NostrEvent';
 import NostrFactory from 'nostr/NostrFactory';
 
 const NostrRelay = () => {
 
-  const nostrEvent = useNostrEvent();
+  const listenProcers = new Map();
+
+  const buildKey = (addr, subid) => {
+    let key = addr + '-' + subid;
+    return key;
+  }
+
+  const addListen = (key, client, once, callback) => {
+    if (listenProcers.get(key)) {
+      return false;
+    }
+    let procer = {
+      key: key,
+      client: client,
+      once: once,
+      callback: callback,
+      cache: []
+    };
+    listenProcers.set(key, procer);
+  }
+
+  const removeListen = (procer) => {
+    listenProcers.delete(procer.key);
+  }
 
   const Connect = async (client) => {
     let flag = false;
@@ -80,17 +100,27 @@ const NostrRelay = () => {
             console.log('relay message', e);
             if (e.data.length > 0) {
               const msg = JSON.parse(e.data);
-              console.log('OnMessage', msg);
+              let tmpKey = buildKey(e.origin, msg[1]);
+              let procer = listenProcers.get(tmpKey);
+              console.log('OnMessage', tmpKey, msg, procer);
               const tag = msg[0];
               if (tag === 'AUTH') {
                 // this._OnAuthAsync(msg[1]);
                 // this.Stats.EventsReceived++;
                 // this._UpdateState();
               } else if (tag === 'EVENT') {
-                // this._OnEvent(msg[1], msg[2]);
-                // this.Stats.EventsReceived++;
-                // this._UpdateState();
+                if (procer && procer.cache) {
+                  procer.cache.push(msg[2]);
+                }
               } else if (tag === 'EOSE') {
+                if (procer) {
+                  procer.callback(procer.cache);
+                  procer.cache = [];
+                  if (procer.once === 0) {
+                    //disconnect
+                    removeListen(procer);
+                  }
+                }
                 // this._OnEnd(msg[1]);
               } else if (tag === 'OK') {
                 console.log(`${client.addr} OK: `, msg);
@@ -147,6 +177,17 @@ const NostrRelay = () => {
       client.Socket.send(json);
     });
     client.PendingList = [];
+  }
+
+  const SendToRelay = (client, ev, once, callback) => {
+    let tmpkey = buildKey(client.addr, ev.Id);
+    addListen(tmpkey, client, once, callback)
+    //
+    if (ev.type === "EVENT") {
+      SendEvent(client, ev);
+    } else if (ev.type === "SUB") {
+      SendSub(client, ev);
+    }
   }
 
   const SendEvent = (client, ev) => {
@@ -395,6 +436,7 @@ const NostrRelay = () => {
   return {
     Connect: Connect,
     Close: Close,
+    SendToRelay: SendToRelay,
     SendEvent: SendEvent,
     SendSub: SendSub,
     SupportsNip: SupportsNip,

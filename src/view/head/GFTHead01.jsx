@@ -201,7 +201,9 @@ const GFTHead01 = () => {
     const fetchProfile = async () => {
         let sub = await MetaData.get(publicKey);
         console.log('MetadataSub', sub);
-        System.Broadcast(sub);
+        System.Broadcast(sub, 0, (msgs) => {
+            console.log('fetchProfile msgs', msgs);
+        });
     }
 
     const openProfile = () => {
@@ -348,6 +350,13 @@ const GFTHead01 = () => {
                                         {account ? getChainLows() : 'CONNECT'}
                                     </Button>
                                 </Box>
+                                <IconButton
+                                    size="large"
+                                    aria-label="relay icon"
+                                    color="inherit"
+                                >
+                                    <PublicIcon />
+                                </IconButton>
                                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                                     <Badge badgeContent={4} color="error">
                                         <MailIcon />
