@@ -15,7 +15,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import DoneIcon from '@mui/icons-material/Done';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 //
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -24,7 +25,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 //
-import { bech32ToHex, parseId } from 'nostr/Util';
+import { hexToBech32, bech32ToHex, parseId } from 'nostr/Util';
 import * as secp from "@noble/secp256k1";
 
 import logo_blue from "asset/image/logo/logo_blue.png";
@@ -38,6 +39,11 @@ const GLoginDialog = () => {
     const [keys, setKeys] = useState({
         pri: '',
         pub: ''
+    });
+    const [profile, setProfile] = useState({
+        nickname: '',
+        displayname: '',
+        about: ''
     });
     const [errorKey, setErrorKey] = useState(false);
     //
@@ -246,31 +252,107 @@ const GLoginDialog = () => {
                     image={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText
+                    sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
                     Username
                 </DialogContentText>
-                <TextField sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined" />
-                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
+                <TextField
+                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
+                    value={profile.nickname}
+                    onChange={(event) => {
+                        profile.nickname = event.target.value;
+                        setProfile({ ...profile });
+                    }}
+                />
+                <DialogContentText
+                    sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
                     Display Name
                 </DialogContentText>
-                <TextField sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined" />
-                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
+                <TextField
+                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
+                    value={profile.displayname}
+                    onChange={(event) => {
+                        profile.displayname = event.target.value;
+                        setProfile({ ...profile });
+                    }}
+                />
+                <DialogContentText
+                    sx={{ marginTop: '12px', width: '100%' }}
+                    color={'primary'}
+                    variant={'subtitle2'}>
                     About
                 </DialogContentText>
-                <TextField sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined" />
+                <TextField
+                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }}
+                    value={profile.about}
+                    onChange={(event) => {
+                        profile.about = event.target.value;
+                        setProfile({ ...profile });
+                    }}
+                    variant="outlined" />
                 <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
                     Account ID
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'} multiline={true}>
-                    {keys.pub}
-                </DialogContentText>
+                <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                    {hexToBech32('npub', keys.pub)}
+                </Typography>
                 <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
-                    setLoginState(2);
+                    setLoginState(3);
                 }}>
                     Create
                 </Button>
             </DialogContent >
         );
+    }
+
+    const renderKeys = () => {
+        return (
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
+                <Button sx={{ position: 'absolute', left: '0px', top: '0px' }} onClick={() => {
+                    // setLoginState(0);
+                }}>Back</Button>
+                <DialogContentText color={'primary'} variant={'h6'}>
+                    {'Welcome,' + profile.nickname + '!'}
+                </DialogContentText>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                    Before we start, you need to save your account information, keep your private key safe so you can log in at any time.
+                </DialogContentText>
+                <DialogContentText sx={{ marginTop: '24px' }} color={'primary'} variant={'h6'}>
+                    {'Public Key'}
+                </DialogContentText>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                    This is your account D, you can give this to your friends so that they can follow you. Click to copy.
+                </DialogContentText>
+                <DialogActions disableSpacing={true}>=
+                    <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                        {hexToBech32('npub', keys.pub)}
+                    </Typography>
+                    <IconButton aria-label="pub-done" color={'primary'}>
+                        <DoneIcon />
+                    </IconButton>
+                </DialogActions>
+                <DialogContentText sx={{ marginTop: '24px' }} color={'primary'} variant={'h6'}>
+                    {'Private Key'}
+                </DialogContentText>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                    This is your secret account key. You need this to access your account. Don't share this with anyone! Save it in a password manager and keep it safe!
+                </DialogContentText>
+                <DialogActions disableSpacing={true}>=
+                    <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                        {hexToBech32('nsec', keys.pri)}
+                    </Typography>
+                    <IconButton aria-label="pri-copy" color={'secondary'}>
+                        <ContentCopyIcon />
+                    </IconButton>
+                </DialogActions>
+                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
+                    // newKeys();
+                    // setLoginState(2);
+                }}>
+                    {'Let’s go!'}
+                </Button>
+            </DialogContent >
+        )
     }
 
     const renderTest = () => {
@@ -288,6 +370,8 @@ const GLoginDialog = () => {
             return renderWarning();
         } else if (loginState === 2) {
             return renderProfile();
+        } else if (loginState === 3) {
+            return renderKeys();
         } else if (loginState === 100) {
             return renderTest();
         }
@@ -302,9 +386,8 @@ const GLoginDialog = () => {
                     boxShadow: 'none',
                 },
             }}>
-            {/* <DialogTitle>Login</DialogTitle> */}
             {renderContent()}
-            <DialogActions disableSpacing={true}>
+            {/* <DialogActions disableSpacing={true}>
                 {gen ? <Button onClick={() => {
                     setGen(false);
                 }}>Switch</Button> : <Button onClick={() => {
@@ -314,7 +397,7 @@ const GLoginDialog = () => {
                 <Box sx={{ flexGrow: 1 }} />
                 <Button onClick={handleClose}>Cancel</Button>
                 <Button onClick={handleOk}>Ensure</Button>
-            </DialogActions>
+            </DialogActions> */}
         </Dialog>
     );
 }

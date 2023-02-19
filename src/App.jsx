@@ -5,6 +5,7 @@ import { SnackbarProvider, useSnackbar } from "notistack";
 import Router from './module/router/router'
 import Web3 from 'web3'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { gfstheme } from 'view/theme/gfstheme';
 import { useSelector, useDispatch } from 'react-redux';
 //
 import GFTConnectDialog from "view/dialog/GFTConnectDialog";
@@ -19,7 +20,9 @@ function getLibrary(provider, connector) {
   return web3 // this will vary according to whether you use e.g. ethers or web3.js
 }
 
-const theme = createTheme();
+const theme1 = gfstheme();
+
+const theme = createTheme(theme1);
 
 function App() {
   const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
