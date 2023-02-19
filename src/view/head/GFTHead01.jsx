@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from "module/store/features/loginSlice";
 import { setOpenLogin } from "module/store/features/dialogSlice";
-import MetadataEvent from 'nostr/ev/MetadataEvent';
+import useMetadataPro from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 //
 import { styled, alpha } from '@mui/material/styles';
@@ -97,7 +97,7 @@ const GFTHead01 = () => {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const MetaData = MetadataEvent();
+    const MetaData = useMetadataPro();
 
     useEffect(() => {
 

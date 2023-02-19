@@ -42,7 +42,7 @@ const NostrFactory = {
     let ev = {};
     ev.type = "EVENT";
     ev.Original = null;
-    ev.Id = uuid();
+    ev.Id = '';
     ev.PubKey = pubKey ? pubKey : "";
     ev.CreatedAt = Math.floor(new Date().getTime() / 1000);
     ev.Kind = EventKind.Unknown;
@@ -88,7 +88,7 @@ const NostrFactory = {
   },
 
   formateSub: (sub) => {
-    console.log('formate sub', sub);
+    // console.log('formate sub', sub);
     const ret = {};
     if (sub.Ids) {
       ret.ids = Array.from(sub.Ids);

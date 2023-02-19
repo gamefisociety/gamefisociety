@@ -31,6 +31,9 @@ import * as secp from "@noble/secp256k1";
 
 import logo_blue from "asset/image/logo/logo_blue.png";
 
+import useMetadataPro from 'nostr/protocal/MetadataPro';
+import { System } from 'nostr/NostrSystem';
+
 const GLoginDialog = () => {
     const { isOpenLogin } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
@@ -47,6 +50,8 @@ const GLoginDialog = () => {
         about: ''
     });
     const [errorKey, setErrorKey] = useState(false);
+    //
+    const MetaData = useMetadataPro();
     //
     useEffect(() => {
         return () => { }
@@ -70,9 +75,12 @@ const GLoginDialog = () => {
             pubkey: keys.pub,
         }));
         dispatch(setOpenLogin(false));
-        // const ev = await eventBuild.metadata('');
-        // console.log("metadata", ev);
-        // eventClient.broadcast(ev);
+        //
+        let ev = await MetaData.send(keys.pub, profile, keys.pri);
+        console.log('MetadataPro', ev);
+        System.Broadcast(ev, 0, (msgs) => {
+            console.log('fetchProfile msgs', msgs);
+        });
     }
 
     const handleLogin = () => {
