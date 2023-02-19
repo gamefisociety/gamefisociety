@@ -169,10 +169,6 @@ const NostrRelay = () => {
   }
 
   const _SendReal = (client, req) => {
-    if (client.Socket?.readyState !== WebSocket.OPEN) {
-      client.PendingList.push(req);
-      return;
-    }
     const json = JSON.stringify(req);
     client.Socket.send(json);
   }
@@ -211,7 +207,7 @@ const NostrRelay = () => {
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendEvent direction', ev);
-      _SendReal(req);
+      _SendReal(client, req);
     } else {
       console.log('SendEvent cache', ev);
       client.PendingList.push(req);
@@ -221,11 +217,17 @@ const NostrRelay = () => {
   }
 
   const SendClose = (client, subId) => {
-    if (!client.Settings.write) {
-      return;
-    }
+    // if (!client.Settings.write) {
+    //   return;
+    // }
     const req = ["CLOSE", subId];
-    _SendReal(req);
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      console.log('SendClose direction');
+      _SendReal(client, req);
+    } else {
+      console.log('SendClose cache');
+      client.PendingList.push(req);
+    }
   }
 
   const SendEventAsync = async (client, ev, timeout = 5000) => {
@@ -244,7 +246,7 @@ const NostrRelay = () => {
 
       const req = ["EVENT", NostrFactory.formateEvent(ev)];
       if (client.Socket?.readyState === WebSocket.OPEN) {
-        _SendReal(req);
+        _SendReal(client, req);
       } else {
         //push msg in pendingList
         client.PendingList.push(req);
@@ -261,7 +263,7 @@ const NostrRelay = () => {
     let req = ["REQ", sub.Id, NostrFactory.formateSub(sub)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendSub direction', req);
-      _SendReal(req);
+      _SendReal(client, req);
     } else {
       console.log('SendSub cache', req);
       client.PendingList.push(req);
