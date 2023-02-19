@@ -219,6 +219,9 @@ const GLoginDialog = () => {
                         setNip19(ev.target.checked);
                     }} />} label="nip19" />
                 </FormGroup>
+                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={handleLogin}>
+                    {'Let’s go!'}
+                </Button>
             </DialogContent>
         );
     }
@@ -342,14 +345,6 @@ const GLoginDialog = () => {
         )
     }
 
-    const renderTest = () => {
-        if (gen) {
-            return renderGen();
-        } else {
-            return renderOld();
-        }
-    }
-
     const renderContent = () => {
         if (loginState === 0) {
             return renderIntroduce();
@@ -360,7 +355,7 @@ const GLoginDialog = () => {
         } else if (loginState === 3) {
             return renderKeys();
         } else if (loginState === 100) {
-            return renderTest();
+            return renderOld();
         }
         return null;
     }
