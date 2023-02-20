@@ -30,6 +30,7 @@ function GFTChat() {
     const relay = relayInit('wss://relay.damus.io')
     let location = useLocation();
     const [search, setsearch] = useSearchParams();
+    const [chatData, setChatData] = useState([]);
     const [chatAddress, setChatAddress] = useState(search.get('name'));
     const [inforData, setInforData] = useState(new Map());
     let pubKey = ""
@@ -56,29 +57,39 @@ function GFTChat() {
     const login = async () => {
         privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
         pubKey = getPublicKey(privateKey);
-        getDataList(pubKey);
+        getDataList(pubKey, chatAddress);
+        // getDataList(chatAddress,pubKey);
     }
 
-    const getDecode =  (sk, pk, data) => {
+    const getDecode = (sk, pk, data) => {
         return nip04.decrypt(sk, pk, data);
     }
-    const getDataList =  (key) => {
+
+    const getDataList = (key, key1) => {
         let sub = relay.sub([
             {
                 kinds: [4],
-                '#p': [chatAddress, key]
+                authors: [key, key1],
+                '#p': [key1, key]
             }
         ])
-        let data = [];
+        let data = [...chatData];
         sub.on('event', event => {
-            getDecode(privateKey, event.tags[0][1], event.content).then(res=>{
-                console.log('content', res);
+
+            getDecode(privateKey, key1, event.content).then(res => {
+                event.contentObj = res;
+                // data.push(event);
             });
+
+            data.push(event);
             console.log('getDataList', event)
         })
         sub.on('eose', () => {
             console.log('sub list eose event', data)
-            getInfor(data);
+            data.sort((a, b) => {
+                return a.created_at - b.created_at
+            })
+            setChatData([...data]);
             sub.unsub()
         })
 
@@ -184,7 +195,15 @@ function GFTChat() {
     return (
         <div className='chat_bg'>
 
-
+            {Array.from(chatData).map((item, index) => (
+                <div key={"chat" + index} className='item_list'>
+                    {
+                        item.pubkey == chatAddress ?
+                            <div className='chat_left'>{item.contentObj}</div> :
+                            <div className='chat_right'>{item.contentObj}</div>
+                    }
+                </div>
+            ))}
 
 
         </div >

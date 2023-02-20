@@ -10,6 +10,15 @@ export function getListData() {
     );
 }
 
+export function getIPFS() {
+    return Requset(
+        {
+            method: "get",
+            url: "https://ipfs.io/ipfs/QmYR5uWGq6GSz3NXfsRgeMaeDSpa173pUTDb1Cw96Dh7iF",
+        }
+    );
+}
+
 export function getListChainData() {
     return Requset(
         {
