@@ -7,6 +7,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import Snackbar from '@mui/material/Snackbar';
+
 import './GCardUser.scss';
 
 import useMetadataPro from 'nostr/protocal/MetadataPro';
@@ -29,6 +32,8 @@ const GCardUser = (props) => {
     const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
 
+    const [open, setOpen] = React.useState(false);
+
     useEffect(() => {
         localProfile.picture = props.profile.picture;
         localProfile.banner = props.profile.banner;
@@ -47,7 +52,10 @@ const GCardUser = (props) => {
         let ev = await MetaPro.send(publicKey, localProfile, privateKey);
         // console.log('saveProfile', ev);
         System.Broadcast(ev, 0, (msg) => {
-            console.log('create profile msg', msg);
+            if (msg[0] === 'OK') {
+                setOpen(true)
+            }
+            console.log('modify profile msg', msg);
         });
     }
 
@@ -58,6 +66,15 @@ const GCardUser = (props) => {
         //     console.log('create profile msg', msg);
         // });
     }
+
+    // const renderSke = () => {
+    //     return (
+    //         <React.Fragment>
+    //             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+    //             <Skeleton animation="wave" height={10} width="80%" />
+    //         </React.Fragment>
+    //     )
+    // }
 
     return (
         <Card sx={{}}>
@@ -183,6 +200,15 @@ const GCardUser = (props) => {
                     Reset
                 </Button>
             </CardActions>
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                }}
+                message="SUCESS"
+                autoHideDuration={2000}
+            />
         </Card>
     );
 
