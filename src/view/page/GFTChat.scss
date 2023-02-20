@@ -1,0 +1,95 @@
+.chat_bg {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 100px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+
+    .tab_layout {
+        width: 200px;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+
+        .tab {
+            width: 50%;
+            height: 40px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background-color: rgb(55, 55, 55);
+            }
+            &:active{
+                background-color: rgb(55, 55, 55);
+            }
+            &:focus{
+                background-color: rgb(55, 55, 55);
+            }
+        }
+    }
+
+    .item_list {
+        padding: 20px;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 10px;
+        border-color: rgb(45, 51, 54);
+
+        .info {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .ic {
+                width: 48px;
+                height: 48px;
+            }
+
+            .name {
+                margin-left: 10px;
+                text-align: start;
+                width: auto;
+                height: auto;
+                font-size: 15px;
+                color: rgb(231, 231, 231);
+                white-space: nowrap;
+            }
+        }
+
+        .chat{
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: auto;
+            height: auto;
+            color: rgb(255, 255, 255);
+            font-size: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: aquamarine;
+        }
+    }
+
+
+}
