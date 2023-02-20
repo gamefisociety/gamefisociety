@@ -33,7 +33,7 @@ const mapData = [
         img: ic_home
     },
     {
-        txt: 'CHAT',
+        txt: 'GLOBAL',
         img: ic_chat
     },
     {
@@ -78,10 +78,6 @@ const mapData = [
     },
     {
         txt: 'CREATE',
-        img: ic_create
-    },
-    {
-        txt: 'GLOBAL',
         img: ic_create
     },
     {
