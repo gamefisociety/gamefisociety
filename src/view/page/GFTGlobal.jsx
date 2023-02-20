@@ -51,7 +51,7 @@ function GFTGlobal() {
     }
 
     const login = async () => {
-        let sk = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
+        let sk = await doLogin("nsec16pvqz6fr89u8u6grvvwtwhs2sfseswhecwfkuu0glykmevx6du9sthk3je");
         let pk = getPublicKey(sk)
         setPubKey(pk);
         setPrivateKey(sk);
