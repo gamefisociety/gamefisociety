@@ -9,7 +9,6 @@ import {
 import {getALLAssetsForAccount} from '../../api/nftscan'
 import './GFTHomeView.scss';
 import FsLightbox from 'fslightbox-react';
-import GFTFooter from '../footer/GFTFooter';
 
 import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_detault_head from "../../asset/image/logo/ic_detault_head.png"
@@ -76,7 +75,6 @@ function GFTHomeView() {
         setTogSlide(index + 1);
         setToggler(!toggler);
     }
-
 
     return (
         <div className='content_bg'>
@@ -157,7 +155,6 @@ function GFTHomeView() {
                     </div>
                 </div>
             ))}
-            <GFTFooter></GFTFooter>
             <FsLightbox
                 toggler={toggler}
                 sources={fsLightList}

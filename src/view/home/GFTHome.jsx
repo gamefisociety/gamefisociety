@@ -7,8 +7,11 @@ import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 import { SearchRelays } from "nostr/Const";
 // import GFTHead from '../head/GFTHead'
-import GFTHead01 from '../head/GFTHead01'
-import GFTLeftMenu from '../head/GFTLeftMenu';
+import Grid from '@mui/material/Grid';
+import GFTHead01 from 'view/head/GFTHead01'
+import GFTLeftMenu from 'view/head/GFTLeftMenu';
+import GFTFooter from 'view/footer/GFTFooter';
+import { Paper } from '../../../node_modules/@mui/material/index';
 
 const GFTHome = () => {
 
@@ -37,16 +40,21 @@ const GFTHome = () => {
         dispatch(init('redux'));
         dispatch(initRelays())
     }, []);
-
     return (
-        <div className='home_bg'>
-            <GFTHead01 />
-            <div className='bt_layout'>
-                <GFTLeftMenu></GFTLeftMenu>
-                <Outlet />
-                {/* <Route path="/ranking" component={GFTNFTDetail} /> */}
-            </div>
-        </div>
+        <Grid sx={{ flexGrow: 1 }} container>
+            <Grid item xs={12}>
+                <GFTHead01 />
+            </Grid>
+            <Grid item xs={12}>
+                <Paper sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <GFTLeftMenu></GFTLeftMenu>
+                    <Outlet />
+                </Paper>
+            </Grid>
+            <Grid item xs={12}>
+                <GFTFooter />
+            </Grid>
+        </Grid>
     );
 }
 

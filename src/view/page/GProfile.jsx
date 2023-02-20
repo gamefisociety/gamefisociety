@@ -9,7 +9,6 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import GFTFooter from '../footer/GFTFooter';
 import './GProfile.scss';
 
 function GProfile() {
