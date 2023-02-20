@@ -59,20 +59,21 @@ function GFTChat() {
         getDataList(pubKey);
     }
 
-   const  getDecode=async (sk,pk,data)=>{
-        let content = await nip04.decrypt(sk, pk, data);
-    return content
-   }
-    const getDataList = async (key) => {
+    const getDecode =  (sk, pk, data) => {
+        return nip04.decrypt(sk, pk, data);
+    }
+    const getDataList =  (key) => {
         let sub = relay.sub([
             {
                 kinds: [4],
-                '#p': [chatAddress,key]
+                '#p': [chatAddress, key]
             }
         ])
         let data = [];
         sub.on('event', event => {
-            console.log('content', getDecode(privateKey,event.tags[0][1],event.content)); 
+            getDecode(privateKey, event.tags[0][1], event.content).then(res=>{
+                console.log('content', res);
+            });
             console.log('getDataList', event)
         })
         sub.on('eose', () => {
@@ -182,7 +183,7 @@ function GFTChat() {
 
     return (
         <div className='chat_bg'>
-            
+
 
 
 
