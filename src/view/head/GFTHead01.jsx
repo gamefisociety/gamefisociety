@@ -208,10 +208,10 @@ const GFTHead01 = () => {
         System.Broadcast(sub, 0, (msgs) => {
             if (msgs) {
                 msgs.map(msg => {
-                    if (msg.kind === 0 && msg.pubkey === publicKey) {
+                    if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
+                        console.log('fetchProfile msgs', msg.content);
                         let content = JSON.parse(msg.content);
                         dispatch(setProfile(content))
-                        console.log('fetchProfile msgs', content, msg);
                     }
                 });
             }

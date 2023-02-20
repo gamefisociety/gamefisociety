@@ -271,7 +271,7 @@ const NostrRelay = () => {
     if (!client.Settings.read) {
       return;
     }
-    let req = ["AUTH",  NostrFactory.formateSub(auth)];
+    let req = ["AUTH", NostrFactory.formateSub(auth)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendAuth direction', req);
       _SendReal(client, req);
@@ -279,8 +279,6 @@ const NostrRelay = () => {
       console.log('SendAuth cache', req);
       client.PendingList.push(req);
     }
-    // client.Stats.EventsSent++;
-    // _UpdateState(client);
   }
   // if (!this.Authed && this.AwaitingAuth.size > 0) {
   //   this.Pending.push(sub.ToObject());
@@ -312,35 +310,6 @@ const NostrRelay = () => {
     // client._NotifyState();
   }
 
-  // AddSub(subId, sub) {
-  //   if (!this.Settings.read) {
-  //     return false;
-  //   }
-  //   if (sub.Search && !this.SupportsNip(Nips.Search)) {
-  //     return false;
-  //   }
-  //   if (this.SubSupports.has(subId)) {
-  //     return false;
-  //   }
-  //   this.SubSupports.set(subId, true);
-  //   //send msg
-  //   if (!this.Authed && this.AwaitingAuth.size > 0) {
-  //     this.PendingList.push(sub.ToObject());
-  //     return true;
-  //   }
-  //   this._SendJson(sub.reqMsg(this.Address));
-  //   return true;
-  // }
-
-  // RemoveSub(subId, sub) {
-  //   if (this.SubSupports.has(subId)) {
-  //     this._SendJson(sub.closeMsg);
-  //     this.Subscriptions.delete(subId);
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   // StatusHook(fnHook) {
   //   const id = uuid();
   //   this.StateHooks.set(id, fnHook);
@@ -361,33 +330,6 @@ const NostrRelay = () => {
   //   const state = this.GetState();
   //   for (const [, h] of this.StateHooks) {
   //     h(state);
-  //   }
-  // }
-
-  // _InitSubscriptions() {
-  //   //clear pendingList
-  //   this.PendingList.map(msg => {
-  //     this._SendJson(msg);
-  //   });
-  //   this.PendingList = [];
-  //   //
-  //   if (this.SubInit) {
-  //     this.SubInit(this);
-  //   }
-  //   //
-  //   this._UpdateState();
-  // }
-
-  // _OnEvent(subId, ev) {
-  //   if (this.Subscriptions.has(subId) && this.SubCallback) {
-  //     const tagged = {
-  //       ...ev,
-  //       relays: [this.Address],
-  //     };
-  //     this.SubCallback(subId, tagged);
-  //   } else {
-  //     // console.warn(`No subscription for event! ${subId}`);
-  //     // ignored for now, track as "dropped event" with connection stats
   //   }
   // }
 
