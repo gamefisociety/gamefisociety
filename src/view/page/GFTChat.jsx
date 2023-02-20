@@ -1,11 +1,12 @@
 import { React, useEffect, useState, useRef } from 'react';
-import './GFTFollow.scss';
-import { useNavigate } from 'react-router-dom'
+import './GFTChat.scss';
+
 import { bech32 } from "bech32";
 import * as secp from "@noble/secp256k1";
-
+import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import {
     nip05,
+    nip04,
     SimplePool,
     relayInit,
     generatePrivateKey,
@@ -25,12 +26,11 @@ export const EmailRegex =
 
 
 
-function GFTFollow() {
-    const navigate = useNavigate();
+function GFTChat() {
     const relay = relayInit('wss://relay.damus.io')
-    const [isFollowTab, setFollowTab] = useState(true);
-    const [dataFollowers, setDataFollowers] = useState([]);
-    const [dataFollowing, setDataFollowing] = useState(new Map());
+    let location = useLocation();
+    const [search, setsearch] = useSearchParams();
+    const [chatAddress, setChatAddress] = useState(search.get('name'));
     const [inforData, setInforData] = useState(new Map());
     let pubKey = ""
     let privateKey = ""
@@ -57,54 +57,23 @@ function GFTFollow() {
         privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
         pubKey = getPublicKey(privateKey);
         getDataList(pubKey);
-        getDataFollowersList(pubKey);
     }
 
-    const getDataList = (key) => {
+   const  getDecode=async (sk,pk,data)=>{
+        let content = await nip04.decrypt(sk, pk, data);
+    return content
+   }
+    const getDataList = async (key) => {
         let sub = relay.sub([
             {
-                kinds: [3],
-                authors: [key]
+                kinds: [4],
+                '#p': [chatAddress,key]
             }
         ])
         let data = [];
         sub.on('event', event => {
+            console.log('content', getDecode(privateKey,event.tags[0][1],event.content)); 
             console.log('getDataList', event)
-
-            for (let i = 0; i < event.tags.length; i++) {
-                data.push(event.tags[i][1]);
-                dataFollowing.set(event.tags[i][1], true);
-            }
-            setDataFollowing(new Map(dataFollowing));
-        })
-        sub.on('eose', () => {
-            console.log('sub list eose event', data)
-            getInfor(data);
-            sub.unsub()
-        })
-
-        sub.off('event', () => {
-            console.log('off event')
-        })
-
-        sub.off('eose', () => {
-            console.log('off eose event')
-        })
-    }
-
-    const getDataFollowersList = (key) => {
-        let sub = relay.sub([
-            {
-                kinds: [3],
-                '#p': [key]
-            }
-        ])
-        let data = [];
-        sub.on('event', event => {
-            console.log('getDataFollowersList', event)
-            data.push(event.pubkey)
-            dataFollowers.push(event.pubkey);
-            setDataFollowers([...dataFollowers]);
         })
         sub.on('eose', () => {
             console.log('sub list eose event', data)
@@ -212,52 +181,14 @@ function GFTFollow() {
 
 
     return (
-        <div className='follow_bg'>
-            <div className='tab_layout'>
-                <div className='tab' tabIndex="1" onClick={() => {
-                    setFollowTab(true);
-                }}>
-                    Following
-                </div>
-                <div className='tab' tabIndex="2" onClick={() => {
-                    setFollowTab(false);
-                }}>
-                    Followers
-                </div>
-            </div>
-            {isFollowTab ?
-                <div>
-                    {[...dataFollowing.keys()].map(k => (
-                        <div key={"follow" + k} className='item_list'>
-                            <div className='info'>
-                                <img className='ic' src={inforData.get(k)?.contentObj.picture != null ? inforData.get(k)?.contentObj.picture : ic_gfs_coin}></img>
-                                <div className='name'>{inforData.get(k)?.contentObj.display_name}</div>
-                            </div>
-                            <span className='chat' onClick={() => {
-                                navigate('/chat?name=' + k);
-                            }}> chat</span>
-                        </div>
+        <div className='chat_bg'>
+            
 
-                    ))}
-                </div> :
-                <div>
-                    {Array.from(dataFollowers).map((item, index) => (
-                        <div key={"followers" + index} className='item_list'>
-                            <div className='info'>
-                                <img className='ic' src={inforData.get(item)?.contentObj.picture != null ? inforData.get(item)?.contentObj.picture : ic_gfs_coin}></img>
-                                <div className='name'>{inforData.get(item)?.contentObj.display_name}</div>
-                            </div>
-                            <span className='chat' onClick={() => {
-                                navigate('/chat?name=' + item);
-                            }}> chat</span>
-                        </div>
-                    ))}
-                </div>
-            }
+
 
         </div >
     );
 
 }
 
-export default GFTFollow;
+export default GFTChat;

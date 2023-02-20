@@ -9,6 +9,8 @@ const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject'
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
+const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
+
 // // render - dashboard
 // const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 // //任务服务
@@ -61,6 +63,10 @@ const MainRoutes = {
         {
             path:'/follow',
             element: <GFTFollow/>,
+        },
+        {
+            path:'/chat',
+            element: <GFTChat/>,
         },
     ]
 };
