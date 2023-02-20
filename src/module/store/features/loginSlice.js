@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as secp from "@noble/secp256k1";
-import { DefaultRelays } from "nostr/Const";
 
 const PrivateKeyItem = "prikey";
 const PublicKeyItem = "pubkey";

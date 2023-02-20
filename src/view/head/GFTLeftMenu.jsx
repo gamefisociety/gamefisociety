@@ -129,7 +129,7 @@ const GFTLeftMenu = () => {
             <MenuList>
                 {mapData.map((item, index) => {
                     if (item.txt === 'DIVIDER') {
-                        return (<Divider />);
+                        return (<Divider key={'main-menu-' + index} />);
                     }
                     return (
                         <MenuItem key={'main-menu-' + index} onClick={() => {

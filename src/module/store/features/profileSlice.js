@@ -33,14 +33,12 @@ const ProfileSlice = createSlice({
   initialState: InitState,
   reducers: {
     initRelays: (state, action) => {
-      //process relays
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       if (lastRelayList) {
         state.relays = JSON.parse(lastRelayList);
       } else {
         state.relays = Object.fromEntries(DefaultRelays.entries());
       }
-      console.log('relays init', state);
     },
     setRelays: (state, action) => {
       const relays = action.payload.relays;

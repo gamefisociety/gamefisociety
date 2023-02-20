@@ -103,12 +103,12 @@ const GFTHead01 = () => {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { picture, display_name, nip05 } = useSelector(s => s.profile);
 
-    const MetaData = useMetadataPro();
+    const MetaPro = useMetadataPro();
 
     useEffect(() => {
         if (loggedOut === false) {
             //get user msg
-            fetchProfile();
+            fetchMeta();
         }
         return () => {
             //
@@ -202,14 +202,14 @@ const GFTHead01 = () => {
         handleMobileMenuClose();
     };
 
-    const fetchProfile = async () => {
-        let sub = await MetaData.get(publicKey);
+    const fetchMeta = async () => {
+        let sub = await MetaPro.get(publicKey);
         // console.log('MetadataSub', sub);
         System.Broadcast(sub, 0, (msgs) => {
             if (msgs) {
                 msgs.map(msg => {
                     if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
-                        console.log('fetchProfile msgs', msg.content);
+                        console.log('fetchMeta msgs', msg.content);
                         let content = JSON.parse(msg.content);
                         dispatch(setProfile(content))
                     }
@@ -219,7 +219,7 @@ const GFTHead01 = () => {
     }
 
     const openProfile = () => {
-        // fetchProfile();
+        // fetchMeta();
         navigate('/profile');
         handleMenuClose();
     };

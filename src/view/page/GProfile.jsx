@@ -29,10 +29,10 @@ function GProfile() {
             <Grid item xs={12}>
                 <GCardUser></GCardUser>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
                 <GCardRelays />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 <Card sx={{}}>
                     <CardActionArea>
                         <CardMedia

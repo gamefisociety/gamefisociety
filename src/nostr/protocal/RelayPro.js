@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import useNostrEvent from "nostr/NostrEvent";
-import { EventKind, NostrList } from "nostr/def";
+import { EventKind } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-const useRelayPro = () => {
+export const useRelayPro = () => {
 
   const privKey = useSelector(s => s.login.privateKey);
 
@@ -32,5 +32,3 @@ const useRelayPro = () => {
     },
   }
 }
-
-export default useRelayPro;
