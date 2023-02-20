@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { setRelays, removeRelay } from 'module/store/features/profileSlice';
-import { useSelector, useDispatch } from 'react-redux';
 import { useRelayPro } from 'nostr/protocal/RelayPro';
 import { System } from 'nostr/NostrSystem';
 import { EventKind } from "nostr/def";
@@ -26,13 +26,13 @@ function GCardRelays() {
     const fetchRelays = async () => {
         //
         let sub = await relayPro.get(publicKey);
-        console.log('fetchRelays', Object.entries(relays), sub);
+        // console.log('fetchRelays', Object.entries(relays), sub);
         System.Broadcast(sub, 0, (msgs) => {
             if (msgs) {
                 msgs.map(msg => {
+                    console.log('fetchRelays msgs', msg);
                     if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
                         let content = JSON.parse(msg.content);
-                        // console.log('fetchRelays msgs', content);
                         let tmpRelays = {
                             relays: {
                                 ...content,
@@ -64,8 +64,8 @@ function GCardRelays() {
     const renderRelays = () => {
         return Object.entries(relays).map((item, index) => {
             return (
-                <Grid item>
-                    <CardActionArea key={'relaycard-index-' + index}>
+                <Grid item key={'relaycard-index-' + index}>
+                    <CardActionArea>
                         <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#2F2F2F', borderRadius: '24px' }}>
                             <Typography sx={{ minWidth: '' }} variant="body2" color="text.secondary">
                                 {item[0]}

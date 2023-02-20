@@ -63,9 +63,6 @@ const NostrRelay = () => {
         } else {
           client.IsClosed = false;
           client.Socket = new WebSocket(client.addr);
-          // on open
-          // console.log('sdfdsfdsfds', nostrRelay);
-          // let relay = this;
           client.Socket.onopen = () => {
             client.ConnectTimeout = DefaultConnectTimeout;
             console.log(`[${client.addr}] Open!`);

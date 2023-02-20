@@ -3,20 +3,20 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-export const useRelayPro = () => {
+export const useChatPro = () => {
 
   const privKey = useSelector(s => s.login.privateKey);
 
   const nostrEvent = useNostrEvent();
 
   return {
-    get: async (pubkey) => {
+    get: async (pubkey, targetpubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
-        sub.Id = `relays:${sub.Id.slice(0, 8)}`;
-        sub.Kinds = [EventKind.ContactList];
-        sub.PTags = [pubkey]
-        sub.Authors = [pubkey];
+        sub.Id = `chat:${sub.Id.slice(0, 8)}`;
+        sub.Kinds = [EventKind.DirectMessage];
+        sub.Authors = [pubkey, targetpubkey];
+        sub.PTags = [pubkey, targetpubkey]
         return sub;
       }
     },

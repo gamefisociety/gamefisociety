@@ -3,7 +3,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-export const useRelayPro = () => {
+export const useFollowPro = () => {
 
   const privKey = useSelector(s => s.login.privateKey);
 
@@ -13,9 +13,9 @@ export const useRelayPro = () => {
     get: async (pubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
-        sub.Id = `relays:${sub.Id.slice(0, 8)}`;
+        sub.Id = `follow:${sub.Id.slice(0, 8)}`;
         sub.Kinds = [EventKind.ContactList];
-        sub.PTags = [pubkey]
+        sub.PTags = [pubkey];
         sub.Authors = [pubkey];
         return sub;
       }

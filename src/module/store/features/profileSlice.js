@@ -63,14 +63,15 @@ const ProfileSlice = createSlice({
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
     },
     setProfile: (state, action) => {
+      state.name = action.payload.name ? action.payload.name : 'default';
       state.display_name = action.payload.display_name ? action.payload.display_name : 'default';
       state.about = action.payload.about ? action.payload.about : 'default';
       state.picture = action.payload.picture ? action.payload.picture : 'default';
       state.website = action.payload.website ? action.payload.website : 'default';
       state.banner = action.payload.banner ? action.payload.banner : 'default';
       state.nip05 = action.payload.nip05 ? action.payload.nip05 : 'default';
-      // state.lud06 = action.payload.name ? action.payload.name : 'default';
-      // state.lud16 = action.payload.name ? action.payload.name : 'default';
+      state.lud06 = action.payload.lud06 ? action.payload.lud06 : 'default';
+      state.lud16 = action.payload.lud16 ? action.payload.lud16 : 'default';
       state.loaded = 0;//时间戳
       state.created = 0; //时间戳
     },

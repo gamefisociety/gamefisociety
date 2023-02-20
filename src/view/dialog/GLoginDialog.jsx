@@ -51,7 +51,7 @@ const GLoginDialog = () => {
     });
     const [errorKey, setErrorKey] = useState(false);
     //
-    const MetaData = useMetadataPro();
+    const MetaPro = useMetadataPro();
     //
     useEffect(() => {
         return () => { }
@@ -76,7 +76,7 @@ const GLoginDialog = () => {
         }));
         dispatch(setOpenLogin(false));
         //
-        let ev = await MetaData.send(keys.pub, profile, keys.pri);
+        let ev = await MetaPro.send(keys.pub, profile, keys.pri);
         console.log('MetadataPro', ev);
         System.Broadcast(ev, 0, (msg) => {
             console.log('create profile msg', msg);

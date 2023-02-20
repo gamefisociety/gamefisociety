@@ -209,7 +209,7 @@ const GFTHead01 = () => {
             if (msgs) {
                 msgs.map(msg => {
                     if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
-                        console.log('fetchMeta msgs', msg.content);
+                        // console.log('fetchMeta msgs', msg.content);
                         let content = JSON.parse(msg.content);
                         dispatch(setProfile(content))
                     }

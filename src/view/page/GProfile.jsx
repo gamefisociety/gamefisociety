@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import { useLocation, Link, useSearchParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -14,11 +15,9 @@ import "swiper/css/pagination";
 import './GProfile.scss';
 
 function GProfile() {
-
     console.log('GProfile enter');
-
+    const profile = useSelector(s => s.profile);
     useEffect(() => {
-        //
         return () => {
             //
         }
@@ -26,8 +25,8 @@ function GProfile() {
 
     return (
         <Grid sx={{ margin: '24px', flexGrow: 1 }} container spacing={2}>
-            <Grid item xs={12}>
-                <GCardUser></GCardUser>
+            <Grid item xs={6}>
+                <GCardUser profile={{ ...profile }} />
             </Grid>
             <Grid item xs={12}>
                 <GCardRelays />
