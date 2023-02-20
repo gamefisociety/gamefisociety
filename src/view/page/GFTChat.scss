@@ -1,4 +1,5 @@
 .chat_bg {
+    position: relative;
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 100px;
@@ -8,8 +9,36 @@
     flex-direction: column;
     overflow-y: scroll;
 
+    .edit {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        align-items: center;
+
+        .send {
+            cursor: pointer;
+            padding: 10px;
+            width: auto;
+            height: 48px;
+            background: #006CF9;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+
+    }
+
     .item_list {
-       
+
         padding: 20px;
         width: 100%;
         height: auto;
@@ -21,7 +50,7 @@
         border-color: rgb(45, 51, 54);
 
         .chat_left {
-       
+
             display: flex;
             flex-direction: column;
             justify-content: center;

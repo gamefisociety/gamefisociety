@@ -17,24 +17,63 @@ import {
     verifySignature,
 
 } from 'nostr-tools'
+import { alpha, styled } from '@mui/material/styles';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { setPrivateKey } from 'module/store/features/loginSlice';
 import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png"
+import { Sync } from '../../../node_modules/@mui/icons-material/index';
 
 export const EmailRegex =
     // eslint-disable-next-line no-useless-escape
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
+const RedditTextField = styled((props) => (
+    <TextField InputProps={{ disableUnderline: true }} {...props} />
+))(({ theme }) => ({
+    '& label': {
+        fontFamily: ['Saira'],
+        fontWeight: 500,
+        fontSize: 18,
+        color: '#666666',
+        '&.Mui-focused': {
+            color: '#666666',
+        },
+    },
+    '& .MuiFilledInput-root': {
+        border: '1px solid #333333',
+        overflow: 'hidden',
+        borderRadius: 4,
+        fontFamily: ['Saira'],
+        fontWeight: 500,
+        color: '#333',
+        fontSize: 20,
+        transition: theme.transitions.create([
+            'border-color',
+            'background-color',
+            'box-shadow',
+        ]),
+        '&:hover': {
+            backgroundColor: 'transparent',
+        },
+        '&.Mui-focused': {
+            backgroundColor: 'transparent',
+            boxShadow: `${alpha('#fff', 0.25)} 0 0 0 1px`,
+            borderColor: `#333`,
+            color: `#fff`
+        },
+    },
+}));
+const relay = relayInit('wss://relay.damus.io')
+let privateKey = "";
+let pubKey = "";
 
 function GFTChat() {
-    const relay = relayInit('wss://relay.damus.io')
     let location = useLocation();
     const [search, setsearch] = useSearchParams();
     const [chatData, setChatData] = useState([]);
     const [chatAddress, setChatAddress] = useState(search.get('name'));
     const [inforData, setInforData] = useState(new Map());
-    let pubKey = ""
-    let privateKey = ""
+    const [inValue, setInValue] = useState("");
     let onlyPost = false;
     useEffect(() => {
         return () => {
@@ -78,19 +117,17 @@ function GFTChat() {
 
             getDecode(privateKey, key1, event.content).then(res => {
                 event.contentObj = res;
-                // data.push(event);
+                data.push(event);
+                data.sort((a, b) => {
+                    return a.created_at - b.created_at
+                })
+                setChatData([...data]);
             });
-
-            data.push(event);
             console.log('getDataList', event)
         })
         sub.on('eose', () => {
             console.log('sub list eose event', data)
-            data.sort((a, b) => {
-                return a.created_at - b.created_at
-            })
-            setChatData([...data]);
-            sub.unsub()
+            // sub.unsub()
         })
 
         sub.off('event', () => {
@@ -192,6 +229,39 @@ function GFTChat() {
     }
 
 
+    const onValueEdite = (e) => {
+        setInValue(e.target.value);
+    }
+
+    const sendEvent = (event) => {
+
+        event.id = getEventHash(event)
+        event.sig = signEvent(event, privateKey)
+        console.log(privateKey, 'privateKey');
+        let pub = relay.publish(event)
+        pub.on('ok', () => {
+            console.log(`${relay.url} has accepted our event ok`)
+        })
+        pub.on('failed', reason => {
+            console.log(`failed to publish to ${relay.url}: ${reason}`)
+        })
+    }
+    const onClickSend = async () => {
+        // privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
+        // pubKey = getPublicKey(privateKey);
+        let ciphertext = await nip04.encrypt(privateKey, chatAddress, inValue);
+        console.log(ciphertext, "aaaaa");
+
+        let event = {
+            kind: 4,
+            pubkey: pubKey,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [['p', chatAddress]],
+            content: ciphertext,
+        }
+        sendEvent(event);
+    }
+
     return (
         <div className='chat_bg'>
 
@@ -204,6 +274,18 @@ function GFTChat() {
                     }
                 </div>
             ))}
+
+            <div className='edit' >
+                <RedditTextField
+                    hiddenLabel
+                    placeholder="chat value"
+                    variant="filled"
+                    rows={1}
+                    onChange={(e) => onValueEdite(e)}
+                    style={{ marginTop: 0, marginLeft: 13 }}
+                />
+                <div className='send' onClick={() => onClickSend()}>send</div>
+            </div>
 
 
         </div >
