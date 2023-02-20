@@ -41,6 +41,10 @@ const mapData = [
         img: ic_sub
     },
     {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
         txt: 'CHECK IN',
         img: ic_check_in
     },
@@ -53,6 +57,10 @@ const mapData = [
         img: ic_swap
     },
     {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
         txt: 'ETH',
         img: ic_eth
     },
@@ -63,6 +71,10 @@ const mapData = [
     {
         txt: 'POLYGON',
         img: ic_polgon
+    },
+    {
+        txt: 'DIVIDER',
+        img: ''
     },
     {
         txt: 'CREATE',
@@ -119,21 +131,27 @@ const GFTLeftMenu = () => {
     return (
         <Paper sx={{ width: 230 }}>
             <MenuList>
-                {mapData.map((item, index) => (
-                    <MenuItem key={'main-menu-' + index} onClick={() => {
-                        clickMenu(item);
-                    }}>
-                        <CardMedia
-                            sx={{ width: 28, height: 28 }}
-                            component="img"
-                            image={item.img}
-                            alt="green iguana"
-                        />
-                        <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
-                            {item.txt}
-                        </Typography>
-                    </MenuItem>
-                ))}
+                {mapData.map((item, index) => {
+                    if (item.txt === 'DIVIDER') {
+                        return (<Divider />);
+                    }
+                    return (
+                        <MenuItem key={'main-menu-' + index} onClick={() => {
+                            clickMenu(item);
+                        }}>
+                            <CardMedia
+                                sx={{ width: 28, height: 28 }}
+                                component="img"
+                                image={item.img}
+                                alt="green iguana"
+                            />
+                            <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
+                                {item.txt}
+                            </Typography>
+                        </MenuItem>
+                    )
+
+                })}
             </MenuList>
         </Paper>
     );
