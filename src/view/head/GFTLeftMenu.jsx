@@ -54,6 +54,9 @@ const GFTLeftMenu = () => {
     const clickGlobal = () => {
         navigate('/global');
     }
+    const clickFollow = () => {
+        navigate('/follow');
+    }
 
     return (
         <div className='left_menu_bg'>
@@ -91,6 +94,10 @@ const GFTLeftMenu = () => {
             <div className='item' onClick={clickGlobal}>
                 <img className='img' src={ic_create}></img>
                 <span className='txt'>Global</span>
+            </div>
+            <div className='item' onClick={clickFollow}>
+                <img className='img' src={ic_create}></img>
+                <span className='txt'>Follow</span>
             </div>
         </div>
     );
