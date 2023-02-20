@@ -4,9 +4,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
-import './GCardUser.scss';
 
-function GCardUser() {
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import './GCardRelays.scss';
+
+
+function GCardRelays() {
 
     useEffect(() => {
         return () => {
@@ -43,4 +48,4 @@ function GCardUser() {
 
 }
 
-export default React.memo(GCardUser);
+export default React.memo(GCardRelays);
