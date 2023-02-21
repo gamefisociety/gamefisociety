@@ -75,7 +75,7 @@ function GFTNostrUtils() {
                 kind: [1]
             }
         ])
-        
+
         sub.on('event', event => {
             console.log('we got the event we wanted:', event)
         })

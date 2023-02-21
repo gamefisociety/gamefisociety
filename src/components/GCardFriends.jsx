@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 
 import './GCardUser.scss';
 
+import { setUsersFlag, setUsers } from 'module/store/features/userSlice';
+
 import { useFollowPro } from 'nostr/protocal/FollowPro';
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
@@ -57,31 +59,18 @@ function a11yProps(index) {
     };
 }
 
-const GCardFriends = (props) => {
+const GCardFriends = () => {
     // console.log('props.profile', props.profile);
     const FollowPro = useFollowPro();
     const MetadataPro = useMetadataPro();
     const { publicKey, privateKey } = useSelector(s => s.login);
+    const { usersflag, follows } = useSelector(s => s.user);
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = React.useState(0);
-    //
-    useEffect(() => {
-        // localProfile.picture = props.profile.picture;
-        // localProfile.banner = props.profile.banner;
-        // localProfile.name = props.profile.name;
-        // localProfile.display_name = props.profile.display_name;
-        // localProfile.about = props.profile.about;
-        // localProfile.website = props.profile.website;
-        // localProfile.nip05 = props.profile.nip05;
-        // localProfile.lud06 = props.profile.lud06;
-        // setLocalProfile({ ...localProfile });
-        return () => {
-        }
-    }, [props])
 
     const fetchAllMeta = (msgs) => {
         msgs.map(msg => {
-            console.log('fetchFollowers msgs', msg);
+            // console.log('fetchFollowers msgs', msg);
             if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.tags.length > 0) {
                 let subMeta = MetadataPro.get(publicKey);
                 msg.tags.map((item) => {
@@ -91,7 +80,21 @@ const GCardFriends = (props) => {
                 });
                 //
                 System.Broadcast(subMeta, 0, (msgs1) => {
-                    console.log('fetchFollowers subMeta', msgs1);
+                    // console.log('fetchFollowers subMeta', msgs1);
+                    let users = [];
+                    msgs1.map(item1 => {
+                        let info = {
+                            pubkey: item1.pubkey,
+                            content: {}
+                        };
+                        if (item1.content !== '') {
+                            info.content = JSON.parse(item1.content);
+                        }
+                        info.content.created_at = item1.created_at;
+                        info.content.following = 1;
+                        users.push(info);
+                    });
+                    dispatch(setUsers(users));
                 });
                 //
             }
@@ -99,12 +102,17 @@ const GCardFriends = (props) => {
     }
 
     const fetchFollowing = () => {
-        let ev = FollowPro.get(publicKey);
-        // console.log('saveProfile', ev);
-        System.Broadcast(ev, 0, (msgs) => {
-            fetchAllMeta(msgs);
-            console.log('fetchFollowing msg', msgs);
-        });
+        if (usersflag === 0) {
+            let ev = FollowPro.get(publicKey);
+            System.Broadcast(ev, 0, (msgs) => {
+                //set flag
+                dispatch(setUsersFlag(1));
+                fetchAllMeta(msgs);
+                console.log('fetchFollowing msg', msgs);
+            });
+        } else if (usersflag === 1) {
+            //update
+        }
     }
 
     const fetchFollowers = () => {
@@ -130,6 +138,18 @@ const GCardFriends = (props) => {
         }
         setTabIndex(newValue);
     };
+
+    //
+    useEffect(() => {
+        fetchFollowing();
+        return () => { }
+    }, [])
+
+    useEffect(() => {
+        // fetchFollowing();
+        console.log('following users', follows);
+        return () => { }
+    }, [follows])
 
     const renderFollowing = () => {
         return null;
