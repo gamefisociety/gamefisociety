@@ -6,17 +6,28 @@ import { System } from 'nostr/NostrSystem';
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 import { SearchRelays } from "nostr/Const";
-// import GFTHead from '../head/GFTHead'
 import Grid from '@mui/material/Grid';
-import GFTHead01 from 'view/head/GFTHead01'
+import GFTHead from 'view/head/GFTHead'
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
 import GFTFooter from 'view/footer/GFTFooter';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import { setDrawer } from 'module/store/features/dialogSlice';
 
 const GFTHome = () => {
 
     const dispatch = useDispatch();
+    const { drawer } = useSelector(s => s.dialog);
 
     const { relays } = useSelector((s) => s.profile);
 
@@ -41,11 +52,47 @@ const GFTHome = () => {
         dispatch(init('redux'));
         dispatch(initRelays())
     }, []);
+
+    const list = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+            role="presentation"
+            onClick={() => { }}
+            onKeyDown={() => { }}
+        >
+            <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
+            <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
+
     return (
         <Box sx={{ flexGrow: 1, backgroundColor: '#0F0F0F' }}>
             <Grid sx={{ flexGrow: 1 }} container>
                 <Grid item xs={12}>
-                    <GFTHead01 />
+                    <GFTHead />
                 </Grid>
                 <Grid item xs={2}>
                     <GFTLeftMenu />
@@ -70,6 +117,17 @@ const GFTHome = () => {
                     <GFTFooter />
                 </Grid>
             </Grid>
+            <Drawer
+                anchor={'right'}
+                open={drawer}
+                onClose={() => {
+                    console.log('Drawer onclose');
+                    dispatch(setDrawer(false))
+                    //toggleDrawer(anchor, false)
+                }}
+            >
+                {list('right')}
+            </Drawer>
         </Box >
     );
 }
