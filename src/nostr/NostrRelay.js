@@ -1,13 +1,33 @@
 import * as secp from "@noble/secp256k1";
 import { DefaultConnectTimeout } from "nostr/Const";
-import { System } from "nostr/NostrSystem";
-import { unwrap } from "nostr/Util";
-import useNostrEvent from 'nostr/NostrEvent';
 import NostrFactory from 'nostr/NostrFactory';
 
 const NostrRelay = () => {
 
-  const nostrEvent = useNostrEvent();
+  const listenProcers = new Map();
+
+  const buildKey = (addr, subid) => {
+    let key = addr + '-' + subid;
+    return key;
+  }
+
+  const addListen = (key, client, once, callback) => {
+    if (listenProcers.get(key)) {
+      return false;
+    }
+    let procer = {
+      key: key,
+      client: client,
+      once: once,
+      callback: callback,
+      cache: []
+    };
+    listenProcers.set(key, procer);
+  }
+
+  const removeListen = (procer) => {
+    listenProcers.delete(procer.key);
+  }
 
   const Connect = async (client) => {
     let flag = false;
@@ -43,9 +63,6 @@ const NostrRelay = () => {
         } else {
           client.IsClosed = false;
           client.Socket = new WebSocket(client.addr);
-          // on open
-          // console.log('sdfdsfdsfds', nostrRelay);
-          // let relay = this;
           client.Socket.onopen = () => {
             client.ConnectTimeout = DefaultConnectTimeout;
             console.log(`[${client.addr}] Open!`);
@@ -77,29 +94,40 @@ const NostrRelay = () => {
           };
           //
           client.Socket.onmessage = e => {
-            console.log('relay message', e);
+            // console.log('relay message', e);
             if (e.data.length > 0) {
               const msg = JSON.parse(e.data);
-              console.log('OnMessage', msg);
+              let tmpKey = buildKey(e.origin, msg[1]);
+              let procer = listenProcers.get(tmpKey);
+              console.log('OnMessage', tmpKey, msg);
               const tag = msg[0];
               if (tag === 'AUTH') {
                 // this._OnAuthAsync(msg[1]);
                 // this.Stats.EventsReceived++;
                 // this._UpdateState();
               } else if (tag === 'EVENT') {
-                // this._OnEvent(msg[1], msg[2]);
-                // this.Stats.EventsReceived++;
-                // this._UpdateState();
+                if (procer && procer.cache) {
+                  procer.cache.push(msg[2]);
+                }
               } else if (tag === 'EOSE') {
+                if (procer) {
+                  procer.callback(procer.cache);
+                  procer.cache = [];
+                  if (procer.once === 0) {
+                    removeListen(procer);
+                    SendClose(client, msg[1]);
+                  }
+                }
                 // this._OnEnd(msg[1]);
               } else if (tag === 'OK') {
                 console.log(`${client.addr} OK: `, msg);
-                const id = msg[1];
-                // if (this.EventsCallback.has(id)) {
-                //   const cb = unwrap(this.EventsCallback.get(id));
-                //   this.EventsCallback.delete(id);
-                //   cb(msg);
-                // }
+                if (procer) {
+                  procer.callback(msg);
+                  procer.cache = [];
+                  if (procer.once === 0) {
+                    removeListen(procer);
+                  }
+                }
               } else if (tag === 'NOTICE') {
                 // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
               } else {
@@ -132,6 +160,11 @@ const NostrRelay = () => {
     _UpdateState(client);
   }
 
+  const _SendReal = (client, req) => {
+    const json = JSON.stringify(req);
+    client.Socket.send(json);
+  }
+
   const SendPending = (client) => {
     // console.log('SendPending', client);
     if (client.PendingList.length <= 0) {
@@ -149,24 +182,47 @@ const NostrRelay = () => {
     client.PendingList = [];
   }
 
+  const SendToRelay = (client, ev, once, callback) => {
+    let tmpkey = buildKey(client.addr, ev.Id);
+    addListen(tmpkey, client, once, callback)
+    if (ev.type === "EVENT") {
+      SendEvent(client, ev);
+    } else if (ev.type === "SUB") {
+      SendSub(client, ev);
+    }
+  }
+
   const SendEvent = (client, ev) => {
     if (!client.Settings.write) {
       return;
     }
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      // console.log('SendEvent direction', ev);
-      const json = JSON.stringify(req);
-      client.Socket.send(json);
+      console.log('SendEvent direction', ev);
+      _SendReal(client, req);
     } else {
-      // console.log('SendEvent cache', ev);
+      console.log('SendEvent cache', ev);
       client.PendingList.push(req);
     }
     client.Stats.EventsSent++;
     _UpdateState(client);
   }
 
-  const SendAsync = async (client, ev, timeout = 5000) => {
+  const SendClose = (client, subId) => {
+    // if (!client.Settings.write) {
+    //   return;
+    // }
+    const req = ["CLOSE", subId];
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      console.log('SendClose direction');
+      _SendReal(client, req);
+    } else {
+      console.log('SendClose cache');
+      client.PendingList.push(req);
+    }
+  }
+
+  const SendEventAsync = async (client, ev, timeout = 5000) => {
     return new Promise(resolve => {
       if (!client.Settings.write) {
         resolve();
@@ -182,8 +238,7 @@ const NostrRelay = () => {
 
       const req = ["EVENT", NostrFactory.formateEvent(ev)];
       if (client.Socket?.readyState === WebSocket.OPEN) {
-        const json = JSON.stringify(req);
-        client.Socket.send(json);
+        _SendReal(client, req);
       } else {
         //push msg in pendingList
         client.PendingList.push(req);
@@ -200,14 +255,27 @@ const NostrRelay = () => {
     let req = ["REQ", sub.Id, NostrFactory.formateSub(sub)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendSub direction', req);
-      const json = JSON.stringify(req);
-      client.Socket.send(json);
+      _SendReal(client, req);
     } else {
       console.log('SendSub cache', req);
       client.PendingList.push(req);
     }
     // client.Stats.EventsSent++;
     // _UpdateState(client);
+  }
+
+  const SendAuth = (client, auth) => {
+    if (!client.Settings.read) {
+      return;
+    }
+    let req = ["AUTH", NostrFactory.formateSub(auth)];
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      console.log('SendAuth direction', req);
+      _SendReal(client, req);
+    } else {
+      console.log('SendAuth cache', req);
+      client.PendingList.push(req);
+    }
   }
   // if (!this.Authed && this.AwaitingAuth.size > 0) {
   //   this.Pending.push(sub.ToObject());
@@ -239,35 +307,6 @@ const NostrRelay = () => {
     // client._NotifyState();
   }
 
-  // AddSub(subId, sub) {
-  //   if (!this.Settings.read) {
-  //     return false;
-  //   }
-  //   if (sub.Search && !this.SupportsNip(Nips.Search)) {
-  //     return false;
-  //   }
-  //   if (this.SubSupports.has(subId)) {
-  //     return false;
-  //   }
-  //   this.SubSupports.set(subId, true);
-  //   //send msg
-  //   if (!this.Authed && this.AwaitingAuth.size > 0) {
-  //     this.PendingList.push(sub.ToObject());
-  //     return true;
-  //   }
-  //   this._SendJson(sub.reqMsg(this.Address));
-  //   return true;
-  // }
-
-  // RemoveSub(subId, sub) {
-  //   if (this.SubSupports.has(subId)) {
-  //     this._SendJson(sub.closeMsg);
-  //     this.Subscriptions.delete(subId);
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   // StatusHook(fnHook) {
   //   const id = uuid();
   //   this.StateHooks.set(id, fnHook);
@@ -288,33 +327,6 @@ const NostrRelay = () => {
   //   const state = this.GetState();
   //   for (const [, h] of this.StateHooks) {
   //     h(state);
-  //   }
-  // }
-
-  // _InitSubscriptions() {
-  //   //clear pendingList
-  //   this.PendingList.map(msg => {
-  //     this._SendJson(msg);
-  //   });
-  //   this.PendingList = [];
-  //   //
-  //   if (this.SubInit) {
-  //     this.SubInit(this);
-  //   }
-  //   //
-  //   this._UpdateState();
-  // }
-
-  // _OnEvent(subId, ev) {
-  //   if (this.Subscriptions.has(subId) && this.SubCallback) {
-  //     const tagged = {
-  //       ...ev,
-  //       relays: [this.Address],
-  //     };
-  //     this.SubCallback(subId, tagged);
-  //   } else {
-  //     // console.warn(`No subscription for event! ${subId}`);
-  //     // ignored for now, track as "dropped event" with connection stats
   //   }
   // }
 
@@ -395,6 +407,7 @@ const NostrRelay = () => {
   return {
     Connect: Connect,
     Close: Close,
+    SendToRelay: SendToRelay,
     SendEvent: SendEvent,
     SendSub: SendSub,
     SupportsNip: SupportsNip,

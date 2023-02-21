@@ -7,7 +7,10 @@ const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
 const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
+const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
+const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
+const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 // // render - dashboard
 // const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -37,26 +40,34 @@ const MainRoutes = {
         {
             path: '/',
             element: <GFTHomeView />,
-
         },
         {
             path: '/detail',
             element: <GFTNFTDetail />,
-
         },
         {
             path: '/create_project',
             element: <GFTCreateProject />,
-
         },
         {
             path: '/hall',
             element: <GHall />,
-
         },
         {
-            path:'/global',
-            element: <GFTGlobal/>,
+            path: '/global',
+            element: <GFTGlobal />,
+        },
+        {
+            path: '/follow',
+            element: <GFTFollow />,
+        },
+        {
+            path: '/chat',
+            element: <GFTChat />,
+        },
+        {
+            path: '/profile',
+            element: <GProfile />,
         },
         {
             path:'/ipfs',

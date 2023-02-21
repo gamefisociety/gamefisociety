@@ -10,7 +10,7 @@ const useNostrEvent = () => {
   }
 
   const CreateId = async (ev) => {
-    // console.log('CreateId ev', ev);
+    console.log('CreateId ev', ev);
     const payload = [
       0,
       ev.PubKey,

@@ -3,7 +3,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, NostrList } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-const MetadataEvent = () => {
+const useMetadataPro = () => {
 
   const privKey = useSelector(s => s.login.privateKey);
 
@@ -19,15 +19,18 @@ const MetadataEvent = () => {
         return sub;
       }
     },
-    send: async (pubKey, obj) => {
+    send: async (pubKey, obj, tmpPrivate) => {
       if (pubKey) {
         const ev = NostrFactory.createEvent(pubKey);
         ev.Kind = EventKind.SetMetadata;
         ev.Content = JSON.stringify(obj);
+        if (tmpPrivate) {
+          return await nostrEvent.Sign(tmpPrivate, ev);
+        }
         return await nostrEvent.Sign(privKey, ev);
       }
     },
   }
 }
 
-export default MetadataEvent;
+export default useMetadataPro;

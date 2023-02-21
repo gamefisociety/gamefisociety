@@ -33,8 +33,9 @@ function GFTGlobal() {
     const [privateKey, setPrivateKey] = useState(null);
     let onlyPost = false;
     useEffect(() => {
+        initConnect();
         return () => {
-            initConnect();
+           
         }
     }, [])
 

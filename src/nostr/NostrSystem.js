@@ -8,8 +8,6 @@ export class NostrSystem {
 
   constructor() {
     this.Clients = new Map();
-    // this.Subscriptions = new Map();
-    // this.PendingSubscriptions = [];
   }
 
   ConnectRelay(address, read, write) {
@@ -40,13 +38,21 @@ export class NostrSystem {
     }
   }
 
-  Broadcast(ev) {
+  Broadcast(ev, once, callback) {
     for (const [, tmpRelay] of this.Clients) {
-      if (ev.type === "EVENT") {
-        Relay.SendEvent(tmpRelay, ev);
-      } else if (ev.type === "SUB") {
-        Relay.SendSub(tmpRelay, ev);
-      }
+      Relay.SendToRelay(tmpRelay, ev, once, callback);
+    }
+  }
+
+  BroadcastSub(ev, once, callback) {
+    for (const [, tmpRelay] of this.Clients) {
+      Relay.SendToRelay(tmpRelay, ev, once, callback);
+    }
+  }
+
+  BroadcastEvent(ev, once, callback) {
+    for (const [, tmpRelay] of this.Clients) {
+      Relay.SendToRelay(tmpRelay, ev, once, callback);
     }
   }
 

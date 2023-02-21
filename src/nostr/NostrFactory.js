@@ -42,7 +42,7 @@ const NostrFactory = {
     let ev = {};
     ev.type = "EVENT";
     ev.Original = null;
-    ev.Id = "";
+    ev.Id = '';
     ev.PubKey = pubKey ? pubKey : "";
     ev.CreatedAt = Math.floor(new Date().getTime() / 1000);
     ev.Kind = EventKind.Unknown;
@@ -88,7 +88,7 @@ const NostrFactory = {
   },
 
   formateSub: (sub) => {
-    console.log('formate sub', sub);
+    // console.log('formate sub', sub);
     const ret = {};
     if (sub.Ids) {
       ret.ids = Array.from(sub.Ids);
@@ -124,7 +124,23 @@ const NostrFactory = {
       ret.limit = sub.Limit;
     }
     return ret;
+  },
+
+  formateAuth: (ev) => {
+    let ret = {
+      id: ev.Id,
+      pubkey: ev.PubKey,
+      created_at: ev.CreatedAt,
+      kind: ev.Kind,
+      tags: ev.Tags.sort((a, b) => a.Index - b.Index)
+        .map(a => a.ToObject())
+        .filter(a => a !== null), //<string[][] >
+      content: ev.Content,
+      sig: ev.Signature,
+    }
+    return ret;
   }
+  // NostrFactory.formateSub
   //!
 }
 

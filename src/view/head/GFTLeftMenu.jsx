@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
@@ -9,15 +9,86 @@ import {
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
 import { Divider } from '@mui/material/index';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 
-import ic_bnb from "asset/image/home/ic_bnb.png"
-import ic_eth from "asset/image/home/ic_eth.png"
-import ic_swap from "asset/image/home/ic_swap.png"
-import ic_polgon from "asset/image/home/ic_polgon.png"
-import ic_check_in from "asset/image/home/ic_check_in.png"
-import ic_free_nft from "asset/image/home/ic_free_nft.png"
-import ic_create from 'asset/image/home/ic_create.png'
+import ic_bnb from "asset/image/home/ic_bnb.png";
+import ic_eth from "asset/image/home/ic_eth.png";
+import ic_swap from "asset/image/home/ic_swap.png";
+import ic_polgon from "asset/image/home/ic_polgon.png";
+import ic_check_in from "asset/image/home/ic_check_in.png";
+import ic_free_nft from "asset/image/home/ic_free_nft.png";
+import ic_create from 'asset/image/home/ic_create.png';
+import ic_home from 'asset/image/logo/ic_home.png';
+import ic_chat from 'asset/image/logo/ic_chat.png';
+import ic_sub from 'asset/image/logo/ic_sub.png';
+
+const mapData = [
+    {
+        txt: 'HOME',
+        img: ic_home
+    },
+    {
+        txt: 'GLOBAL',
+        img: ic_chat
+    },
+    {
+        txt: 'SUBSCRIPTION',
+        img: ic_sub
+    },
+    {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
+        txt: 'CHECK IN',
+        img: ic_check_in
+    },
+    {
+        txt: 'MINT AVATAR',
+        img: ic_free_nft
+    },
+    {
+        txt: 'SWAP IN',
+        img: ic_swap
+    },
+    {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
+        txt: 'ETH',
+        img: ic_eth
+    },
+    {
+        txt: 'BNB',
+        img: ic_bnb
+    },
+    {
+        txt: 'POLYGON',
+        img: ic_polgon
+    },
+    {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
+        txt: 'CREATE',
+        img: ic_create
+    },
+    {
+        txt: 'FOLLOW',
+        img: ic_create
+    },
+    {
+        txt: 'IPFS',
+        img: ic_create
+    }
+];
 
 const GFTLeftMenu = () => {
     const navigate = useNavigate();
@@ -31,77 +102,61 @@ const GFTLeftMenu = () => {
 
     }, [])
 
-    const openCheckIn = () => {
-        if (account) {
-            dispatch(setOpenCheckIn(true));
-        } else {
-            dispatch(setIsOpen(true));
+    const clickMenu = (item) => {
+        if (item.txt === 'HOME') {
+            navigate('/');
+        } else if (item.txt === 'CHECK IN') {
+            if (account) {
+                dispatch(setOpenCheckIn(true));
+            } else {
+                dispatch(setIsOpen(true));
+            }
+        } else if (item.txt === 'GLOBAL') {
+            navigate('/global');
+        } else if (item.txt === 'FOLLOW') {
+            navigate('/follow');
+        } else if (item.txt === 'CREATE') {
+            navigate('/create_project');
+        } else if (item.txt === 'MINT AVATAR') {
+            if (account) {
+                dispatch(setOpenMintAvatar(true));
+            } else {
+                dispatch(setIsOpen(true));
+            }
+        } else if (item.txt === 'POLYGON') {
+            navigate('/hall');
+        } else if (item.txt === 'IPFS') {
+            navigate('/ipfs');
         }
-    }
-
-    const mintAvatarHandle = () => {
-        if (account) {
-            dispatch(setOpenMintAvatar(true));
-        } else {
-            dispatch(setIsOpen(true));
-        }
-    }
-
-    const clickCreate = () => {
-        navigate('/create_project');
-    }
-
-    const clickGlobal = () => {
-        navigate('/global');
-    }
-
-    const testIPFS = () => {
-        navigate('/ipfs');
     }
 
     return (
-        <div className='left_menu_bg'>
-            <div className='item' onClick={openCheckIn}>
-                <img className='img' src={ic_check_in}></img>
-                <span className='txt'>CHECK IN</span>
-            </div>
-            <div className='item' onClick={mintAvatarHandle}>
-                <img className='img' src={ic_free_nft}></img>
-                <span className='txt'>MINT AVATAR</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_swap}></img>
-                <span className='txt'>SWAP</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_eth}></img>
-                <span className='txt'>ETH</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_bnb}></img>
-                <span className='txt'>BNB</span>
-            </div>
-            <Divider light />
-            <div className='item'>
-                <img className='img' src={ic_polgon} onClick={() => {
-                    navigate('/hall');
-                }}></img>
-                <span className='txt' >POLYGON</span>
-            </div>
-            <div className='item'>
-                <img className='img' src={ic_create} onClick={clickCreate}></img>
-                <span className='txt'>CREATE</span>
-            </div>
-            <div className='item' onClick={clickGlobal}>
-                <img className='img' src={ic_create}></img>
-                <span className='txt'>Global</span>
-            </div>
-            <div className='item' onClick={testIPFS}>
-                <img className='img' src={ic_create}></img>
-                <span className='txt'>IPFS</span>
-            </div>
-        </div>
+        <Paper sx={{ width: 230 }}>
+            <MenuList>
+                {mapData.map((item, index) => {
+                    if (item.txt === 'DIVIDER') {
+                        return (<Divider key={'main-menu-' + index} />);
+                    }
+                    return (
+                        <MenuItem key={'main-menu-' + index} onClick={() => {
+                            clickMenu(item);
+                        }}>
+                            <CardMedia
+                                sx={{ width: 28, height: 28 }}
+                                component="img"
+                                image={item.img}
+                                alt="green iguana"
+                            />
+                            <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
+                                {item.txt}
+                            </Typography>
+                        </MenuItem>
+                    )
+
+                })}
+            </MenuList>
+        </Paper>
     );
 }
 
-export default GFTLeftMenu;
+export default React.memo(GFTLeftMenu);

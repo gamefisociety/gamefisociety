@@ -15,6 +15,17 @@ export const InitState = {
   newUserKey: false,
   relays: {},
   latestRelays: 0,
+  name: 'aaaa',
+  display_name: 'bbbb',
+  about: '',
+  picture: '',
+  website: '',
+  banner: '',
+  nip05: '',
+  lud06: '',
+  lud16: '',
+  loaded: 0, //时间戳
+  created: 0, //时间戳
 };
 
 const ProfileSlice = createSlice({
@@ -22,14 +33,12 @@ const ProfileSlice = createSlice({
   initialState: InitState,
   reducers: {
     initRelays: (state, action) => {
-      //process relays
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       if (lastRelayList) {
         state.relays = JSON.parse(lastRelayList);
       } else {
         state.relays = Object.fromEntries(DefaultRelays.entries());
       }
-      console.log('relays init', state);
     },
     setRelays: (state, action) => {
       const relays = action.payload.relays;
@@ -53,6 +62,19 @@ const ProfileSlice = createSlice({
       state.relays = { ...state.relays };
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
     },
+    setProfile: (state, action) => {
+      state.name = action.payload.name ? action.payload.name : 'default';
+      state.display_name = action.payload.display_name ? action.payload.display_name : 'default';
+      state.about = action.payload.about ? action.payload.about : 'default';
+      state.picture = action.payload.picture ? action.payload.picture : 'default';
+      state.website = action.payload.website ? action.payload.website : 'default';
+      state.banner = action.payload.banner ? action.payload.banner : 'default';
+      state.nip05 = action.payload.nip05 ? action.payload.nip05 : 'default';
+      state.lud06 = action.payload.lud06 ? action.payload.lud06 : 'default';
+      state.lud16 = action.payload.lud16 ? action.payload.lud16 : 'default';
+      state.loaded = 0;//时间戳
+      state.created = 0; //时间戳
+    },
   },
 });
 
@@ -60,6 +82,7 @@ export const {
   initRelays,
   setRelays,
   removeRelay,
+  setProfile,
 } = ProfileSlice.actions;
 
 export default ProfileSlice.reducer;
