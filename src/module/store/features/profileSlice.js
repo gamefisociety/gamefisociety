@@ -73,7 +73,7 @@ const ProfileSlice = createSlice({
       state.lud06 = action.payload.lud06 ? action.payload.lud06 : 'default';
       state.lud16 = action.payload.lud16 ? action.payload.lud16 : 'default';
       state.loaded = 0;//时间戳
-      state.created = 0; //时间戳
+      state.created = action.payload.created_at ? action.payload.created_at : 'default';
     },
   },
 });

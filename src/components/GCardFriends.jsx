@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import './GCardUser.scss';
 
 import { useFollowPro } from 'nostr/protocal/FollowPro';
+import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
 function TabPanel(props) {
@@ -58,23 +59,12 @@ function a11yProps(index) {
 
 const GCardFriends = (props) => {
     // console.log('props.profile', props.profile);
-
     const FollowPro = useFollowPro();
-
-    const [localProfile, setLocalProfile] = useState({
-        picture: '',
-        banner: '',
-        name: 'default',
-        display_name: 'default',
-        about: 'default',
-        website: 'default',
-        lud06: '',
-    });
+    const MetadataPro = useMetadataPro();
     const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
-
     const [tabIndex, setTabIndex] = React.useState(0);
-
+    //
     useEffect(() => {
         // localProfile.picture = props.profile.picture;
         // localProfile.banner = props.profile.banner;
@@ -89,48 +79,46 @@ const GCardFriends = (props) => {
         }
     }, [props])
 
-    const fetchFollowing = async () => {
-        let ev = await FollowPro.get(publicKey);
-        // console.log('saveProfile', ev);
-        System.Broadcast(ev, 0, (msg) => {
-            // if (msg[0] === 'OK') {
-            //     // setOpen(true)
-            // }
-            console.log('fetchFollowing msg', msg);
+    const fetchAllMeta = (msgs) => {
+        msgs.map(msg => {
+            console.log('fetchFollowers msgs', msg);
+            if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.tags.length > 0) {
+                let subMeta = MetadataPro.get(publicKey);
+                msg.tags.map((item) => {
+                    if (item.length === 2 && item[0] === 'p') {
+                        subMeta.Authors.push(item[1]);
+                    }
+                });
+                //
+                System.Broadcast(subMeta, 0, (msgs1) => {
+                    console.log('fetchFollowers subMeta', msgs1);
+                });
+                //
+            }
         });
     }
 
-    const fetchFollowers = async () => {
-        let ev = await FollowPro.get(publicKey);
+    const fetchFollowing = () => {
+        let ev = FollowPro.get(publicKey);
         // console.log('saveProfile', ev);
         System.Broadcast(ev, 0, (msgs) => {
+            fetchAllMeta(msgs);
+            console.log('fetchFollowing msg', msgs);
+        });
+    }
+
+    const fetchFollowers = () => {
+        let subFollow = FollowPro.get(publicKey);
+        // console.log('saveProfile', ev);
+        System.Broadcast(subFollow, 0, (msgs) => {
             if (msgs) {
-                msgs.map(msg => {
-                    console.log('fetchFollowers msgs', msg);
-                    if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.tags.length > 0) {
-                        //msg.tags ,get user infomation
-                        // let ev = await FollowPro.get(publicKey);
-                        msg.tags.map((item) => {
-                            if (item.length === 2 && item[0] === 'p') {
-                                //
-                            }
-                        });
-                    }
-                });
+                //
             }
             // if (msg[0] === 'OK') {
             //     // setOpen(true)
             // }
             // console.log('fetchFollowers msg', msg);
         });
-    }
-
-    const updateProfile = async () => {
-        // let ev = await MetaPro.send(keys.pub, localProfile, keys.pri);
-        // console.log('MetadataPro', ev);
-        // System.Broadcast(ev, 0, (msg) => {
-        //     console.log('create profile msg', msg);
-        // });
     }
 
     const switchTab = (event, newValue) => {

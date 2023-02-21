@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from "module/store/features/loginSlice";
 import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
-import useMetadataPro from 'nostr/protocal/MetadataPro';
+import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 //
 import { styled, alpha } from '@mui/material/styles';
@@ -105,15 +105,6 @@ const GFTHead = () => {
 
     const MetaPro = useMetadataPro();
 
-    useEffect(() => {
-        if (loggedOut === false) {
-            //get user msg
-            fetchMeta();
-        }
-        return () => {
-            //
-        }
-    }, [loggedOut]);
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");
     //     const rsp = await fetch(`https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(username)}`);
@@ -126,51 +117,6 @@ const GFTHead = () => {
     //     }
     //     throw new Error("User key not found");
     // }
-
-    // const doLogin = async () => {
-    //     try {
-    //         if (key.startsWith("nsec")) {
-    //             const hexKey = bech32ToHex(key);
-    //             if (secp.utils.isValidPrivateKey(hexKey)) {
-    //                 dispatch(setPrivateKey(hexKey));
-    //             } else {
-    //                 throw new Error("INVALID PRIVATE KEY");
-    //             }
-    //         } else if (key.startsWith("npub")) {
-    //             const hexKey = bech32ToHex(key);
-    //             dispatch(setPublicKey(hexKey));
-    //         } else if (key.match(EmailRegex)) {
-    //             const hexKey = await getNip05PubKey(key);
-    //             dispatch(setPublicKey(hexKey));
-    //         } else {
-    //             if (secp.utils.isValidPrivateKey(key)) {
-    //                 dispatch(setPrivateKey(key));
-    //             } else {
-    //                 throw new Error("INVALID PRIVATE KEY");
-    //             }
-    //         }
-    //     } catch (e) {
-    //         setError(`Failed to load NIP-05 pub key (${e})`);
-    //         console.error(e);
-    //     }
-    // }
-
-    // async function doNip07Login() {
-    //     const pubKey = await window.nostr.getPublicKey();
-    //     dispatch(setPublicKey(pubKey));
-    //     if ("getRelays" in window.nostr) {
-    //       const relays = await window.nostr.getRelays();
-    //       dispatch(
-    //         setRelays({
-    //           relays: {
-    //             ...relays,
-    //             ...Object.fromEntries(DefaultRelays.entries()),
-    //           },
-    //           createdAt: 1,
-    //         })
-    //       );
-    //     }
-    //   }
     const openDialog = () => {
         if (account) {
             dispatch(setIsOpenWallet(true));
@@ -209,14 +155,24 @@ const GFTHead = () => {
             if (msgs) {
                 msgs.map(msg => {
                     if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
-                        console.log('fetchMeta msgs', msg.content);
                         let content = JSON.parse(msg.content);
+                        content.created_at = msg.created_at;
+                        // console.log('fetchMeta msgs', msg.content);
                         dispatch(setProfile(content))
                     }
                 });
             }
         });
     }
+
+    useEffect(() => {
+        if (loggedOut === false) {
+            fetchMeta();
+        }
+        return () => {
+            //
+        }
+    }, [loggedOut]);
 
     const openProfile = () => {
         // fetchMeta();

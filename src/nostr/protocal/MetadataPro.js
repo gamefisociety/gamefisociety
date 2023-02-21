@@ -3,7 +3,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, NostrList } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-const useMetadataPro = () => {
+export const useMetadataPro = () => {
 
   const privKey = useSelector(s => s.login.privateKey);
 
@@ -32,5 +32,3 @@ const useMetadataPro = () => {
     },
   }
 }
-
-export default useMetadataPro;

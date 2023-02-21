@@ -12,7 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 import './GCardUser.scss';
 
-import useMetadataPro from 'nostr/protocal/MetadataPro';
+import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
 const GCardUser = (props) => {
@@ -28,6 +28,7 @@ const GCardUser = (props) => {
         about: 'default',
         website: 'default',
         lud06: '',
+        created: 'default',
     });
     const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const GCardUser = (props) => {
         localProfile.website = props.profile.website;
         localProfile.nip05 = props.profile.nip05;
         localProfile.lud06 = props.profile.lud06;
+        localProfile.created = props.profile.created;
         setLocalProfile({ ...localProfile });
         return () => {
         }
@@ -81,7 +83,7 @@ const GCardUser = (props) => {
             <Typography align='left' variant="h6" component="div">
                 {'Profile Panel'}
             </Typography>
-            <CardActionArea sx={{ my: '12px' }}>
+            <CardActionArea sx={{ mt: '12px' }}>
                 <Avatar
                     sx={{ width: 64, height: 64, position: 'absolute', left: '24px', top: '120px' }}
                     edge="end"
@@ -94,9 +96,12 @@ const GCardUser = (props) => {
                     image={localProfile.banner}
                     alt="green iguana"
                 />
-                <CardContent sx={{ my: '48px' }}>
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        Your Name
+                <CardContent sx={{ mt: '32px' }}>
+                    <Typography variant="body2" component="div" align={'left'}>
+                        {'Update: ' + localProfile.created}
+                    </Typography>
+                    <Typography sx={{ mt: '24px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'Your Name'}
                     </Typography>
                     <TextField
                         value={localProfile.display_name}
@@ -109,8 +114,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        User Name
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'User Name'}
                     </Typography>
                     <TextField
                         value={localProfile.name}
@@ -123,8 +128,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        Profile Picture
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'Profile Picture'}
                     </Typography>
                     <TextField
                         value={localProfile.picture}
@@ -137,8 +142,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        Banner Image
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'Banner Image'}
                     </Typography>
                     <TextField
                         value={localProfile.banner}
@@ -151,8 +156,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        Website
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'Website'}
                     </Typography>
                     <TextField
                         value={localProfile.website}
@@ -165,8 +170,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        Abount Me
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'Abount Me'}
                     </Typography>
                     <TextField
                         value={localProfile.about}
@@ -179,8 +184,8 @@ const GCardUser = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
-                    <Typography gutterBottom variant="button" component="div" align={'left'}>
-                        NIP-05
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'NIP-05'}
                     </Typography>
                     <TextField
                         value={localProfile.nip05}

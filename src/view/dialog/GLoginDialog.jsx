@@ -31,7 +31,7 @@ import * as secp from "@noble/secp256k1";
 
 import logo_blue from "asset/image/logo/logo_blue.png";
 
-import useMetadataPro from 'nostr/protocal/MetadataPro';
+import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
 const GLoginDialog = () => {
