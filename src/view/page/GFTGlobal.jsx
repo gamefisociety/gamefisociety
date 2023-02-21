@@ -1,8 +1,15 @@
-import { React, useEffect, useState, useRef } from 'react';
-import './GFTGlobal.scss';
+import React, { useEffect, useState, useRef } from 'react';
+import Paper from '@mui/material/Paper';
 
+
+
+import List from '@mui/material/List';
+
+import './GFTGlobal.scss';
 import { bech32 } from "bech32";
 import * as secp from "@noble/secp256k1";
+
+// import { FixedSizeList } from 'react-window';
 
 import {
     nip05,
@@ -18,24 +25,26 @@ import {
 } from 'nostr-tools'
 import { setPrivateKey } from 'module/store/features/loginSlice';
 import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png"
+import { useSelector } from 'react-redux';
 
 export const EmailRegex =
     // eslint-disable-next-line no-useless-escape
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
-
-function GFTGlobal() {
+const GFTGlobal = () => {
     const relay = relayInit('wss://relay.damus.io')
     const [data, setData] = useState(new Map());
     const [inforData, setInforData] = useState(new Map());
-    const [pubkey, setPubKey] = useState(null);
-    const [privateKey, setPrivateKey] = useState(null);
+    const { publicKey, privateKey } = useSelector(s => s.login);
+
+    // const [pubkey, setPubKey] = useState(null);
+    // const [privateKey, setPrivateKey] = useState(null);
+
     let onlyPost = false;
     useEffect(() => {
         initConnect();
         return () => {
-           
+
         }
     }, [])
 
@@ -47,15 +56,15 @@ function GFTGlobal() {
         relay.on('error', () => {
             console.log(`failed to connect to ${relay.url}`)
         })
-        login();
+        // login();
         getDataList();
     }
 
     const login = async () => {
-        let sk = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
-        let pk = getPublicKey(sk)
-        setPubKey(pk);
-        setPrivateKey(sk);
+        // let sk = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
+        // let pk = getPublicKey(sk)
+        // setPubKey(pk);
+        // setPrivateKey(sk);
     }
 
     const getDataList = () => {
@@ -71,14 +80,14 @@ function GFTGlobal() {
             setData(new Map(data.set(event.id, event)));
         })
         sub.on('eose', () => {
-            console.log('sub list eose event',data)
+            console.log('sub list eose event', data)
             sub.unsub()
 
             let arrayKey = [];
             for (let key of data.keys()) {
-                inforData.set(data.get(key).pubkey,null);
+                inforData.set(data.get(key).pubkey, null);
             }
-            for(let key of inforData.keys()){
+            for (let key of inforData.keys()) {
                 arrayKey.push(key);
             }
             console.log(arrayKey);
@@ -181,26 +190,22 @@ function GFTGlobal() {
         return new TextDecoder().decode(Uint8Array.from(buf)).to;
     }
 
-
-    // const filterPosts = useCallback(
-    //     (nts) => {
-    //         return [...nts]
-    //             .sort((a, b) => b.created_at - a.created_at)
-    //     },
-    // );
-
     return (
-        <div className='global_bg'>
-            {[...data.keys()].map(k => (
-                <div key={k} className='item_list'>
-                    <div className='info'>
-                        <img className='ic' src={inforData.get(data.get(k).pubkey)?.contentObj.picture != null ? inforData.get(data.get(k).pubkey)?.contentObj.picture : ic_gfs_coin}></img>
-                        <div className='name'>{inforData.get(data.get(k).pubkey)?.contentObj.name} time:{data.get(k).created_at}</div>
+        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+            <List>
+                {[...data.keys()].map(k => (
+                    <div key={k} className='item_list'>
+                        <div className='info'>
+                            <img className='ic' src={inforData.get(data.get(k).pubkey)?.contentObj.picture != null ? inforData.get(data.get(k).pubkey)?.contentObj.picture : ic_gfs_coin}></img>
+                            <div className='name'>{inforData.get(data.get(k).pubkey)?.contentObj.name} time:{data.get(k).created_at}</div>
+                        </div>
+                        <div className='content'>{data.get(k).content}</div>
                     </div>
-                    <div className='content'>{data.get(k).content}</div>
-                </div>
-            ))}
-        </div >
+                ))}
+            </List>
+        </Paper>
+        // <div className='global_bg'>
+        // </div >
     );
 
 }

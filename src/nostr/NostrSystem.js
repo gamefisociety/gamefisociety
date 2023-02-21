@@ -46,19 +46,30 @@ export class NostrSystem {
   }
 
   Broadcast(ev, once, callback) {
-    // console.log('no relay now', this.Clients);
+    console.log('no relay now', this.Clients, ev);
+    if (!ev) {
+      return;
+    }
     for (const [, tmpRelay] of this.Clients) {
       Relay.SendToRelay(tmpRelay, ev, once, callback);
     }
   }
 
   BroadcastSub(ev, once, callback) {
+    console.log('BroadcastSub', ev);
+    if (!ev) {
+      return;
+    }
     for (const [, tmpRelay] of this.Clients) {
       Relay.SendToRelay(tmpRelay, ev, once, callback);
     }
   }
 
   BroadcastEvent(ev, once, callback) {
+    console.log('BroadcastEvent', ev);
+    if (!ev) {
+      return;
+    }
     for (const [, tmpRelay] of this.Clients) {
       Relay.SendToRelay(tmpRelay, ev, once, callback);
     }

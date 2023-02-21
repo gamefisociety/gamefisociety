@@ -183,6 +183,7 @@ const NostrRelay = () => {
   }
 
   const SendToRelay = (client, ev, once, callback) => {
+    console.log('SendToRelay', client, ev);
     let tmpkey = buildKey(client.addr, ev.Id);
     addListen(tmpkey, client, once, callback)
     if (ev.type === "EVENT") {

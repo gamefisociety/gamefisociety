@@ -52,7 +52,7 @@ const GCardUser = (props) => {
 
     const saveProfile = async () => {
         let ev = await MetaPro.send(publicKey, localProfile, privateKey);
-        // console.log('saveProfile', ev);
+        console.log('saveProfile', ev);
         System.Broadcast(ev, 0, (msg) => {
             if (msg[0] === 'OK') {
                 setOpen(true)
