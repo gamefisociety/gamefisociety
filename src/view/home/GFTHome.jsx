@@ -108,7 +108,7 @@ const GFTHome = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             width: '100%',
-                            maxWidth: '1440px',
+                            // maxWidth: '1440px',
                             minHeight: '460px',
                             // backgroundColor: 'red',
                         }}
