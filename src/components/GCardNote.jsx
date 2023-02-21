@@ -53,7 +53,7 @@ const GCardNote = (props) => {
                                 }} variant="body2" align="left">{data.content}</Typography>
                             );
                         } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
-                            && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.jpeg'))) {
+                            && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.gif'))) {
                             console.log('render image', stritem);
                             return (<CardMedia
                                 component="img"

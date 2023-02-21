@@ -93,7 +93,9 @@ const GCardUser = (props) => {
                 <CardMedia
                     component="img"
                     sx={{ height: '140px' }}
-                    image={localProfile.banner}
+                    src="localProfile.banner"
+                    // src="https://i.pinimg.com/originals/6d/fb/c7/6dfbc74564ed8ed039734fa91b2d8f9a.gif"
+                    // image={localProfile.banner}
                     alt="green iguana"
                 />
                 <CardContent sx={{ mt: '32px' }}>
