@@ -7,11 +7,21 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import Snackbar from '@mui/material/Snackbar';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+import ChatIcon from '@mui/icons-material/Chat';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -19,11 +29,14 @@ import PropTypes from 'prop-types';
 
 import './GCardUser.scss';
 
-import { setUsersFlag, setUsers } from 'module/store/features/userSlice';
+import { dbCache } from 'db/DbCache';
 
+import { setUsersFlag, setUsers } from 'module/store/features/userSlice';
 import { useFollowPro } from 'nostr/protocal/FollowPro';
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
+
+const db = dbCache();
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -32,12 +45,11 @@ function TabPanel(props) {
         <div
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={'friend-pannel-' + index}
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box sx={{ padding: '8px' }}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -67,6 +79,7 @@ const GCardFriends = () => {
     const { usersflag, follows } = useSelector(s => s.user);
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = React.useState(0);
+    // const [followings,setFollowings] = React.useState([]);
 
     const fetchAllMeta = (msgs) => {
         msgs.map(msg => {
@@ -145,14 +158,62 @@ const GCardFriends = () => {
         return () => { }
     }, [])
 
+    //
     useEffect(() => {
         // fetchFollowing();
-        console.log('following users', follows);
+        // console.log('following users', db.getMetaDatas(follows));
+        // setFollowings
         return () => { }
     }, [follows])
 
     const renderFollowing = () => {
-        return null;
+        const followsData = db.getMetaDatas(follows);
+        console.log('followsData', followsData);
+        if (followsData.length === 0) {
+            return null;
+        }
+        return (
+            <List> {
+                followsData.map((item, index) => (
+                    <ListItem sx={{ my: '2px', backgroundColor: '#202020' }} key={'following-list-' + index}
+                        secondaryAction={
+                            <IconButton sx={{ mr: '8px' }} edge="end" onClick={() => {
+                                console.log('on chat!');
+                            }}>
+                                <ChatIcon />
+                            </IconButton>
+                        }
+                        disablePadding>
+                        <ListItemButton>
+                            <ListItemAvatar>
+                                <Avatar
+                                    alt={'GameFi Society'}
+                                    src={item.picture ? item.picture : ''}
+                                />
+                            </ListItemAvatar>
+                            <ListItemText primary={item.name} />
+                        </ListItemButton>
+                        {/* <Box sx={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                        }}>
+                            <Avatar
+                                sx={{ width: 32, height: 32, }}
+                                edge="end"
+                                alt="GameFi Society"
+                                src={item.picture ? item.picture : ''}
+                            />
+                            <Typography sx={{ ml: '24px' }} variant="subtitle1" align={'left'} >{item.name}</Typography>
+                            <Box sx={{ flexGrow: 1 }}></Box>
+                        </Box> */}
+                    </ListItem>
+                ))}
+            </List>
+        );
     }
 
     const renderFollowers = () => {

@@ -117,7 +117,10 @@ const GFTHome = () => {
                         </Box>
                     </Grid>
                     <Drawer
-                        PaperProps={{ style: { marginTop: '84px', minWidth: '360px', height: '92%', borderRadius: '12px' } }}
+                        PaperProps={{
+                            style:
+                                { marginTop: '84px', minWidth: '360px', height: '92%', borderRadius: '12px', backgroundColor: '#0F0F0F' }
+                        }}
                         anchor={'right'}
                         open={drawer}
                         hideBackdrop={true}
