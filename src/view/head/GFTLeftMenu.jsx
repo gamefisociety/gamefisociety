@@ -55,6 +55,10 @@ const GFTLeftMenu = () => {
         navigate('/global');
     }
 
+    const testIPFS = () => {
+        navigate('/ipfs');
+    }
+
     return (
         <div className='left_menu_bg'>
             <div className='item' onClick={openCheckIn}>
@@ -91,6 +95,10 @@ const GFTLeftMenu = () => {
             <div className='item' onClick={clickGlobal}>
                 <img className='img' src={ic_create}></img>
                 <span className='txt'>Global</span>
+            </div>
+            <div className='item' onClick={testIPFS}>
+                <img className='img' src={ic_create}></img>
+                <span className='txt'>IPFS</span>
             </div>
         </div>
     );
