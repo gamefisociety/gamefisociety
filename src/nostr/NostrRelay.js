@@ -252,7 +252,7 @@ const NostrRelay = () => {
     if (!client.Settings.read) {
       return;
     }
-    let req = ["REQ", sub.Id, NostrFactory.formateSub(sub)];
+    let req = NostrFactory.buildReq(sub);
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendSub direction', req);
       _SendReal(client, req);

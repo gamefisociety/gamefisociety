@@ -123,6 +123,8 @@ const NostrFactory = {
     if (sub.Limit !== null) {
       ret.limit = sub.Limit;
     }
+    let rets = [];
+    rets.push(ret);
     return ret;
   },
 
@@ -138,6 +140,23 @@ const NostrFactory = {
       content: ev.Content,
       sig: ev.Signature,
     }
+    return ret;
+  },
+  buildReq: (sub) => {
+    //
+    const buildChild = (ret1, subchild) => {
+      if (subchild.childs && subchild.childs.length > 0) {
+        subchild.childs.map((item) => {
+          ret1.push(NostrFactory.formateSub(item));
+          buildChild(ret1, item);
+        });
+      }
+      return ret1;
+    }
+    let ret = ["REQ", sub.Id];
+    let subinfo = NostrFactory.formateSub(sub);
+    ret.push(subinfo);
+    ret = buildChild(ret, sub);
     return ret;
   }
   // NostrFactory.formateSub
