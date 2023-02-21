@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
+
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-
-
+import GCardNote from 'components/GCardNote';
 
 import List from '@mui/material/List';
 
@@ -191,23 +192,17 @@ const GFTGlobal = () => {
     }
 
     return (
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
+        <Paper style={{ height: '100%', width: '100%', maxWidth: '960px', overflow: 'auto' }}>
+            <Grid container></Grid>
             <List>
-                {[...data.keys()].map(k => (
-                    <div key={k} className='item_list'>
-                        <div className='info'>
-                            <img className='ic' src={inforData.get(data.get(k).pubkey)?.contentObj.picture != null ? inforData.get(data.get(k).pubkey)?.contentObj.picture : ic_gfs_coin}></img>
-                            <div className='name'>{inforData.get(data.get(k).pubkey)?.contentObj.name} time:{data.get(k).created_at}</div>
-                        </div>
-                        <div className='content'>{data.get(k).content}</div>
-                    </div>
+                {[...data.keys()].map((k, index) => (
+                    <GCardNote key={'global-note-' + index} pubkey={k} info={inforData.get(data.get(k).pubkey)} data={data.get(k)} />
                 ))}
             </List>
         </Paper>
         // <div className='global_bg'>
         // </div >
     );
-
 }
 
 export default GFTGlobal;
