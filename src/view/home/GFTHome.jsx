@@ -33,6 +33,10 @@ const GFTHome = () => {
     const { drawer } = useSelector(s => s.dialog);
     const { relays } = useSelector((s) => s.profile);
 
+    // let teststr = "PL032HZ2X0██████████████████全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！████████████████████ 下载链接： https://885n.top"
+    // let flag = teststr.startsWith('https');
+    // console.log('fffffffffff', flag);
+
     useEffect(() => {
         if (relays) {
             //connect target relays

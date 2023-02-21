@@ -35,11 +35,58 @@ const GCardNote = (props) => {
 
     const [open, setOpen] = React.useState(false);
 
+    // if (data) {
+    //     console.log('GCardNote', data.content);
+    // }
+
     useEffect(() => {
         //
         return () => {
         }
     }, [props])
+
+    const renderContent = (str) => {
+        const strArray = str.split("\n");
+        // console.log('strArray', strArray);
+        // if(strArray.length === 0) {
+        //     return null;
+        // }
+        // return null;
+        return (
+            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+                {strArray.map((stritem, index) => {
+                    try {
+                        if (stritem === '') {
+                            return (
+                                <Typography sx={{
+                                    // margin: '12px',
+                                    whiteSpace: 'pre-wrap'
+                                }} variant="body2" align="left">{data.content}</Typography>
+                            );
+                        } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
+                            && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.jpeg'))) {
+                            console.log('render image', stritem);
+                            return (<CardMedia
+                                component="img"
+                                key={'cxt-' + index + '-' + stritem}
+                                sx={{ height: '240px', objectFit: 'contain' }}
+                                src={stritem}></CardMedia>);
+                        } else {
+                            return (
+                                <Typography sx={{
+                                    // margin: '12px',
+                                    whiteSpace: 'pre-wrap'
+                                }} variant="body2" align="left">{stritem}</Typography>
+                            );
+                        }
+                    } catch (error) {
+                        // console.log('strArray error', error, stritem);
+                        return null;
+                    }
+                })}
+            </Box>
+        );
+    }
     // const renderSke = () => {
     //     return (
     //         <React.Fragment>
@@ -67,9 +114,11 @@ const GCardNote = (props) => {
                     {data ? data.created_at : 'default'}
                 </Typography>
             </CardActionArea>
-            {data && <Typography sx={{
-                margin: '12px'
-            }} variant="body2" align="left" >{data.content}</Typography>}
+            {data && renderContent(data.content)}
+            {/* {data && <Typography sx={{
+                margin: '12px',
+                whiteSpace: 'pre-wrap'
+            }} variant="body2" align="left">{data.content}</Typography>} */}
             <CardActions sx={{ mx: '6px' }}>
                 <IconButton sx={{}} size="small" onClick={() => {
                     // setLoginState(0);
