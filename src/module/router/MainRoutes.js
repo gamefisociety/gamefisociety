@@ -11,7 +11,7 @@ const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
 const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
-
+const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 // // render - dashboard
 // const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 // //任务服务
@@ -69,6 +69,10 @@ const MainRoutes = {
             path: '/profile',
             element: <GProfile />,
         },
+        {
+            path:'/ipfs',
+            element: <GTestIPFS/>,
+        }
     ]
 };
 

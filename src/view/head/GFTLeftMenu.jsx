@@ -83,6 +83,10 @@ const mapData = [
     {
         txt: 'FOLLOW',
         img: ic_create
+    },
+    {
+        txt: 'IPFS',
+        img: ic_create
     }
 ];
 
@@ -121,6 +125,8 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'POLYGON') {
             navigate('/hall');
+        } else if (item.txt === 'IPFS') {
+            navigate('/ipfs');
         }
     }
 

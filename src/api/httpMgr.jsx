@@ -27,8 +27,8 @@ function requset(config) {
       config.url,
       config.params,
       config.data,
-      config.header,
-      config.addheader
+      config.headers,
+      config.addheaders
     );
   });
 }
@@ -40,19 +40,19 @@ function _apiAxios(
   url = "",
   params = {},
   data = {},
-  header = {},
-  addheader = {}
+  headers = {},
+  addheaders = {}
 ) {
   let defaultHeaders = {
     "Content-Type": "application/json",
     Accept: "application/json",
   };
-  if (JSON.stringify(header) !== JSON.stringify({})){
-    defaultHeaders = header;
+  if (JSON.stringify(headers) !== JSON.stringify({})){
+    defaultHeaders = headers;
   }
-  if (JSON.stringify(addheader) !== JSON.stringify({})){
-    for (var key in addheader){
-        defaultHeaders[key] = addheader[key];
+  if (JSON.stringify(addheaders) !== JSON.stringify({})){
+    for (var key in addheaders){
+        defaultHeaders[key] = addheaders[key];
     }
   }
 
@@ -61,7 +61,7 @@ function _apiAxios(
     url: url,
     params: params,
     data: data,
-    headers: defaultHeaders,
+    headers: headers,
     withCredentials: false,
   })
     .then(
