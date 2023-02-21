@@ -17,7 +17,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import Snackbar from '@mui/material/Snackbar';
 
 import './GCardUser.scss';
 
@@ -33,12 +32,6 @@ const GCardNote = (props) => {
     const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
 
-    const [open, setOpen] = React.useState(false);
-
-    // if (data) {
-    //     console.log('GCardNote', data.content);
-    // }
-
     useEffect(() => {
         //
         return () => {
@@ -47,19 +40,15 @@ const GCardNote = (props) => {
 
     const renderContent = (str) => {
         const strArray = str.split("\n");
-        // console.log('strArray', strArray);
-        // if(strArray.length === 0) {
-        //     return null;
-        // }
-        // return null;
         return (
-            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
                 {strArray.map((stritem, index) => {
                     try {
                         if (stritem === '') {
                             return (
                                 <Typography sx={{
-                                    // margin: '12px',
+                                    margin: '12px',
+                                    wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap'
                                 }} variant="body2" align="left">{data.content}</Typography>
                             );
@@ -71,10 +60,15 @@ const GCardNote = (props) => {
                                 key={'cxt-' + index + '-' + stritem}
                                 sx={{ height: '240px', objectFit: 'contain' }}
                                 src={stritem}></CardMedia>);
+                        } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
+                            && (stritem.endsWith('.mp4'))) {
+                            console.log('render video', stritem)
+                            return null;
                         } else {
                             return (
                                 <Typography sx={{
-                                    // margin: '12px',
+                                    margin: '12px',
+                                    wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap'
                                 }} variant="body2" align="left">{stritem}</Typography>
                             );
@@ -142,15 +136,6 @@ const GCardNote = (props) => {
                     <IosShareIcon />
                 </IconButton>
             </CardActions>
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={open}
-                onClose={() => {
-                    setOpen(false);
-                }}
-                message="SUCESS"
-                autoHideDuration={2000}
-            />
         </Card>
     );
 
