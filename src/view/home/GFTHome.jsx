@@ -11,7 +11,8 @@ import Grid from '@mui/material/Grid';
 import GFTHead01 from 'view/head/GFTHead01'
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
 import GFTFooter from 'view/footer/GFTFooter';
-import { Paper } from '../../../node_modules/@mui/material/index';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
 const GFTHome = () => {
 
@@ -41,20 +42,35 @@ const GFTHome = () => {
         dispatch(initRelays())
     }, []);
     return (
-        <Grid sx={{ flexGrow: 1 }} container>
-            <Grid item xs={12}>
-                <GFTHead01 />
+        <Box sx={{ flexGrow: 1, backgroundColor: '#0F0F0F' }}>
+            <Grid sx={{ flexGrow: 1 }} container>
+                <Grid item xs={12}>
+                    <GFTHead01 />
+                </Grid>
+                <Grid item xs={2}>
+                    <GFTLeftMenu />
+                </Grid>
+                <Grid item xs={10}>
+                    <Box sx={{
+                        // flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        maxWidth: '1440px',
+                        minHeight: '460px',
+                        // backgroundColor: 'red',
+                    }}
+                    >
+                        <Outlet />
+                    </Box>
+                </Grid>
+                <Grid item xs={12}>
+                    <GFTFooter />
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <Paper sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center' }}>
-                    <GFTLeftMenu></GFTLeftMenu>
-                    <Outlet />
-                </Paper>
-            </Grid>
-            <Grid item xs={12}>
-                <GFTFooter />
-            </Grid>
-        </Grid>
+        </Box >
     );
 }
 

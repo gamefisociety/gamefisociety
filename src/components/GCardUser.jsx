@@ -77,7 +77,7 @@ const GCardUser = (props) => {
     // }
 
     return (
-        <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px' }}>
+        <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px', width: '100%', maxWidth: '960px' }}>
             <Typography align='left' variant="h6" component="div">
                 {'Profile Panel'}
             </Typography>
