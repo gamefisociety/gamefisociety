@@ -76,8 +76,9 @@ function GFTChat() {
     const [inValue, setInValue] = useState("");
     let onlyPost = false;
     useEffect(() => {
+        initConnect();
         return () => {
-            initConnect();
+           
         }
     }, [])
 
@@ -94,7 +95,7 @@ function GFTChat() {
     }
 
     const login = async () => {
-        privateKey = await doLogin("nsec16pvqz6fr89u8u6grvvwtwhs2sfseswhecwfkuu0glykmevx6du9sthk3je");
+        privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
         pubKey = getPublicKey(privateKey);
         getDataList(pubKey, chatAddress);
         // getDataList(chatAddress,pubKey);
@@ -234,7 +235,6 @@ function GFTChat() {
     }
 
     const sendEvent = (event) => {
-
         event.id = getEventHash(event)
         event.sig = signEvent(event, privateKey)
         console.log(privateKey, 'privateKey');
@@ -250,7 +250,6 @@ function GFTChat() {
         // privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
         // pubKey = getPublicKey(privateKey);
         let ciphertext = await nip04.encrypt(privateKey, chatAddress, inValue);
-        console.log(ciphertext, "aaaaa");
 
         let event = {
             kind: 4,
