@@ -119,23 +119,25 @@ const GFTHome = () => {
                     <Drawer
                         PaperProps={{
                             style:
-                                { marginTop: '84px', minWidth: '360px', height: '92%', borderRadius: '12px', backgroundColor: '#0F0F0F' }
+                                { marginTop: '84px', minWidth: '320px', height: '92%', borderRadius: '12px', backgroundColor: '#0F0F0F' }
                         }}
+                        variant="persistent"
                         anchor={'right'}
                         open={drawer}
                         hideBackdrop={true}
                     >
-                        <Box>
-                            <IconButton sx={{ marginLeft: '12px' }} onClick={() => {
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#202020' }}>
+                            <IconButton sx={{}} onClick={() => {
                                 dispatch(setDrawer(false))
                             }}>
                                 <CloseIcon />
                             </IconButton>
-                            <GCardFriends />
                         </Box>
+                        <Divider />
+                        <GCardFriends />
+
                     </Drawer>
                 </Grid>
-
                 <Grid item xs={12}>
                     <GFTFooter />
                 </Grid>
