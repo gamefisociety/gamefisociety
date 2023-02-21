@@ -1,6 +1,7 @@
 import NostrRelay from "nostr/NostrRelay";
-import { unwrap } from "nostr/Util";
 import NostrFactory from "nostr/NostrFactory";
+import { unwrap } from "nostr/Util";
+import { DefaultRelays } from 'nostr/Const';
 
 let Relay = NostrRelay();
 
@@ -10,13 +11,19 @@ export class NostrSystem {
     this.Clients = new Map();
   }
 
+  initRelays() {
+    for (const [addr, cfg] of DefaultRelays) {
+      this.ConnectRelay(addr, cfg.read, cfg.write);
+    }
+  }
+
   ConnectRelay(address, read, write) {
     try {
       if (!this.Clients.has(address)) {
         const client = NostrFactory.createRelay(address, read, write);
         this.Clients.set(address, client);
         Relay.Connect(client).then(ret => {
-          // console.log('nostr client connect', ret);
+          //check cache msg and send
         });
 
       } else {
@@ -39,6 +46,7 @@ export class NostrSystem {
   }
 
   Broadcast(ev, once, callback) {
+    // console.log('no relay now', this.Clients);
     for (const [, tmpRelay] of this.Clients) {
       Relay.SendToRelay(tmpRelay, ev, once, callback);
     }

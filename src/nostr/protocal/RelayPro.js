@@ -10,7 +10,7 @@ export const useRelayPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: async (pubkey) => {
+    get: (pubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
         sub.Id = `relays:${sub.Id.slice(0, 8)}`;

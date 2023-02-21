@@ -13,6 +13,9 @@ import GFTFooter from 'view/footer/GFTFooter';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
+import GCardFriends from 'components/GCardFriends';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -28,7 +31,6 @@ const GFTHome = () => {
 
     const dispatch = useDispatch();
     const { drawer } = useSelector(s => s.dialog);
-
     const { relays } = useSelector((s) => s.profile);
 
     useEffect(() => {
@@ -94,40 +96,47 @@ const GFTHome = () => {
                 <Grid item xs={12}>
                     <GFTHead />
                 </Grid>
-                <Grid item xs={2}>
-                    <GFTLeftMenu />
-                </Grid>
-                <Grid item xs={10}>
-                    <Box sx={{
-                        // flexGrow: 1,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        maxWidth: '1440px',
-                        minHeight: '460px',
-                        // backgroundColor: 'red',
-                    }}
+                <Grid sx={{ flexGrow: 1 }} container>
+                    <Grid item xs={2}>
+                        <GFTLeftMenu />
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Box sx={{
+                            // flexGrow: 1,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            maxWidth: '1440px',
+                            minHeight: '460px',
+                            // backgroundColor: 'red',
+                        }}
+                        >
+                            <Outlet />
+                        </Box>
+                    </Grid>
+                    <Drawer
+                        PaperProps={{ style: { marginTop: '84px', minWidth: '360px', height: '92%', borderRadius: '12px' } }}
+                        anchor={'right'}
+                        open={drawer}
+                        hideBackdrop={true}
                     >
-                        <Outlet />
-                    </Box>
+                        <Box>
+                            <IconButton sx={{ marginLeft: '12px' }} onClick={() => {
+                                dispatch(setDrawer(false))
+                            }}>
+                                <CloseIcon />
+                            </IconButton>
+                            <GCardFriends />
+                        </Box>
+                    </Drawer>
                 </Grid>
+
                 <Grid item xs={12}>
                     <GFTFooter />
                 </Grid>
             </Grid>
-            <Drawer
-                anchor={'right'}
-                open={drawer}
-                onClose={() => {
-                    console.log('Drawer onclose');
-                    dispatch(setDrawer(false))
-                    //toggleDrawer(anchor, false)
-                }}
-            >
-                {list('right')}
-            </Drawer>
         </Box >
     );
 }

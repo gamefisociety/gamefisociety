@@ -1,0 +1,113 @@
+.dialog_connect_bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(24, 24, 24, 0.96);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+
+    .layout {
+        width: 400px;
+        height: 364px;
+        background: #0F0F0F;
+        border-radius: 10px;
+        padding-top: 18px;
+        padding-left: 24px;
+        padding-right: 24px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            width: 100%;
+            font-size: 24px;
+            font-family: Saira;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 38px;
+            text-align: left;
+        }
+
+        .item {
+            margin-top: 13px;
+            width: 100%;
+            height: 48px;
+            background: #191A1B;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor:pointer;
+
+            &:hover {
+                background: #222528;
+            }
+
+            .name {
+                flex: 1;
+                margin-left: 15px;
+                font-size: 16px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #909090;
+                line-height: 25px;
+                text-align: left;
+            }
+
+            .ic_metamask {
+                width: 32px;
+                height: 32px;
+                background-size: 100% 100%;
+                background-image: url(../../asset/image/logo/ic_metamask.png);
+            }
+
+            .ic_walletconnect {
+                width: 32px;
+                height: 32px;
+                background-size: 100% 100%;
+                background-image: url(../../asset/image/logo/ic_wallet_connect.png);
+            }
+
+            .ic_coinbase {
+                width: 32px;
+                height: 32px;
+                background-size: 100% 100%;
+                background-image: url(../../asset/image/logo/ic_coinbase_wallet.png);
+            }
+
+            .ic_menu_right {
+                margin-left: 8px;
+                margin-right: 8px;
+                width: 32px;
+                height: 32px;
+                background-size: 100% 100%;
+                background-image: url(../../asset/image/logo/ic_menu_right.png);
+            }
+        }
+
+        .privacy {
+            margin-top: 34px;
+            width: 100%;
+            font-size: 12px;
+            font-family: SairaRoman-Medium, SairaRoman;
+            font-weight: 500;
+            color: #909090;
+            line-height: 19px;
+            text-align: left;
+        }
+        .privacy_link{
+            font-size: 12px;
+            cursor: pointer;
+            font-family: SairaRoman-Medium, SairaRoman;
+            font-weight: 500;
+            color: #006CF9;
+            line-height: 19px;
+            text-align: left;
+        }
+    }
+}

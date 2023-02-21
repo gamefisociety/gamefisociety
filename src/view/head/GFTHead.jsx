@@ -202,14 +202,14 @@ const GFTHead = () => {
         handleMobileMenuClose();
     };
 
-    const fetchMeta = async () => {
-        let sub = await MetaPro.get(publicKey);
-        // console.log('MetadataSub', sub);
+    const fetchMeta = () => {
+        let sub = MetaPro.get(publicKey);
+        console.log('MetadataSub', sub);
         System.Broadcast(sub, 0, (msgs) => {
             if (msgs) {
                 msgs.map(msg => {
                     if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
-                        // console.log('fetchMeta msgs', msg.content);
+                        console.log('fetchMeta msgs', msg.content);
                         let content = JSON.parse(msg.content);
                         dispatch(setProfile(content))
                     }

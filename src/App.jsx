@@ -15,6 +15,10 @@ import GFTMintAvatarDialog from "view/dialog/GFTMintAvatarDialog";
 import GLoginDialog from "view/dialog/GLoginDialog";
 
 import './App.css';
+
+import { System } from 'nostr/NostrSystem';
+
+//
 function getLibrary(provider, connector) {
   const web3 = new Web3(provider);
   return web3 // this will vary according to whether you use e.g. ethers or web3.js
@@ -24,7 +28,12 @@ const theme1 = gfstheme();
 
 const theme = createTheme(theme1);
 
+console.log('gfs init!');
+
+System.initRelays();
+
 function App() {
+
   const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
 
   return (

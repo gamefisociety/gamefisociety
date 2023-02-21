@@ -10,7 +10,7 @@ const useMetadataPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: async (pubkey) => {
+    get: (pubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
         sub.Id = `profiles:${sub.Id.slice(0, 8)}`;

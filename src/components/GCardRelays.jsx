@@ -23,9 +23,9 @@ function GCardRelays() {
     const dispatch = useDispatch();
     const relayPro = useRelayPro();
 
-    const fetchRelays = async () => {
+    const fetchRelays = () => {
         //
-        let sub = await relayPro.get(publicKey);
+        let sub = relayPro.get(publicKey);
         // console.log('fetchRelays', Object.entries(relays), sub);
         System.Broadcast(sub, 0, (msgs) => {
             if (msgs) {

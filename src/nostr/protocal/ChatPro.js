@@ -10,7 +10,7 @@ export const useChatPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: async (pubkey, targetpubkey) => {
+    get: (pubkey, targetpubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
         sub.Id = `chat:${sub.Id.slice(0, 8)}`;

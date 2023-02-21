@@ -10,7 +10,7 @@ export const useFollowPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: async (pubkey) => {
+    get: (pubkey) => {
       if (pubkey) {
         const sub = NostrFactory.createSub();
         sub.Id = `follow:${sub.Id.slice(0, 8)}`;
