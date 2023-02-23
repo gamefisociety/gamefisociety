@@ -12,6 +12,7 @@ export class NostrSystem {
   }
 
   initRelays() {
+    //init default relays
     for (const [addr, cfg] of DefaultRelays) {
       this.ConnectRelay(addr, cfg.read, cfg.write);
     }

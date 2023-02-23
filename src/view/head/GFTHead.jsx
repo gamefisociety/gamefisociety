@@ -356,6 +356,7 @@ const GFTHead = () => {
                                 size="large"
                                 aria-label="relay icon"
                                 color="inherit"
+                                onClick={openRelays}
                             >
                                 <PublicIcon />
                             </IconButton>
