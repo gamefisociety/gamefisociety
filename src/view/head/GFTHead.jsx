@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
+import { Divider } from '@mui/material/index';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -49,7 +50,6 @@ import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_massage from "../../asset/image/home/ic_massage.png"
 import ic_wallet from "../../asset/image/home/ic_wallet.png"
 import ic_man from "../../asset/image/home/ic_man.png"
-import { Divider } from '../../../node_modules/@mui/material/index';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -181,7 +181,20 @@ const GFTHead = () => {
     };
 
     const openSociety = () => {
-        dispatch(setDrawer(true));
+        dispatch(setDrawer({
+            isDrawer: true,
+            placeDrawer: 'right',
+            cardDrawer: 'follow'
+        }));
+        handleMenuClose();
+    }
+
+    const openRelays = () => {
+        dispatch(setDrawer({
+            isDrawer: true,
+            placeDrawer: 'top',
+            cardDrawer: 'relays'
+        }));
         handleMenuClose();
     }
 
@@ -362,9 +375,7 @@ const GFTHead = () => {
                                     size="large"
                                     aria-label="relay icon"
                                     color="inherit"
-                                    onClick={() => {
-                                        navigate('/relays');
-                                    }}
+                                    onClick={openRelays}
                                 >
                                     <PublicIcon />
                                 </IconButton>

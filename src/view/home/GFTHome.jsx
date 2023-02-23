@@ -5,7 +5,6 @@ import './GFTHome.scss';
 import { System } from 'nostr/NostrSystem';
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
-import { SearchRelays } from "nostr/Const";
 import Grid from '@mui/material/Grid';
 import GFTHead from 'view/head/GFTHead'
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
@@ -14,8 +13,10 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import GCardFriends from 'components/GCardFriends';
+import GCardRelays from 'components/GCardRelays';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { SearchRelays } from "nostr/Const";
 
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -29,8 +30,11 @@ import { setDrawer } from 'module/store/features/dialogSlice';
 
 const GFTHome = () => {
 
+    // state.isDrawer = action.payload.isDrawer;
+    // state.placeDrawer = action.payload.placeDrawer;
+    // state.cardDrawer = action.payload.cardDrawer;
     const dispatch = useDispatch();
-    const { drawer } = useSelector(s => s.dialog);
+    const { isDrawer, placeDrawer, cardDrawer } = useSelector(s => s.dialog);
     const { relays } = useSelector((s) => s.profile);
 
     // let teststr = "PL032HZ2X0██████████████████全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！████████████████████ 下载链接： https://885n.top"
@@ -124,31 +128,35 @@ const GFTHome = () => {
                         PaperProps={{
                             style:
                             {
-                                // marginTop: '84px',
-                                // minWidth:'320px',
-                                // height: '92%',
                                 borderRadius: '12px',
                                 backgroundColor: '#0F0F0F'
                             }
                         }}
                         // variant="persistent"
-                        anchor={'right'}
-                        open={drawer}
+                        anchor={placeDrawer}
+                        open={isDrawer}
                         onClose={() => {
-                            dispatch(setDrawer(false))
+                            dispatch(setDrawer({
+                                isDrawer: false,
+                                placeDrawer: 'right',
+                                cardDrawer: 'default'
+                            }))
                         }}
-                    // hideBackdrop={true}
                     >
-                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#202020' }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#202020' }}>
                             <IconButton sx={{}} onClick={() => {
-                                dispatch(setDrawer(false))
+                                dispatch(setDrawer({
+                                    isDrawer: false,
+                                    placeDrawer: 'right',
+                                    cardDrawer: 'default'
+                                }))
                             }}>
                                 <CloseIcon />
                             </IconButton>
                         </Box>
-                        <Divider />
-                        <GCardFriends />
-
+                        <Divider /> */}
+                        {cardDrawer === 'follow' && <GCardFriends />}
+                        {cardDrawer === 'relays' && <GCardRelays />}
                     </Drawer>
                 </Grid>
                 <Grid item xs={12}>

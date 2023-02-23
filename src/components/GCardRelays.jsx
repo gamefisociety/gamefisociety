@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,6 +11,7 @@ import { useRelayPro } from 'nostr/protocal/RelayPro';
 import { System } from 'nostr/NostrSystem';
 import { EventKind } from "nostr/def";
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
 import { DefaultRelays } from "nostr/Const";
@@ -65,30 +67,33 @@ function GCardRelays() {
         return Object.entries(relays).map((item, index) => {
             return (
                 <Grid item key={'relaycard-index-' + index}>
-                    <CardActionArea>
-                        <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#2F2F2F', borderRadius: '24px' }}>
-                            <Typography sx={{ minWidth: '' }} variant="body2" color="text.secondary">
-                                {item[0]}
-                            </Typography>
-                            <Chip sx={{ marginLeft: '12px' }} label="read" color={item[1].read ? "success" : "error"} size="small" />
-                            <Chip sx={{ marginLeft: '12px' }} label="write" color={item[1].write ? "success" : "error"} size="small" />
-                            <IconButton sx={{ marginLeft: '12px' }} onClick={() => {
-                                deleteRelays(item[0]);
-                            }}>
-                                <DisabledByDefaultIcon />
-                            </IconButton>
-                        </CardContent>
-                    </CardActionArea>
+                    <Box sx={{
+                        height: '32px',
+                        px: '12px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: '#2F2F2F',
+                        borderRadius: '12px'
+                    }}>
+                        <Typography variant="body2" color="text.secondary">
+                            {item[0]}
+                        </Typography>
+                        <Chip sx={{ ml: '6px', width: '12px', height: '12px' }} color={item[1].read ? "success" : "error"} />
+                        <Chip sx={{ ml: '6px', width: '12px', height: '12px' }} color={item[1].write ? "success" : "error"} />
+                        <IconButton sx={{ ml: '6px', width: '12px', height: '12px' }} onClick={() => {
+                            deleteRelays(item[0]);
+                        }}>
+                            <RemoveCircleOutlineIcon sx={{ width: '12px', height: '12px' }} />
+                        </IconButton>
+                    </Box>
                 </Grid>
             )
         })
     }
 
     return (
-        <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px', maxWidth: '960px' }}>
-            <Typography align='left' variant="h6" component="div">
-                {'Relay Panel'}
-            </Typography>
+        <Card sx={{ backgroundColor: '#1F1F1F', padding: '6px' }}>
             <Grid container spacing={2} sx={{ my: '12px' }}>
                 {renderRelays()}
             </Grid>
