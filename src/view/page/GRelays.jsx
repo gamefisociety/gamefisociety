@@ -3,12 +3,11 @@ import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 
-import GCardUser from 'components/GCardUser';
-import './GProfile.scss';
+import GCardRelays from 'components/GCardRelays';
+import './GRelays.scss';
 
-function GProfile() {
-    console.log('GProfile enter');
-    const profile = useSelector(s => s.profile);
+function GRelays() {
+    console.log('GRelays enter');
     useEffect(() => {
         return () => {
             //
@@ -25,11 +24,10 @@ function GProfile() {
             justifyContent: 'center',
             my: '24px'
         }}>
-            <GCardUser profile={{ ...profile }} />
-            <Box sx={{ height: '12px' }}></Box>
+            <GCardRelays />
         </Box>
     );
 
 }
 
-export default GProfile;
+export default GRelays;
