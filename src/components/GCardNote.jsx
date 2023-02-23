@@ -25,7 +25,7 @@ import { System } from 'nostr/NostrSystem';
 
 const GCardNote = (props) => {
     // console.log('props.profile', props.profile);
-    const { pubkey, info, data } = props;
+    const { pubkey, info, content, time } = props;
 
     const MetaPro = useMetadataPro();
 
@@ -50,7 +50,7 @@ const GCardNote = (props) => {
                                     margin: '12px',
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap'
-                                }} variant="body2" align="left">{data.content}</Typography>
+                                }} variant="body2" align="left">{content}</Typography>
                             );
                         } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
                             && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.gif'))) {
@@ -97,7 +97,7 @@ const GCardNote = (props) => {
                     sx={{ width: 26, height: 26 }}
                     edge="end"
                     alt="GameFi Society"
-                    src={info ? info.contentObj.picture : ''}
+                    src={info ? info.picture : ''}
                 />
                 <Typography sx={{ ml: '8px', width: '120px', whiteSpace: 'nowrap', overflow: 'hidden' }}
                     noWrap={true}
@@ -105,10 +105,10 @@ const GCardNote = (props) => {
                     {pubkey ? pubkey : 'default'}
                 </Typography>
                 <Typography sx={{ ml: '8px' }} variant="body2">
-                    {data ? data.created_at : 'default'}
+                    {time}
                 </Typography>
             </CardActionArea>
-            {data && renderContent(data.content)}
+            {content && renderContent(content)}
             {/* {data && <Typography sx={{
                 margin: '12px',
                 whiteSpace: 'pre-wrap'

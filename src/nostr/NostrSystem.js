@@ -53,14 +53,24 @@ export class NostrSystem {
     }
   }
 
-  Broadcast(ev, once, callback) {
+  Broadcast(ev, once, callback, relays) {
     console.log('no relay now', this.Clients, ev);
     if (!ev) {
       return;
     }
-    for (const [, tmpRelay] of this.Clients) {
-      Relay.SendToRelay(tmpRelay, ev, once, callback);
+    if (relays && relays.length !== 0) {
+      for (const [addr, tmpRelay] of this.Clients) {
+        if (relays.includes(addr)) {
+          Relay.SendToRelay(tmpRelay, ev, once, callback);
+        }
+      }
+    } else {
+      for (const [addr, tmpRelay] of this.Clients) {
+        // relays.relays();
+        Relay.SendToRelay(tmpRelay, ev, once, callback);
+      }
     }
+
   }
 
   BroadcastSub(ev, once, callback) {

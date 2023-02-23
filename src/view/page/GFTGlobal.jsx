@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -6,202 +6,83 @@ import GCardNote from 'components/GCardNote';
 
 import List from '@mui/material/List';
 
+import { useTextNotePro } from 'nostr/protocal/TextNotePro';
+import { useMetadataPro } from 'nostr/protocal/MetadataPro';
+import { System } from 'nostr/NostrSystem';
+
 import './GFTGlobal.scss';
-import { bech32 } from "bech32";
-import * as secp from "@noble/secp256k1";
-
-// import { FixedSizeList } from 'react-window';
-
-import {
-    nip05,
-    SimplePool,
-    relayInit,
-    generatePrivateKey,
-    getPublicKey,
-    getEventHash,
-    signEvent,
-    validateEvent,
-    verifySignature,
-
-} from 'nostr-tools'
-import { setPrivateKey } from 'module/store/features/loginSlice';
-import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png"
-import { useSelector } from 'react-redux';
 
 export const EmailRegex =
     // eslint-disable-next-line no-useless-escape
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const GFTGlobal = () => {
-    const relay = relayInit('wss://relay.damus.io')
-    const [data, setData] = useState(new Map());
+    const [curRelays, setCurRelays] = useState([]);
+    const [data, setData] = useState([]);
     const [inforData, setInforData] = useState(new Map());
-    const { publicKey, privateKey } = useSelector(s => s.login);
 
-    // const [pubkey, setPubKey] = useState(null);
-    // const [privateKey, setPrivateKey] = useState(null);
+    const textNotePro = useTextNotePro();
+    const metadataPro = useMetadataPro();
 
-    let onlyPost = false;
     useEffect(() => {
-        initConnect();
-        return () => {
-
-        }
+        getDataList();
+        return () => { }
     }, [])
 
-    const initConnect = async () => {
-        await relay.connect()
-        relay.on('connect', () => {
-            console.log(`connected to ${relay.url}`)
-        })
-        relay.on('error', () => {
-            console.log(`failed to connect to ${relay.url}`)
-        })
-        // login();
-        getDataList();
-    }
-
-    const login = async () => {
-        // let sk = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
-        // let pk = getPublicKey(sk)
-        // setPubKey(pk);
-        // setPrivateKey(sk);
-    }
-
     const getDataList = () => {
-        let sub = relay.sub([
-            {
-                kinds: [1],
-                until: Date.now(),
-                limit: 100
-            }
-        ])
-        sub.on('event', event => {
-            console.log('getDataList', event)
-            setData(new Map(data.set(event.id, event)));
-        })
-        sub.on('eose', () => {
-            console.log('sub list eose event', data)
-            sub.unsub()
 
-            let arrayKey = [];
-            for (let key of data.keys()) {
-                inforData.set(data.get(key).pubkey, null);
-            }
-            for (let key of inforData.keys()) {
-                arrayKey.push(key);
-            }
-            console.log(arrayKey);
-            setInforData(new Map(inforData));
-            getInfor(arrayKey);
-        })
-
-        sub.off('event', () => {
-            console.log('off event')
-        })
-
-        sub.off('eose', () => {
-            console.log('off eose event')
-        })
+        const textNote = textNotePro.get();
+        textNote.until = Date.now();
+        textNote.limit = 50;
+        //
+        curRelays.push('wss://nos.lol');
+        //
+        System.Broadcast(textNote, 0, (msgs, client) => {
+            // console.log('textNote msgs', msgs);
+            setData(msgs.concat());
+            //
+            const pubkeys = [];
+            msgs.map((item) => {
+                pubkeys.push(item.pubkey);
+            });
+            const pubkyes_filter = new Set(pubkeys);
+            getInfor(pubkyes_filter, curRelays);
+        }, curRelays);
     }
 
-    const getInfor = (pkey) => {
-        let sub = relay.sub([
-            {
-                kinds: [0],
-                authors: pkey
-            }
-        ])
-        sub.on('event', event => {
-            event.contentObj = JSON.parse(event.content);
-            setInforData(new Map(inforData.set(event.pubkey, event)));
-            // sub.unsub()
-        })
-        sub.on('eose', () => {
-            console.log('eose event')
-            sub.unsub()
-        })
-
-        sub.off('event', () => {
-            console.log('off event')
-        })
-
-        sub.off('eose', () => {
-            console.log('off eose event')
-        })
-    }
-
-    //login
-    async function getNip05PubKey(addr) {
-        const [username, domain] = addr.split("@");
-        const rsp = await fetch(`https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(username)}`);
-        if (rsp.ok) {
-            const data = await rsp.json();
-            const pKey = data.names[username];
-            if (pKey) {
-                return pKey;
-            }
-        }
-        throw new Error("User key not found");
-    }
-
-    async function doLogin(key) {
-        try {
-            if (key.startsWith("nsec")) {
-                const hexKey = bech32ToHex(key);
-                console.log(hexKey);
-                return hexKey;
-                // if (secp.utils.isValidPrivateKey(hexKey)) {
-                //     console.log("ccccc");
-                //     return hexKey;
-                // } else {
-                //   throw new Error("INVALID PRIVATE KEY");
-                // }
-            } else if (key.startsWith("npub")) {
-                const hexKey = bech32ToHex(key);
-                return hexKey;
-            } else if (key.match(EmailRegex)) {
-                const hexKey = await getNip05PubKey(key);
-                if (secp.utils.isValidPrivateKey(hexKey)) {
-                    return hexKey;
-                } else {
-                    throw new Error("INVALID PRIVATE KEY");
+    const getInfor = (pkeys, relays) => {
+        const metadata = metadataPro.get(Array.from(pkeys));
+        metadata.Authors = Array.from(pkeys);
+        //
+        const newInfo = new Map();
+        System.Broadcast(metadata, 0, (msgs, client) => {
+            msgs.map((item) => {
+                //
+                let info = {};
+                if (item.content !== '') {
+                    info = JSON.parse(item.content);
                 }
-            } else {
-                if (secp.utils.isValidPrivateKey(key)) {
-                    return key;
-                } else {
-                    throw new Error("INVALID PRIVATE KEY");
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    function bech32ToHex(str) {
-        const nKey = bech32.decode(str);
-        const buff = bech32.fromWords(nKey.words);
-        return secp.utils.bytesToHex(Uint8Array.from(buff));
-    }
-
-    function bech32ToText(str) {
-        const decoded = bech32.decode(str, 1000);
-        const buf = bech32.fromWords(decoded.words);
-        return new TextDecoder().decode(Uint8Array.from(buf)).to;
+                newInfo.set(item.pubkey, info);
+            });
+            setInforData(newInfo);
+        }, relays);
     }
 
     return (
         <Paper style={{ height: '100%', width: '100%', maxWidth: '960px', overflow: 'auto' }}>
             <Grid container></Grid>
             <List>
-                {[...data.keys()].map((k, index) => (
-                    <GCardNote key={'global-note-' + index} pubkey={k} info={inforData.get(data.get(k).pubkey)} data={data.get(k)} />
-                ))}
+                {data.map((item, index) => {
+                    const info = inforData.get(item.pubkey);
+                    return (
+                        <GCardNote key={'global-note-' + index}
+                            pubkey={item.pubkey}
+                            content={item.content}
+                            time={item.create_at}
+                            info={info} />)
+                })}
             </List>
         </Paper>
-        // <div className='global_bg'>
-        // </div >
     );
 }
 

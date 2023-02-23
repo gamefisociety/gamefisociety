@@ -1,5 +1,4 @@
 import { React, useEffect, useState } from 'react';
-import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 
@@ -29,7 +28,6 @@ function GProfile() {
             <Box sx={{ height: '12px' }}></Box>
         </Box>
     );
-
 }
 
 export default GProfile;

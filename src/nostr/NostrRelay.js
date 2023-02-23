@@ -98,7 +98,7 @@ const NostrRelay = () => {
               const msg = JSON.parse(e.data);
               let tmpKey = buildKey(e.origin, msg[1]);
               let procer = listenProcers.get(tmpKey);
-              console.log('OnMessage', tmpKey, msg);
+              // console.log('OnMessage', tmpKey, msg);
               const tag = msg[0];
               if (tag === 'AUTH') {
                 // this._OnAuthAsync(msg[1]);
@@ -110,7 +110,7 @@ const NostrRelay = () => {
                 }
               } else if (tag === 'EOSE') {
                 if (procer) {
-                  procer.callback(procer.cache);
+                  procer.callback(procer.cache, client);
                   procer.cache = [];
                   if (procer.once === 0) {
                     removeListen(procer);
@@ -119,7 +119,7 @@ const NostrRelay = () => {
                 }
                 // this._OnEnd(msg[1]);
               } else if (tag === 'OK') {
-                console.log(`${client.addr} OK: `, msg);
+                // console.log(`${client.addr} OK: `, msg);
                 if (procer) {
                   procer.callback(msg);
                   procer.cache = [];
@@ -133,7 +133,7 @@ const NostrRelay = () => {
                 // console.warn(`Unknown tag: ${tag}`);
               }
             } else {
-              console.log('no OnMessage');
+              // console.log('no OnMessage');
             }
             // if (client.listenMessages) {
             //   // client.listenMessages.map((proc) => {

@@ -16,7 +16,6 @@ import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
 const GCardUser = (props) => {
-    // console.log('props.profile', props.profile);
 
     const MetaPro = useMetadataPro();
 
@@ -62,21 +61,8 @@ const GCardUser = (props) => {
     }
 
     const updateProfile = async () => {
-        // let ev = await MetaPro.send(keys.pub, localProfile, keys.pri);
-        // console.log('MetadataPro', ev);
-        // System.Broadcast(ev, 0, (msg) => {
-        //     console.log('create profile msg', msg);
-        // });
+        //
     }
-
-    // const renderSke = () => {
-    //     return (
-    //         <React.Fragment>
-    //             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-    //             <Skeleton animation="wave" height={10} width="80%" />
-    //         </React.Fragment>
-    //     )
-    // }
 
     return (
         <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px', width: '100%', maxWidth: '960px' }}>
@@ -95,7 +81,7 @@ const GCardUser = (props) => {
                     sx={{ height: '140px' }}
                     src="localProfile.banner"
                     // src="https://i.pinimg.com/originals/6d/fb/c7/6dfbc74564ed8ed039734fa91b2d8f9a.gif"
-                    // image={localProfile.banner}
+                    image={localProfile.banner}
                     alt="green iguana"
                 />
                 <CardContent sx={{ mt: '32px' }}>
