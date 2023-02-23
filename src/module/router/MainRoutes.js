@@ -8,6 +8,7 @@ const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
 const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
+const GRelays = Loadable(lazy(() => import('view/page/GRelays')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
 const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
@@ -70,8 +71,12 @@ const MainRoutes = {
             element: <GProfile />,
         },
         {
-            path:'/ipfs',
-            element: <GTestIPFS/>,
+            path: '/relays',
+            element: <GRelays />,
+        },
+        {
+            path: '/ipfs',
+            element: <GTestIPFS />,
         }
     ]
 };

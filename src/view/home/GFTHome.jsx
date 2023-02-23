@@ -123,12 +123,21 @@ const GFTHome = () => {
                     <Drawer
                         PaperProps={{
                             style:
-                                { marginTop: '84px', minWidth: '320px', height: '92%', borderRadius: '12px', backgroundColor: '#0F0F0F' }
+                            {
+                                // marginTop: '84px',
+                                // minWidth:'320px',
+                                // height: '92%',
+                                borderRadius: '12px',
+                                backgroundColor: '#0F0F0F'
+                            }
                         }}
-                        variant="persistent"
+                        // variant="persistent"
                         anchor={'right'}
                         open={drawer}
-                        hideBackdrop={true}
+                        onClose={() => {
+                            dispatch(setDrawer(false))
+                        }}
+                    // hideBackdrop={true}
                     >
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#202020' }}>
                             <IconButton sx={{}} onClick={() => {
