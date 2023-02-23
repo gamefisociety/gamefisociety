@@ -12,10 +12,17 @@ export class NostrSystem {
   }
 
   initRelays() {
-    //init default relays
     for (const [addr, cfg] of DefaultRelays) {
       this.ConnectRelay(addr, cfg.read, cfg.write);
     }
+  }
+
+  relayState(addr) {
+    const relay = this.Clients.get(addr);
+    if (relay) {
+
+    }
+    return -1;
   }
 
   ConnectRelay(address, read, write) {

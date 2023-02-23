@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { EventKind } from "nostr/def";
+import { DefaultConnectTimeout } from "nostr/Const";
 
 const NostrFactory = {
 
@@ -10,25 +11,14 @@ const NostrFactory = {
     relay.addr = addr;
     relay.Socket = null;
     relay.PendingList = [];
-    relay.SubSupports = new Map();
     relay.Settings = {
       read: read,
       write: write,
     };
-    relay.ConnectTimeout = null;
+    relay.ConnectTimeout = DefaultConnectTimeout;
     relay.StateHooks = new Map();
     relay.HasStateChange = true;
     relay.Stats = {};
-    relay.CurrentState = {
-      connected: false,
-      disconnects: 0,
-      avgLatency: 0,
-      events: {
-        received: 0,
-        send: 0,
-      },
-    };
-    // relay.LastState = Object.freeze({ ...this.CurrentState });
     relay.IsClosed = false;
     relay.ReconnectTimer = null;
     relay.EventsCallback = new Map();
