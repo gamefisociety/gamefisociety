@@ -33,7 +33,7 @@ const GFTGlobal = () => {
 
         const textNote = textNotePro.get();
         textNote.until = Date.now();
-        textNote.limit = 50;
+        textNote.limit = 10;
         //
         curRelays.push('wss://nos.lol');
         //
@@ -74,11 +74,12 @@ const GFTGlobal = () => {
             <List>
                 {data.map((item, index) => {
                     const info = inforData.get(item.pubkey);
+                    // console.log('time', item);
                     return (
                         <GCardNote key={'global-note-' + index}
                             pubkey={item.pubkey}
                             content={item.content}
-                            time={item.create_at}
+                            time={item.created_at}
                             info={info} />)
                 })}
             </List>

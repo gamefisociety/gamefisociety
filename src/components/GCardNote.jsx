@@ -54,7 +54,7 @@ const GCardNote = (props) => {
                             );
                         } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
                             && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.gif'))) {
-                            console.log('render image', stritem);
+                            // console.log('render image', stritem);
                             return (<CardMedia
                                 component="img"
                                 key={'cxt-' + index + '-' + stritem}
@@ -89,6 +89,20 @@ const GCardNote = (props) => {
     //         </React.Fragment>
     //     )
     // }
+
+    const curTime = Number(Date.now() / 1000);
+    const getTime = (tim) => {
+        if (curTime === tim) {
+            return 'Now';
+        } else if (curTime > tim) {
+            let diff = curTime - tim;
+            diff = Number(diff / 1000).toFixed(1);
+            return diff + ' seconds';
+        } else {
+            return 0 + 'default';
+        }
+    }
+
     return (
         <Card sx={{ width: '100%', padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
             <CardActionArea
@@ -105,7 +119,7 @@ const GCardNote = (props) => {
                     {pubkey ? pubkey : 'default'}
                 </Typography>
                 <Typography sx={{ ml: '8px' }} variant="body2">
-                    {time}
+                    {getTime(Number(time))}
                 </Typography>
             </CardActionArea>
             {content && renderContent(content)}
