@@ -20,7 +20,7 @@ export class NostrSystem {
   relayState(addr) {
     const relay = this.Clients.get(addr);
     if (relay) {
-
+      //
     }
     return -1;
   }

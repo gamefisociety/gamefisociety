@@ -33,8 +33,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
 import {
-    decrement,
-    increment,
     setIsOpen,
     setIsOpenWallet,
     setOpenMenuLeft
@@ -164,6 +162,21 @@ const GFTHead = () => {
             }
         });
     }
+
+    // const { relays } = useSelector((s) => s.profile);
+    // useEffect(() => {
+    //     if (relays) {
+    //         for (const [addr, v] of Object.entries(relays)) {
+    //             System.ConnectRelay(addr, v.read, v.write);
+    //         }
+    //     }
+    // }, [relays]);
+    //init param form db or others
+    useEffect(() => {
+        // console.log('use db from reduce');
+        // dispatch(init('redux'));
+        // dispatch(initRelays())
+    }, []);
 
     useEffect(() => {
         if (loggedOut === false) {

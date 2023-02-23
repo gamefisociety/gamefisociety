@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid';
 import GFTHead from 'view/head/GFTHead'
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
 import GFTFooter from 'view/footer/GFTFooter';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import GCardFriends from 'components/GCardFriends';
@@ -17,86 +16,26 @@ import GCardRelays from 'components/GCardRelays';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { SearchRelays } from "nostr/Const";
-
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { setDrawer } from 'module/store/features/dialogSlice';
 
 const GFTHome = () => {
 
-    // state.isDrawer = action.payload.isDrawer;
-    // state.placeDrawer = action.payload.placeDrawer;
-    // state.cardDrawer = action.payload.cardDrawer;
     const dispatch = useDispatch();
     const { isDrawer, placeDrawer, cardDrawer } = useSelector(s => s.dialog);
-    const { relays } = useSelector((s) => s.profile);
-
-    // let teststr = "PL032HZ2X0██████████████████全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！全国同城约炮！妹妹多 服务好！全国支持600+城市空降/同城配对！高端私人配对 少妇 萝莉 网红 空姐 应有尽有！████████████████████ 下载链接： https://885n.top"
-    // let flag = teststr.startsWith('https');
-    // console.log('fffffffffff', flag);
-
-    useEffect(() => {
-        if (relays) {
-            //connect target relays
-            for (const [addr, v] of Object.entries(relays)) {
-                System.ConnectRelay(addr, v.read, v.write);
-            }
-            // //diconnect noneed relays
-            // for (const [addr] of System.ClientRelays) {
-            //     if (!relays[addr] && !SearchRelays.has(addr)) {
-            //         System.DisconnectRelay(addr);
-            //     }
-            // }
-        }
-    }, [relays]);
-
+    // const { relays } = useSelector((s) => s.profile);
+    // useEffect(() => {
+    //     if (relays) {
+    //         for (const [addr, v] of Object.entries(relays)) {
+    //             System.ConnectRelay(addr, v.read, v.write);
+    //         }
+    //     }
+    // }, [relays]);
     //init param form db or others
-    useEffect(() => {
-        console.log('use db from reduce');
-        dispatch(init('redux'));
-        dispatch(initRelays())
-    }, []);
-
-    const list = (anchor) => (
-        <Box
-            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-            role="presentation"
-            onClick={() => { }}
-            onKeyDown={() => { }}
-        >
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-    );
+    // useEffect(() => {
+    //     console.log('use db from reduce');
+    //     dispatch(init('redux'));
+    //     dispatch(initRelays())
+    // }, []);
 
     return (
         <Box sx={{ flexGrow: 1, backgroundColor: '#0F0F0F' }}>
@@ -132,7 +71,6 @@ const GFTHome = () => {
                                 backgroundColor: '#0F0F0F'
                             }
                         }}
-                        // variant="persistent"
                         anchor={placeDrawer}
                         open={isDrawer}
                         onClose={() => {
@@ -143,18 +81,6 @@ const GFTHome = () => {
                             }))
                         }}
                     >
-                        {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#202020' }}>
-                            <IconButton sx={{}} onClick={() => {
-                                dispatch(setDrawer({
-                                    isDrawer: false,
-                                    placeDrawer: 'right',
-                                    cardDrawer: 'default'
-                                }))
-                            }}>
-                                <CloseIcon />
-                            </IconButton>
-                        </Box>
-                        <Divider /> */}
                         {cardDrawer === 'follow' && <GCardFriends />}
                         {cardDrawer === 'relays' && <GCardRelays />}
                     </Drawer>

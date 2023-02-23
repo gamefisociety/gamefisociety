@@ -73,12 +73,12 @@ const NostrRelay = () => {
           };
           // on error
           client.Socket.onerror = e => {
-            console.error(`[${client.addr}] Error!`, e);
+            console.log(`[${client.addr}] Error!`, e);
             client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
           };
           //on close
           client.Socket.onclose = e => {
-            console.error(`[${client.addr}] Close!`, e);
+            console.log(`[${client.addr}] Close!`, e);
             client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
             if (!client.IsClosed) {
               //reconnect time ervey time * 2
