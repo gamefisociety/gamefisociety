@@ -23,7 +23,16 @@ export const dbCache = () => {
   }
 
   const updateMetaDatas = (metadatas) => {
-    // MetaDataCache.set(pubkey, metadata);
+    metadatas.map((item) => {
+      const src = getMetaData(item.pubkey);
+      if (src) {
+        if (src.created_at < item.created_at) {
+          MetaDataCache.set(item.pubkey, item);
+        }
+      } else {
+        MetaDataCache.set(item.pubkey, item);
+      }
+    });
   }
 
   const getAll = () => {

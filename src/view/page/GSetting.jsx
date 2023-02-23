@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 
 import GCardRelays from 'components/GCardRelays';
-import './GRelays.scss';
+import './GSetting.scss';
 
-function GRelays() {
+function GSetting() {
     console.log('GRelays enter');
     useEffect(() => {
         return () => {
@@ -30,4 +30,4 @@ function GRelays() {
 
 }
 
-export default GRelays;
+export default GSetting;

@@ -2,13 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EventKind } from "nostr/def";
 import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
@@ -31,7 +27,7 @@ import './GCardUser.scss';
 
 import { dbCache } from 'db/DbCache';
 
-import { setUsersFlag, setUsers } from 'module/store/features/userSlice';
+import { setUsersFlag } from 'module/store/features/userSlice';
 import { useFollowPro } from 'nostr/protocal/FollowPro';
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
@@ -72,58 +68,43 @@ function a11yProps(index) {
 }
 
 const GCardFriends = () => {
-    // console.log('props.profile', props.profile);
     const FollowPro = useFollowPro();
     const MetadataPro = useMetadataPro();
-    const { publicKey, privateKey } = useSelector(s => s.login);
-    const { usersflag, follows } = useSelector(s => s.user);
+    const { publicKey } = useSelector(s => s.login);
+    const { followsData, follows } = useSelector(s => s.user);
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = React.useState(0);
-    // const [followings,setFollowings] = React.useState([]);
 
-    const fetchAllMeta = (msgs) => {
-        msgs.map(msg => {
-            // console.log('fetchFollowers msgs', msg);
-            if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.tags.length > 0) {
-                let subMeta = MetadataPro.get(publicKey);
-                msg.tags.map((item) => {
-                    if (item.length === 2 && item[0] === 'p') {
-                        subMeta.Authors.push(item[1]);
-                    }
-                });
-                //
-                System.Broadcast(subMeta, 0, (msgs1) => {
-                    // console.log('fetchFollowers subMeta', msgs1);
-                    let users = [];
-                    msgs1.map(item1 => {
-                        let info = {
-                            pubkey: item1.pubkey,
-                            content: {}
-                        };
-                        if (item1.content !== '') {
-                            info.content = JSON.parse(item1.content);
-                        }
-                        info.content.created_at = item1.created_at;
-                        info.content.following = 1;
-                        users.push(info);
-                    });
-                    dispatch(setUsers(users));
-                });
-                //
-            }
+    const fetchAllMeta = () => {
+        let subMeta = MetadataPro.get(publicKey);
+        follows.map((item) => {
+            subMeta.Authors.push(item);
+        });
+        //
+        System.Broadcast(subMeta, 0, (msgs) => {
+            //
+            let metaDatas = [];
+            msgs.map(item => {
+                let info = {
+                    pubkey: item.pubkey,
+                    created_at: item.created_at,
+                    content: {}
+                };
+                if (item.content !== '') {
+                    info.content = JSON.parse(item.content);
+                }
+                info.content.following = 1;
+                metaDatas.push(info);
+            });
+            db.updateMetaDatas(metaDatas);
+            dispatch(setUsersFlag(1));
         });
     }
 
     const fetchFollowing = () => {
-        if (usersflag === 0) {
-            let ev = FollowPro.get(publicKey);
-            System.Broadcast(ev, 0, (msgs) => {
-                //set flag
-                dispatch(setUsersFlag(1));
-                fetchAllMeta(msgs);
-                console.log('fetchFollowing msg', msgs);
-            });
-        } else if (usersflag === 1) {
+        if (followsData === 0) {
+            fetchAllMeta();
+        } else if (followsData === 1) {
             //update
         }
     }
@@ -147,7 +128,7 @@ const GCardFriends = () => {
         if (newValue === 0) {
             fetchFollowing();
         } else if (newValue === 1) {
-            fetchFollowers();
+            // fetchFollowers();
         }
         setTabIndex(newValue);
     };
@@ -160,58 +141,38 @@ const GCardFriends = () => {
 
     //
     useEffect(() => {
-        // fetchFollowing();
-        // console.log('following users', db.getMetaDatas(follows));
-        // setFollowings
         return () => { }
     }, [follows])
 
     const renderFollowing = () => {
-        const followsData = db.getMetaDatas(follows);
-        console.log('followsData', followsData);
-        if (followsData.length === 0) {
+        if (follows.length === 0) {
             return null;
         }
         return (
             <List> {
-                followsData.map((item, index) => (
-                    <ListItem sx={{ my: '2px', backgroundColor: '#202020' }} key={'following-list-' + index}
-                        secondaryAction={
-                            <IconButton sx={{ mr: '8px' }} edge="end" onClick={() => {
-                                console.log('on chat!');
-                            }}>
-                                <ChatIcon />
-                            </IconButton>
-                        }
-                        disablePadding>
-                        <ListItemButton>
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={'GameFi Society'}
-                                    src={item.picture ? item.picture : ''}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText primary={item.name} />
-                        </ListItemButton>
-                        {/* <Box sx={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            borderBottom: 1,
-                            borderColor: 'divider',
-                        }}>
-                            <Avatar
-                                sx={{ width: 32, height: 32, }}
-                                edge="end"
-                                alt="GameFi Society"
-                                src={item.picture ? item.picture : ''}
-                            />
-                            <Typography sx={{ ml: '24px' }} variant="subtitle1" align={'left'} >{item.name}</Typography>
-                            <Box sx={{ flexGrow: 1 }}></Box>
-                        </Box> */}
-                    </ListItem>
-                ))}
+                follows.map((pubkey, index) => {
+                    const item = db.getMetaData(pubkey);
+                    if (!item) {
+                        return null;
+                    }
+                    return (
+                        <ListItem sx={{ my: '2px', backgroundColor: '#202020' }} key={'following-list-' + index}
+                            secondaryAction={
+                                <Button variant="outlined" sx={{ width: '80px', height: '24px', fontSize: '12px' }}>{'unfollow'}</Button>
+                            }
+                            disablePadding>
+                            <ListItemButton>
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt={'GameFi Society'}
+                                        src={item.content.picture ? item.content.picture : ''}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText primary={item.content.name} />
+                            </ListItemButton>
+                        </ListItem>
+                    )
+                })}
             </List>
         );
     }
@@ -230,14 +191,14 @@ const GCardFriends = () => {
     // }
 
     return (
-        <Box sx={{ backgroundColor: '#1F1F1F', width: '100%', height: '100%' }}>
+        <Box sx={{ backgroundColor: '#1F1F1F', width: '360px', height: '100%' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs sx={{ width: '100%' }}
                     variant="fullWidth"
                     value={tabIndex}
                     onChange={switchTab}
                     aria-label="friend tab">
-                    <Tab label="Following" {...a11yProps(0)} />
+                    <Tab label={"Following " + follows.length} {...a11yProps(0)} />
                     <Tab label="Followers" {...a11yProps(1)} />
                 </Tabs>
             </Box>

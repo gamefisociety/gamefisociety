@@ -8,31 +8,11 @@ const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
 const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
-const GRelays = Loadable(lazy(() => import('view/page/GRelays')));
+const GSetting = Loadable(lazy(() => import('view/page/GSetting')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
 const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
-// // render - dashboard
-// const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
-// //任务服务
-// const MissionFrame = Loadable(lazy(() => import('pages/mission/MissionFrame')));
-// const MissionGroupFrame = Loadable(lazy(() => import('pages/mission/MissionGroupFrame')));
-// const UserMissionFrame = Loadable(lazy(() => import('pages/mission/UserMissionFrame')));
-// //
-// const AirDropFrame = Loadable(lazy(() => import('pages/airdrop/AirDropFrame')));
-// const WhiteListFrame = Loadable(lazy(() => import('pages/airdrop/WhiteListFrame')));
-// //level
-// const StarFrame = Loadable(lazy(() => import('pages/level/StarFrame')));
-// const InviteRuleFrame = Loadable(lazy(() => import('pages/level/InviteRuleFrame')));
-// //log
-// const GoodsLogFrame = Loadable(lazy(() => import('pages/logpage/GoodsLogFrame')));
-// const SwapLogFrame = Loadable(lazy(() => import('pages/logpage/SwapLogFrame')));
-// const FeedbackFrame = Loadable(lazy(() => import('pages/logpage/FeedbackFrame')));
-// const BillLogFrame = Loadable(lazy(() => import('pages/logpage/BillLogFrame')));
-// const GoodsCenterFrame = Loadable(lazy(() => import('pages/logpage/GoodsCenterFrame')));
-// //计算中心
-// const ComputeFrame = Loadable(lazy(() => import('pages/compute/ComputeFrame')));
 
 const MainRoutes = {
     path: '/',
@@ -71,8 +51,8 @@ const MainRoutes = {
             element: <GProfile />,
         },
         {
-            path: '/relays',
-            element: <GRelays />,
+            path: '/setting',
+            element: <GSetting />,
         },
         {
             path: '/ipfs',
