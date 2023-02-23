@@ -25,47 +25,78 @@ const GCardRelays = () => {
     const dispatch = useDispatch();
     const relayPro = useRelayPro();
     const [newRelays, setNewRelays] = useState([]);
-    
-    console.log('init GCardRelays');
+
+    // console.log('init GCardRelays', relays);
 
     const fetchRelays = () => {
         // console.log('fetchRelays', Object.entries(relays), sub);
-        let sub = relayPro.get(publicKey);
-        System.Broadcast(sub, 0, (msgs) => {
-            if (msgs) {
-                msgs.map(msg => {
-                    // console.log('fetchRelays msgs', msg);
-                    if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
-                        let content = JSON.parse(msg.content);
-                        let tmpRelays = {
-                            relays: {
-                                ...content,
-                                ...Object.fromEntries(DefaultRelays.entries()),
-                            },
-                            createdAt: 1,
-                        };
-                        dispatch(setRelays(tmpRelays));
-                    }
-                });
-            }
-        });
+        // let sub = relayPro.get(publicKey);
+        // System.Broadcast(sub, 0, (msgs) => {
+        //     if (msgs) {
+        //         msgs.map(msg => {
+        //             // console.log('fetchRelays msgs', msg);
+        //             if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
+        //                 let content = JSON.parse(msg.content);
+        //                 let tmpRelays = {
+        //                     relays: {
+        //                         ...content,
+        //                         ...Object.fromEntries(DefaultRelays.entries()),
+        //                     },
+        //                     createdAt: 1,
+        //                 };
+        //                 dispatch(setRelays(tmpRelays));
+        //             }
+        //         });
+        //     }
+        // });
     }
 
     const saveRelays = async () => {
-        //
+        let tmp_new_relays = [];
+        newRelays.map((newitem) => {
+            if (newitem !== '') {
+                let tmp = [];
+                tmp.push(newitem);
+                tmp.push({
+                    read: true,
+                    write: true,
+                });
+                tmp_new_relays.push(tmp);
+            }
+        });
+        let tmpRelays = {
+            relays: {
+                ...relays,
+                ...Object.fromEntries(tmp_new_relays),
+            },
+            createdAt: new Date().getTime(),
+        };
+        setNewRelays([]);
+        dispatch(setRelays(tmpRelays));
+        if (loggedOut === false) {
+            //sync to users
+        }
         return null;
     }
 
     const deleteRelays = async (addr) => {
-        console.log('delete relay', addr);
+        const relayArray = Object.entries(relays);
+        const retArray = relayArray.filter((value) => {
+            return value[0] !== addr;
+        });
+        let tmpRelays = {
+            relays: {
+                ...Object.fromEntries(retArray),
+            },
+            createdAt: new Date().getTime(),
+        };
+        dispatch(setRelays(tmpRelays));
+        //need disconnect relays
+        if (loggedOut === false) {
+            //sync to users
+        }
         return null;
     }
-
-    useEffect(() => {
-        return () => {
-            fetchRelays();
-        }
-    }, [])
 
     const renderCacheRelays = () => {
         return Object.entries(relays).map((item, index) => {
