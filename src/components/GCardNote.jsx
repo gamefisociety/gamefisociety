@@ -92,14 +92,11 @@ const GCardNote = (props) => {
 
     const curTime = Number(Date.now() / 1000);
     const getTime = (tim) => {
-        if (curTime === tim) {
-            return 'Now';
-        } else if (curTime > tim) {
-            let diff = curTime - tim;
-            diff = Number(diff / 1000).toFixed(1);
+        let diff = (curTime - tim).toFixed(1);
+        if (diff > 1) {
             return diff + ' seconds';
         } else {
-            return 0 + 'default';
+            return 'now';
         }
     }
 
