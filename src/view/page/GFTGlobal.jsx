@@ -32,8 +32,8 @@ const GFTGlobal = () => {
     const getDataList = () => {
 
         const textNote = textNotePro.get();
-        textNote.until = Date.now();
-        textNote.limit = 10;
+        textNote.Until = Date.now();
+        textNote.Limit = 50;
         //
         curRelays.push('wss://nos.lol');
         //

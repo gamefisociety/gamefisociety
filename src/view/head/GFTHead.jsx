@@ -223,7 +223,7 @@ const GFTHead = () => {
 
     const openProfile = () => {
         // fetchMeta();
-        navigate('/profile');
+        navigate('/setting');
         handleMenuClose();
     };
 
@@ -333,10 +333,7 @@ const GFTHead = () => {
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={() => {
-                navigate('/profile');
-                setMobileMoreAnchorEl(null);
-            }}>
+            <MenuItem onClick={openProfile}>
                 <IconButton
                     size="large"
                     aria-label="account of current user"
