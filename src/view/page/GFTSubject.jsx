@@ -87,6 +87,10 @@ function GFTGlobal() {
 // ['e', 'id', '', 'reply']
 // ['p', 'pubkey']
 
+//collect
+// ['e', 'id']
+// ['p', 'pubkey']
+
     const getDataList = () => {
         let sub = relay.sub([
             {
