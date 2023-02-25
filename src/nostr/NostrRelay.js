@@ -32,7 +32,6 @@ const NostrRelay = () => {
   const Connect = async (client) => {
     let flag = false;
     try {
-      // console.log('NostrRelay connect', client.info);
       if (client.info === null) {
         const u = new URL(client.addr);
         const rsp = await fetch(`https://${u.host}`, {
@@ -48,49 +47,49 @@ const NostrRelay = () => {
             }
           }
           client.info = data;
-          // console.log('NostrRelay connect info', data);
           flag = true;
         } else {
           flag = false;
         }
+      } else {
+        //reconnect
+        flag = true;
       }
     } catch (e) {
       console.warn("Could not load relay information", e);
     } finally {
       if (flag === true) {
+        console.log('Find relay and try to connect!');
         if (client.IsClosed) {
           _UpdateState(client);
         } else {
           client.IsClosed = false;
           client.Socket = new WebSocket(client.addr);
           client.Socket.onopen = () => {
+            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
             client.ConnectTimeout = DefaultConnectTimeout;
             console.log(`[${client.addr}] Open!`);
             SendPending(client);
           };
           // on error
           client.Socket.onerror = e => {
-            console.error(e);
-            _UpdateState(client);
+            console.log(`[${client.addr}] Error!`, e);
+            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
           };
           //on close
           client.Socket.onclose = e => {
+            console.log(`[${client.addr}] Close!`, e);
+            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
             if (!client.IsClosed) {
+              //reconnect time ervey time * 2
+              client.Stats.Disconnects++;
               client.ConnectTimeout = client.ConnectTimeout * 2;
-              console.log(
-                `[${client.addr}] Closed (${e.reason}), trying again in ${(client.ConnectTimeout / 1000)
-                  .toFixed(0)
-                  .toLocaleString()} sec`
-              );
               client.ReconnectTimer = setTimeout(() => {
                 Connect(client);
               }, client.ConnectTimeout);
-              client.Stats.Disconnects++;
             } else {
               console.log(`[${client.Address}] Closed!`);
-              client.ReconnectTimer = null;
             }
-            _UpdateState(client);
           };
           //
           client.Socket.onmessage = e => {
@@ -99,7 +98,7 @@ const NostrRelay = () => {
               const msg = JSON.parse(e.data);
               let tmpKey = buildKey(e.origin, msg[1]);
               let procer = listenProcers.get(tmpKey);
-              console.log('OnMessage', tmpKey, msg);
+              // console.log('OnMessage', tmpKey, msg);
               const tag = msg[0];
               if (tag === 'AUTH') {
                 // this._OnAuthAsync(msg[1]);
@@ -111,7 +110,7 @@ const NostrRelay = () => {
                 }
               } else if (tag === 'EOSE') {
                 if (procer) {
-                  procer.callback(procer.cache);
+                  procer.callback(procer.cache, client);
                   procer.cache = [];
                   if (procer.once === 0) {
                     removeListen(procer);
@@ -120,7 +119,7 @@ const NostrRelay = () => {
                 }
                 // this._OnEnd(msg[1]);
               } else if (tag === 'OK') {
-                console.log(`${client.addr} OK: `, msg);
+                // console.log(`${client.addr} OK: `, msg);
                 if (procer) {
                   procer.callback(msg);
                   procer.cache = [];
@@ -134,7 +133,7 @@ const NostrRelay = () => {
                 // console.warn(`Unknown tag: ${tag}`);
               }
             } else {
-              console.log('no OnMessage');
+              // console.log('no OnMessage');
             }
             // if (client.listenMessages) {
             //   // client.listenMessages.map((proc) => {
@@ -150,6 +149,7 @@ const NostrRelay = () => {
     }
   }
 
+  //manul close relays
   const Close = (client) => {
     client.IsClosed = true;
     if (client.ReconnectTimer !== null) {
@@ -157,9 +157,13 @@ const NostrRelay = () => {
       client.ReconnectTimer = null;
     }
     client.Socket?.close();
-    _UpdateState(client);
+    client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
   }
 
+  /**
+   * Next send msg
+   * 
+  */
   const _SendReal = (client, req) => {
     const json = JSON.stringify(req);
     client.Socket.send(json);
@@ -282,7 +286,6 @@ const NostrRelay = () => {
   //   this.Pending.push(sub.ToObject());
   //   return;
   // }
-
   // let req = ["REQ", sub.Id, sub.ToObject()];
   // if (sub.OrSubs.length > 0) {
   //   req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
@@ -295,17 +298,7 @@ const NostrRelay = () => {
   }
 
   const _UpdateState = (client) => {
-    // client.CurrentState.connected = client.Socket?.readyState === WebSocket.OPEN;
-    // client.CurrentState.events.received = client.Stats.EventsReceived;
-    // client.CurrentState.events.send = client.Stats.EventsSent;
-    // client.CurrentState.avgLatency =
-    //   client.Stats.Latency.length > 0 ? client.Stats.Latency.reduce((acc, v) => acc + v, 0) / client.Stats.Latency.length : 0;
-    // client.CurrentState.disconnects = client.Stats.Disconnects;
-    // client.CurrentState.info = client.info;
-    // client.CurrentState.id = client.Id;
-    // client.Stats.Latency = client.Stats.Latency.slice(-20); // trim
-    // client.HasStateChange = true;
-    // client._NotifyState();
+    client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
   }
 
   // StatusHook(fnHook) {

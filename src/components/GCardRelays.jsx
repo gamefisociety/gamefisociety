@@ -1,104 +1,194 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import { Divider } from '@mui/material/index';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Button, CardActions } from '@mui/material';
 import { setRelays, removeRelay } from 'module/store/features/profileSlice';
 import { useRelayPro } from 'nostr/protocal/RelayPro';
 import { System } from 'nostr/NostrSystem';
 import { EventKind } from "nostr/def";
-import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
 import { DefaultRelays } from "nostr/Const";
 
 import './GCardRelays.scss';
 
-function GCardRelays() {
+const GCardRelays = () => {
 
     const { relays } = useSelector(s => s.profile);
-    const { publicKey } = useSelector(s => s.login);
+    const { publicKey, loggedOut } = useSelector(s => s.login);
     const dispatch = useDispatch();
     const relayPro = useRelayPro();
+    const [newRelays, setNewRelays] = useState([]);
+
+    // console.log('init GCardRelays', relays);
 
     const fetchRelays = () => {
-        //
-        let sub = relayPro.get(publicKey);
         // console.log('fetchRelays', Object.entries(relays), sub);
-        System.Broadcast(sub, 0, (msgs) => {
-            if (msgs) {
-                msgs.map(msg => {
-                    console.log('fetchRelays msgs', msg);
-                    if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
-                        let content = JSON.parse(msg.content);
-                        let tmpRelays = {
-                            relays: {
-                                ...content,
-                                ...Object.fromEntries(DefaultRelays.entries()),
-                            },
-                            createdAt: 1,
-                        };
-                        dispatch(setRelays(tmpRelays));
-                    }
-                });
-            }
-        });
+        // let sub = relayPro.get(publicKey);
+        // System.Broadcast(sub, 0, (msgs) => {
+        //     if (msgs) {
+        //         msgs.map(msg => {
+        //             // console.log('fetchRelays msgs', msg);
+        //             if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
+        //                 let content = JSON.parse(msg.content);
+        //                 let tmpRelays = {
+        //                     relays: {
+        //                         ...content,
+        //                         ...Object.fromEntries(DefaultRelays.entries()),
+        //                     },
+        //                     createdAt: 1,
+        //                 };
+        //                 dispatch(setRelays(tmpRelays));
+        //             }
+        //         });
+        //     }
+        // });
     }
 
-    const addRelays = async (addr) => {
+    const saveRelays = async () => {
+        let tmp_new_relays = [];
+        newRelays.map((newitem) => {
+            if (newitem !== '') {
+                let tmp = [];
+                tmp.push(newitem);
+                tmp.push({
+                    read: true,
+                    write: true,
+                });
+                tmp_new_relays.push(tmp);
+            }
+        });
+        let tmpRelays = {
+            relays: {
+                ...relays,
+                ...Object.fromEntries(tmp_new_relays),
+            },
+            createdAt: new Date().getTime(),
+        };
+        setNewRelays([]);
+        dispatch(setRelays(tmpRelays));
+        if (loggedOut === false) {
+            //sync to users
+        }
         return null;
     }
 
     const deleteRelays = async (addr) => {
+        const relayArray = Object.entries(relays);
+        const retArray = relayArray.filter((value) => {
+            return value[0] !== addr;
+        });
+        let tmpRelays = {
+            relays: {
+                ...Object.fromEntries(retArray),
+            },
+            createdAt: new Date().getTime(),
+        };
+        dispatch(setRelays(tmpRelays));
+        //need disconnect relays
+        if (loggedOut === false) {
+            //sync to users
+        }
         return null;
     }
 
-    useEffect(() => {
-        return () => {
-            fetchRelays();
-        }
-    }, [])
-
-    const renderRelays = () => {
+    const renderCacheRelays = () => {
         return Object.entries(relays).map((item, index) => {
             return (
                 <Grid item key={'relaycard-index-' + index}>
-                    <CardActionArea>
-                        <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: '#2F2F2F', borderRadius: '24px' }}>
-                            <Typography sx={{ minWidth: '' }} variant="body2" color="text.secondary">
-                                {item[0]}
-                            </Typography>
-                            <Chip sx={{ marginLeft: '12px' }} label="read" color={item[1].read ? "success" : "error"} size="small" />
-                            <Chip sx={{ marginLeft: '12px' }} label="write" color={item[1].write ? "success" : "error"} size="small" />
-                            <IconButton sx={{ marginLeft: '12px' }} onClick={() => {
-                                deleteRelays(item[0]);
-                            }}>
-                                <DisabledByDefaultIcon />
-                            </IconButton>
-                        </CardContent>
-                    </CardActionArea>
+                    <Box sx={{
+                        height: '32px',
+                        px: '12px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: '#2F2F2F',
+                        borderRadius: '12px'
+                    }}>
+                        <Typography variant="body2" color="text.secondary">
+                            {item[0]}
+                        </Typography>
+                        <Chip sx={{ ml: '6px', width: '12px', height: '12px' }} color={item[1].read ? "success" : "error"} />
+                        <Chip sx={{ ml: '6px', width: '12px', height: '12px' }} color={item[1].write ? "success" : "error"} />
+                        <IconButton sx={{ ml: '6px', width: '12px', height: '12px' }} onClick={() => {
+                            deleteRelays(item[0]);
+                        }}>
+                            <RemoveCircleOutlineIcon sx={{ width: '12px', height: '12px' }} />
+                        </IconButton>
+                    </Box>
                 </Grid>
             )
         })
     }
 
-    return (
-        <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px', maxWidth: '960px' }}>
-            <Typography align='left' variant="h6" component="div">
-                {'Relay Panel'}
-            </Typography>
-            <Grid container spacing={2} sx={{ my: '12px' }}>
-                {renderRelays()}
+    //
+    const renderNewRelays = () => {
+        return (
+            <Grid container>
+                {
+                    newRelays.map((item, index) => (
+                        <Grid item key={'add-new-relay-' + index}>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <TextField
+                                    sx={{ mx: '6px' }}
+                                    value={item}
+                                    margin="dense"
+                                    size='small'
+                                    onChange={(event) => {
+                                        newRelays[index] = event.target.value;
+                                        setNewRelays(newRelays.concat());
+                                    }}
+                                />
+                                <IconButton sx={{ ml: '6px', width: '12px', height: '12px' }} onClick={() => {
+                                    newRelays.splice(index, 1);
+                                    setNewRelays(newRelays.concat());
+                                }}>
+                                    <RemoveCircleOutlineIcon sx={{ width: '12px', height: '12px' }} />
+                                </IconButton>
+                            </Box>
+                        </Grid>
+                    ))
+                }
             </Grid>
+        );
+    }
+
+    return (
+        <Card sx={{ backgroundColor: '#1F1F1F', padding: '6px' }}>
+            <Typography sx={{ margin: '12px' }} variant="body2" color="primary">
+                {'Your Relays'}
+            </Typography>
+            <Grid container spacing={2} >
+                {renderCacheRelays()}
+            </Grid>
+            <Divider sx={{ mt: '12px' }} />
             <CardActions>
-                <Button size="small" color="primary" onClick={fetchRelays}>
-                    refresh
+                {renderNewRelays()}
+            </CardActions>
+            <CardActions>
+                <Button size="small" color="primary" onClick={() => {
+                    newRelays.push('');
+                    setNewRelays(newRelays.concat());
+                }}>
+                    {'Add'}
                 </Button>
-                <Button size="small" color="primary" onClick={fetchRelays}>
-                    Add
-                </Button>
+                {newRelays.length > 0 && <Button size="small" color="primary" onClick={saveRelays}>
+                    {'Save'}
+                </Button>}
+                {loggedOut === false && <Button size="small" color="primary" onClick={fetchRelays}>
+                    {'SYNC'}
+                </Button>}
+
             </CardActions>
         </Card>
     );

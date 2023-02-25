@@ -50,12 +50,9 @@ const LoginSlice = createSlice({
       window.localStorage.setItem(PublicKeyItem, state.publicKey);
     },
     logout: state => {
-      // const relays = { ...state.relays };
       Object.assign(state, InitState);
       state.loggedOut = true;
       window.localStorage.clear();
-      // state.relays = relays;
-      // window.localStorage.setItem(RelayListKey, JSON.stringify(relays));
     },
   },
 });

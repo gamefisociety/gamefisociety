@@ -25,7 +25,7 @@ import { System } from 'nostr/NostrSystem';
 
 const GCardNote = (props) => {
     // console.log('props.profile', props.profile);
-    const { pubkey, info, data } = props;
+    const { pubkey, info, content, time } = props;
 
     const MetaPro = useMetadataPro();
 
@@ -50,11 +50,11 @@ const GCardNote = (props) => {
                                     margin: '12px',
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap'
-                                }} variant="body2" align="left">{data.content}</Typography>
+                                }} variant="body2" align="left">{content}</Typography>
                             );
                         } else if ((stritem.startsWith('http://') || stritem.startsWith('https://'))
                             && (stritem.endsWith('.png') || stritem.endsWith('.jpg') || stritem.endsWith('.gif'))) {
-                            console.log('render image', stritem);
+                            // console.log('render image', stritem);
                             return (<CardMedia
                                 component="img"
                                 key={'cxt-' + index + '-' + stritem}
@@ -89,6 +89,17 @@ const GCardNote = (props) => {
     //         </React.Fragment>
     //     )
     // }
+
+    const curTime = Number(Date.now() / 1000);
+    const getTime = (tim) => {
+        let diff = (curTime - tim).toFixed(1);
+        if (diff > 1) {
+            return diff + ' seconds';
+        } else {
+            return 'now';
+        }
+    }
+
     return (
         <Card sx={{ width: '100%', padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
             <CardActionArea
@@ -97,7 +108,7 @@ const GCardNote = (props) => {
                     sx={{ width: 26, height: 26 }}
                     edge="end"
                     alt="GameFi Society"
-                    src={info ? info.contentObj.picture : ''}
+                    src={info ? info.picture : ''}
                 />
                 <Typography sx={{ ml: '8px', width: '120px', whiteSpace: 'nowrap', overflow: 'hidden' }}
                     noWrap={true}
@@ -105,10 +116,10 @@ const GCardNote = (props) => {
                     {pubkey ? pubkey : 'default'}
                 </Typography>
                 <Typography sx={{ ml: '8px' }} variant="body2">
-                    {data ? data.created_at : 'default'}
+                    {getTime(Number(time))}
                 </Typography>
             </CardActionArea>
-            {data && renderContent(data.content)}
+            {content && renderContent(content)}
             {/* {data && <Typography sx={{
                 margin: '12px',
                 whiteSpace: 'pre-wrap'

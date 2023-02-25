@@ -10,12 +10,12 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import Snackbar from '@mui/material/Snackbar';
 
-import './GCardUser.scss';
+import './GCardUserSetting.scss';
 
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
-const GCardUser = (props) => {
+const GCardUserSetting = (props) => {
 
     const MetaPro = useMetadataPro();
 
@@ -210,4 +210,4 @@ const GCardUser = (props) => {
 
 }
 
-export default React.memo(GCardUser);
+export default React.memo(GCardUserSetting);

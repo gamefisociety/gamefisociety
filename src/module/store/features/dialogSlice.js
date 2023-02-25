@@ -9,7 +9,9 @@ const initialState = {
   isOpenLogin: false,
   status: 'idle',
   isOpenMenuLeft: true,
-  drawer: false,
+  isDrawer: false,
+  placeDrawer: 'right',
+  cardDrawer: 'follow'
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -49,7 +51,9 @@ export const dialogSlice = createSlice({
       state.isOpenMenuLeft = action.payload;
     },
     setDrawer: (state, action) => {
-      state.drawer = action.payload;
+      state.isDrawer = action.payload.isDrawer;
+      state.placeDrawer = action.payload.placeDrawer;
+      state.cardDrawer = action.payload.cardDrawer;
     }
     
   },

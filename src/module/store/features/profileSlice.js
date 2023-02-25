@@ -56,6 +56,7 @@ const ProfileSlice = createSlice({
       state.relays = Object.fromEntries(filtered.entries());
       state.latestRelays = createdAt;
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
+      // console.log('reduce relays', state.relays);
     },
     removeRelay: (state, action) => {
       delete state.relays[action.payload];

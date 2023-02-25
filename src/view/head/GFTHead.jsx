@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from "module/store/features/loginSlice";
 import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
+import { useRelayPro } from 'nostr/protocal/RelayPro';
 import { System } from 'nostr/NostrSystem';
 //
 import { styled, alpha } from '@mui/material/styles';
@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
+import { Divider } from '@mui/material/index';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -32,8 +33,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
 import {
-    decrement,
-    increment,
     setIsOpen,
     setIsOpenWallet,
     setOpenMenuLeft
@@ -42,6 +41,9 @@ import {
 import {
     setProfile,
 } from 'module/store/features/profileSlice';
+import { logout } from "module/store/features/loginSlice";
+import { setRelays } from 'module/store/features/profileSlice';
+import { setFollows } from 'module/store/features/userSlice';
 
 import './GFTHead.scss';
 
@@ -49,7 +51,7 @@ import ic_logo from "../../asset/image/logo/ic_logo.png"
 import ic_massage from "../../asset/image/home/ic_massage.png"
 import ic_wallet from "../../asset/image/home/ic_wallet.png"
 import ic_man from "../../asset/image/home/ic_man.png"
-import { Divider } from '../../../node_modules/@mui/material/index';
+import { EventKind } from 'nostr/def';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -93,10 +95,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GFTHead = () => {
     const navigate = useNavigate();
-    const { loggedOut, publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
-    const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft, drawer } = useSelector(s => s.dialog);
+    const { loggedOut, publicKey } = useSelector(s => s.login);
+    const { relays } = useSelector(s => s.profile);
+    const { follows, followUpdate } = useSelector(s => s.user);
+
+    const { account } = useWeb3React();
+    const { isOpenMenuLeft } = useSelector(s => s.dialog);
+    //
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -104,6 +110,7 @@ const GFTHead = () => {
     const { picture, display_name, nip05 } = useSelector(s => s.profile);
 
     const MetaPro = useMetadataPro();
+    const relayPro = useRelayPro();
 
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");
@@ -149,21 +156,61 @@ const GFTHead = () => {
     };
 
     const fetchMeta = () => {
-        let sub = MetaPro.get(publicKey);
-        console.log('MetadataSub', sub);
-        System.Broadcast(sub, 0, (msgs) => {
+        let subMeta = MetaPro.get(publicKey);
+        let subRelay = relayPro.get(publicKey);
+        subMeta.childs.push(subRelay);
+        // console.log('MetadataSub', subMeta);
+        System.Broadcast(subMeta, 0, (msgs) => {
             if (msgs) {
+                console.log('fetchMeta msgs', msgs);
                 msgs.map(msg => {
-                    if (msg.kind === 0 && msg.pubkey === publicKey && msg.content !== '') {
-                        let content = JSON.parse(msg.content);
-                        content.created_at = msg.created_at;
-                        // console.log('fetchMeta msgs', msg.content);
-                        dispatch(setProfile(content))
+                    if (msg.pubkey === publicKey) {
+                        if (msg.kind === EventKind.SetMetadata && msg.content !== '') {
+                            //meta data
+                            let contentMeta = JSON.parse(msg.content);
+                            contentMeta.created_at = msg.created_at;
+                            dispatch(setProfile(contentMeta))
+                        } else if (msg.kind === EventKind.ContactList) {
+                            if (msg.content !== '') {
+                                //relay info
+                                let content = JSON.parse(msg.content);
+                                let tmpRelays = {
+                                    relays: {
+                                        ...content,
+                                        ...relays,
+                                    },
+                                    createdAt: 1,
+                                };
+                                dispatch(setRelays(tmpRelays));
+                            }
+                            //follows
+                            if (msg.tags.length > 0) {
+                                let follow_pubkes = [];
+                                msg.tags.map(item => {
+                                    if (item.length === 2 && item[0] === 'p') {
+                                        follow_pubkes.push(item[1]);
+                                    }
+                                });
+                                let followsInfo = {
+                                    create_at: msg.created_at,
+                                    follows: follow_pubkes.concat()
+                                }
+                                dispatch(setFollows(followsInfo));
+                            }
+                            //
+                        }
                     }
                 });
             }
         });
     }
+    //
+    //init param form db or others
+    useEffect(() => {
+        // console.log('use db from reduce');
+        // dispatch(init('redux'));
+        // dispatch(initRelays())
+    }, []);
 
     useEffect(() => {
         if (loggedOut === false) {
@@ -176,12 +223,25 @@ const GFTHead = () => {
 
     const openProfile = () => {
         // fetchMeta();
-        navigate('/profile');
+        navigate('/setting');
         handleMenuClose();
     };
 
     const openSociety = () => {
-        dispatch(setDrawer(true));
+        dispatch(setDrawer({
+            isDrawer: true,
+            placeDrawer: 'right',
+            cardDrawer: 'follow'
+        }));
+        handleMenuClose();
+    }
+
+    const openRelays = () => {
+        dispatch(setDrawer({
+            isDrawer: true,
+            placeDrawer: 'top',
+            cardDrawer: 'relays'
+        }));
         handleMenuClose();
     }
 
@@ -273,10 +333,7 @@ const GFTHead = () => {
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={() => {
-                navigate('/profile');
-                setMobileMoreAnchorEl(null);
-            }}>
+            <MenuItem onClick={openProfile}>
                 <IconButton
                     size="large"
                     aria-label="account of current user"
@@ -343,6 +400,7 @@ const GFTHead = () => {
                                 size="large"
                                 aria-label="relay icon"
                                 color="inherit"
+                                onClick={openRelays}
                             >
                                 <PublicIcon />
                             </IconButton>
@@ -362,9 +420,7 @@ const GFTHead = () => {
                                     size="large"
                                     aria-label="relay icon"
                                     color="inherit"
-                                    onClick={() => {
-                                        navigate('/relays');
-                                    }}
+                                    onClick={openRelays}
                                 >
                                     <PublicIcon />
                                 </IconButton>

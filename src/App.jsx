@@ -17,6 +17,8 @@ import GLoginDialog from "view/dialog/GLoginDialog";
 import './App.css';
 
 import { System } from 'nostr/NostrSystem';
+import { init } from "module/store/features/loginSlice";
+import { initRelays } from 'module/store/features/profileSlice';
 
 //
 function getLibrary(provider, connector) {
@@ -34,7 +36,22 @@ System.initRelays();
 
 function App() {
 
+  const dispatch = useDispatch();
   const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
+  const { relays } = useSelector((s) => s.profile);
+  useEffect(() => {
+    if (relays) {
+      for (const [addr, v] of Object.entries(relays)) {
+        System.ConnectRelay(addr, v.read, v.write);
+      }
+    }
+  }, [relays]);
+  //init param form db or others
+  useEffect(() => {
+    // console.log('use db from reduce');
+    dispatch(init('redux'));
+    dispatch(initRelays())
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
