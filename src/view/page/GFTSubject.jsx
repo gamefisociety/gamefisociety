@@ -25,7 +25,7 @@ export const EmailRegex =
 
 
 
-function GFTGlobal() {
+function GFTSubject() {
     const relay = relayInit('wss://relay.damus.io')
     const [data, setData] = useState(new Map());
     const [inforData, setInforData] = useState(new Map());
@@ -233,4 +233,4 @@ function GFTGlobal() {
 
 }
 
-export default GFTGlobal;
+export default GFTSubject;
