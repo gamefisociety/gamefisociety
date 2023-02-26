@@ -41,7 +41,7 @@ const GCardUser = (props) => {
                     sx={{ height: '140px' }}
                     src="localProfile.banner"
                     image={profile ? profile.banner : ''}
-                    alt="card-user-banner"
+                    alt="no banner"
                 />
                 <Box sx={{
                     display: 'flex',
