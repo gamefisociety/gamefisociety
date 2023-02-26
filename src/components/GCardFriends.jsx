@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { EventKind } from "nostr/def";
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
@@ -67,7 +68,10 @@ function a11yProps(index) {
     };
 }
 
-const GCardFriends = () => {
+const GCardFriends = (props) => {
+    const { callback } = props;
+
+    const navigate = useNavigate();
     const FollowPro = useFollowPro();
     const MetadataPro = useMetadataPro();
     const { publicKey } = useSelector(s => s.login);
@@ -162,7 +166,12 @@ const GCardFriends = () => {
                             }
                             disablePadding>
                             <ListItemButton>
-                                <ListItemAvatar>
+                                <ListItemAvatar onClick={() => {
+                                    navigate('/profile', { state: { info: { ...item.content }, pubkey: pubkey } });
+                                    if (callback) {
+                                        callback();
+                                    }
+                                }}>
                                     <Avatar
                                         alt={'GameFi Society'}
                                         src={item.content.picture ? item.content.picture : ''}

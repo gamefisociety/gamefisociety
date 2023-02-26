@@ -81,7 +81,13 @@ const GFTHome = () => {
                             }))
                         }}
                     >
-                        {cardDrawer === 'follow' && <GCardFriends />}
+                        {cardDrawer === 'follow' && <GCardFriends callback={() => {
+                            dispatch(setDrawer({
+                                isDrawer: false,
+                                placeDrawer: 'right',
+                                cardDrawer: 'default'
+                            }))
+                        }} />}
                         {cardDrawer === 'relays' && <GCardRelays />}
                     </Drawer>
                 </Grid>
