@@ -230,7 +230,7 @@ const GFTGlobal = () => {
 
     const renderContent = () => {
         return (
-            <List>
+            <List sx={{ width: '100%', maxHeight: '800px', overflow: 'auto' }}>
                 {data.map((item, index) => {
                     const info = inforData.get(item.pubkey);
                     // console.log('time', item);
@@ -250,8 +250,6 @@ const GFTGlobal = () => {
             minHeight: '800px',
             width: '100%',
             maxWidth: '960px',
-            overflow: 'auto',
-            // backgroundColor: 'blue'
         }}>
             {renderPartment()}
             {renderLables()}

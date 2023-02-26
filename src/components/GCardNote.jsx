@@ -101,7 +101,7 @@ const GCardNote = (props) => {
     }
 
     return (
-        <Card sx={{ width: '100%', padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
+        <Card sx={{ padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
             <CardActionArea
                 sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                 <Avatar
