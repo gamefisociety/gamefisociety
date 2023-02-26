@@ -1,13 +1,16 @@
 import { React, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom'
 import Box from '@mui/material/Box';
 
 import GCardUser from 'components/GCardUser';
 import './GProfile.scss';
 
-function GProfile() {
-    console.log('GProfile enter');
-    const profile = useSelector(s => s.profile);
+const GProfile = () => {
+    const location = useLocation();
+    console.log('GProfile enter', location);
+    const { info } = location.state;
+    //
     useEffect(() => {
         return () => {
             //
@@ -24,7 +27,7 @@ function GProfile() {
             justifyContent: 'center',
             my: '24px'
         }}>
-            <GCardUser profile={{ ...profile }} />
+            <GCardUser profile={{ ...info }} />
             <Box sx={{ height: '12px' }}></Box>
         </Box>
     );

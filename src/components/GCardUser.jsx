@@ -66,9 +66,6 @@ const GCardUser = (props) => {
 
     return (
         <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px' }}>
-            <Typography align='left' variant="h6" component="div">
-                {'Profile Panel'}
-            </Typography>
             <CardActionArea sx={{ mt: '12px' }}>
                 <Avatar
                     sx={{ width: 64, height: 64, position: 'absolute', left: '24px', top: '120px' }}

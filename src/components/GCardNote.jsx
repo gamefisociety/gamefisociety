@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-
 import IconButton from '@mui/material/IconButton';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import IosShareIcon from '@mui/icons-material/IosShare';
-
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
@@ -24,7 +21,8 @@ import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
 const GCardNote = (props) => {
-    // console.log('props.profile', props.profile);
+    const navigate = useNavigate();
+
     const { pubkey, info, content, time } = props;
 
     const MetaPro = useMetadataPro();
@@ -103,7 +101,16 @@ const GCardNote = (props) => {
     return (
         <Card sx={{ padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
             <CardActionArea
-                sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start'
+                }}
+                onClick={() => {
+                    navigate('/profile', { state: { info: { ...info } } });
+                }}
+            >
                 <Avatar
                     sx={{ width: 26, height: 26 }}
                     edge="end"
