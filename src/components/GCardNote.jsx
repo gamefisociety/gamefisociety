@@ -108,7 +108,7 @@ const GCardNote = (props) => {
                     justifyContent: 'flex-start'
                 }}
                 onClick={() => {
-                    navigate('/profile', { state: { info: { ...info } } });
+                    navigate('/profile', { state: { info: { ...info }, pubkey: pubkey } });
                 }}
             >
                 <Avatar
