@@ -98,9 +98,15 @@ const GCardNote = (props) => {
     }
 
     return (
-        <Card sx={{ padding: '12px', borderBottom: 1, borderColor: 'divider' }}>
+        <Card sx={{
+            width: '100%',
+            borderBottom: 1,
+            borderColor: 'divider'
+        }}>
             <CardActionArea
                 sx={{
+                    py: '12px',
+                    px: '24px',
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -111,9 +117,9 @@ const GCardNote = (props) => {
                 }}
             >
                 <Avatar
-                    sx={{ width: 26, height: 26 }}
-                    edge="end"
-                    alt="GameFi Society"
+                    sx={{ width: '26px', height: '26px' }}
+                    // edge="end"
+                    alt="Avatar"
                     src={info ? info.picture : ''}
                 />
                 <Typography sx={{ ml: '8px', width: '120px', whiteSpace: 'nowrap', overflow: 'hidden' }}

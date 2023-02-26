@@ -14,17 +14,14 @@ import Snackbar from '@mui/material/Snackbar';
 import './GCardUser.scss';
 
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
+import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
+
 
 const GCardUser = (props) => {
 
     const { profile, pubkey } = props;
 
-    console.log('GCardUser profile', profile);
-
-    const MetaPro = useMetadataPro();
-
-    const { publicKey, privateKey } = useSelector(s => s.login);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,8 +31,10 @@ const GCardUser = (props) => {
 
     //#1F1F1F
     return (
-        <Card sx={{ backgroundColor: '#1F1F1F', padding: '12px', minWidth: '960px' }}>
-            <CardContent>
+        <Card sx={{ width: '100%', backgroundColor: '#1F1F1F' }}>
+            <CardContent sx={{
+                padding: '12px'
+            }}>
                 <CardMedia
                     component="img"
                     sx={{ height: '140px' }}
