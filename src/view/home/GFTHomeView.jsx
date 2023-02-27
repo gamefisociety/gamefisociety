@@ -99,12 +99,13 @@ const GFTHomeView = () => {
 
     const renderVideos = () => {
         return (
-            <Grid container spacing={2}>
+            <Grid container spacing={0}>
                 {videoList.map((item, index) => (
                     <Grid item key={'video-index-' + index} sx={{
                         // backgroundColor: 'blue'
                     }}>
                         <Card sx={{
+                            padding: '2px',
                             width: '320px'
                         }} onClick={() => itemVideo(index)}>
                             <CardActionArea>
