@@ -263,13 +263,34 @@ const GLoginDialog = () => {
         );
     }
 
-    const renderOld = () => {
+    const renderLogin = () => {
         return (
-            <DialogContent>
-                <DialogContentText color="primary">
+            <DialogContent sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                paddingBottom: '26px'
+            }}>
+                <IconButton sx={{
+                    position: 'absolute',
+                    left: '12px',
+                    top: '12px'
+                }} onClick={() => {
+                    setLoginState(0);
+                }}>
+                    <ArrowBackIosIcon />
+                </IconButton>
+                <CardMedia
+                    component="img"
+                    sx={{ width: '120px', height: '120px' }}
+                    src={logo_blue}
+                    alt="Paella dish"
+                />
+                <DialogContentText color="primary" variant={'h6'}>
                     {'Please enter your private key!'}
                 </DialogContentText>
                 <TextField
+                    sx={{ mt: '24px' }}
                     autoFocus
                     margin="dense"
                     id="name"
@@ -284,14 +305,15 @@ const GLoginDialog = () => {
                         setKeys({ ...keys });
                     }}
                 />
-                <FormGroup>
-                    <FormControlLabel control={<Switch checked={isNip19} onChange={(ev) => {
-                        console.log('target', ev.target.checked);
-                        setNip19(ev.target.checked);
-                    }} />} label="nip19" />
+                <FormGroup sx={{ width: '100%' }}>
+                    <FormControlLabel sx={{ mt: '12px' }} control={<Switch checked={isNip19}
+                        onChange={(ev) => {
+                            console.log('target', ev.target.checked);
+                            setNip19(ev.target.checked);
+                        }} />} label="nip19" />
                 </FormGroup>
+                <Box sx={{ flexGrow: 1 }}></Box>
                 <Button sx={{
-                    marginTop: '24px',
                     width: '90%'
                 }}
                     variant="contained"
@@ -447,7 +469,7 @@ const GLoginDialog = () => {
         } else if (loginState === 3) {
             return renderKeys();
         } else if (loginState === 100) {
-            return renderOld();
+            return renderLogin();
         }
         return null;
     }
