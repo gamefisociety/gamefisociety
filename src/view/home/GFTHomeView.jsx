@@ -32,7 +32,6 @@ import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
-
 import ic_banner_l1 from "asset/image/home/banner_l1.png"
 import ic_banner_l2 from "asset/image/home/banner_l2.png"
 import ic_banner_c from "asset/image/home/banner_c.png"
@@ -40,6 +39,9 @@ import ic_banner_r from "asset/image/home/banner_r.png"
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+const win_w = window.screen.width;
+console.log('widows width', win_w);
 
 const banners = [
     {
@@ -110,8 +112,11 @@ const banners = [
     }
 ]
 
+
 const GFTHomeView = () => {
 
+    const [winWidth, setWinWidth] = useState(win_w);
+    //
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);
     const [fsLightList, setFsLightList] = useState([]);
@@ -127,9 +132,18 @@ const GFTHomeView = () => {
         requsetData();
         fetchAllNFTs();
         return () => {
-
         }
+    }, [])
 
+    useEffect(() => {
+        const winResize = (e) => {
+            console.log('window resize', e.target.screen.width);
+            setWinWidth(e.target.screen.width);
+        }
+        window.addEventListener('resize', winResize)
+        return () => {
+            window.removeEventListener('resize', winResize);
+        }
     }, [])
 
     const requsetData = () => {
@@ -190,20 +204,12 @@ const GFTHomeView = () => {
                 onChangeIndex={handleStepChange}
                 enableMouseEvents
             >
-                {/* <Box
-                    component="img"
-                    sx={{
-                        width: '246px',
-                        height: '',
-                        display: 'block',
-                        overflow: 'hidden',
-                        // width: '100%',
-                    }}
-                    src={ic_banner_l1}
-                    alt={'l1'}
-                /> */}
                 {banners.map((step, index) => (
-                    <Grid container key={'banner-index-' + index} spacing={2}>
+                    <Grid container key={'banner-index-' + index} spacing={2} sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
                         <Grid item xs={4}>
                             <Box
                                 key={'banner-index-' + index}
@@ -216,9 +222,11 @@ const GFTHomeView = () => {
                                 <Box
                                     component="img"
                                     sx={{
+                                        padding: '8px',
                                         width: '100%',
                                         display: 'block',
                                         overflow: 'hidden',
+                                        objectFit: 'fill'
                                         // maxHeight: '116px'
                                     }}
                                     src={step.l1.img}
@@ -227,9 +235,11 @@ const GFTHomeView = () => {
                                 <Box
                                     component="img"
                                     sx={{
+                                        padding: '8px',
                                         width: '100%',
                                         display: 'block',
                                         overflow: 'hidden',
+                                        objectFit: 'fill'
                                         // maxHeight: '116px'
                                     }}
                                     src={step.l2.img}
@@ -248,6 +258,16 @@ const GFTHomeView = () => {
                                 src={step.c.img}
                                 alt={'a'}
                             />
+                            {/* <Typography
+                                sx={{
+                                    width: '100%',
+                                    backgroundColor: '#2F2F2F',
+                                }}
+                                variant="h5"
+                                color='white'
+                                align={'center'}>
+                                {step.c.label}
+                            </Typography> */}
                         </Grid>
                         <Grid item xs={4}>
                             <Box
@@ -261,6 +281,7 @@ const GFTHomeView = () => {
                                 alt={'a'}
                             />
                         </Grid>
+                        <Typography >{step.r.label}</Typography>
                     </Grid>
                 ))}
             </AutoPlaySwipeableViews>
