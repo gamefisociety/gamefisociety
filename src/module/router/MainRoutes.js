@@ -6,6 +6,7 @@ import GFTHome from "../../view/home/GFTHome";
 const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
 const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
+const GFTMintNFT = Loadable(lazy(() => import('view/home/GFTMintNFT')));
 const GHall = Loadable(lazy(() => import('view/page/GHall')));
 const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
 const GSetting = Loadable(lazy(() => import('view/page/GSetting')));
@@ -41,6 +42,10 @@ const MainRoutes = {
         {
             path: '/follow',
             element: <GFTFollow />,
+        },
+        {
+            path: '/mint',
+            element: <GFTMintNFT />,
         },
         {
             path: '/chat',

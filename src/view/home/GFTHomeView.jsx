@@ -130,7 +130,7 @@ const GFTHomeView = () => {
     const navigate = useNavigate();
     useEffect(() => {
         requsetData();
-        fetchAllNFTs();
+        // fetchAllNFTs();
         return () => {
         }
     }, [])
