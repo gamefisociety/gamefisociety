@@ -119,7 +119,7 @@ const GFTLeftMenu = () => {
             navigate('/create_project');
         } else if (item.txt === 'MINT AVATAR') {
             if (account) {
-                dispatch(setOpenMintAvatar(true));
+                navigate('/mint');
             } else {
                 dispatch(setIsOpen(true));
             }

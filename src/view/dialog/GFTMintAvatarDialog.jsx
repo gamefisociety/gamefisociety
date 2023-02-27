@@ -26,7 +26,7 @@ const GFTMintAvatarDialog = () => {
 
     const getAvatarBalance = () => {
         if (account) {
-            GSTAvatarNFTBase.getTokenbalanceOf(library, account).then(res => {
+            GSTAvatarNFTBase.getTokenBalanceOf(library, account).then(res => {
                 if (res > 0) {
                     setCheckState(3);
                 }
