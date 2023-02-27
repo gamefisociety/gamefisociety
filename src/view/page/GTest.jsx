@@ -3,7 +3,6 @@ import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import GFTFooter from '../footer/GFTFooter';
 import './GTest.scss';
 
 function GTest() {
@@ -25,7 +24,6 @@ function GTest() {
                     <span className='txt'> {'Test'} </span>
                 </div>
             </div>
-            <GFTFooter></GFTFooter>
         </div >
     );
 

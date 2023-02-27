@@ -3,7 +3,6 @@ import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import GFTFooter from '../footer/GFTFooter';
 import './GHall.scss';
 
 function GHall() {
@@ -26,7 +25,6 @@ function GHall() {
                     <span className='txt'> {'Hall'} </span>
                 </div>
             </div>
-            <GFTFooter></GFTFooter>
         </div >
     );
 

@@ -33,15 +33,15 @@ const GFTFooter = () => {
 
     return (
         <Paper sx={{
-            py: '24px',
+            pt: '24px',
             px: '42px',
             backgroundColor: '#0F0F0F'
         }}>
             <Divider />
             <Box sx={{
-                py: '16px',
                 display: 'flex',
-                flexDirection: 'row'
+                flexDirection: 'row',
+                alignItems: 'center',
             }}>
                 <CardMedia
                     component="img"
@@ -102,7 +102,7 @@ const GFTFooter = () => {
                 />
             </Box>
             <Divider />
-            <Grid container spacing={2}>
+            {/* <Grid container spacing={2}>
                 <Grid item xs={3}>
                     <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
                 </Grid>
@@ -116,7 +116,7 @@ const GFTFooter = () => {
                     <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
                 </Grid>
             </Grid>
-            <Divider />
+            <Divider /> */}
             <Box sx={{
                 py: '16px',
                 display: 'flex',

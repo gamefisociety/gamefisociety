@@ -10,7 +10,6 @@ import "swiper/css/pagination";
 import MenuUnstyled from '@mui/base/MenuUnstyled';
 import { StyledListbox, StyledMenuItem, Popper } from '../menu/GFTMenuPopStyle'
 import { useSnackbar } from "notistack";
-import GFTFooter from '../footer/GFTFooter';
 import {
     getDetailData
 } from '../../api/requestData'
@@ -357,7 +356,6 @@ function GFTNFTDetail() {
                     ))}
                 </div>
             </div>
-            <GFTFooter></GFTFooter>
             <FsLightbox
                 toggler={togglerVideos.toggles}
                 sources={videosBox}
