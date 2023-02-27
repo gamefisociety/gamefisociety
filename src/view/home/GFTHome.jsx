@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom'
-import './GFTHome.scss';
 import { System } from 'nostr/NostrSystem';
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 import Grid from '@mui/material/Grid';
 import GFTHead from 'view/head/GFTHead'
+import GBanner from 'view/head/GBanner';
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
 import GFTFooter from 'view/footer/GFTFooter';
 import Box from '@mui/material/Box';
@@ -17,6 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { SearchRelays } from "nostr/Const";
 import { setDrawer } from 'module/store/features/dialogSlice';
+
+import './GFTHome.scss';
 
 const GFTHome = () => {
 
@@ -42,6 +44,9 @@ const GFTHome = () => {
             <Grid sx={{ flexGrow: 1 }} container>
                 <Grid item xs={12}>
                     <GFTHead />
+                </Grid>
+                <Grid item xs={12}>
+                    <GBanner />
                 </Grid>
                 <Grid sx={{ flexGrow: 1 }} container>
                     <Grid item xs={2}>
