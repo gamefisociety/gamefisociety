@@ -249,7 +249,7 @@ const GLoginDialog = () => {
                         {license_5}
                     </DialogContentText>
                 </DialogContent>
-
+                <Box sx={{ flexGrow: 1 }}></Box>
                 <Button sx={{ marginTop: '24px', width: '75%' }} variant="contained" color="primary" onClick={() => {
                     newKeys();
                     setLoginState(2);
@@ -399,14 +399,14 @@ const GLoginDialog = () => {
                 <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
                     {'Before we start, you need to save your account information, keep your private key safe so you can log in at any time.'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '24px' }} color={'primary'} variant={'h6'}>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle1'}>
                     {'Public Key'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText sx={{ marginTop: '6px' }} color={'primary'} variant={'subtitle2'}>
                     {'This is your account D, you can give this to your friends so that they can follow you. Click to copy.'}
                 </DialogContentText>
                 <DialogActions disableSpacing={true}>=
-                    <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                    <Typography sx={{ marginTop: '6px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('npub', keys.pub)}
                     </Typography>
                     <IconButton aria-label="pub-done" color={'white'} onClick={() => {
@@ -415,21 +415,22 @@ const GLoginDialog = () => {
                         <DoneIcon />
                     </IconButton>
                 </DialogActions>
-                <DialogContentText sx={{ marginTop: '24px' }} color={'primary'} variant={'h6'}>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle1'}>
                     {'Private Key'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText sx={{ marginTop: '6px' }} color={'primary'} variant={'subtitle2'}>
                     This is your secret account key. You need this to access your account. Don't share this with anyone! Save it in a password manager and keep it safe!
                 </DialogContentText>
                 <DialogActions disableSpacing={true}>=
-                    <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                    <Typography sx={{ marginTop: '6px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('nsec', keys.pri)}
                     </Typography>
                     <IconButton aria-label="pri-copy" color={'white'}>
                         <ContentCopyIcon />
                     </IconButton>
                 </DialogActions>
-                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={handleCreate}>
+                <Box sx={{ flexGrow: 1 }}></Box>
+                <Button sx={{ width: '75%' }} variant="contained" color="primary" onClick={handleCreate}>
                     {'Let’s go!'}
                 </Button>
             </DialogContent >
