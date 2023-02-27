@@ -27,7 +27,6 @@ import CardActions from '@mui/material/CardActions';
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
 const GFTHomeView = () => {
-
     //
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);

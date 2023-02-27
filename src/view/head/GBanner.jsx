@@ -102,18 +102,20 @@ const GBanner = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [winWidth, setWinWidth] = useState(win_w);
+    const tmpH = win_w >= 1440 ? 1400 * 0.75 * 0.333 : win_w * 0.75 * 0.333;
+    const [fixHeight, setFixHeight] = useState(tmpH);
 
     //
     const theme = useTheme();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = useState(0);
     const maxSteps = 3;
-
 
     useEffect(() => {
         const winResize = (e) => {
-            console.log('window resize', e.target.screen.width);
-            setWinWidth(e.target.screen.width);
+            const curWidth = e.target.screen.width;
+            const tmpH = curWidth >= 1440 ? 1400 * 0.75 * 0.333 : curWidth * 0.75 * 0.333;
+            console.log('window resize', e.target.screen.width, tmpH);
+            setFixHeight(tmpH);
         }
         window.addEventListener('resize', winResize)
         return () => {
@@ -121,6 +123,10 @@ const GBanner = () => {
         }
     }, [])
 
+    // window.onresize = () => {
+    //     const tmpW = window.width();
+    //     setFixHeight(tmpW);
+    // }
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -134,14 +140,42 @@ const GBanner = () => {
         setActiveStep(step);
     };
 
+    const renderPicture = (img, lable, url, h) => {
+        return (
+            <Box sx={{
+                backgroundColor: 'blue',
+                width: '100%',
+                height: h ? h : fixHeight,
+                // margin: '24px'
+            }}>
+                {/* <Box
+                    component="img"
+                    sx={{
+                        padding: '8px',
+                        display: 'block',
+                        overflow: 'hidden',
+                        objectFit: 'contain'
+                        // maxHeight: '116px'
+                    }}
+                    src={img}
+                    alt={'a'}
+                /> */}
+                <Typography
+                    sx={{
+                        width: '100%',
+                        backgroundColor: '#2F2F2F',
+                    }}
+                    variant="h5"
+                    color='white'
+                    align={'center'}>
+                    {fixHeight}
+                </Typography>
+            </Box>);
+    }
+    //document.documentElement.clientWidth
 
-
-    const renderBanner = () => {
-        return <Box sx={{
-            width: '100%',
-            // height: '42px',
-            // backgroundColor: 'blue'
-        }}>
+    return (
+        <Box sx={{ width: '100%', maxWidth: '1440px', backgroundColor: 'red' }}>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={activeStep}
@@ -159,71 +193,20 @@ const GBanner = () => {
                                 key={'banner-index-' + index}
                                 sx={{
                                     width: '100%',
+                                    height: fixHeight,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center'
                                 }}>
-                                <Box
-                                    component="img"
-                                    sx={{
-                                        padding: '8px',
-                                        width: '100%',
-                                        display: 'block',
-                                        overflow: 'hidden',
-                                        objectFit: 'fill'
-                                        // maxHeight: '116px'
-                                    }}
-                                    src={step.l1.img}
-                                    alt={'a'}
-                                />
-                                <Box
-                                    component="img"
-                                    sx={{
-                                        padding: '8px',
-                                        width: '100%',
-                                        display: 'block',
-                                        overflow: 'hidden',
-                                        objectFit: 'fill'
-                                        // maxHeight: '116px'
-                                    }}
-                                    src={step.l2.img}
-                                    alt={'a'}
-                                />
+                                {renderPicture(step.l1.img, step.l1.lable, step.l1.url, fixHeight * 0.5)}
+                                {renderPicture(step.l2.img, step.l2.lable, step.l2.url, fixHeight * 0.5)}
                             </Box>
                         </Grid>
                         <Grid item xs={4}>
-                            <Box
-                                component="img"
-                                sx={{
-                                    width: '100%',
-                                    display: 'block',
-                                    overflow: 'hidden',
-                                }}
-                                src={step.c.img}
-                                alt={'a'}
-                            />
-                            {/* <Typography
-                                sx={{
-                                    width: '100%',
-                                    backgroundColor: '#2F2F2F',
-                                }}
-                                variant="h5"
-                                color='white'
-                                align={'center'}>
-                                {step.c.label}
-                            </Typography> */}
+                            {renderPicture(step.c.img, step.c.lable, step.c.url)}
                         </Grid>
                         <Grid item xs={4}>
-                            <Box
-                                component="img"
-                                sx={{
-                                    width: '100%',
-                                    display: 'block',
-                                    overflow: 'hidden',
-                                }}
-                                src={step.r.img}
-                                alt={'a'}
-                            />
+                            {renderPicture(step.r.img, step.r.lable, step.r.url)}
                         </Grid>
                         <Typography >{step.r.label}</Typography>
                     </Grid>
@@ -258,15 +241,8 @@ const GBanner = () => {
                     </Button>
                 }
             />
-        </Box>;
-    }
-
-
-
-    return (
-        <Box sx={{ flexGrow: 1 }}>
         </Box>
     );
 }
 
-export default React.memo(GBanner);
+export default GBanner;

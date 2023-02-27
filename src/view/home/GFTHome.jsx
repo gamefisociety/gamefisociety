@@ -46,7 +46,13 @@ const GFTHome = () => {
                     <GFTHead />
                 </Grid>
                 <Grid item xs={12}>
-                    <GBanner />
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
+                        <GBanner />
+                    </Box>
                 </Grid>
                 <Grid sx={{ flexGrow: 1 }} container>
                     <Grid item xs={2}>
