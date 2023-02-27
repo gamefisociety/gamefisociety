@@ -34,6 +34,12 @@ import logo_blue from "asset/image/logo/logo_blue.png";
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
 
+const license_1 = 'End User License Agreement\n\n##Introduction\n\nThis End User License Agreement("EULA") is a legal agreement between you and GameFi Society Platform. For the use of our dapp,you agree to be bound of by the terms and conditions of this EULA';
+const license_2 = '## Prohibited Content and Conduct\n\nYou agree not to use our Dapp to create,upload,post,send,or store any content that:\n\n*Is illegal,infringing,or fraudulent\n*Is defamatory,libelous,or threatening\n*Is pornographic,obscene,or offensive\n*Is discriminatory or promotes hate speech\n*Is harmful to minors\n*Is intended to harass or bully others\n*Is intendet to impersonnate others';
+const license_3 = '## You also agree not to engage in any conduct thart.\n*Harasses or bullies others\n*Impersonates others\n*Is intended to intimidate or threaten others\n*Is intended to promote or incite violence';
+const license_4 = '## Changes to EULA\n\nWe reserve the right to update ro modify this EULA at any time and without prior notice. Your continues use of out Dapp or Application following any changes to this EULA will be deemed to be your acceptance of such changes.';
+const license_5 = '## Contact infomation\n\nIf you have any questions about this EULA, please contact us at apple.sve@gmail.com';
+
 const GLoginDialog = () => {
     const { isOpenLogin } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
@@ -109,31 +115,65 @@ const GLoginDialog = () => {
 
     const renderIntroduce = () => {
         return (
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '46px' }} >
+            <DialogContent sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                paddingBottom: '66px'
+            }}
+            >
                 <CardMedia
                     component="img"
-                    sx={{ width: 118, height: 118 }}
-                    image={logo_blue}
+                    sx={{ width: '120px', height: '120px' }}
+                    src={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText color={'primary'} variant={'h6'}>
-                    Welcome to Gamefi Society
+                <DialogContentText color={'primary'} variant={'h5'}>
+                    {'GameFi Society'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    Completely decentralize the game community, keep big technology away from your community
+                <DialogContentText
+                    sx={{ mt: '24px', px: '24px' }}
+                    color={'primary'}
+                    variant={'subtitle2'}>
+                    {'Decentralized game social platform. Good products come from user evaluations'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    Completely private, no phone number, email or name are required to create an account. Get started right away with zero friction.
+                <DialogContentText
+                    sx={{ mt: '12px', px: '24px' }}
+                    color={'primary'}
+                    variant={'subtitle2'}>
+                    {'Creating an account, doesn‘t require a phone number, email or name. Get started right away with zero friction.'}
                 </DialogContentText>
-                <Button sx={{ marginTop: '24px' }} variant="contained" color="primary" onClick={() => {
-                    setLoginState(1);
-                }}>
-                    Create Account
+                <DialogContentText
+                    sx={{ mt: '12px', px: '24px' }}
+                    color={'primary'}
+                    variant={'subtitle2'}>
+                    {'Freedom post notes on nostr network and blockchain net.'}
+                </DialogContentText>
+                <DialogContentText
+                    sx={{ mt: '12px', px: '24px' }}
+                    color={'primary'}
+                    variant={'subtitle2'}>
+                    {'End-to-End encrypted private messaging.Keep Big Tech out of your DMs'}
+                </DialogContentText>
+                <Box sx={{ flexGrow: 1 }}></Box>
+                <Button sx={{ mt: '24px', width: '75%' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        setLoginState(1);
+                    }}>
+                    {'Create Account'}
                 </Button>
-                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} variant="contained" color="primary" onClick={() => {
-                    setLoginState(100);
-                }}>
-                    Login
+                <Button sx={{
+                    mt: '24px',
+                    backgroundColor: 'transparent'
+                }}
+                    // variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        setLoginState(100);
+                    }}>
+                    {'Login'}
                 </Button>
             </DialogContent>
         );
@@ -141,29 +181,83 @@ const GLoginDialog = () => {
 
     const renderWarning = () => {
         return (
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
-                <IconButton sx={{ position: 'absolute', left: '10px', top: '10px' }} onClick={() => {
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: '46px' }} >
+                <IconButton sx={{
+                    position: 'absolute',
+                    left: '12px',
+                    top: '12px'
+                }} onClick={() => {
                     setLoginState(0);
                 }}>
                     <ArrowBackIosIcon />
                 </IconButton>
-                <DialogContentText color={'primary'} variant={'h6'}>
-                    You can review the end user agreement before registering
+                <DialogContentText sx={{
+                    mt: '36px',
+                    mb: '12px'
+                }} color={'primary'} variant={'h5'}>
+                    {'EULA'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    Completely decentralize the game community, keep big technology away from your community
-                </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    Completely private, no phone number, email or name are required to create an account. Get started right away with zero friction.
-                </DialogContentText>
-                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
+                <DialogContent dividers={true}>
+                    <DialogContentText
+                        sx={{
+                            marginTop: '12px',
+                            wordWrap: 'break-word',
+                            whiteSpace: 'pre-wrap'
+                        }}
+                        color={'primary'}
+                        variant={'subtitle2'}>
+                        {license_1}
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            marginTop: '12px',
+                            wordWrap: 'break-word',
+                            whiteSpace: 'pre-wrap'
+                        }}
+                        color={'primary'}
+                        variant={'subtitle2'}>
+                        {license_2}
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            marginTop: '12px',
+                            wordWrap: 'break-word',
+                            whiteSpace: 'pre-wrap'
+                        }}
+                        color={'primary'}
+                        variant={'subtitle2'}>
+                        {license_3}
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            marginTop: '12px',
+                            wordWrap: 'break-word',
+                            whiteSpace: 'pre-wrap'
+                        }}
+                        color={'primary'}
+                        variant={'subtitle2'}>
+                        {license_4}
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            marginTop: '12px',
+                            wordWrap: 'break-word',
+                            whiteSpace: 'pre-wrap'
+                        }}
+                        color={'primary'}
+                        variant={'subtitle2'}>
+                        {license_5}
+                    </DialogContentText>
+                </DialogContent>
+
+                <Button sx={{ marginTop: '24px', width: '75%' }} variant="contained" color="primary" onClick={() => {
                     newKeys();
                     setLoginState(2);
                 }}>
-                    Accept
+                    {'Accept'}
                 </Button>
-                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} variant="contained" color="primary" onClick={handleClose}>
-                    Reject
+                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} onClick={handleClose}>
+                    {'Reject'}
                 </Button>
             </DialogContent >
         );
@@ -196,10 +290,21 @@ const GLoginDialog = () => {
                         setNip19(ev.target.checked);
                     }} />} label="nip19" />
                 </FormGroup>
-                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={handleLogin}>
+                <Button sx={{
+                    marginTop: '24px',
+                    width: '90%'
+                }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleLogin}>
                     {'Let’s go!'}
                 </Button>
-                <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" onClick={handleClose}>
+                <Button sx={{
+                    marginTop: '24px',
+                    width: '90%'
+                }}
+                    variant="contained"
+                    onClick={handleClose}>
                     {'Cancle'}
                 </Button>
             </DialogContent>
@@ -208,27 +313,31 @@ const GLoginDialog = () => {
 
     const renderProfile = () => {
         return (
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: '46px' }} >
-                <IconButton sx={{ position: 'absolute', left: '10px', top: '10px' }} onClick={() => {
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '26px' }} >
+                <IconButton sx={{
+                    position: 'absolute',
+                    left: '12px',
+                    top: '12px'
+                }} onClick={() => {
                     setLoginState(0);
                 }}>
                     <ArrowBackIosIcon />
                 </IconButton>
-                <DialogContentText color={'primary'} variant={'h6'}>
-                    Create Account
-                </DialogContentText>
                 <CardMedia
                     component="img"
-                    sx={{ width: 118, height: 118 }}
-                    image={logo_blue}
+                    sx={{ width: '120px', height: '120px' }}
+                    src={logo_blue}
                     alt="Paella dish"
                 />
+                <DialogContentText color={'primary'} variant={'h6'}>
+                    {'Create Account'}
+                </DialogContentText>
                 <DialogContentText
                     sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
                     Username
                 </DialogContentText>
                 <TextField
-                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
+                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
                     value={profile.nickname}
                     onChange={(event) => {
                         profile.nickname = event.target.value;
@@ -237,10 +346,10 @@ const GLoginDialog = () => {
                 />
                 <DialogContentText
                     sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
-                    Display Name
+                    {'Display Name'}
                 </DialogContentText>
                 <TextField
-                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
+                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
                     value={profile.displayname}
                     onChange={(event) => {
                         profile.displayname = event.target.value;
@@ -251,10 +360,10 @@ const GLoginDialog = () => {
                     sx={{ marginTop: '12px', width: '100%' }}
                     color={'primary'}
                     variant={'subtitle2'}>
-                    About
+                    {'About'}
                 </DialogContentText>
                 <TextField
-                    sx={{ marginTop: '12px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }}
+                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }}
                     value={profile.about}
                     onChange={(event) => {
                         profile.about = event.target.value;
@@ -262,7 +371,7 @@ const GLoginDialog = () => {
                     }}
                     variant="outlined" />
                 <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
-                    Account ID
+                    {'Account ID (public key)'}
                 </DialogContentText>
                 <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                     {hexToBech32('npub', keys.pub)}
@@ -270,7 +379,7 @@ const GLoginDialog = () => {
                 <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
                     setLoginState(3);
                 }}>
-                    Create
+                    {'Create'}
                 </Button>
             </DialogContent >
         );
@@ -285,22 +394,24 @@ const GLoginDialog = () => {
                     <ArrowBackIosIcon />
                 </IconButton>
                 <DialogContentText color={'primary'} variant={'h6'}>
-                    {'Welcome,' + profile.nickname + '!'}
+                    {'Welcome, ' + profile.nickname + '!'}
                 </DialogContentText>
                 <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    Before we start, you need to save your account information, keep your private key safe so you can log in at any time.
+                    {'Before we start, you need to save your account information, keep your private key safe so you can log in at any time.'}
                 </DialogContentText>
                 <DialogContentText sx={{ marginTop: '24px' }} color={'primary'} variant={'h6'}>
                     {'Public Key'}
                 </DialogContentText>
                 <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
-                    This is your account D, you can give this to your friends so that they can follow you. Click to copy.
+                    {'This is your account D, you can give this to your friends so that they can follow you. Click to copy.'}
                 </DialogContentText>
                 <DialogActions disableSpacing={true}>=
                     <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('npub', keys.pub)}
                     </Typography>
-                    <IconButton aria-label="pub-done" color={'primary'}>
+                    <IconButton aria-label="pub-done" color={'white'} onClick={() => {
+                        //
+                    }}>
                         <DoneIcon />
                     </IconButton>
                 </DialogActions>
@@ -314,7 +425,7 @@ const GLoginDialog = () => {
                     <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('nsec', keys.pri)}
                     </Typography>
-                    <IconButton aria-label="pri-copy" color={'secondary'}>
+                    <IconButton aria-label="pri-copy" color={'white'}>
                         <ContentCopyIcon />
                     </IconButton>
                 </DialogActions>
@@ -344,10 +455,12 @@ const GLoginDialog = () => {
         <Dialog open={isOpenLogin} fullWidth={true} maxWidth={'xs'}
             PaperProps={{
                 style: {
+                    height: '650px',
                     backgroundColor: 'rgba(15, 15, 15, 1)',
                     boxShadow: 'none',
                 },
-            }}>
+            }}
+        >
             {renderContent()}
         </Dialog>
     );
