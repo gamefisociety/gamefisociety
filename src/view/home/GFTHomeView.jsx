@@ -93,7 +93,7 @@ const GFTHomeView = () => {
         return <Box sx={{
             width: '100%',
             height: '42px',
-            backgroundColor: 'blue'
+            // backgroundColor: 'blue'
         }}></Box>;
     }
 
@@ -164,56 +164,64 @@ const GFTHomeView = () => {
     // </div>
     const renderGames = () => {
         return (
-            <Grid container spacing={2}>
-                {chainList.map((item, index) => (
-                    <Grid item key={'game-index-' + index} sx={{
-                        // backgroundColor: 'blue'
-                    }}>
-                        <Card sx={{
-                            width: '240px',
-                            borderRadius: '4px',
-                            backgroundColor: 'gray'
+            <Box>
+                <Typography sx={{
+                    width: '100%',
+                    margin: '12px',
+                }} color={'white'} variant={'h6'} align={'left'} >
+                    {'Project List'}
+                </Typography>
+                <Grid container spacing={2}>
+                    {chainList.map((item, index) => (
+                        <Grid item key={'game-index-' + index} sx={{
+                            // backgroundColor: 'blue'
                         }}>
-                            <CardActionArea sx={{
-                                padding: '12px',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'flex-start',
-                                justifyContent: 'flex-start'
+                            <Card sx={{
+                                width: '240px',
+                                borderRadius: '4px',
+                                backgroundColor: 'gray'
                             }}>
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: '64px', height: '64px', borderRadius: '4px' }}
-                                    src={item.icon}
-                                    alt="icon" />
-                                <Typography sx={{
-                                    marginLeft: '12px'
-                                }} color={'white'} variant={'body1'} >
-                                    {item.name}
-                                </Typography>
-                            </CardActionArea>
-                            <CardActions disableSpacing>
-                                <IconButton sx={{}} size="small" onClick={() => {
-                                    // setLoginState(0);
+                                <CardActionArea sx={{
+                                    padding: '12px',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'flex-start',
+                                    justifyContent: 'flex-start'
                                 }}>
-                                    <ChatBubbleOutlineIcon />
-                                </IconButton>
-                                {/* <IconButton sx={{}} size="small" onClick={() => {
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: '64px', height: '64px', borderRadius: '4px' }}
+                                        src={item.icon}
+                                        alt="icon" />
+                                    <Typography sx={{
+                                        marginLeft: '12px'
+                                    }} color={'white'} variant={'body1'} >
+                                        {item.name}
+                                    </Typography>
+                                </CardActionArea>
+                                <CardActions disableSpacing>
+                                    <IconButton sx={{}} size="small" onClick={() => {
+                                        // setLoginState(0);
+                                    }}>
+                                        <ChatBubbleOutlineIcon />
+                                    </IconButton>
+                                    {/* <IconButton sx={{}} size="small" onClick={() => {
                                     // setLoginState(0);
                                 }}>
                                     <ChatBubbleOutlineIcon />
                                 </IconButton> */}
-                                <Box sx={{ flexGrow: 1 }}></Box>
-                                <IconButton sx={{}} size="small" onClick={() => {
-                                    // setLoginState(0);
-                                }}>
-                                    <MoreHorizIcon />
-                                </IconButton>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+                                    <Box sx={{ flexGrow: 1 }}></Box>
+                                    <IconButton sx={{}} size="small" onClick={() => {
+                                        // setLoginState(0);
+                                    }}>
+                                        <MoreHorizIcon />
+                                    </IconButton>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         )
     }
 
@@ -221,7 +229,7 @@ const GFTHomeView = () => {
         return <Box sx={{
             width: '100%',
             height: '42px',
-            backgroundColor: 'blue'
+            // backgroundColor: 'blue'
         }}></Box>;
     }
 
@@ -229,7 +237,7 @@ const GFTHomeView = () => {
         return <Box sx={{
             width: '100%',
             height: '42px',
-            backgroundColor: 'blue'
+            // backgroundColor: 'blue'
         }}></Box>;
     }
 
@@ -248,13 +256,6 @@ const GFTHomeView = () => {
                     {renderVideos()}
                 </Grid>
                 <Divider />
-                <Grid item xs={12}>
-                    <Typography sx={{
-                        marginLeft: '12px'
-                    }} color={'white'} variant={'h6'} >
-                        {'Project List'}
-                    </Typography>
-                </Grid>
                 <Grid item xs={9}>
                     {renderGames()}
                 </Grid>
