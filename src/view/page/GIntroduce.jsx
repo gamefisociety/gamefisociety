@@ -626,6 +626,34 @@ const GIntroduce = () => {
                                 <Button size="large">{'Join in discord'}</Button>
                             </CardActions>
                         </Card>
+                        <Card sx={{
+                            width: '240px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            borderRadius: '12px',
+                            py: '12px',
+                        }}>
+                            <CardMedia
+                                sx={{
+                                    width: '80px',
+                                    height: '80px'
+                                    // overflow: 'hidden',
+                                    // objectFit: 'cover'
+                                }}
+                                image={logo_telegram}
+                                title="green iguana"
+                                alt={'p'}
+                            />
+                            <CardContent>
+                                <Typography variant="h6" component="div">
+                                    {'Telegram'}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="large">{'Join in telegram'}</Button>
+                            </CardActions>
+                        </Card>
                     </Stack>
                 </Stack>
             </Stack>
