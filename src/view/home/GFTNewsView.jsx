@@ -56,10 +56,13 @@ const GFTNewsView = () => {
     return(
         <Grid container spacing={1}>
         {
-          <Grid item xs={6}>
+          <Grid  sx={{
+            boxSizing: 'border-box',    
+            }} item xs={10}>
             <ThemeProvider theme={darkTheme}>
               <Box
                 sx={{
+                  boxSizing: 'border-box',    
                   p: 1,
                   bgcolor: 'background.default',
                   display: 'grid',
@@ -68,7 +71,15 @@ const GFTNewsView = () => {
                 }}
               >
                 {newsList.map((elevation,index) => (
-                  <Item key={index} >
+                  <Item sx={{
+                    padding:'10px',
+                    width: '100%',
+                    height: 'auto',
+                    fontSize: '12px',
+                    fontFamily: 'Saira',
+                    lineHeight:'14px',
+                    textAlign:'left',
+                  }} key={index} >
                     {elevation.content}
                   </Item>
                 ))}
