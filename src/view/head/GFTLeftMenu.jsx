@@ -187,7 +187,7 @@ const GFTLeftMenu = () => {
     }
 
     return (
-        <Paper sx={{ width: 230 }}>
+        <Paper className='left_menu_bg'>
             <MenuList>
                 {mapData.map((item, index) => {
                     return renderMenu(item, index)

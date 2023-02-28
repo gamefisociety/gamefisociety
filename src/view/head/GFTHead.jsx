@@ -361,8 +361,8 @@ const GFTHead = () => {
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#191A1B' }}>
+        <Box className='head_bg'>
+            <AppBar position="static">
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -444,17 +444,6 @@ const GFTHead = () => {
                                     alt="GameFi Society"
                                     src={picture}
                                     onClick={handleProfileMenuOpen} />
-                                {/* <IconButton
-                                    size="large"
-                                    edge="end"
-                                    aria-label="account of current user"
-                                    aria-controls={menuId}
-                                    aria-haspopup="true"
-                                    onClick={handleProfileMenuOpen}
-                                    color="inherit"
-                                >
-                                    <AccountCircle />
-                                </IconButton> */}
                             </Box>
                     }
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

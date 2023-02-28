@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom'
-import { System } from 'nostr/NostrSystem';
-import { init } from "module/store/features/loginSlice";
-import { initRelays } from 'module/store/features/profileSlice';
 import Grid from '@mui/material/Grid';
 import GFTHead from 'view/head/GFTHead'
 import GBanner from 'view/head/GBanner';
@@ -18,94 +15,76 @@ import CloseIcon from '@mui/icons-material/Close';
 import { SearchRelays } from "nostr/Const";
 import { setDrawer } from 'module/store/features/dialogSlice';
 
+import { System } from 'nostr/NostrSystem';
+import { init } from "module/store/features/loginSlice";
+import { initRelays } from 'module/store/features/profileSlice';
+
 import './GFTHome.scss';
+import { Stack } from '../../../node_modules/@mui/material/index';
+
+// const win_h = window.client
 
 const GFTHome = () => {
 
     const dispatch = useDispatch();
     const { isDrawer, placeDrawer, cardDrawer } = useSelector(s => s.dialog);
-    // const { relays } = useSelector((s) => s.profile);
-    // useEffect(() => {
-    //     if (relays) {
-    //         for (const [addr, v] of Object.entries(relays)) {
-    //             System.ConnectRelay(addr, v.read, v.write);
-    //         }
-    //     }
-    // }, [relays]);
-    //init param form db or others
-    // useEffect(() => {
-    //     console.log('use db from reduce');
-    //     dispatch(init('redux'));
-    //     dispatch(initRelays())
-    // }, []);
 
     return (
-        <Box sx={{ flexGrow: 1, backgroundColor: '#0F0F0F' }}>
+        <Box className='main_bg'>
+            <GFTHead />
+            <Box sx={{
+                width: '280px',
+                position: 'fixed',
+                top: '60px',
+                zIndex: '1000',
+            }}>
+                <GFTLeftMenu />
+            </Box>
             <Grid sx={{ flexGrow: 1 }} container>
-                <Grid item xs={12}>
-                    <GFTHead />
-                </Grid>
-                <Grid item xs={12}>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center'
-                    }}>
-                        <GBanner />
-                    </Box>
-                </Grid>
-                <Grid sx={{ flexGrow: 1 }} container>
-                    <Grid item xs={2}>
-                        <GFTLeftMenu />
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Box sx={{
-                            // flexGrow: 1,
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '100%',
-                            // maxWidth: '1440px',
-                            minHeight: '460px',
-                            // backgroundColor: 'red',
-                        }}
-                        >
-                            <Outlet />
-                        </Box>
-                    </Grid>
-                    <Drawer
-                        PaperProps={{
-                            style:
-                            {
-                                borderRadius: '12px',
-                                backgroundColor: '#0F0F0F'
-                            }
-                        }}
-                        anchor={placeDrawer}
-                        open={isDrawer}
-                        onClose={() => {
-                            dispatch(setDrawer({
-                                isDrawer: false,
-                                placeDrawer: 'right',
-                                cardDrawer: 'default'
-                            }))
-                        }}
+                <Stack
+                    className='main_content'
+                    direction="row"
+                    alignItems={'flex-start'}
+                    justifyContent={'flex-start'}
+                >
+                    <Box sx={{ width: '280px' }} />
+                    <Stack
+                        sx={{ flexGrow: 1, backgroundColor: '#000000' }}
+                        direction="column"
+                        alignItems={'center'}
+                        justifyContent={'flex-start'}
                     >
-                        {cardDrawer === 'follow' && <GCardFriends callback={() => {
-                            dispatch(setDrawer({
-                                isDrawer: false,
-                                placeDrawer: 'right',
-                                cardDrawer: 'default'
-                            }))
-                        }} />}
-                        {cardDrawer === 'relays' && <GCardRelays />}
-                    </Drawer>
-                </Grid>
-                <Grid item xs={12}>
-                    <GFTFooter />
-                </Grid>
+                        <Outlet />
+                    </Stack>
+                </Stack>
             </Grid>
+            <Drawer
+                PaperProps={{
+                    style:
+                    {
+                        borderRadius: '12px',
+                        backgroundColor: '#0F0F0F'
+                    }
+                }}
+                anchor={placeDrawer}
+                open={isDrawer}
+                onClose={() => {
+                    dispatch(setDrawer({
+                        isDrawer: false,
+                        placeDrawer: 'right',
+                        cardDrawer: 'default'
+                    }))
+                }}
+            >
+                {cardDrawer === 'follow' && <GCardFriends callback={() => {
+                    dispatch(setDrawer({
+                        isDrawer: false,
+                        placeDrawer: 'right',
+                        cardDrawer: 'default'
+                    }))
+                }} />}
+                {cardDrawer === 'relays' && <GCardRelays />}
+            </Drawer>
         </Box >
     );
 }

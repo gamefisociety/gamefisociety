@@ -7,36 +7,4 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 22px;
-
-    .item {
-        cursor: pointer;
-        width: auto;
-        height: auto;
-        min-width: 200px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        margin-top: 18px;
-        &:hover{
-            transform: scale(1.1);
-            background-color: rgba(39, 39, 39, 1);
-        }
-
-        .img {
-            width: 28px;
-            height: 28px;
-        }
-
-        .txt {
-            font-size: 12px;
-            font-family: Saira;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin-left: 20px;
-            // line-height: 40px;
-            // height: 40px;
-        }
-    }
-
 }

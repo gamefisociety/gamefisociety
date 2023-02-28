@@ -1,19 +1,9 @@
-.home_bg {
-    width: 100vw;
-    height: 100vh;
-    min-width: 900px;
+.main_bg {
+    width: 100%;
     background-color: #0F0F0F;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    box-sizing: border-box;
-    overflow: hidden;
+}
 
-    .bt_layout {
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        height: 100%;
-        flex: 1;
-    }
+.main_content {
+    width: 100%;
+    // overflow: hidden;
 }

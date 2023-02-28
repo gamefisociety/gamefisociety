@@ -7,7 +7,6 @@ import {
     getListChainData
 } from '../../api/requestData'
 import { getALLAssetsForAccount } from '../../api/nftscan'
-import './GFTHomeView.scss';
 import FsLightbox from 'fslightbox-react';
 
 import Paper from '@mui/material/Paper';
@@ -25,15 +24,16 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardActions from '@mui/material/CardActions';
 import GFTNewsView from './GFTNewsView'
 
-
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
+
+import './GFTHomeView.scss';
 
 const GFTHomeView = () => {
     //
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);
     const [fsLightList, setFsLightList] = useState([]);
-   
+
     const [toggler, setToggler] = useState(false);
     const [togSlide, setTogSlide] = useState(0);
 
@@ -62,10 +62,10 @@ const GFTHomeView = () => {
             console.log(res.list, "res");
             setChainList(res.list);
         })
-       
+
     }
 
-   
+
 
     const fetchAllNFTs = () => {
         getALLAssetsForAccount("0xcE97Ca12A55288f388a09392c6D525eBe94F8617").then(res => {
@@ -130,30 +130,7 @@ const GFTHomeView = () => {
             </Grid>
         );
     }
-    // <div key={"chain_list" + index} className='rank_layout' onClick={() => itemNFTClick(item)}>
-    //     {
-    //         item.isAd ?
-    //             <div className='number_ad'>AD</div>
-    //             :
-    //             <div className='number'>{index}</div>
-    //     }
-    //     <img className='pro_img' src={item.icon}></img>
-    //     <div className='layout_name'>
-    //         <span className='name'>{item.name}</span>
-    //         <span className='chain_name'>{item.chainName}</span>
-    //     </div>
-    //     <span className="balance">{item.balance}</span>
-    //     <div className='layout_uaw'>
-    //         <span className='uaw'>{item.uawSum}</span>
-    //         <span className='uaw_red'>{item.uaw}%</span>
-    //     </div>
-    //     <span className='volume'>{item.volume}</span>
-    //     <div className='layout_social_signal'>
-    //         <img className='img_hot' src={ic_item_hot}></img>
-    //         <span className='txt_price'>{item.price}</span>
-    //         <span className='txt_up'>{item.percentage}%</span>
-    //     </div>
-    // </div>
+
     const renderGames = () => {
         return (
             <Box>
@@ -218,7 +195,7 @@ const GFTHomeView = () => {
     }
 
     const renderNews = () => {
-        return <GFTNewsView/>
+        return <GFTNewsView />
     }
 
     const renderNots = () => {
@@ -230,11 +207,7 @@ const GFTHomeView = () => {
     }
 
     return (
-        <Paper sx={{
-            width: '100%',
-            minHeight: '400px',
-            // backgroundColor: 'red'
-        }}>
+        <Paper className='content_bg'>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Box sx={{ padding: '24px' }}>
@@ -263,52 +236,6 @@ const GFTHomeView = () => {
                 slide={togSlide}
             />
         </Paper>)
-
-    // <div className='content_bg'>
-    //     <div className='item_tab'>
-    //         <div className='card_layout right_18'>
-    //             <img className='img' src={ic_card}></img>
-    //             <span className='txt'>Card Area</span>
-    //         </div>
-    //         <div className='mobile_layout right_18'>
-    //             <img className='img' src={ic_mobile}></img>
-    //             <span className='txt1'>
-    //                 Mobile
-    //             </span>
-    //             <span className='txt'>
-    //                 Phone Area
-    //             </span>
-    //         </div>
-    //         <div className='nft_layout right_18'>
-    //             <img className='img' src={ic_nft}></img>
-    //             <span className='txt'>NFT Trading Area</span>
-    //         </div>
-    //         <div className='battle_layout'>
-    //             <img className='img' src={ic_battle}></img>
-    //             <span className='txt'>Battle Area</span>
-    //         </div>
-    //     </div>
-    //     <div className='video_layout'>
-    //     </div>
-    //     <div className="rank_layout_head">
-    //         <span className='number'>#</span>
-    //         <span className='name'>Name</span>
-    //         <div className='layout_item'>
-    //             <span className='balance'>Balance</span>
-    //             <img className='sort_img' src={ic_default_sort}></img>
-    //         </div>
-    //         <div className='layout_item'>
-    //             <span className='uaw'>UAW</span>
-    //             <img className='sort_img' src={ic_default_sort}></img>
-    //         </div>
-    //         <div className='layout_item'>
-    //             <span className='volume'>Volume</span>
-    //             <img className='sort_img' src={ic_default_sort}></img>
-    //         </div>
-    //         <span className='social_signa'>social_signa</span>
-    //     </div>
-    // </div>);
-
 }
 
 export default GFTHomeView;
