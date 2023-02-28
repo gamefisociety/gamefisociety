@@ -34,22 +34,22 @@ const banners = [
         l1: {
             img: ic_banner_l1,
             link: 'abc',
-            label: 'abc'
+            label: 'aaa'
         },
         l2: {
             img: ic_banner_l2,
             link: 'abc',
-            label: 'abc'
+            label: 'abb'
         },
         c: {
             img: ic_banner_c,
             link: 'abc',
-            label: 'abc'
+            label: 'ccc'
         },
         r: {
             img: ic_banner_r,
             link: 'abc',
-            label: 'abc'
+            label: 'ddd'
         },
     },
     {
@@ -101,25 +101,14 @@ const banners = [
 const GBanner = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const tmpH = win_w >= 1440 ? 1400 * 0.75 * 0.333 : win_w * 0.75 * 0.333;
-    const [fixHeight, setFixHeight] = useState(tmpH);
-
     //
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = 3;
 
     useEffect(() => {
-        const winResize = (e) => {
-            const curWidth = e.target.screen.width;
-            const tmpH = curWidth >= 1440 ? 1400 * 0.75 * 0.333 : curWidth * 0.75 * 0.333;
-            console.log('window resize', e.target.screen.width, tmpH);
-            setFixHeight(tmpH);
-        }
-        window.addEventListener('resize', winResize)
+
         return () => {
-            window.removeEventListener('resize', winResize);
         }
     }, [])
 
@@ -143,33 +132,34 @@ const GBanner = () => {
     const renderPicture = (img, lable, url, h) => {
         return (
             <Box sx={{
-                // backgroundColor: 'blue',
-                width: '100%',
-                // height: h ? h : fixHeight,
-                // margin: '24px'
+                // width: '100%',
+                backgroundColor: 'blue',
             }}>
                 <Box
                     component="img"
                     sx={{
-                        // padding: '8px',
                         width: '100%',
+                        height: '146px',
                         display: 'block',
                         overflow: 'hidden',
-                        objectFit: 'contain'
-                        // maxHeight: '116px'
+                        objectFit: 'fill'
                     }}
                     src={img}
-                    alt={'a'}
                 />
                 {/* <Typography
                     sx={{
                         width: '100%',
+                        height: '50%',
                         backgroundColor: '#2F2F2F',
+                        position: 'absolute',
+                        bottom: '0px',
+                        left: '0px',
+                        opacity: 0.2,
                     }}
                     variant="h5"
                     color='white'
                     align={'center'}>
-                    {fixHeight}
+                    {lable}
                 </Typography> */}
             </Box>);
     }
@@ -177,9 +167,10 @@ const GBanner = () => {
 
     return (
         <Box sx={{
+            py: '24px',
             width: '100%',
             maxWidth: '1440px',
-            // backgroundColor: 'red'
+            backgroundColor: 'rgba(15, 15, 15, 1)',
         }}>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -193,58 +184,32 @@ const GBanner = () => {
                         flexDirection: 'row',
                         alignItems: 'center'
                     }}>
-                        <Grid item xs={4}>
-                            <Box
-                                key={'banner-index-' + index}
-                                sx={{
-                                    width: '100%',
-                                    // height: fixHeight,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center'
-                                }}>
-                                {renderPicture(step.l1.img, step.l1.lable, step.l1.url, fixHeight * 0.5)}
-                                {renderPicture(step.l2.img, step.l2.lable, step.l2.url, fixHeight * 0.5)}
-                            </Box>
+                        <Grid item xs={3}>
+                            {renderPicture(step.l1.img, step.l1.label, step.l1.url)}
                         </Grid>
-                        <Grid item xs={4}>
-                            {renderPicture(step.c.img, step.c.lable, step.c.url)}
+                        <Grid item xs={3}>
+                            {renderPicture(step.l2.img, step.l2.label, step.l2.url)}
                         </Grid>
-                        <Grid item xs={4}>
-                            {renderPicture(step.r.img, step.r.lable, step.r.url)}
+                        <Grid item xs={3}>
+                            {renderPicture(step.c.img, step.c.label, step.c.url)}
+                        </Grid>
+                        <Grid item xs={3}>
+                            {renderPicture(step.r.img, step.r.label, step.r.url)}
                         </Grid>
                         <Typography >{step.r.label}</Typography>
                     </Grid>
                 ))}
             </AutoPlaySwipeableViews>
             <MobileStepper
+                sx={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    backgroundColor: 'transparent',
+                }}
                 steps={maxSteps}
                 position="static"
                 activeStep={activeStep}
-                nextButton={
-                    <Button
-                        size="small"
-                        onClick={handleNext}
-                        disabled={activeStep === maxSteps - 1}
-                    >
-                        Next
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowLeft />
-                        ) : (
-                            <KeyboardArrowRight />
-                        )}
-                    </Button>
-                }
-                backButton={
-                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowRight />
-                        ) : (
-                            <KeyboardArrowLeft />
-                        )}
-                        Back
-                    </Button>
-                }
+                variant={'dots'}
             />
         </Box>
     );

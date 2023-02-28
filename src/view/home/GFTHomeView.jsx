@@ -27,6 +27,7 @@ import GFTNewsView from './GFTNewsView'
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
 import './GFTHomeView.scss';
+import GBanner from 'view/head/GBanner';
 
 const GFTHomeView = () => {
     //
@@ -85,7 +86,7 @@ const GFTHomeView = () => {
     }
 
     const renderBanner = () => {
-        return null;
+        return <GBanner />;
     }
 
     const renderVideos = () => {
