@@ -12,6 +12,8 @@ import FsLightbox from 'fslightbox-react';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -28,6 +30,7 @@ import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
 import './GFTHomeView.scss';
 import GBanner from 'view/head/GBanner';
+import { Button } from '../../../node_modules/@mui/material/index';
 
 const GFTHomeView = () => {
     //
@@ -66,8 +69,6 @@ const GFTHomeView = () => {
 
     }
 
-
-
     const fetchAllNFTs = () => {
         getALLAssetsForAccount("0xcE97Ca12A55288f388a09392c6D525eBe94F8617").then(res => {
             console.log('fetchAllNFTs', res);
@@ -91,112 +92,145 @@ const GFTHomeView = () => {
 
     const renderVideos = () => {
         return (
-            <Grid container spacing={0}>
-                {videoList.map((item, index) => (
-                    <Grid item key={'video-index-' + index} sx={{
-                        // backgroundColor: 'blue'
-                    }}>
-                        <Card sx={{
-                            padding: '2px',
-                            width: '320px'
-                        }} onClick={() => itemVideo(index)}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: '100%' }}
-                                    src={item.thumb}
-                                    alt="video" />
-                                <CardMedia
-                                    component="img"
-                                    sx={{
-                                        width: '62px',
-                                        height: '62px',
-                                        position: 'absolute',
-                                        left: '38%',
-                                        top: '38%'
-                                    }}
-                                    src={ic_play_youtube}
-                                    alt="play" />
-                            </CardActionArea>
-                            <CardActionArea>
-                                <CardContent>
-                                    <Typography sx={{ width: '100%', }} color={'white'} variant={'body2'} multiline >
-                                        {item.desc}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+            <Stack sx={{
+                flexGrow: 1,
+                width: '100%',
+                // backgroundColor: 'red',
+                py: '12px',
+            }} spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
+                <Typography sx={{
+                    width: '100%',
+                    margin: '12px',
+                }} color={'white'} variant={'h6'} align={'left'} >
+                    {'Videos'}
+                </Typography>
+                <Grid container spacing={2}>
+                    {videoList.map((item, index) => (
+                        <Grid item key={'video-index-' + index} sx={{
+                            // backgroundColor: 'blue'
+                        }}>
+                            <Card sx={{
+                                padding: '2px',
+                                width: '320px'
+                            }} onClick={() => itemVideo(index)}>
+                                <CardActionArea>
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: '100%' }}
+                                        src={item.thumb}
+                                        alt="video" />
+                                    <CardMedia
+                                        component="img"
+                                        sx={{
+                                            width: '62px',
+                                            height: '62px',
+                                            position: 'absolute',
+                                            left: '38%',
+                                            top: '38%'
+                                        }}
+                                        src={ic_play_youtube}
+                                        alt="play" />
+                                </CardActionArea>
+                                <CardActionArea>
+                                    <CardContent>
+                                        <Typography sx={{ width: '100%', }} color={'white'} variant={'body2'} multiline >
+                                            {item.desc}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Stack>
         );
     }
 
     const renderGames = () => {
         return (
-            <Box>
+            <Stack spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
                 <Typography sx={{
                     width: '100%',
                     margin: '12px',
                 }} color={'white'} variant={'h6'} align={'left'} >
-                    {'Project List'}
+                    {'Projects'}
                 </Typography>
-                <Grid container spacing={2}>
-                    {chainList.map((item, index) => (
-                        <Grid item key={'game-index-' + index} sx={{
-                            // backgroundColor: 'blue'
-                        }}>
-                            <Card sx={{
-                                width: '240px',
-                                borderRadius: '4px',
-                                backgroundColor: 'gray'
+                <Grid container spacing={2} sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    {chainList.map((item, index) => {
+                        if (index >= 10) {
+                            return null;
+                        }
+                        return (
+                            <Grid item key={'game-index-' + index} sx={{
+                                // backgroundColor: 'blue'
                             }}>
-                                <CardActionArea sx={{
-                                    padding: '12px',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'flex-start',
-                                    justifyContent: 'flex-start'
+                                <Card sx={{
+                                    width: '240px',
+                                    borderRadius: '4px',
+                                    backgroundColor: 'gray'
                                 }}>
-                                    <CardMedia
-                                        component="img"
-                                        sx={{ width: '64px', height: '64px', borderRadius: '4px' }}
-                                        src={item.icon}
-                                        alt="icon" />
-                                    <Typography sx={{
-                                        marginLeft: '12px'
-                                    }} color={'white'} variant={'body1'} >
-                                        {item.name}
-                                    </Typography>
-                                </CardActionArea>
-                                <CardActions disableSpacing>
-                                    <IconButton sx={{}} size="small" onClick={() => {
+                                    <CardActionArea sx={{
+                                        padding: '12px',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'flex-start',
+                                        justifyContent: 'flex-start'
+                                    }}>
+                                        <CardMedia
+                                            component="img"
+                                            sx={{ width: '64px', height: '64px', borderRadius: '4px' }}
+                                            src={item.icon}
+                                            alt="icon" />
+                                        <Typography sx={{
+                                            marginLeft: '12px'
+                                        }} color={'white'} variant={'body1'} >
+                                            {item.name}
+                                        </Typography>
+                                    </CardActionArea>
+                                    <CardActions disableSpacing>
+                                        <IconButton sx={{}} size="small" onClick={() => {
+                                            // setLoginState(0);
+                                        }}>
+                                            <ChatBubbleOutlineIcon />
+                                        </IconButton>
+                                        {/* <IconButton sx={{}} size="small" onClick={() => {
                                         // setLoginState(0);
                                     }}>
                                         <ChatBubbleOutlineIcon />
-                                    </IconButton>
-                                    {/* <IconButton sx={{}} size="small" onClick={() => {
-                                    // setLoginState(0);
-                                }}>
-                                    <ChatBubbleOutlineIcon />
-                                </IconButton> */}
-                                    <Box sx={{ flexGrow: 1 }}></Box>
-                                    <IconButton sx={{}} size="small" onClick={() => {
-                                        // setLoginState(0);
-                                    }}>
-                                        <MoreHorizIcon />
-                                    </IconButton>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
+                                    </IconButton> */}
+                                        <Box sx={{ flexGrow: 1 }}></Box>
+                                        <IconButton sx={{}} size="small" onClick={() => {
+                                            // setLoginState(0);
+                                        }}>
+                                            <MoreHorizIcon />
+                                        </IconButton>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        );
+                    })}
                 </Grid>
-            </Box>
+            </Stack>
         )
     }
 
     const renderNews = () => {
-        return <GFTNewsView />
+        return (
+            <Stack spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
+                <Typography sx={{
+                    width: '100%',
+                    margin: '12px',
+                }} color={'white'} variant={'h6'} align={'left'} >
+                    {'News'}
+                </Typography>
+                <GFTNewsView />
+            </Stack>
+        );
     }
 
     const renderNots = () => {
@@ -209,7 +243,12 @@ const GFTHomeView = () => {
 
     return (
         <Paper className='content_bg'>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}>
                 <Grid item xs={12}>
                     <Box sx={{ padding: '24px' }}>
                         {renderBanner()}
@@ -219,13 +258,17 @@ const GFTHomeView = () => {
                 <Grid item xs={12}>
                     {renderVideos()}
                 </Grid>
-                <Divider />
-                <Grid item xs={9}>
-                    {renderGames()}
-                </Grid>
-                <Grid item xs={3}>
+                <Button sx={{ my: '16px' }}>{'More'}</Button>
+                <Divider fullWidth color={'white'} />
+                <Grid item xs={12}>
                     {renderNews()}
                 </Grid>
+                <Button sx={{ my: '16px' }}>{'More'}</Button>
+                <Divider />
+                <Grid item xs={12}>
+                    {renderGames()}
+                </Grid>
+                <Button sx={{ my: '16px' }}>{'More'}</Button>
                 <Divider />
                 <Grid item xs={12}>
                     {renderNots()}

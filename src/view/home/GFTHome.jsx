@@ -7,6 +7,7 @@ import GBanner from 'view/head/GBanner';
 import GFTLeftMenu from 'view/head/GFTLeftMenu';
 import GFTFooter from 'view/footer/GFTFooter';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import GCardFriends from 'components/GCardFriends';
 import GCardRelays from 'components/GCardRelays';
@@ -20,7 +21,6 @@ import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 
 import './GFTHome.scss';
-import { Stack } from '../../../node_modules/@mui/material/index';
 
 // const win_h = window.client
 
