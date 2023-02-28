@@ -38,7 +38,12 @@ const GCardNote = (props) => {
     const renderContent = (str) => {
         const strArray = str.split("\n");
         return (
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-start'
+            }}>
                 {strArray.map((stritem, index) => {
                     try {
                         if (stritem === '') {
