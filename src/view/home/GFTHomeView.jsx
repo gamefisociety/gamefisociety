@@ -104,7 +104,12 @@ const GFTHomeView = () => {
                 }} color={'white'} variant={'h6'} align={'left'} >
                     {'Videos'}
                 </Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                }}>
                     {videoList.map((item, index) => (
                         <Grid item key={'video-index-' + index} sx={{
                             // backgroundColor: 'blue'
@@ -244,7 +249,7 @@ const GFTHomeView = () => {
     return (
         <Paper className='content_bg'>
             <Grid container spacing={2} sx={{
-                flexGrow: 1,
+                // width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -254,22 +259,30 @@ const GFTHomeView = () => {
                         {renderBanner()}
                     </Box>
                 </Grid>
-                <Divider />
+                <Divider light={true} sx={{
+                    width: '100%',
+                }} />
                 <Grid item xs={12}>
                     {renderVideos()}
                 </Grid>
                 <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider fullWidth color={'white'} />
+                <Divider light={true} sx={{
+                    width: '100%',
+                }} />
                 <Grid item xs={12}>
                     {renderNews()}
                 </Grid>
                 <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider />
+                <Divider light={true} sx={{
+                    width: '100%',
+                }} />
                 <Grid item xs={12}>
                     {renderGames()}
                 </Grid>
                 <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider />
+                <Divider light={true} sx={{
+                    width: '100%',
+                }} />
                 <Grid item xs={12}>
                     {renderNots()}
                 </Grid>
