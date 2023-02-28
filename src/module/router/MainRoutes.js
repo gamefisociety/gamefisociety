@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import Loadable from '../../components/Loadable';
 import GFTHome from "../../view/home/GFTHome";
 const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
+const GIntroduce = Loadable(lazy(() => import('view/page/GIntroduce')));
 const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GFTMintNFT = Loadable(lazy(() => import('view/home/GFTMintNFT')));
@@ -22,6 +23,10 @@ const MainRoutes = {
         {
             path: '/',
             element: <GFTHomeView />,
+        },
+        {
+            path: '/introduce',
+            element: <GIntroduce />,
         },
         {
             path: '/detail',

@@ -37,7 +37,7 @@ const mapData = [
         img: ic_chat
     },
     {
-        txt: 'SUBSCRIPTION',
+        txt: 'INTRODUCE',
         img: ic_sub
     },
     {
@@ -127,6 +127,8 @@ const GFTLeftMenu = () => {
             navigate('/hall');
         } else if (item.txt === 'IPFS') {
             navigate('/ipfs');
+        } else if (item.txt === 'INTRODUCE') {
+            navigate('/introduce');
         }
     }
 
