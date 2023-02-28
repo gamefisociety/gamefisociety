@@ -23,6 +23,8 @@ import IconButton from '@mui/material/IconButton';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardActions from '@mui/material/CardActions';
+import GFTNewsView from './GFTNewsView'
+
 
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
@@ -31,8 +33,11 @@ const GFTHomeView = () => {
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);
     const [fsLightList, setFsLightList] = useState([]);
+   
     const [toggler, setToggler] = useState(false);
     const [togSlide, setTogSlide] = useState(0);
+
+
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -57,7 +62,10 @@ const GFTHomeView = () => {
             console.log(res.list, "res");
             setChainList(res.list);
         })
+       
     }
+
+   
 
     const fetchAllNFTs = () => {
         getALLAssetsForAccount("0xcE97Ca12A55288f388a09392c6D525eBe94F8617").then(res => {
@@ -210,11 +218,7 @@ const GFTHomeView = () => {
     }
 
     const renderNews = () => {
-        return <Box sx={{
-            width: '100%',
-            height: '42px',
-            // backgroundColor: 'blue'
-        }}></Box>;
+        return <GFTNewsView/>
     }
 
     const renderNots = () => {
