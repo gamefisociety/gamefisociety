@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
+import { Link } from 'react-router-dom';
+
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
@@ -38,7 +40,8 @@ const mapData = [
     },
     {
         txt: 'INTRODUCE',
-        img: ic_sub
+        img: ic_sub,
+        out: true
     },
     {
         txt: 'DIVIDER',
@@ -132,6 +135,15 @@ const GFTLeftMenu = () => {
         }
     }
 
+    let itemTarget = '_self';
+    // if (item.target) {
+    //     itemTarget = '_blank';
+    // }
+    let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };
+    // if (item?.external) {
+    // }
+    // let listItemProps = { component: 'a', href: '/introduce', target: itemTarget };
+
     return (
         <Paper sx={{ width: 230 }}>
             <MenuList>
@@ -140,9 +152,14 @@ const GFTLeftMenu = () => {
                         return (<Divider key={'main-menu-' + index} />);
                     }
                     return (
-                        <MenuItem key={'main-menu-' + index} onClick={() => {
-                            clickMenu(item);
-                        }}>
+                        <MenuItem
+                            // {...listItemProps}
+                            key={'main-menu-' + index}
+                            onClick={() => {
+                                if (!item.out) {
+                                    clickMenu(item);
+                                }
+                            }}>
                             <CardMedia
                                 sx={{ width: 28, height: 28 }}
                                 component="img"
@@ -154,7 +171,6 @@ const GFTLeftMenu = () => {
                             </Typography>
                         </MenuItem>
                     )
-
                 })}
             </MenuList>
         </Paper>

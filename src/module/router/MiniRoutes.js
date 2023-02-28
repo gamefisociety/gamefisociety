@@ -11,7 +11,7 @@ const MiniRoutes = {
     element: <MiniLayout />,
     children: [
         {
-            path: 'introduce',
+            path: '/introduce',
             element: <GIntroduce />
         },
     ]
