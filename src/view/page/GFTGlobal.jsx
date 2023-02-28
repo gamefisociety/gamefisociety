@@ -230,7 +230,7 @@ const GFTGlobal = () => {
 
     const renderContent = () => {
         return (
-            <List sx={{ width: '100%', maxHeight: '800px', overflow: 'auto' }}>
+            <List sx={{ width: '100%', overflow: 'auto' }}>
                 {data.map((item, index) => {
                     const info = inforData.get(item.pubkey);
                     // console.log('time', item);

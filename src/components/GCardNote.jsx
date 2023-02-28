@@ -18,6 +18,7 @@ import './GCardUser.scss';
 
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
+import { CardContent } from '../../node_modules/@mui/material/index';
 
 const GCardNote = (props) => {
     const navigate = useNavigate();
@@ -39,6 +40,7 @@ const GCardNote = (props) => {
         const strArray = str.split("\n");
         return (
             <Box sx={{
+                width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -69,7 +71,9 @@ const GCardNote = (props) => {
                         } else {
                             return (
                                 <Typography sx={{
+                                    width: '100%',
                                     margin: '12px',
+                                    // px: '24px',
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap'
                                 }} variant="body2" align="left">{stritem}</Typography>
@@ -136,7 +140,9 @@ const GCardNote = (props) => {
                     {getTime(Number(time))}
                 </Typography>
             </CardActionArea>
-            {content && renderContent(content)}
+            <CardContent>
+                {content && renderContent(content)}
+            </CardContent>
             {/* {data && <Typography sx={{
                 margin: '12px',
                 whiteSpace: 'pre-wrap'

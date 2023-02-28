@@ -64,15 +64,15 @@ const mapData = [
         img: ''
     },
     {
-        txt: 'ETH',
+        txt: 'NEWS',
         img: ic_eth
     },
     {
-        txt: 'BNB',
+        txt: 'VIDEOS',
         img: ic_bnb
     },
     {
-        txt: 'POLYGON',
+        txt: 'GAMES',
         img: ic_polgon
     },
     {

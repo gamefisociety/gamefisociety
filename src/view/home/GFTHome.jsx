@@ -36,7 +36,7 @@ const GFTHome = () => {
                 width: '280px',
                 position: 'fixed',
                 top: '60px',
-                zIndex: '1000',
+                zIndex: '999',
             }}>
                 <GFTLeftMenu />
             </Box>
