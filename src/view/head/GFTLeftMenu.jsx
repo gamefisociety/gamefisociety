@@ -139,38 +139,58 @@ const GFTLeftMenu = () => {
     // if (item.target) {
     //     itemTarget = '_blank';
     // }
-    let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };
     // if (item?.external) {
     // }
     // let listItemProps = { component: 'a', href: '/introduce', target: itemTarget };
+
+    const renderMenu = (item, index) => {
+        if (item.txt === 'DIVIDER') {
+            return (<Divider key={'main-menu-' + index} />);
+        }
+        if (item.out) {
+            let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };
+            // let listItemProps = { component: 'a', href: '/introduce', target: itemTarget };
+            return (
+                <MenuItem
+                    {...listItemProps}
+                    key={'main-menu-' + index}
+                    onClick={() => { }}>
+                    <CardMedia
+                        sx={{ width: 28, height: 28 }}
+                        component="img"
+                        image={item.img}
+                        alt="green iguana"
+                    />
+                    <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
+                        {item.txt}
+                    </Typography>
+                </MenuItem>
+            );
+        }
+        return (
+            <MenuItem
+                key={'main-menu-' + index}
+                onClick={() => {
+                    clickMenu(item);
+                }}>
+                <CardMedia
+                    sx={{ width: 28, height: 28 }}
+                    component="img"
+                    image={item.img}
+                    alt="green iguana"
+                />
+                <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
+                    {item.txt}
+                </Typography>
+            </MenuItem>
+        )
+    }
 
     return (
         <Paper sx={{ width: 230 }}>
             <MenuList>
                 {mapData.map((item, index) => {
-                    if (item.txt === 'DIVIDER') {
-                        return (<Divider key={'main-menu-' + index} />);
-                    }
-                    return (
-                        <MenuItem
-                            // {...listItemProps}
-                            key={'main-menu-' + index}
-                            onClick={() => {
-                                if (!item.out) {
-                                    clickMenu(item);
-                                }
-                            }}>
-                            <CardMedia
-                                sx={{ width: 28, height: 28 }}
-                                component="img"
-                                image={item.img}
-                                alt="green iguana"
-                            />
-                            <Typography sx={{ mx: '12px' }} variant="caption" component="div" color="white">
-                                {item.txt}
-                            </Typography>
-                        </MenuItem>
-                    )
+                    return renderMenu(item, index)
                 })}
             </MenuList>
         </Paper>

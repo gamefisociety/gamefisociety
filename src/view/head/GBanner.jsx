@@ -143,15 +143,16 @@ const GBanner = () => {
     const renderPicture = (img, lable, url, h) => {
         return (
             <Box sx={{
-                backgroundColor: 'blue',
+                // backgroundColor: 'blue',
                 width: '100%',
-                height: h ? h : fixHeight,
+                // height: h ? h : fixHeight,
                 // margin: '24px'
             }}>
-                {/* <Box
+                <Box
                     component="img"
                     sx={{
-                        padding: '8px',
+                        // padding: '8px',
+                        width: '100%',
                         display: 'block',
                         overflow: 'hidden',
                         objectFit: 'contain'
@@ -159,8 +160,8 @@ const GBanner = () => {
                     }}
                     src={img}
                     alt={'a'}
-                /> */}
-                <Typography
+                />
+                {/* <Typography
                     sx={{
                         width: '100%',
                         backgroundColor: '#2F2F2F',
@@ -169,13 +170,17 @@ const GBanner = () => {
                     color='white'
                     align={'center'}>
                     {fixHeight}
-                </Typography>
+                </Typography> */}
             </Box>);
     }
     //document.documentElement.clientWidth
 
     return (
-        <Box sx={{ width: '100%', maxWidth: '1440px', backgroundColor: 'red' }}>
+        <Box sx={{
+            width: '100%',
+            maxWidth: '1440px',
+            // backgroundColor: 'red'
+        }}>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={activeStep}
@@ -193,7 +198,7 @@ const GBanner = () => {
                                 key={'banner-index-' + index}
                                 sx={{
                                     width: '100%',
-                                    height: fixHeight,
+                                    // height: fixHeight,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center'
