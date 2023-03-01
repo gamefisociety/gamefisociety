@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 
+import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -189,68 +190,30 @@ const GFTHomeView = () => {
                         {'Projects'}
                     </Typography>
                 </Box>
-                <Grid container sx={{
-                    mt: '24px',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
+                <Box className={'game_card_contain'}>
                     {chainList.map((item, index) => {
                         if (index >= 10) {
                             return null;
                         }
                         return (
-                            <Grid item key={'game-index-' + index} sx={{
-                                // backgroundColor: 'blue'
-                            }}>
-                                <Card sx={{
-                                    width: '240px',
-                                    margin: '6px',
-                                    borderRadius: '4px',
-                                    backgroundColor: 'gray'
-                                }}>
-                                    <CardActionArea sx={{
-                                        padding: '12px',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'flex-start',
-                                        justifyContent: 'flex-start'
-                                    }}>
-                                        <CardMedia
-                                            component="img"
-                                            sx={{ width: '64px', height: '64px', borderRadius: '4px' }}
-                                            src={item.icon}
-                                            alt="icon" />
-                                        <Typography sx={{
-                                            marginLeft: '12px'
-                                        }} color={'white'} variant={'body1'} >
-                                            {item.name}
-                                        </Typography>
-                                    </CardActionArea>
-                                    <CardActions disableSpacing>
-                                        <IconButton sx={{}} size="small" onClick={() => {
-                                            // setLoginState(0);
-                                        }}>
-                                            <ChatBubbleOutlineIcon />
-                                        </IconButton>
-                                        {/* <IconButton sx={{}} size="small" onClick={() => {
-                                        // setLoginState(0);
-                                    }}>
-                                        <ChatBubbleOutlineIcon />
-                                    </IconButton> */}
-                                        <Box sx={{ flexGrow: 1 }}></Box>
-                                        <IconButton sx={{}} size="small" onClick={() => {
-                                            // setLoginState(0);
-                                        }}>
-                                            <MoreHorizIcon />
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
+                            <Card className={'game_card'}>
+                                <Avatar sx={{
+                                    width: '64px',
+                                    height: '64px',
+                                }}
+                                    alt="Remy Sharp"
+                                    src={item.icon} />
+                                <Typography sx={{
+                                    mt: '12px'
+                                }} color={'white'} variant={'body1'} >
+                                    {item.name}
+                                </Typography>
+                                <Box sx={{ flexGrow: 1 }}></Box>
+                                <Button variant="contained">{'DETAIL'}</Button>
+                            </Card>
                         );
                     })}
-                </Grid>
+                </Box>
                 <Box sx={{
                     mt: '24px',
                     width: '100%',

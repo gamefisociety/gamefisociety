@@ -9,3 +9,27 @@
     // box-sizing: border-box;
     // background: #623b3b;
 }
+
+.game_card_contain {
+    padding-top: 24px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 32px;
+    gap: 32px;
+    // width: calc( 20% - 25.6px ) !important;
+    // height: 248px;
+    // border-radius: 12px;
+}
+
+.game_card {
+    width: calc( 20% - 25.6px ) !important;
+    height: 200px;
+    border-radius: 12px;
+    background-color: #15171c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
