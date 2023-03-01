@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Card, CardMedia, CardActionArea, CardActions, CardContent } from "@mui/material";
+import { Stepper, Step, StepLabel, StepContent } from "@mui/material";
 
 import './GIntroduce.scss';
 import GFTHead from 'view/head/GFTHead';
@@ -22,6 +23,39 @@ import logo_facebook from 'asset/image/logo/ic_facebook.png';
 import logo_youtube from 'asset/image/logo/ic_youtube.png';
 import logo_ins from 'asset/image/logo/ic_ins.png';
 import logo_github from 'asset/image/logo/ic_github.png';
+
+const steps = [
+    {
+        label: '2022-Q4',
+        description: '# a\n# b\n# c\n',
+    },
+    {
+        label: '2023-Q1',
+        description: `For each ad campaign that you create, you can control how much
+              you're willing to spend on clicks and conversions, which networks
+              and geographical locations you want your ads to show on, and more.`,
+    },
+    {
+        label: '2023-Q2',
+        description:
+            'An ad group contains one or more ads which target a shared set of keywords.',
+    },
+    {
+        label: '2023-Q3',
+        description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+    },
+    {
+        label: '2023-Q4',
+        description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+    },
+];
+
 
 const GIntroduce = () => {
 
@@ -453,14 +487,13 @@ const GIntroduce = () => {
                 // height: '400px',
                 // backgroundColor: 'red',
             }}>
-                <Stack direction="row" alignItems={'center'} justifyContent={'center'} sx={{
+                <Stack direction="column" alignItems={'center'} justifyContent={'center'} sx={{
                     width: '1440px',
-                    backgroundColor: 'blue',
+                    // backgroundColor: 'blue',
                 }}>
                     <Typography sx={{
                         width: '100%',
                         my: '46px',
-                        // ml: '8px'
                     }}
                         variant="h4"
                         color={'white'}
@@ -468,6 +501,25 @@ const GIntroduce = () => {
                     >
                         {'RoadMap'}
                     </Typography>
+                    <Stepper activeStep={1} orientation="horizontal" alternativeLabel={true}>
+                        {steps.map((step, index) => (
+                            <Step key={step.label} expanded={true}>
+                                <StepLabel>
+                                    {step.label}
+                                </StepLabel>
+                                <StepContent>
+                                    <Typography sx={{
+                                        mt: '24px',
+                                        wordBreak: "break-word",
+                                        whiteSpace: 'pre-wrap'
+                                    }}
+                                        variant="body2"
+                                        color='white'
+                                    >{step.description}</Typography>
+                                </StepContent>
+                            </Step>
+                        ))}
+                    </Stepper>
                 </Stack>
 
             </Stack>
