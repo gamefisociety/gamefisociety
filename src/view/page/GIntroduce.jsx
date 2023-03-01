@@ -11,7 +11,7 @@ import { Card, CardMedia, CardActionArea, CardActions, CardContent } from "@mui/
 import { Stepper, Step, StepLabel, StepContent } from "@mui/material";
 
 import './GIntroduce.scss';
-import GFTHead from 'view/head/GFTHead';
+import GHeadIntro from 'view/head/GHeadIntro';
 import GFTFooter from 'view/footer/GFTFooter';
 
 import footer_logo from "../../asset/image/logo/footer_logo.png"
@@ -716,7 +716,7 @@ const GIntroduce = () => {
         <Box sx={{ flexGrow: 1, backgroundColor: '#0F0F0F' }}>
             <Grid sx={{ flexGrow: 1 }} container spacing={2}>
                 <Grid item xs={12}>
-                    <GFTHead />
+                    <GHeadIntro />
                 </Grid>
                 <Grid item xs={12}>
                     {renderPartOne()}
