@@ -1,5 +1,6 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useLocation, Link, useSearchParams } from 'react-router-dom'
+import { useLocation, Link, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -15,13 +16,14 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import {
-    getListData,
     getListChainData
 } from 'api/requestData'
 
 import './GGamePage.scss';
 
 const GGamePage = () => {
+
+    const navigate = useNavigate();
 
     const [chainList, setChainList] = useState([]);
 
@@ -75,7 +77,9 @@ const GGamePage = () => {
                                 }} color={'white'} variant={'body1'} >
                                     {item.name}
                                 </Typography>
-                                <Box sx={{ flexGrow: 1 }}></Box>
+                                <Box sx={{ flexGrow: 1 }} onClick={() => {
+                                    navigate('/detail?name=' + item.name);
+                                }}></Box>
                                 <Button variant="contained">{'DETAIL'}</Button>
                             </Card>
                         );
