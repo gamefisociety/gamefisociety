@@ -25,13 +25,16 @@ function GTestIPFS() {
     catIPFSContent(cid)
       .then((res) => {
         setFetching(false);
-        if(typeof(res) == 'string'){
+        if(typeof(res) === 'string'){
           setContent(res);
+        }else if(typeof(res) === 'object'){
+          setContent(res.content);
         }
         console.log(res);
       })
       .catch((err) => {
         setFetching(false);
+        console.log(err);
       });
   };
   const handleInputChange = (e) => {
