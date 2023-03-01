@@ -5,5 +5,9 @@
 
 .main_content {
     width: 100%;
-    // overflow: hidden;
+    .scroll_content {
+        width: calc( 100vw - 280px);
+        background-color: #0F0F0F;
+        // overflow: hidden;
+    }
 }

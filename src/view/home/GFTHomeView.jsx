@@ -41,9 +41,8 @@ const GFTHomeView = () => {
     const [toggler, setToggler] = useState(false);
     const [togSlide, setTogSlide] = useState(0);
 
-
-
     const navigate = useNavigate();
+
     useEffect(() => {
         requsetData();
         // fetchAllNFTs();
@@ -93,30 +92,38 @@ const GFTHomeView = () => {
     const renderVideos = () => {
         return (
             <Stack sx={{
-                flexGrow: 1,
                 width: '100%',
-                // backgroundColor: 'red',
-                py: '12px',
-            }} spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
-                <Typography sx={{
+                minHeigth: '200px',
+                py: '24px',
+            }} spacing={2} direction="column" alignItems={'flex-start'} justifyContent={'flex-start'}>
+                <Box sx={{
                     width: '100%',
-                    margin: '12px',
-                }} color={'white'} variant={'h6'} align={'left'} >
-                    {'Videos'}
-                </Typography>
-                <Grid container spacing={2} sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                }}>
+                    <Typography sx={{
+                        ml: '24px',
+                    }} color={'white'} variant={'h6'} align={'left'} >
+                        {'Videos'}
+                    </Typography>
+                </Box>
+                <Grid container sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'flex-start',
+                    // backgroundColor: 'yellow',
                 }}>
                     {videoList.map((item, index) => (
                         <Grid item key={'video-index-' + index} sx={{
                             // backgroundColor: 'blue'
                         }}>
                             <Card sx={{
+                                margin: '6px',
                                 padding: '2px',
-                                width: '320px'
+                                width: '320px',
+                                borderRadius: '12px',
                             }} onClick={() => itemVideo(index)}>
                                 <CardActionArea>
                                     <CardMedia
@@ -147,20 +154,43 @@ const GFTHomeView = () => {
                         </Grid>
                     ))}
                 </Grid>
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                }}>
+                    <Button sx={{
+                        mr: '24px',
+                    }} onClick={() => {
+                        navigate('/videopage');
+                    }}>{'more'}</Button>
+                </Box>
             </Stack>
         );
     }
 
     const renderGames = () => {
         return (
-            <Stack spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
-                <Typography sx={{
+            <Stack sx={{
+                width: '100%',
+                minHeigth: '200px',
+                py: '24px',
+            }} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
+                <Box sx={{
                     width: '100%',
-                    margin: '12px',
-                }} color={'white'} variant={'h6'} align={'left'} >
-                    {'Projects'}
-                </Typography>
-                <Grid container spacing={2} sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                }}>
+                    <Typography sx={{
+                        ml: '24px',
+                    }} color={'white'} variant={'h6'} align={'left'} >
+                        {'Projects'}
+                    </Typography>
+                </Box>
+                <Grid container sx={{
+                    mt: '24px',
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -176,6 +206,7 @@ const GFTHomeView = () => {
                             }}>
                                 <Card sx={{
                                     width: '240px',
+                                    margin: '6px',
                                     borderRadius: '4px',
                                     backgroundColor: 'gray'
                                 }}>
@@ -220,16 +251,28 @@ const GFTHomeView = () => {
                         );
                     })}
                 </Grid>
+                <Box sx={{
+                    mt: '24px',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                }}>
+                    <Button sx={{
+                        mr: '24px',
+                    }} onClick={() => {
+                        navigate('/gamepage');
+                    }}>{'more'}</Button>
+                </Box>
             </Stack>
         )
     }
 
     const renderNews = () => {
         return (
-            <Stack spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
+            <Stack direction="column" alignItems={'flex-start'} justifyContent={'flex-start'}>
                 <Typography sx={{
-                    width: '100%',
-                    margin: '12px',
+                    ml: '24px',
                 }} color={'white'} variant={'h6'} align={'left'} >
                     {'News'}
                 </Typography>
@@ -248,45 +291,15 @@ const GFTHomeView = () => {
 
     return (
         <Paper className='content_bg'>
-            <Grid container spacing={2} sx={{
-                // width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}>
-                <Grid item xs={12}>
-                    <Box sx={{ padding: '24px' }}>
-                        {renderBanner()}
-                    </Box>
-                </Grid>
-                <Divider light={true} sx={{
-                    width: '100%',
-                }} />
-                <Grid item xs={12}>
-                    {renderVideos()}
-                </Grid>
-                <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider light={true} sx={{
-                    width: '100%',
-                }} />
-                <Grid item xs={12}>
-                    {renderNews()}
-                </Grid>
-                <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider light={true} sx={{
-                    width: '100%',
-                }} />
-                <Grid item xs={12}>
-                    {renderGames()}
-                </Grid>
-                <Button sx={{ my: '16px' }}>{'More'}</Button>
-                <Divider light={true} sx={{
-                    width: '100%',
-                }} />
-                <Grid item xs={12}>
-                    {renderNots()}
-                </Grid>
-            </Grid>
+            {renderBanner()}
+            {/* <Divider light={true} sx={{
+                width: '100%',
+                color: 'blue',
+            }} /> */}
+            {renderVideos()}
+            {renderNews()}
+            {renderGames()}
+            {renderNots()}
             <FsLightbox
                 toggler={toggler}
                 sources={fsLightList}

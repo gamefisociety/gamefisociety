@@ -46,7 +46,7 @@ const MainLayout = () => {
                 >
                     <Box sx={{ width: '280px' }} />
                     <Stack
-                        sx={{ flexGrow: 1, backgroundColor: '#000000' }}
+                        className={'scroll_content'}
                         direction="column"
                         alignItems={'center'}
                         justifyContent={'flex-start'}
