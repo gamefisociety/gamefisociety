@@ -277,6 +277,19 @@ const GFTHomeView = () => {
                     {'News'}
                 </Typography>
                 <GFTNewsView />
+                <Box sx={{
+                    mt: '24px',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                }}>
+                    <Button sx={{
+                        mr: '24px',
+                    }} onClick={() => {
+                        navigate('/newspage');
+                    }}>{'more'}</Button>
+                </Box>
             </Stack>
         );
     }
