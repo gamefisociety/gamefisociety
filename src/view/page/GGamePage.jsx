@@ -91,7 +91,9 @@ const GGamePage = () => {
     }
 
     return (
-        <Paper>
+        <Paper sx={{
+            backgroundColor: 'black'
+        }}>
             {renderGames()}
         </Paper>
     );

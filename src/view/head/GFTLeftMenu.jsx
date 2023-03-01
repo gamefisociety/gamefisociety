@@ -121,6 +121,7 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'CREATE') {
             navigate('/create_project');
         } else if (item.txt === 'MINT AVATAR') {
+            // navigate('/mint');
             if (account) {
                 navigate('/mint');
             } else {
