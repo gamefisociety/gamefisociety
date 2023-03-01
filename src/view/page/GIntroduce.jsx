@@ -727,9 +727,9 @@ const GIntroduce = () => {
                 <Grid item xs={12}>
                     {renderFeathers()}
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     {renderToken()}
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                     {renderRoadMap()}
                 </Grid>
