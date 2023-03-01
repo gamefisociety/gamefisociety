@@ -92,7 +92,7 @@ const GGamePage = () => {
 
     return (
         <Paper sx={{
-            backgroundColor: 'black'
+            backgroundColor: '#000000'
         }}>
             {renderGames()}
         </Paper>
