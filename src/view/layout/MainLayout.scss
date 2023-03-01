@@ -1,13 +1,14 @@
 .main_bg {
     width: 100%;
-    background-color: #0F0F0F;
+    background-color: #000000;
 }
 
 .main_content {
     width: 100%;
+
     .scroll_content {
         width: calc( 100vw - 280px);
-        background-color: #0F0F0F;
-        // overflow: hidden;
+        background-color: #000000;
+        overflow: hidden;
     }
 }

@@ -1,13 +1,10 @@
 .content_bg {
     width: 100%;
     max-width: 1440px;
-    // padding-bottom: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // overflow-y: scroll;
-    // box-sizing: border-box;
-    // background: #623b3b;
+    background-color: black;
 }
 
 .game_card_contain {
@@ -17,9 +14,6 @@
     flex-wrap: wrap;
     grid-gap: 32px;
     gap: 32px;
-    // width: calc( 20% - 25.6px ) !important;
-    // height: 248px;
-    // border-radius: 12px;
 }
 
 .game_card {
@@ -32,4 +26,10 @@
     align-items: center;
     padding-top: 24px;
     padding-bottom: 24px;
+    cursor: pointer;
+    transition: all .3s cubic-bezier(.17,.67,.83,.67);
+    overflow: hidden;
+    &:hover{
+        transform: scale(1.1);
+    }
 }
