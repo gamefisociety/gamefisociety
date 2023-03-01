@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // project import
 import Loadable from 'components/Loadable';
-import GFTHome from "view/home/GFTHome";
+import MainLayout from "view/layout/MainLayout";
 
 const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
 const GGamePage = Loadable(lazy(() => import('view/page/GGamePage')));
@@ -21,7 +21,7 @@ const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 
 const MainRoutes = {
     path: '/',
-    element: <GFTHome />,
+    element: <MainLayout />,
     children: [
         {
             path: '/',

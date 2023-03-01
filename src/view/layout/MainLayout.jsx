@@ -1,30 +1,27 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom'
+
 import Grid from '@mui/material/Grid';
-import GFTHead from 'view/head/GFTHead'
-import GBanner from 'view/head/GBanner';
-import GFTLeftMenu from 'view/head/GFTLeftMenu';
-import GFTFooter from 'view/footer/GFTFooter';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import GCardFriends from 'components/GCardFriends';
 import GCardRelays from 'components/GCardRelays';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { SearchRelays } from "nostr/Const";
 import { setDrawer } from 'module/store/features/dialogSlice';
+
+import GFTHead from 'view/head/GFTHead'
+import GFTLeftMenu from 'view/head/GFTLeftMenu';
 
 import { System } from 'nostr/NostrSystem';
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 
-import './GFTHome.scss';
+import './MainLayout.scss';
 
 // const win_h = window.client
 
-const GFTHome = () => {
+const MainLayout = () => {
 
     const dispatch = useDispatch();
     const { isDrawer, placeDrawer, cardDrawer } = useSelector(s => s.dialog);
@@ -89,4 +86,4 @@ const GFTHome = () => {
     );
 }
 
-export default GFTHome;
+export default MainLayout;
