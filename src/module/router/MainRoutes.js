@@ -3,8 +3,11 @@ import { lazy } from 'react';
 // project import
 import Loadable from 'components/Loadable';
 import GFTHome from "view/home/GFTHome";
+
 const GFTHomeView = Loadable(lazy(() => import('view/home/GFTHomeView')));
-// const GIntroduce = Loadable(lazy(() => import('view/page/GIntroduce')));
+const GGamePage = Loadable(lazy(() => import('view/page/GGamePage')));
+const GNewsPage = Loadable(lazy(() => import('view/page/GNewsPage')));
+const GVideoPage = Loadable(lazy(() => import('view/page/GVideoPage')));
 const GFTNFTDetail = Loadable(lazy(() => import('view/home/GFTNFTDetail')));
 const GFTCreateProject = Loadable(lazy(() => import('view/home/GFTCreateProject')));
 const GFTMintNFT = Loadable(lazy(() => import('view/home/GFTMintNFT')));
@@ -43,6 +46,18 @@ const MainRoutes = {
         {
             path: '/global',
             element: <GFTGlobal />,
+        },
+        {
+            path: '/gamepage',
+            element: <GGamePage />,
+        },
+        {
+            path: '/newspage',
+            element: <GNewsPage />,
+        },
+        {
+            path: '/videopage',
+            element: <GVideoPage />,
         },
         {
             path: '/follow',

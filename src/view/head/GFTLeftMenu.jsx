@@ -126,8 +126,12 @@ const GFTLeftMenu = () => {
             } else {
                 dispatch(setIsOpen(true));
             }
-        } else if (item.txt === 'POLYGON') {
-            navigate('/hall');
+        } else if (item.txt === 'GAMES') {
+            navigate('/gamepage');
+        } else if (item.txt === 'VIDEOS') {
+            navigate('/videopage');
+        } else if (item.txt === 'NEWS') {
+            navigate('/newspage');
         } else if (item.txt === 'IPFS') {
             navigate('/ipfs');
         } else if (item.txt === 'INTRODUCE') {
