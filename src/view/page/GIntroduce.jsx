@@ -275,10 +275,12 @@ const GIntroduce = () => {
                         padding: '24px'
                     }} spacing={2}>
                         <Grid item>
-                            <Card sx={{
-                                width: '320px',
-                                height: '320px'
-                            }}>
+                            <Card
+                                className={'introduce_card'}
+                                sx={{
+                                    width: '320px',
+                                    height: '320px'
+                                }}>
                                 <CardMedia
                                     sx={{ height: '140px' }}
                                     image={""}
@@ -296,7 +298,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -314,11 +316,10 @@ const GIntroduce = () => {
                                         {'Users can follow each other and be followed by each other'}
                                     </Typography>
                                 </CardContent>
-
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -340,7 +341,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -362,7 +363,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -383,7 +384,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -404,7 +405,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -425,7 +426,7 @@ const GIntroduce = () => {
                             </Card>
                         </Grid>
                         <Grid item>
-                            <Card sx={{
+                            <Card className={'introduce_card'} sx={{
                                 width: '320px',
                                 height: '320px'
                             }}>
@@ -484,6 +485,7 @@ const GIntroduce = () => {
         return (
             <Stack spacing={2} direction="column" alignItems={'center'} justifyContent={'flex-start'} sx={{
                 width: '100%',
+                pb: '46px',
                 // height: '400px',
                 // backgroundColor: 'red',
             }}>
@@ -546,12 +548,11 @@ const GIntroduce = () => {
                     >
                         {'Join our community'}
                     </Typography>
-
                     <Stack spacing={2} direction="row" alignItems={'center'} justifyContent={'center'} sx={{
                         width: '100%',
                         // backgroundColor: 'blue',
                     }}>
-                        <Card sx={{
+                        <Card className={'introduce_card'} sx={{
                             // width: '640px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -592,7 +593,7 @@ const GIntroduce = () => {
                         mt: '24px'
                         // backgroundColor: 'blue',
                     }}>
-                        <Card sx={{
+                        <Card className={'introduce_card'} sx={{
                             width: '240px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -620,8 +621,7 @@ const GIntroduce = () => {
                                 <Button size="large">{'Follow on twitter'}</Button>
                             </CardActions>
                         </Card>
-
-                        <Card sx={{
+                        <Card className={'introduce_card'} sx={{
                             width: '240px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -650,7 +650,7 @@ const GIntroduce = () => {
                             </CardActions>
                         </Card>
 
-                        <Card sx={{
+                        <Card className={'introduce_card'} sx={{
                             width: '240px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -678,7 +678,7 @@ const GIntroduce = () => {
                                 <Button size="large">{'Join in discord'}</Button>
                             </CardActions>
                         </Card>
-                        <Card sx={{
+                        <Card className={'introduce_card'} sx={{
                             width: '240px',
                             display: 'flex',
                             flexDirection: 'column',
