@@ -5,7 +5,7 @@ import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
 import {
     getListData,
     getListChainData
-} from '../../api/requestData'
+} from 'api/requestData'
 import { getALLAssetsForAccount } from '../../api/nftscan'
 import FsLightbox from 'fslightbox-react';
 
@@ -20,18 +20,20 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardActions from '@mui/material/CardActions';
+
 import GFTNewsView from './GFTNewsView'
+import GBanner from 'view/head/GBanner';
 
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 
 import './GFTHomeView.scss';
-import GBanner from 'view/head/GBanner';
-import { Button } from '../../../node_modules/@mui/material/index';
+
 
 const GFTHomeView = () => {
     //
@@ -196,7 +198,7 @@ const GFTHomeView = () => {
                             return null;
                         }
                         return (
-                            <Card className={'game_card'}>
+                            <Card className={'game_card'}  key={'homepage-gamecard-index' + index}>
                                 <Avatar sx={{
                                     width: '64px',
                                     height: '64px',
