@@ -198,7 +198,9 @@ const GFTHomeView = () => {
                             return null;
                         }
                         return (
-                            <Card className={'game_card'} key={'homepage-gamecard-index' + index}>
+                            <Card className={'game_card'} key={'homepage-gamecard-index' + index} onClick={()=>{
+                                itemNFTClick(item);
+                            }}>
                                 <Avatar sx={{
                                     width: '64px',
                                     height: '64px',
@@ -210,10 +212,8 @@ const GFTHomeView = () => {
                                 }} color={'white'} variant={'body1'} >
                                     {item.name}
                                 </Typography>
-                                <Box sx={{ flexGrow: 1 }} onClick={() => {
-                                    itemNFTClick(item);
-                                }}></Box>
-                                <Button variant="contained">{'DETAIL'}</Button>
+                            
+                                <Button variant="contained" >{'DETAIL'}</Button>
                             </Card>
                         );
                     })}

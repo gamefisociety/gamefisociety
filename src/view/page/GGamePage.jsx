@@ -77,10 +77,11 @@ const GGamePage = () => {
                                 }} color={'white'} variant={'body1'} >
                                     {item.name}
                                 </Typography>
-                                <Box sx={{ flexGrow: 1 }} onClick={() => {
+                                <Box sx={{ flexGrow: 1 }} ></Box>
+                                <Button variant="contained" onClick={() => {
+                                    console.log(item);
                                     navigate('/detail?name=' + item.name);
-                                }}></Box>
-                                <Button variant="contained">{'DETAIL'}</Button>
+                                }}>{'DETAIL'}</Button>
                             </Card>
                         );
                     })}
