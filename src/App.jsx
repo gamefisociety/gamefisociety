@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter } from "react-router-dom";
-import { Web3ReactProvider } from '@web3-react/core'
-import { SnackbarProvider, useSnackbar } from "notistack";
-import Router from './module/router/router'
-import Web3 from 'web3'
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { gfstheme } from 'view/theme/gfstheme';
 import { useSelector, useDispatch } from 'react-redux';
-//
+import Router from './module/router/router'
+
+import ThemeCustomization from 'themes/ThemeCustomization';
+import ScrollTop from 'components/ScrollTop';
+
 import GFTConnectDialog from "view/dialog/GFTConnectDialog";
 import GFTWalletMenu from "view/menu/GFTWalletMenu";
 import GFTCheckInDialog from "view/dialog/GFTCheckInDialog";
@@ -20,21 +18,11 @@ import { System } from 'nostr/NostrSystem';
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from 'module/store/features/profileSlice';
 
-//
-function getLibrary(provider, connector) {
-  const web3 = new Web3(provider);
-  return web3 // this will vary according to whether you use e.g. ethers or web3.js
-}
-
-const theme1 = gfstheme();
-
-const theme = createTheme(theme1);
-
 console.log('gfs init!');
 
 System.initRelays();
 
-function App() {
+const App = () => {
 
   const dispatch = useDispatch();
   const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
@@ -54,22 +42,18 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <SnackbarProvider maxSnack={3}>
-          <div className="App">
-            <HashRouter>
-              <Router />
-            </HashRouter>
-            {isOpenConnect && <GFTConnectDialog />}
-            {isOpenMenu && <GFTWalletMenu />}
-            {isOpenCheckIn && <GFTCheckInDialog />}
-            {isOpenMintAvatar && <GFTMintAvatarDialog />}
-            {isOpenLogin && <GLoginDialog />}
-          </div>
-        </SnackbarProvider>
-      </Web3ReactProvider>
-    </ThemeProvider>
+    <ThemeCustomization>
+      <HashRouter>
+        <ScrollTop>
+          <Router />
+        </ScrollTop>
+      </HashRouter>
+      {isOpenConnect && <GFTConnectDialog />}
+      {isOpenMenu && <GFTWalletMenu />}
+      {isOpenCheckIn && <GFTCheckInDialog />}
+      {isOpenMintAvatar && <GFTMintAvatarDialog />}
+      {isOpenLogin && <GLoginDialog />}
+    </ThemeCustomization>
   );
 }
 
