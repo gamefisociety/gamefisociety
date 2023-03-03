@@ -1,4 +1,5 @@
 import { React, useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import "./GFTChat.scss";
 
 import { bech32 } from "bech32";
@@ -9,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import {
   nip05,
   nip04,
@@ -23,95 +24,29 @@ import {
   verifySignature,
 } from "nostr-tools";
 import { alpha, styled } from "@mui/material/styles";
-import { setPrivateKey } from "module/store/features/loginSlice";
-import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png";
-import { Sync } from "../../../node_modules/@mui/icons-material/index";
+import { useChatPro } from "nostr/protocal/ChatPro";
+import { System } from "nostr/NostrSystem";
+import useNostrEvent from "nostr/NostrEvent";
 
-export const EmailRegex =
-  // eslint-disable-next-line no-useless-escape
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: "#272727",
-  //   ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  width: "100%",
-}));
-
-const RedditTextField = styled((props) => (
-  <TextField InputProps={{ disableUnderline: true }} {...props} />
-))(({ theme }) => ({
-  "& label": {
-    fontFamily: ["Saira"],
-    fontWeight: 500,
-    fontSize: 18,
-    color: "#666666",
-    "&.Mui-focused": {
-      color: "#666666",
-    },
-  },
-  "& .MuiFilledInput-root": {
-    border: "1px solid #333333",
-    overflow: "hidden",
-    borderRadius: 4,
-    fontFamily: ["Saira"],
-    fontWeight: 500,
-    color: "#333",
-    fontSize: 20,
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    "&:hover": {
-      backgroundColor: "transparent",
-    },
-    "&.Mui-focused": {
-      backgroundColor: "transparent",
-      boxShadow: `${alpha("#fff", 0.25)} 0 0 0 1px`,
-      borderColor: `#333`,
-      color: `#fff`,
-    },
-  },
-}));
 const relay = relayInit("wss://relay.damus.io");
-let privateKey = "";
-let pubKey = "";
-
 const GFTChat = (props) => {
   const { chatPK } = props;
+  const nostrEvent = useNostrEvent();
+  const publicKey = useSelector((s) => s.login.publicKey);
+  const privateKey = useSelector((s) => s.login.privateKey);
+  const chatPro = useChatPro();
   const [chatData, setChatData] = useState([]);
-  const [inforData, setInforData] = useState(new Map());
   const [inValue, setInValue] = useState("");
   useEffect(() => {
-    initConnect();
-    return () => {};
+    getDMs();
+    return () => {
+        chatData.splice(0, chatData.length);
+        setChatData([...chatData]);
+    };
   }, []);
 
-  const initConnect = async () => {
-    await relay.connect();
-    relay.on("connect", () => {
-      console.log(`connected to ${relay.url}`);
-    });
-    relay.on("error", () => {
-      console.log(`failed to connect to ${relay.url}`);
-    });
-    login();
-  };
-
-  const login = async () => {
-    privateKey = await doLogin(
-      "nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp"
-    );
-    pubKey = getPublicKey(privateKey);
-    getDataList(pubKey, chatPK);
-    // getDataList(chatAddress,pubKey);
-  };
-
-  const getDecode = (sk, pk, data) => {
-    return nip04.decrypt(sk, pk, data);
+  const decodeContent = (sk, pk, content) => {
+    return nip04.decrypt(sk, pk, content);
   };
 
   const getDataList = (key, key1) => {
@@ -124,7 +59,7 @@ const GFTChat = (props) => {
     ]);
     let data = [...chatData];
     sub.on("event", (event) => {
-      getDecode(privateKey, key1, event.content).then((res) => {
+      decodeContent(privateKey, key1, event.content).then((res) => {
         event.contentObj = res;
         data.push(event);
         data.sort((a, b) => {
@@ -148,125 +83,51 @@ const GFTChat = (props) => {
     });
   };
 
-  //login
-  async function getNip05PubKey(addr) {
-    const [username, domain] = addr.split("@");
-    const rsp = await fetch(
-      `https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(
-        username
-      )}`
-    );
-    if (rsp.ok) {
-      const data = await rsp.json();
-      const pKey = data.names[username];
-      if (pKey) {
-        return pKey;
+  const getDMs = () => {
+    const chatNode = chatPro.get(publicKey, chatPK);
+    console.log("chatNode", chatNode);
+    System.BroadcastSub(chatNode, 1, (msgs) => {
+      console.log("getDMs user chat sub", msgs);
+      if (msgs && msgs.length > 0) {
+        let t_chatData = [];
+        msgs.map((item, index) => {
+          decodeContent(privateKey, publicKey, item.content).then((demsg) => {
+            item.decontent = demsg;
+            t_chatData.push(item);
+            t_chatData.sort((a, b) => {
+              return a.created_at - b.created_at;
+            });
+            console.log(demsg);
+            setChatData([...t_chatData]);
+          });
+        });
       }
-    }
-    throw new Error("User key not found");
-  }
+    });
+  };
 
-  async function doLogin(key) {
-    try {
-      if (key.startsWith("nsec")) {
-        const hexKey = bech32ToHex(key);
-        console.log(hexKey);
-        return hexKey;
-        // if (secp.utils.isValidPrivateKey(hexKey)) {
-        //     console.log("ccccc");
-        //     return hexKey;
-        // } else {
-        //   throw new Error("INVALID PRIVATE KEY");
-        // }
-      } else if (key.startsWith("npub")) {
-        const hexKey = bech32ToHex(key);
-        return hexKey;
-      } else if (key.match(EmailRegex)) {
-        const hexKey = await getNip05PubKey(key);
-        if (secp.utils.isValidPrivateKey(hexKey)) {
-          return hexKey;
-        } else {
-          throw new Error("INVALID PRIVATE KEY");
-        }
-      } else {
-        if (secp.utils.isValidPrivateKey(key)) {
-          return key;
-        } else {
-          throw new Error("INVALID PRIVATE KEY");
-        }
-      }
-    } catch (e) {
-      console.error(e);
+  const sendDM = async () => {
+    if (inValue.length === 0) {
+      return;
     }
-  }
-
-  const getInfor = (pkey) => {
-    let sub = relay.sub([
-      {
-        kinds: [0],
-        authors: pkey,
+    const chatNode = await chatPro.send(publicKey, chatPK, undefined, inValue);
+    const curRelays = [];
+    curRelays.push("wss://nos.lol");
+    //
+    console.log("chatnode", chatNode);
+    System.Broadcast(
+      chatNode,
+      1,
+      (msgs) => {
+        console.log("sendDM user chat sub", msgs);
+        if (msgs && msgs.length > 0) {
+        }
       },
-    ]);
-    sub.on("event", (event) => {
-      console.log("event", event);
-      event.contentObj = JSON.parse(event.content);
-      setInforData(new Map(inforData.set(event.pubkey, event)));
-      // sub.unsub()
-    });
-    sub.on("eose", () => {
-      console.log("eose event");
-      sub.unsub();
-    });
-
-    sub.off("event", () => {
-      console.log("off event");
-    });
-
-    sub.off("eose", () => {
-      console.log("off eose event");
-    });
+      curRelays
+    );
   };
-  function bech32ToHex(str) {
-    const nKey = bech32.decode(str);
-    const buff = bech32.fromWords(nKey.words);
-    return secp.utils.bytesToHex(Uint8Array.from(buff));
-  }
 
-  function bech32ToText(str) {
-    const decoded = bech32.decode(str, 1000);
-    const buf = bech32.fromWords(decoded.words);
-    return new TextDecoder().decode(Uint8Array.from(buf)).to;
-  }
-
-  const onValueEdite = (e) => {
+  const onChangeHandle = (e) => {
     setInValue(e.target.value);
-  };
-
-  const sendEvent = (event) => {
-    event.id = getEventHash(event);
-    event.sig = signEvent(event, privateKey);
-    console.log(privateKey, "privateKey");
-    let pub = relay.publish(event);
-    pub.on("ok", () => {
-      console.log(`${relay.url} has accepted our event ok`);
-    });
-    pub.on("failed", (reason) => {
-      console.log(`failed to publish to ${relay.url}: ${reason}`);
-    });
-  };
-  const onClickSend = async () => {
-    // privateKey = await doLogin("nsec1e6vl3t2dpqh6hh5q8vxjuyqaxg0apjk6fmqazythdtd487d0p0wq94pkwp");
-    // pubKey = getPublicKey(privateKey);
-    let ciphertext = await nip04.encrypt(privateKey, chatPK, inValue);
-
-    let event = {
-      kind: 4,
-      pubkey: pubKey,
-      created_at: Math.floor(Date.now() / 1000),
-      tags: [["p", chatPK]],
-      content: ciphertext,
-    };
-    sendEvent(event);
   };
 
   return (
@@ -306,7 +167,7 @@ const GFTChat = (props) => {
               color="white"
               align={"left"}
             >
-              {item.contentObj}
+              {item.decontent}
             </Typography>
           </Box>
         ))}
@@ -322,42 +183,24 @@ const GFTChat = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <TextField variant="outlined" value={inValue} onChange={(e) => onValueEdite(e)} />
-        <Button variant="contained" color="info" onClick={()=>{
-            onClickSend()
-        }}>
+        <TextField
+          variant="outlined"
+          value={inValue}
+          onChange={(e) => onChangeHandle(e)}
+        />
+        <Button
+          variant="contained"
+          color="info"
+          onClick={() => {
+            // onClickSend();
+            sendDM();
+          }}
+        >
           send
         </Button>
       </Box>
     </Container>
   );
-  // return (
-  //     <div className='chat_bg'>
-
-  //         {Array.from(chatData).map((item, index) => (
-  //             <div key={"chat" + index} className='item_list'>
-  //                 {
-  //                     item.pubkey == chatPK ?
-  //                         <div className='chat_left'>{item.contentObj}</div> :
-  //                         <div className='chat_right'>{item.contentObj}</div>
-  //                 }
-  //             </div>
-  //         ))}
-
-  //         <div className='edit' >
-  //             <RedditTextField
-  //                 hiddenLabel
-  //                 placeholder="chat value"
-  //                 variant="filled"
-  //                 rows={1}
-  //                 onChange={(e) => onValueEdite(e)}
-  //                 style={{ marginTop: 0, marginLeft: 13 }}
-  //             />
-  //             <div className='send' onClick={() => onClickSend()}>send</div>
-  //         </div>
-
-  //     </div >
-  // );
 };
 
 export default GFTChat;

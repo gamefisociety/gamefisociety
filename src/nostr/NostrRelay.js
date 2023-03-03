@@ -203,7 +203,7 @@ const NostrRelay = () => {
     }
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      console.log('SendEvent direction', ev);
+      console.log('SendEvent direction', req);
       _SendReal(client, req);
     } else {
       console.log('SendEvent cache', ev);

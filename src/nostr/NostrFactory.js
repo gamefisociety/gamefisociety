@@ -69,9 +69,10 @@ const NostrFactory = {
       pubkey: ev.PubKey,
       created_at: ev.CreatedAt,
       kind: ev.Kind,
-      tags: ev.Tags.sort((a, b) => a.Index - b.Index)
-        .map(a => a.ToObject())
-        .filter(a => a !== null), //<string[][] >
+      tags: ev.Tags,
+      // tags: ev.Tags.sort((a, b) => a.Index - b.Index)
+      //   .map(a => a.ToObject())
+      //   .filter(a => a !== null), //<string[][] >
       content: ev.Content,
       sig: ev.Signature,
     };
