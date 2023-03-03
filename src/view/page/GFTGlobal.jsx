@@ -72,15 +72,28 @@ const GFTGlobal = () => {
     const [curLable, setCurLable] = useState('All');
     //
     const [data, setData] = useState([]);
+    const [isMore, setMore] = useState(false);
     const [inforData, setInforData] = useState(new Map());
-
     const textNotePro = useTextNotePro();
     const metadataPro = useMetadataPro();
 
     useEffect(() => {
+        window.addEventListener('scroll', loadMore);
+        return () => { 
+            window.removeEventListener('scroll', loadMore);
+        }
+    }, [data,isMore])
+    useEffect(() => {
         getDataList();
         return () => { }
     }, [])
+
+    const loadMore = () =>{
+        if (window.innerHeight + document.documentElement.scrollTop > (document.scrollingElement.scrollHeight-50)) {
+            
+            moreListData();
+        }
+    }
 
     const getDataList = () => {
 
@@ -103,6 +116,40 @@ const GFTGlobal = () => {
         }, curRelays);
     }
 
+    const moreListData = () => {
+        console.log("more");
+        if(isMore||data.length<=0){
+            console.log("more-----",data.length);
+            return;
+        }
+        console.log("more++++");
+        setMore(true);
+        const textNote = textNotePro.get();
+        textNote.Since = data[data.length-1].created_at;
+        textNote.Limit = 50;
+        //
+        curRelays.push('wss://nos.lol');
+        //
+        System.Broadcast(textNote, 0, (msgs, client) => {
+            console.log('textNote msgs', msgs);
+            let copydata= [...data];
+            data.map((item) => {
+                copydata.push(item);
+            });
+            setData(copydata);
+            //
+            const pubkeys = [];
+            msgs.map((item) => {
+                pubkeys.push(item.pubkey);
+            });
+            const pubkyes_filter = new Set(pubkeys);
+            getInfor(pubkyes_filter, curRelays);
+            setMore(false);
+        }, curRelays);
+    }
+
+
+
     const getInfor = (pkeys, relays) => {
         const metadata = metadataPro.get(Array.from(pkeys));
         metadata.Authors = Array.from(pkeys);
@@ -118,6 +165,7 @@ const GFTGlobal = () => {
                 newInfo.set(item.pubkey, info);
             });
             setInforData(newInfo);
+           
         }, relays);
     }
 
@@ -227,6 +275,8 @@ const GFTGlobal = () => {
                 <Button>{'more'}</Button>
             </Paper>);
     }
+
+  
 
     const renderContent = () => {
         return (
