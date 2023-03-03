@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom'
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import Snackbar from '@mui/material/Snackbar';
@@ -21,7 +22,7 @@ import { System } from 'nostr/NostrSystem';
 const GCardUser = (props) => {
 
     const { profile, pubkey } = props;
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -89,7 +90,12 @@ const GCardUser = (props) => {
                         sx={{ px: '16px', ml: '12px', backgroundColor: 'gray', borderRadius: '4px' }}
                         variant="subtitle2"
                         color='white'
-                        align={'center'}>
+                        align={'center'}
+                        onClick={() => {
+                            props.chatOnClick(pubkey);
+                            // navigate('/chat?pk=' + pubkey);
+                            // setCurLable(item);
+                        }}>
                         {'Chat'}
                     </Typography>
                     <Typography
