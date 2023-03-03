@@ -16,18 +16,22 @@ export const useChatPro = () => {
         sub.Id = `chat:${sub.Id.slice(0, 8)}`;
         sub.Kinds = [EventKind.DirectMessage];
         sub.Authors = [pubkey, targetpubkey];
-        sub.PTags = [pubkey, targetpubkey]
+        sub.PTags = [targetpubkey, pubkey]
         return sub;
       }
     },
-    send: async (pubKey, obj, tmpPrivate) => {
-      if (pubKey) {
-        const ev = NostrFactory.createEvent(pubKey);
-        ev.Kind = EventKind.ContactList;
-        ev.Content = JSON.stringify(obj);
+    send: async (pubkey, targetpubkey, tmpPrivate, content) => {
+      if (pubkey) {
+        const ev = NostrFactory.createEvent(pubkey);
+        ev.Kind = EventKind.DirectMessage;
+        ev.PubKey = pubkey;
+        ev.Tags = [["p", targetpubkey]];
+        ev.Content = content;
         if (tmpPrivate) {
+          await nostrEvent.EncryptDm(ev, pubkey, tmpPrivate);
           return await nostrEvent.Sign(tmpPrivate, ev);
         }
+        await nostrEvent.EncryptDm(ev, pubkey, privKey);
         return await nostrEvent.Sign(privKey, ev);
       }
     },

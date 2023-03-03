@@ -16,12 +16,14 @@ const useNostrEvent = () => {
       ev.PubKey,
       ev.CreatedAt,
       ev.Kind,
-      ev.Tags.map(a => a.ToObject()).filter(a => a !== null),
+      ev.Tags,
       ev.Content,
     ];
+    console.log('createID payload', payload);
     const payloadData = new TextEncoder().encode(JSON.stringify(payload));
     const data = await secp.utils.sha256(payloadData);
     const hash = secp.utils.bytesToHex(data);
+    console.log('createID hash', hash);
     if (ev.Id !== "" && hash !== ev.Id) {
       console.debug(payload);
       throw "ID doesnt match!";
@@ -62,7 +64,7 @@ const useNostrEvent = () => {
     return `${base64.encode(uData, 0, result.byteLength)}?iv=${base64.encode(iv, 0, 16)}`;
   }
 
-  const EncryptDmForPubkey = async (ev, pubkey, privkey) => {
+  const EncryptDm = async (ev, pubkey, privkey) => {
     ev.Content = await EncryptData(ev.Content, pubkey, privkey);
   }
 
@@ -102,8 +104,9 @@ const useNostrEvent = () => {
     CreateId: CreateId,
     Verify: Verify,
     Sign: Sign,
-    DecryptData: DecryptData,
-    DecryptDm: DecryptDm
+    EncryptDm: EncryptDm,
+    DecryptDm: DecryptDm,
+    DecryptData: DecryptData
   }
 
 };
