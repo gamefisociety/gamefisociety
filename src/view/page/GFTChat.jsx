@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import "./GFTChat.scss";
 
@@ -6,11 +6,14 @@ import { bech32 } from "bech32";
 import * as secp from "@noble/secp256k1";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import Icon from "@mui/material/Icon";
+import Button from "@mui/material/Button";
+import { VariableSizeList as List } from "react-window";
+import closeImg from "./../../asset/image/social/close.png";
+import dmLeftImg from "./../../asset/image/social/dm_left.png";
 import {
   nip05,
   nip04,
@@ -29,7 +32,47 @@ import { System } from "nostr/NostrSystem";
 import useNostrEvent from "nostr/NostrEvent";
 
 const relay = relayInit("wss://relay.damus.io");
+
+const ListRow = ({ data, index, setSize, chatPK }) => {
+  const rowRef = useRef();
+  const item = data[index];
+  useEffect(() => {
+    setSize(index, rowRef.current.getBoundingClientRect().height);
+  }, [setSize, index]);
+  return (
+    <Box
+      ref={rowRef}
+      key={index}
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        padding: "10px",
+        justifyContent: item.pubkey === chatPK ? "flex-start" : "flex-end",
+      }}
+    >
+      <Typography
+        sx={{
+          width: "70%",
+          padding: "10px",
+          backgroundColor: item.pubkey === chatPK ? "#191A1B" : "#454FBF",
+          borderRadius: "6px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+        }}
+        variant="body2"
+        color="#FFFFFF"
+        align={"left"}
+      >
+        {item.decontent}
+      </Typography>
+    </Box>
+  );
+};
+
 const GFTChat = (props) => {
+  const listRef = useRef();
   const { chatPK } = props;
   const nostrEvent = useNostrEvent();
   const publicKey = useSelector((s) => s.login.publicKey);
@@ -37,11 +80,17 @@ const GFTChat = (props) => {
   const chatPro = useChatPro();
   const [chatData, setChatData] = useState([]);
   const [inValue, setInValue] = useState("");
+  const sizeMap = useRef({});
+  const setSize = useCallback((index, size) => {
+    sizeMap.current = { ...sizeMap.current, [index]: size };
+    listRef.current.resetAfterIndex(index);
+  }, []);
+  const getSize = (index) => sizeMap.current[index] || 50;
   useEffect(() => {
     getDMs();
     return () => {
-        chatData.splice(0, chatData.length);
-        setChatData([...chatData]);
+      chatData.splice(0, chatData.length);
+      setChatData([...chatData]);
     };
   }, []);
 
@@ -86,7 +135,7 @@ const GFTChat = (props) => {
   const getDMs = () => {
     const chatNode = chatPro.get(publicKey, chatPK);
     console.log("chatNode", chatNode);
-    System.BroadcastSub(chatNode, 1, (msgs) => {
+    System.BroadcastSub(chatNode, 0, (msgs) => {
       console.log("getDMs user chat sub", msgs);
       if (msgs && msgs.length > 0) {
         let t_chatData = [];
@@ -120,14 +169,11 @@ const GFTChat = (props) => {
       (msgs) => {
         console.log("sendDM user chat sub", msgs);
         if (msgs && msgs.length > 0) {
+          setInValue("");
         }
       },
       curRelays
     );
-  };
-
-  const onChangeHandle = (e) => {
-    setInValue(e.target.value);
   };
 
   return (
@@ -143,36 +189,64 @@ const GFTChat = (props) => {
         padding: "30px",
       }}
     >
-      <Stack spacing={2} sx={{ width: "100%" }}>
-        {Array.from(chatData).map((item, index) => (
-          <Box
-            key={index}
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent:
-                item.pubkey === chatPK ? "flex-start" : "flex-end",
-            }}
-          >
-            <Typography
-              sx={{
-                width: "70%",
-                padding: "10px",
-                backgroundColor: item.pubkey === chatPK ? "#191A1B" : "#454FBF",
-                borderRadius: "6px",
-              }}
-              variant="body2"
-              color="white"
-              align={"left"}
-            >
-              {item.decontent}
-            </Typography>
-          </Box>
-        ))}
-      </Stack>
-
+      <Box
+        sx={{
+          marginTop: "30px",
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Icon
+          sx={{
+            width: "100px",
+            height: "50px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#FFFFFF",
+            fontSize: "20px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+          }}
+        >
+          <img src={dmLeftImg} width="50px" alt="dmleft" />
+          DMs
+        </Icon>
+        <Button
+          sx={{
+            width: "60px",
+            height: "60px",
+          }}
+          onClick={() => {
+            props.closeHandle();
+          }}
+        >
+          <img src={closeImg} width="60px" alt="close" />
+        </Button>
+      </Box>
+      <List
+        ref={listRef}
+        height={400}
+        width={"100%"}
+        itemSize={getSize}
+        itemCount={chatData.length}
+        itemData={chatData}
+      >
+        {({ data, index, style }) => (
+          <div style={style}>
+            <ListRow
+              data={data}
+              index={index}
+              setSize={setSize}
+              chatPK={chatPK}
+            />
+          </div>
+        )}
+      </List>
       <Box
         sx={{
           marginTop: "30px",
@@ -184,15 +258,32 @@ const GFTChat = (props) => {
         }}
       >
         <TextField
-          variant="outlined"
+          vlabel="Multiline"
+          multiline
+          maxRows={4}
           value={inValue}
-          onChange={(e) => onChangeHandle(e)}
+          sx={{
+            "& .MuiInputBase-root": {
+              color: "white",
+              width: "250px",
+              //   height: "40px",
+              fontSize: "18px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+            },
+          }}
+          onChange={(e) => {
+            setInValue(e.target.value);
+          }}
         />
         <Button
           variant="contained"
-          color="info"
+          sx={{
+            width: "80px",
+            height: "60px",
+            backgroundColor: "#454FBF",
+          }}
           onClick={() => {
-            // onClickSend();
             sendDM();
           }}
         >
