@@ -68,13 +68,11 @@ const GProfile = () => {
       sx={{
         width: "100%",
         maxWidth: "960px",
-        // height: 'auto',
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         my: "24px",
-        // backgroundColor: 'red',
       }}
     >
       <GCardUser
@@ -84,7 +82,7 @@ const GProfile = () => {
           setChatDrawer(true);
         }}
       />
-      <List sx={{ width: "100%", maxHeight: "800px", overflow: "auto" }}>
+      <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => (
           <GCardNote
             key={"profile-note-index" + index}
