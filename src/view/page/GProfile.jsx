@@ -68,13 +68,11 @@ const GProfile = () => {
       sx={{
         width: "100%",
         maxWidth: "960px",
-        // height: 'auto',
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         my: "24px",
-        // backgroundColor: 'red',
       }}
     >
       <GCardUser

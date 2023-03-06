@@ -1,135 +1,375 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom'
-import { Button, CardActionArea, CardActions } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
-import Snackbar from '@mui/material/Snackbar';
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
+import { Button, Link } from "@mui/material";
+import copy from "copy-to-clipboard";
+import Skeleton from "@mui/material/Skeleton";
+import Snackbar from "@mui/material/Snackbar";
+import logo_chat from "../asset/image/social/logo_chat.png";
+import logo_lighting from "../asset/image/social/logo_lighting.png";
+import logo_key from "../asset/image/social/logo_key.png";
+import logo_copy from "../asset/image/social/logo_copy.png";
+import logo_link from "../asset/image/social/logo_link.png";
+import "./GCardUser.scss";
 
-import './GCardUser.scss';
-
-import { useMetadataPro } from 'nostr/protocal/MetadataPro';
-import { useTextNotePro } from 'nostr/protocal/TextNotePro';
-import { System } from 'nostr/NostrSystem';
-
-
+import { useMetadataPro } from "nostr/protocal/MetadataPro";
+import { useTextNotePro } from "nostr/protocal/TextNotePro";
+import { System } from "nostr/NostrSystem";
+const default_banner =
+  "https://gateway.pinata.cloud/ipfs/QmSif6VWuJ9X7phY8wPMwxR8xPQdDq3ABE93Yo7BUwj68C";
+const default_avatar =
+  "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 const GCardUser = (props) => {
+  const { profile, pubkey } = props;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const { profile, pubkey } = props;
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("profile", profile);
+    return () => {};
+  }, [props]);
 
-    useEffect(() => {
-        return () => {
-        }
-    }, [props])
+  //#1F1F1F
+  return (
+    <Card sx={{ width: "100%", backgroundColor: "transparent" }}>
+      <CardContent
+        sx={{
+          padding: "12px",
+        }}
+      >
+        <CardMedia
+          component="img"
+          sx={{ height: "140px", borderRadius: "6px" }}
+          src="localProfile.banner"
+          image={profile.banner ? profile.banner : default_banner}
+          alt="no banner"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            paddingLeft: "52px",
+            paddingRight: "52px",
+          }}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "flex-end",
+              paddingTop: "5px",
+            }}
+          >
+            <Avatar
+              sx={{ width: "86px", height: "86px", mt: "-43px" }}
+              edge="end"
+              alt="GameFi Society"
+              src={profile.picture ? profile.picture : default_avatar}
+            />
+            <Button
+              sx={{
+                width: "40px",
+                height: "40px",
+              }}
+              onClick={() => {}}
+            >
+              <img src={logo_lighting} width="40px" alt="lighting" />
+            </Button>
+            <Button
+              sx={{
+                width: "40px",
+                height: "40px",
+              }}
+              onClick={() => {
+                props.chatOnClick(pubkey);
+              }}
+            >
+              <img src={logo_chat} width="40px" alt="chat" />
+            </Button>
+            <Button
+              sx={{
+                width: "96px",
+                height: "36px",
+                backgroundColor: "#006CF9",
+                borderRadius: "18px",
+              }}
+              onClick={() => {}}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#FFFFFF"
+                align={"center"}
+              >
+                Follow
+              </Typography>
+            </Button>
+          </Box>
 
-    //#1F1F1F
-    return (
-        <Card sx={{ width: '100%', backgroundColor: '#1F1F1F' }}>
-            <CardContent sx={{
-                padding: '12px'
-            }}>
-                <CardMedia
-                    component="img"
-                    sx={{ height: '140px' }}
-                    src="localProfile.banner"
-                    image={profile ? profile.banner : ''}
-                    alt="no banner"
-                />
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    // backgroundColor: 'red',
-                    px: '12px'
-                }}>
-                    <Avatar
-                        sx={{ width: '64px', height: '64px', mt: '-23px' }}
-                        edge="end"
-                        alt="GameFi Society"
-                        src={profile ? profile.picture : ''}
-                    />
-                    <Box sx={{
-                        ml: '12px',
-                        pt: '4px',
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}>
-                        <Typography sx={{}} variant="body1" color='white' align={'left'}>
-                            {profile.display_name}
-                        </Typography>
-                        <Typography sx={{}} variant="body2" color='gray' align={'left'}>
-                            {'@' + profile.name}
-                        </Typography>
-                    </Box>
-                </Box>
-                <Typography sx={{ mt: '4px', width: '75%' }} variant="subtitle2" color='white' align={'left'} multiline>
-                    {pubkey}
+          <Box
+            sx={{
+              marginTop: "15px",
+              paddingBottom: "25px",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              borderBottom: 1,
+              borderColor: "#191A1B",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "20px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+              }}
+              color="#FFFFFF"
+              align={"left"}
+            >
+              {profile.display_name
+                ? profile.display_name
+                : "Nostr#" + pubkey.substring(pubkey.length - 4, pubkey.length)}
+            </Typography>
+            {profile.name ? (
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#919191"
+                align={"left"}
+              >
+                {"@" + profile.name}
+              </Typography>
+            ) : null}
+            <Box
+              sx={{
+                marginTop: "30px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  borderRadius: "15px",
+                  backgroundColor: "#272727",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                }}
+              >
+                <img src={logo_key} width="20px" alt="key" />
+                <Typography
+                  sx={{
+                    marginLeft: "6px",
+                    fontSize: "12px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                  }}
+                  color="#919191"
+                  align={"left"}
+                >
+                  {pubkey}
                 </Typography>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    // backgroundColor: 'red',
-                    px: '12px',
-                    py: '16px'
-                }}>
-                    <Typography
-                        sx={{ px: '16px', backgroundColor: 'gray', borderRadius: '4px' }}
-                        variant="subtitle2"
-                        color='white'
-                        align={'center'}>
-                        {'Follow'}
-                    </Typography>
-                    <Typography
-                        sx={{ px: '16px', ml: '12px', backgroundColor: 'gray', borderRadius: '4px' }}
-                        variant="subtitle2"
-                        color='white'
-                        align={'center'}
-                        onClick={() => {
-                            props.chatOnClick(pubkey);
-                            // navigate('/chat?pk=' + pubkey);
-                            // setCurLable(item);
-                        }}>
-                        {'Chat'}
-                    </Typography>
-                    <Typography
-                        sx={{ px: '16px', ml: '12px', backgroundColor: 'gray', borderRadius: '4px' }}
-                        variant="subtitle2"
-                        color='white'
-                        align={'center'}>
-                        {'Pay'}
-                    </Typography>
-                </Box>
-                <Typography sx={{ mt: '4px' }} variant="subtitle2" color='gray' align={'left'}>
-                    {profile.about}
-                </Typography>
-                {/* <TextField
-                        value={profile.about}
-                        margin="dense"
-                        id="name"
-                        fullWidth
-                        variant="standard"
-                    /> */}
-                {/* <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
-                        {'NIP-05'}
-                    </Typography>
-                    <TextField
-                        value={profile.nip05}
-                        margin="dense"
-                        id="name"
-                        fullWidth
-                        variant="standard"
-                    /> */}
-            </CardContent>
-        </Card>
-    );
-
-}
+              </Box>
+              <Button
+                sx={{
+                  width: "36px",
+                  height: "36px",
+                }}
+                onClick={() => {
+                  if (copy(pubkey)) {
+                    console.log("copy success");
+                  } else {
+                    console.log("copy failed");
+                  }
+                }}
+              >
+                <img src={logo_copy} width="36px" alt="copy" />
+              </Button>
+            </Box>
+          </Box>
+          {profile.about ? (
+            <Typography
+              sx={{
+                marginTop: "24px",
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                wordWrap: "break-word",
+              }}
+              color="#FFFFFF"
+              align={"left"}
+            >
+              {profile.about}
+            </Typography>
+          ) : null}
+          {profile.website ? (
+            <Box
+              sx={{
+                marginTop: "12px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <img src={logo_link} width="20px" alt="link" />
+              <Link
+                href={profile.website}
+                underline="always"
+                sx={{
+                  marginLeft: "4px",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  fontColor: "#00B7FF",
+                }}
+              >
+                {profile.website}
+              </Link>
+            </Box>
+          ) : null}
+          <Box
+            sx={{
+              paddingTop: "25px",
+              paddingBottom: "25px",
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              borderBottom: 1,
+              borderColor: "#191A1B",
+            }}
+          >
+            <Box
+              sx={{
+                marginRight: "28px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  marginRight: "8px",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#FFFFFF"
+                align={"center"}
+              >
+                {11}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#666666"
+                align={"center"}
+              >
+                Following
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                marginRight: "28px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  marginRight: "8px",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#FFFFFF"
+                align={"center"}
+              >
+                {11}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#666666"
+                align={"center"}
+              >
+                Followers
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                marginRight: "28px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  marginRight: "8px",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#FFFFFF"
+                align={"center"}
+              >
+                {11}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                }}
+                color="#666666"
+                align={"center"}
+              >
+                Followers
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default React.memo(GCardUser);
