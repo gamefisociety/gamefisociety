@@ -50,9 +50,9 @@ const Palette = (mode) => {
             },
             divider: paletteColor.grey[200],
             background: {
-                paper: paletteColor.grey[0],
+                paper: mode === 'dark' ? '#0F0F0F' : '#FFFFFF',
                 default: paletteColor.grey.A50
-            }
+            },
         }
     });
 };

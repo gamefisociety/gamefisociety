@@ -1,9 +1,26 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // material-ui
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+    experimental_extendTheme as extendTheme,
+    Experimental_CssVarsProvider as CssVarsProvider,
+    useColorScheme
+} from '@mui/material/styles';
+
+// import {
+//     Experimental_CssVarsProvider as CssVarsProvider,
+//     experimental_extendTheme as extendTheme,
+// } from '@mui/material/styles';
+
+//   const theme = extendTheme();
+//   // ...custom theme
+
+//   function App() {
+//     return <CssVarsProvider theme={theme}>...</CssVarsProvider>;
+//   }
+
 
 // project import
 import Palette from './palette';
@@ -13,14 +30,22 @@ import componentsOverride from './overrides';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 export default function ThemeCustomization({ children }) {
-    const theme = Palette('light', 'default');
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const theme_dark = Palette('dark');
+    const theme_light = Palette('light');
+    //
     const themeTypography = Typography(`'Public Sans', sans-serif`);
-    const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
+    // const themeCustomShadows = useMemo(() => CustomShadows(theme_dark), [theme_dark]);
 
     const themeOptions = useMemo(
         () => ({
+            colorSchemes: {
+                light: {
+                    palette: theme_light,
+                },
+                dark: {
+                    palette: theme_dark
+                },
+            },
             breakpoints: {
                 values: {
                     xs: 0,
@@ -38,22 +63,33 @@ export default function ThemeCustomization({ children }) {
                     paddingBottom: 8
                 }
             },
-            palette: theme.palette,
-            customShadows: themeCustomShadows,
-            typography: themeTypography
+            // customShadows: themeCustomShadows,
+            // typography: themeTypography
+            // // palette: theme.palette,
         }),
-        [theme, themeTypography, themeCustomShadows]
+        [theme_dark, theme_light, themeTypography]
     );
 
-    const themes = createTheme(themeOptions);
+    const themes = extendTheme(themeOptions);
     themes.components = componentsOverride(themes);
+
+    // const themes = extendTheme(themeOptions);
+
+    console.log('themes', themes);
+    // const { mode, setMode } = useColorScheme();
+    // const [mode, setMode] = useState(() => {
+    //     if (typeof window !== 'undefined') {
+    //         return localStorage.getItem('mode') ?? 'light';
+    //     }
+    //     return 'light';
+    // });
 
     return (
         <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={themes}>
+            <CssVarsProvider theme={themes} defaultMode="dark">
                 <CssBaseline />
                 {children}
-            </ThemeProvider>
+            </CssVarsProvider>
         </StyledEngineProvider>
     );
 }

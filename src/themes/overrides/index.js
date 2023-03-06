@@ -22,20 +22,20 @@ import Typography from './Typography';
 
 export default function ComponentsOverrides(theme) {
     return merge(
-        Button(theme),
-        Badge(theme),
-        CardContent(),
-        Checkbox(theme),
-        Chip(theme),
-        IconButton(theme),
-        InputLabel(theme),
-        LinearProgress(),
-        Link(),
-        ListItemIcon(),
-        OutlinedInput(theme),
-        Tab(theme),
-        TableCell(theme),
-        Tabs(),
-        Typography()
+        // Button(theme),
+        // Badge(theme),
+        // CardContent(),
+        // Checkbox(theme),
+        // Chip(theme),
+        // IconButton(theme),
+        // InputLabel(theme),
+        // LinearProgress(),
+        // Link(),
+        // ListItemIcon(),
+        // OutlinedInput(theme),
+        // Tab(theme),
+        // TableCell(theme),
+        // Tabs(),
+        // Typography()
     );
 }
