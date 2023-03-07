@@ -41,9 +41,9 @@ const Palette = (mode) => {
             },
             ...paletteColor,
             text: {
-                primary: paletteColor.grey[700],
-                secondary: paletteColor.grey[500],
-                disabled: paletteColor.grey[400]
+                primary: mode === 'dark' ? paletteColor.grey[200] : paletteColor.grey[700],
+                secondary: mode === 'dark' ? paletteColor.grey[400] : paletteColor.grey[500],
+                disabled: mode === 'dark' ? paletteColor.grey[500] : paletteColor.grey[400]
             },
             action: {
                 disabled: paletteColor.grey[300]

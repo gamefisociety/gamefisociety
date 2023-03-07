@@ -33,7 +33,9 @@ export default function ThemeCustomization({ children }) {
     const theme_dark = Palette('dark');
     const theme_light = Palette('light');
     //
-    const themeTypography = Typography(`'Public Sans', sans-serif`);
+    //Saira-Medium, Saira
+    // const themeTypography = Typography(`'Public Sans', sans-serif`);
+    const themeTypography = Typography(`'Saira-Medium', Saira`);
     // const themeCustomShadows = useMemo(() => CustomShadows(theme_dark), [theme_dark]);
 
     const themeOptions = useMemo(
@@ -64,18 +66,21 @@ export default function ThemeCustomization({ children }) {
                 }
             },
             // customShadows: themeCustomShadows,
-            // typography: themeTypography
+            typography: themeTypography
             // // palette: theme.palette,
         }),
         [theme_dark, theme_light, themeTypography]
     );
 
     const themes = extendTheme(themeOptions);
-    themes.components = componentsOverride(themes);
+    // console.log
+    console.log('themes', themes);
+
+    // themes.components = componentsOverride(themes);
 
     // const themes = extendTheme(themeOptions);
 
-    console.log('themes', themes);
+
     // const { mode, setMode } = useColorScheme();
     // const [mode, setMode] = useState(() => {
     //     if (typeof window !== 'undefined') {

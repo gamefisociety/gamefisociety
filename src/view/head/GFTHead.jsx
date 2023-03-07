@@ -361,108 +361,106 @@ const GFTHead = () => {
     );
 
     return (
-        <Box className='head_bg'>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                        onClick={() => {
-                            console.log('click menu');
-                            dispatch(setOpenMenuLeft(!isOpenMenuLeft));
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <CardMedia
-                        component="img"
-                        sx={{ width: 160 }}
-                        image={ic_logo}
-                        alt="Paella dish"
-                        onClick={clickLogo}
+
+        <AppBar className='head_bg'>
+            <Toolbar>
+                <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    sx={{ mr: 2 }}
+                    onClick={() => {
+                        console.log('click menu');
+                        dispatch(setOpenMenuLeft(!isOpenMenuLeft));
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <CardMedia
+                    component="img"
+                    sx={{ width: 160 }}
+                    image={ic_logo}
+                    alt="Paella dish"
+                    onClick={clickLogo}
+                />
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
                     />
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
-                    <Box sx={{ flexGrow: 1 }} />
-                    {
-                        loggedOut === true ? <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+                </Search>
+                <Box sx={{ flexGrow: 1 }} />
+                {
+                    loggedOut === true ? <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+                        <IconButton
+                            className='head_icon'
+                            aria-label="relay icon"
+                            color="inherit"
+                            onClick={openRelays}
+                        >
+                            <PublicIcon />
+                        </IconButton>
+                        <Button sx={{ px: '24px', backgroundColor: 'rgba(255, 72, 100, 1)', color: 'white', borderRadius: '24px' }} endIcon={<AccountCircle />} onClick={() => {
+                            dispatch(setOpenLogin(true));
+                        }}>
+                            Login
+                        </Button>
+                    </Box> :
+                        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+                            <Box className='wallet_layout' onClick={openDialog}>
+                                <Button sx={{ px: '24px', backgroundColor: 'rgba(0, 108, 249, 1)', color: 'white', borderRadius: '24px' }} startIcon={<AdbIcon />} >
+                                    {account ? getChainLows() : 'CONNECT'}
+                                </Button>
+                            </Box>
                             <IconButton
-                                size="large"
-                                aria-label="relay icon"
+                                className='head_icon'
                                 color="inherit"
                                 onClick={openRelays}
                             >
                                 <PublicIcon />
                             </IconButton>
-                            <Button sx={{ px: '24px', backgroundColor: 'rgba(255, 72, 100, 1)', color: 'white', borderRadius: '24px' }} endIcon={<AccountCircle />} onClick={() => {
-                                dispatch(setOpenLogin(true));
-                            }}>
-                                Login
-                            </Button>
-                        </Box> :
-                            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-                                <Box className='wallet_layout' onClick={openDialog}>
-                                    <Button sx={{ px: '24px', backgroundColor: 'rgba(0, 108, 249, 1)', color: 'white', borderRadius: '24px' }} startIcon={<AdbIcon />} >
-                                        {account ? getChainLows() : 'CONNECT'}
-                                    </Button>
-                                </Box>
-                                <IconButton
-                                    size="large"
-                                    aria-label="relay icon"
-                                    color="inherit"
-                                    onClick={openRelays}
-                                >
-                                    <PublicIcon />
-                                </IconButton>
-                                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                                    <Badge badgeContent={4} color="error">
-                                        <MailIcon />
-                                    </Badge>
-                                </IconButton>
-                                <IconButton
-                                    size="large"
-                                    aria-label="show 17 new notifications"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={17} color="error">
-                                        <NotificationsIcon />
-                                    </Badge>
-                                </IconButton>
-                                <Avatar aria-controls={menuId}
-                                    sx={{ width: 32, height: 32, marginLeft: '12px' }}
-                                    edge="end"
-                                    alt="GameFi Society"
-                                    src={picture}
-                                    onClick={handleProfileMenuOpen} />
-                            </Box>
-                    }
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-            </AppBar>
+                            <IconButton className='head_icon' color="inherit">
+                                <Badge badgeContent={4} color="error">
+                                    <MailIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                className='head_icon'
+                                color="inherit"
+                            >
+                                <Badge badgeContent={17} color="error">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                            <Avatar aria-controls={menuId}
+                                sx={{ width: '32px', height: '32px', marginLeft: '12px' }}
+                                edge="end"
+                                alt="GameFi Society"
+                                src={picture}
+                                onClick={handleProfileMenuOpen} />
+                            <Typography variant="body2" color="text.secondary">{display_name}</Typography>
+                        </Box>
+                }
+                <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                    <IconButton
+                        size="large"
+                        aria-label="show more"
+                        aria-controls={mobileMenuId}
+                        aria-haspopup="true"
+                        onClick={handleMobileMenuOpen}
+                        color="inherit"
+                    >
+                        <MoreIcon />
+                    </IconButton>
+                </Box>
+            </Toolbar>
             {renderMobileMenu}
             {renderMenu}
-        </Box>
+        </AppBar>
     );
 }
 

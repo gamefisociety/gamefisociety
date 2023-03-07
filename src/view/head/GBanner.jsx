@@ -103,6 +103,8 @@ const GBanner = () => {
     const dispatch = useDispatch();
     //
     const theme = useTheme();
+
+    console.log('useTheme', theme);
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = 3;
 
