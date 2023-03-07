@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
-
 // material-ui
-import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import {
+    CssBaseline,
+    StyledEngineProvider
+} from '@mui/material';
 import {
     experimental_extendTheme as extendTheme,
     Experimental_CssVarsProvider as CssVarsProvider,
-    useColorScheme
 } from '@mui/material/styles';
 
 // import {
@@ -30,9 +31,8 @@ import componentsOverride from './overrides';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 export default function ThemeCustomization({ children }) {
-    const theme_dark = Palette('dark');
     const theme_light = Palette('light');
-    //
+    const theme_dark = Palette('dark');
     //Saira-Medium, Saira
     // const themeTypography = Typography(`'Public Sans', sans-serif`);
     const themeTypography = Typography(`'Saira-Medium', Saira`);
@@ -41,12 +41,8 @@ export default function ThemeCustomization({ children }) {
     const themeOptions = useMemo(
         () => ({
             colorSchemes: {
-                light: {
-                    palette: theme_light,
-                },
-                dark: {
-                    palette: theme_dark
-                },
+                light: theme_light,
+                dark: theme_dark,
             },
             breakpoints: {
                 values: {
@@ -73,15 +69,14 @@ export default function ThemeCustomization({ children }) {
     );
 
     const themes = extendTheme(themeOptions);
+
+    // delete themes.colorSchemes.light;
     // console.log
-    console.log('themes', themes);
+    // console.log('themes', themes);
 
     // themes.components = componentsOverride(themes);
 
     // const themes = extendTheme(themeOptions);
-
-
-    // const { mode, setMode } = useColorScheme();
     // const [mode, setMode] = useState(() => {
     //     if (typeof window !== 'undefined') {
     //         return localStorage.getItem('mode') ?? 'light';
@@ -91,7 +86,7 @@ export default function ThemeCustomization({ children }) {
 
     return (
         <StyledEngineProvider injectFirst>
-            <CssVarsProvider theme={themes} defaultMode="dark">
+            <CssVarsProvider theme={themes} defaultMode="dark" enableColorScheme={true}>
                 <CssBaseline />
                 {children}
             </CssVarsProvider>

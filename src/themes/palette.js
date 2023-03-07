@@ -1,10 +1,6 @@
 // material-ui
 import { createTheme } from '@mui/material/styles';
-
-// third-party
 import { presetPalettes } from '@ant-design/colors';
-
-// project import
 import ThemeOption from './theme';
 
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
@@ -32,7 +28,7 @@ const Palette = (mode) => {
 
     const paletteColor = ThemeOption(colors);
 
-    return createTheme({
+    return {
         palette: {
             mode,
             common: {
@@ -41,20 +37,20 @@ const Palette = (mode) => {
             },
             ...paletteColor,
             text: {
-                primary: mode === 'dark' ? paletteColor.grey[200] : paletteColor.grey[700],
-                secondary: mode === 'dark' ? paletteColor.grey[400] : paletteColor.grey[500],
+                primary: mode === 'dark' ? '#fff' : '#000',
+                secondary: mode === 'dark' ? paletteColor.grey[200] : paletteColor.grey[700],
                 disabled: mode === 'dark' ? paletteColor.grey[500] : paletteColor.grey[400]
             },
             action: {
                 disabled: paletteColor.grey[300]
             },
-            divider: paletteColor.grey[200],
+            divider: mode === 'dark' ? paletteColor.grey[0] : paletteColor.grey[900],
             background: {
                 paper: mode === 'dark' ? '#0F0F0F' : '#FFFFFF',
-                default: paletteColor.grey.A50
+                default: mode === 'dark' ? paletteColor.grey.A50 : paletteColor.grey.A50,
             },
         }
-    });
+    };
 };
 
 export default Palette;

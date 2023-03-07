@@ -177,7 +177,7 @@ const GCardFriends = (props) => {
                                         src={item.content.picture ? item.content.picture : ''}
                                     />
                                 </ListItemAvatar>
-                                <ListItemText primary={item.content.name} color="white" />
+                                <ListItemText primary={item.content.name} color="text.secondary" />
                             </ListItemButton>
                         </ListItem>
                     )

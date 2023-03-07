@@ -7,7 +7,7 @@ import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import { System } from "nostr/NostrSystem";
 //
-import { styled, alpha } from "@mui/material/styles";
+import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -127,6 +127,10 @@ const GFTHead = () => {
 
     const MetaPro = useMetadataPro();
     const relayPro = useRelayPro();
+
+    const { mode, setMode } = useColorScheme();
+
+    console.log('current mode', mode);
 
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");

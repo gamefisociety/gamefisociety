@@ -148,7 +148,7 @@ const GFTHomeView = () => {
                                 </CardActionArea>
                                 <CardActionArea>
                                     <CardContent>
-                                        <Typography sx={{ width: '100%', }} color={'white'} variant={'body2'} multiline >
+                                        <Typography sx={{ width: '100%', }} color={'text.primary'} variant={'body2'} multiline >
                                             {item.desc}
                                         </Typography>
                                     </CardContent>
