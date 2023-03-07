@@ -442,7 +442,7 @@ const GFTHead = () => {
                                 alt="GameFi Society"
                                 src={picture}
                                 onClick={handleProfileMenuOpen} />
-                            <Typography variant="body2" color="text.secondary">{display_name}</Typography>
+                            <Typography variant="body2">{display_name}</Typography>
                         </Box>
                 }
                 <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
