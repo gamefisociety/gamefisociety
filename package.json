@@ -27,6 +27,7 @@
     "bech32": "^2.0.0",
     "copy-to-clipboard": "^3.3.3",
     "fslightbox-react": "^1.6.2-2",
+    "moment": "2.29.4",
     "nostr-tools": "^1.4.2",
     "notistack": "^2.0.8",
     "react": "^18.2.0",
@@ -34,6 +35,7 @@
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
     "react-swipeable-views": "^0.14.0",
+    "react-use-clipboard": "^1.0.9",
     "react-window": "^1.8.8",
     "sass": "^1.56.1",
     "styled-components": "^5.3.6",
@@ -41,8 +43,7 @@
     "web-vitals": "^2.1.4",
     "web3": "^1.8.0",
     "web3-react": "^5.0.5",
-    "websocket-polyfill": "0.0.3",
-    "moment": "2.29.4"
+    "websocket-polyfill": "0.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

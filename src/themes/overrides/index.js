@@ -20,9 +20,9 @@ import Typography from './Typography';
 
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
-export default function ComponentsOverrides(theme) {
+export default function ComponentsOverrides(themes) {
     return merge(
-        // Button(theme),
+        Button(themes),
         // Badge(theme),
         // CardContent(),
         // Checkbox(theme),

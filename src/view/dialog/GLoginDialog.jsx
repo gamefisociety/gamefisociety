@@ -8,6 +8,8 @@ import { setKeyPairs } from "module/store/features/loginSlice";
 import './GLoginDialog.scss';
 //
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+//
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -128,37 +130,36 @@ const GLoginDialog = () => {
                     src={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText color={'primary'} variant={'h5'}>
+                <DialogContentText color={'text.secondary'} variant={'h5'}>
                     {'GameFi Society'}
                 </DialogContentText>
                 <DialogContentText
                     sx={{ mt: '24px', px: '24px' }}
-                    color={'primary'}
+                    color={'text.secondary'}
                     variant={'subtitle2'}>
                     {'Decentralized game social platform. Good products come from user evaluations'}
                 </DialogContentText>
                 <DialogContentText
                     sx={{ mt: '12px', px: '24px' }}
-                    color={'primary'}
+                    color={'text.secondary'}
                     variant={'subtitle2'}>
                     {'Creating an account, doesn‘t require a phone number, email or name. Get started right away with zero friction.'}
                 </DialogContentText>
                 <DialogContentText
                     sx={{ mt: '12px', px: '24px' }}
-                    color={'primary'}
+                    color={'text.secondary'}
                     variant={'subtitle2'}>
                     {'Freedom post notes on nostr network and blockchain net.'}
                 </DialogContentText>
                 <DialogContentText
                     sx={{ mt: '12px', px: '24px' }}
-                    color={'primary'}
+                    color={'text.secondary'}
                     variant={'subtitle2'}>
                     {'End-to-End encrypted private messaging.Keep Big Tech out of your DMs'}
                 </DialogContentText>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 <Button sx={{ mt: '24px', width: '75%' }}
                     variant="contained"
-                    color="primary"
                     onClick={() => {
                         setLoginState(1);
                     }}>
@@ -194,7 +195,7 @@ const GLoginDialog = () => {
                 <DialogContentText sx={{
                     mt: '36px',
                     mb: '12px'
-                }} color={'primary'} variant={'h5'}>
+                }} color={'text.secondary'} variant={'h5'}>
                     {'EULA'}
                 </DialogContentText>
                 <DialogContent dividers={true}>
@@ -204,7 +205,7 @@ const GLoginDialog = () => {
                             wordWrap: 'break-word',
                             whiteSpace: 'pre-wrap'
                         }}
-                        color={'primary'}
+                        color={'text.secondary'}
                         variant={'subtitle2'}>
                         {license_1}
                     </DialogContentText>
@@ -214,7 +215,7 @@ const GLoginDialog = () => {
                             wordWrap: 'break-word',
                             whiteSpace: 'pre-wrap'
                         }}
-                        color={'primary'}
+                        color={'text.secondary'}
                         variant={'subtitle2'}>
                         {license_2}
                     </DialogContentText>
@@ -224,7 +225,7 @@ const GLoginDialog = () => {
                             wordWrap: 'break-word',
                             whiteSpace: 'pre-wrap'
                         }}
-                        color={'primary'}
+                        color={'text.secondary'}
                         variant={'subtitle2'}>
                         {license_3}
                     </DialogContentText>
@@ -234,7 +235,7 @@ const GLoginDialog = () => {
                             wordWrap: 'break-word',
                             whiteSpace: 'pre-wrap'
                         }}
-                        color={'primary'}
+                        color={'text.secondary'}
                         variant={'subtitle2'}>
                         {license_4}
                     </DialogContentText>
@@ -244,7 +245,7 @@ const GLoginDialog = () => {
                             wordWrap: 'break-word',
                             whiteSpace: 'pre-wrap'
                         }}
-                        color={'primary'}
+                        color={'text.secondary'}
                         variant={'subtitle2'}>
                         {license_5}
                     </DialogContentText>
@@ -351,27 +352,39 @@ const GLoginDialog = () => {
                     src={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText color={'primary'} variant={'h6'}>
+                <DialogContentText color={'text.secondary'} variant={'h6'}>
                     {'Create Account'}
                 </DialogContentText>
                 <DialogContentText
-                    sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
-                    Username
+                    sx={{ marginTop: '12px', width: '100%' }} color={'text.secondary'} variant={'subtitle2'}>
+                    {'Username'}
                 </DialogContentText>
-                <TextField
-                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
-                    value={profile.nickname}
-                    onChange={(event) => {
-                        profile.nickname = event.target.value;
-                        setProfile({ ...profile });
-                    }}
-                />
+                <Stack sx={{
+                    marginTop: '6px',
+                    width: '100%',
+                }} direction='row' alignItems='center' justifyContent='flex-start'>
+                    <Typography color={'text.primary'}>{'@'}</Typography>
+                    <TextField
+                        className={'text_input'}
+                        sx={{
+                            ml: '15px'
+                        }} variant="outlined"
+                        placeholder={'gamefi society username'}
+                        value={profile.nickname}
+                        onChange={(event) => {
+                            profile.nickname = event.target.value;
+                            setProfile({ ...profile });
+                        }}
+                    />
+                </Stack>
                 <DialogContentText
-                    sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
+                    sx={{ marginTop: '12px', width: '100%' }} color={'text.secondary'} variant={'subtitle2'}>
                     {'Display Name'}
                 </DialogContentText>
                 <TextField
-                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }} variant="outlined"
+                    className={'text_input'}
+                    variant="outlined"
+                    placeholder={'gamefi society displayname'}
                     value={profile.displayname}
                     onChange={(event) => {
                         profile.displayname = event.target.value;
@@ -380,22 +393,23 @@ const GLoginDialog = () => {
                 />
                 <DialogContentText
                     sx={{ marginTop: '12px', width: '100%' }}
-                    color={'primary'}
+                    color={'text.secondary'}
                     variant={'subtitle2'}>
                     {'About'}
                 </DialogContentText>
                 <TextField
-                    sx={{ marginTop: '6px', width: '100%', backgroundColor: 'rgba(50, 50, 50, 1)', borderRadius: '12px' }}
+                    className={'text_input'}
                     value={profile.about}
+                    placeholder={'introduce youself'}
                     onChange={(event) => {
                         profile.about = event.target.value;
                         setProfile({ ...profile });
                     }}
                     variant="outlined" />
-                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText sx={{ marginTop: '12px', width: '100%' }} color={'text.secondary'} variant={'subtitle2'}>
                     {'Account ID (public key)'}
                 </DialogContentText>
-                <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                <Typography sx={{ marginTop: '12px', wordBreak: "break-word" }} color={'tetxt.primary'} variant={'subtitle2'} >
                     {hexToBech32('npub', keys.pub)}
                 </Typography>
                 <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
@@ -415,16 +429,16 @@ const GLoginDialog = () => {
                 }}>
                     <ArrowBackIosIcon />
                 </IconButton>
-                <DialogContentText color={'primary'} variant={'h6'}>
+                <DialogContentText color={'text.primary'} variant={'h6'}>
                     {'Welcome, ' + profile.nickname + '!'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'text.primary'} variant={'subtitle2'}>
                     {'Before we start, you need to save your account information, keep your private key safe so you can log in at any time.'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle1'}>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'text.primary'} variant={'subtitle1'}>
                     {'Public Key'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '6px' }} color={'primary'} variant={'subtitle2'}>
+                <DialogContentText sx={{ marginTop: '6px' }} color={'text.primary'} variant={'subtitle2'}>
                     {'This is your account D, you can give this to your friends so that they can follow you. Click to copy.'}
                 </DialogContentText>
                 <DialogActions disableSpacing={true}>=
@@ -437,11 +451,11 @@ const GLoginDialog = () => {
                         <DoneIcon />
                     </IconButton>
                 </DialogActions>
-                <DialogContentText sx={{ marginTop: '12px' }} color={'primary'} variant={'subtitle1'}>
+                <DialogContentText sx={{ marginTop: '12px' }} color={'text.primary'} variant={'subtitle1'}>
                     {'Private Key'}
                 </DialogContentText>
-                <DialogContentText sx={{ marginTop: '6px' }} color={'primary'} variant={'subtitle2'}>
-                    This is your secret account key. You need this to access your account. Don't share this with anyone! Save it in a password manager and keep it safe!
+                <DialogContentText sx={{ marginTop: '6px' }} color={'text.primary'} variant={'subtitle2'}>
+                    {"This is your secret account key. You need this to access your account. Don't share this with anyone! Save it in a password manager and keep it safe!"}
                 </DialogContentText>
                 <DialogActions disableSpacing={true}>=
                     <Typography sx={{ marginTop: '6px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
@@ -475,9 +489,13 @@ const GLoginDialog = () => {
     }
 
     return (
-        <Dialog open={isOpenLogin} fullWidth={true} maxWidth={'xs'}
+        <Dialog
+            className={'dialog_login'}
+            open={isOpenLogin}
+            fullWidth={true}
             PaperProps={{
                 style: {
+                    width: '400px',
                     height: '650px',
                     backgroundColor: 'rgba(15, 15, 15, 1)',
                     boxShadow: 'none',

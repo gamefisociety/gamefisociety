@@ -33,8 +33,6 @@ import componentsOverride from './overrides';
 export default function ThemeCustomization({ children }) {
     const theme_light = Palette('light');
     const theme_dark = Palette('dark');
-    //Saira-Medium, Saira
-    // const themeTypography = Typography(`'Public Sans', sans-serif`);
     const themeTypography = Typography(`'Saira-Medium', Saira`);
     // const themeCustomShadows = useMemo(() => CustomShadows(theme_dark), [theme_dark]);
 
@@ -63,19 +61,17 @@ export default function ThemeCustomization({ children }) {
             },
             // customShadows: themeCustomShadows,
             typography: themeTypography
-            // // palette: theme.palette,
         }),
         [theme_dark, theme_light, themeTypography]
     );
 
     const themes = extendTheme(themeOptions);
 
+    themes.components = componentsOverride(themes);
+
     // delete themes.colorSchemes.light;
     // console.log
     // console.log('themes', themes);
-
-    // themes.components = componentsOverride(themes);
-
     // const themes = extendTheme(themeOptions);
     // const [mode, setMode] = useState(() => {
     //     if (typeof window !== 'undefined') {

@@ -1,11 +1,12 @@
 // ==============================|| OVERRIDES - BUTTON ||============================== //
 
-export default function Button(theme) {
-    const disabledStyle = {
-        '&.Mui-disabled': {
-            backgroundColor: theme.palette.grey[200]
-        }
-    };
+export const Button = (themes) => {
+    // console.log('Button', themes);
+    // const disabledStyle = {
+    //     '&.Mui-disabled': {
+    //         backgroundColor: themes.palette.grey[200]
+    //     }
+    // };
 
     return {
         MuiButton: {
@@ -16,13 +17,19 @@ export default function Button(theme) {
                 root: {
                     fontWeight: 400
                 },
-                contained: {
-                    ...disabledStyle
+                contained: ({ theme }) => {
+                    console.log('MuiButton', theme);
+                    return {
+                        color: theme.vars.palette.grey[200]
+                    }
                 },
-                outlined: {
-                    ...disabledStyle
-                }
+                outlined: ({ theme }) => ({
+                    // use JavaScript conditional expression
+                    color: theme.vars.palette.grey[200]
+                })
             }
         }
     };
 }
+
+export default Button;
