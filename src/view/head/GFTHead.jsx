@@ -20,7 +20,6 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import CardMedia from "@mui/material/CardMedia";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
-import { Divider } from "@mui/material/index";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -29,10 +28,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import AdbIcon from "@mui/icons-material/Adb";
 import PublicIcon from "@mui/icons-material/Public";
-import LoginIcon from "@mui/icons-material/Login";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import {
     setIsOpen,
     setIsOpenWallet,
@@ -119,9 +117,8 @@ const GFTHead = () => {
     const { account } = useWeb3React();
     const { isOpenMenuLeft } = useSelector((s) => s.dialog);
     //
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [profileOpen, setProfileOPen] = React.useState(false);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { picture, display_name, name, nip05 } = useSelector((s) => s.profile);
 
@@ -130,7 +127,7 @@ const GFTHead = () => {
 
     const { mode, setMode } = useColorScheme();
 
-    console.log('current mode', mode);
+    console.log("current mode", mode);
 
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");
@@ -144,6 +141,13 @@ const GFTHead = () => {
     //     }
     //     throw new Error("User key not found");
     // }
+    const handleTooltipClose = () => {
+        setProfileOPen(false);
+    };
+
+    const handleTooltipOpen = () => {
+        setProfileOPen(true);
+    };
     const openDialog = () => {
         if (account) {
             dispatch(setIsOpenWallet(true));
@@ -166,16 +170,13 @@ const GFTHead = () => {
         navigate("/");
     };
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const handleProfileMenuOpen = (event) => { };
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
 
     const handleMenuClose = () => {
-        setAnchorEl(null);
         handleMobileMenuClose();
     };
 
@@ -266,11 +267,10 @@ const GFTHead = () => {
         dispatch(
             setDrawer({
                 isDrawer: true,
-                placeDrawer: "top",
+                placeDrawer: "right",
                 cardDrawer: "relays",
             })
         );
-        handleMenuClose();
     };
 
     const handleMobileMenuOpen = (event) => {
@@ -318,7 +318,7 @@ const GFTHead = () => {
                                 fontSize: "14px",
                                 fontFamily: "Saira",
                                 fontWeight: "500",
-                                align: "left",
+                                textAlign: "left",
                             }}
                             color={"#FFFFFF"}
                         >
@@ -332,7 +332,7 @@ const GFTHead = () => {
                                 fontSize: "14px",
                                 fontFamily: "Saira",
                                 fontWeight: "500",
-                                align: "left",
+                                textAlign: "left",
                             }}
                             color={"#919191"}
                         >
@@ -415,7 +415,9 @@ const GFTHead = () => {
                         justifyContent: "flex-start",
                         height: "36px",
                     }}
-                    onClick={() => { }}
+                    onClick={() => {
+                        openRelays();
+                    }}
                 >
                     <img
                         className="iconimg"
@@ -529,64 +531,6 @@ const GFTHead = () => {
                 </Button>
             </Box>
         </React.Fragment>
-    );
-    const menuId = "primary-search-account-menu";
-    const renderMenu = (
-        <Menu
-            sx={{ width: "228px", backgroundColor: "#191A1B" }}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={false}
-            onClose={handleMenuClose}
-        >
-            <MenuItem sx={{ dispaly: "flex", flexDirection: "column" }}>
-                <Box sx={{ dispaly: "flex", flexDirection: "row" }}>
-                    <Avatar
-                        sx={{ width: 32, height: 32, marginLeft: "12px" }}
-                        edge="end"
-                        alt="GameFi Society"
-                        src={picture}
-                    />
-                    <Typography
-                        sx={{ marginLeft: "12px" }}
-                        color={"primary"}
-                        variant={"subtitle2"}
-                    >
-                        {display_name}
-                    </Typography>
-                </Box>
-                <Typography
-                    sx={{ width: "100%", marginTop: "12px", wordBreak: "break-word" }}
-                    color={"primary"}
-                    variant={"subtitle2"}
-                >
-                    {nip05}
-                </Typography>
-            </MenuItem>
-            <Divider></Divider>
-            <MenuItem onClick={openProfile}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-            <MenuItem onClick={openSociety}>Society</MenuItem>
-            <Divider></Divider>
-            <MenuItem
-                onClick={() => {
-                    setAnchorEl(null);
-                    handleMobileMenuClose();
-                    dispatch(logout());
-                }}
-            >
-                Clear Account
-            </MenuItem>
-        </Menu>
     );
 
     const mobileMenuId = "primary-search-account-menu-mobile";
@@ -705,7 +649,7 @@ const GFTHead = () => {
                                 dispatch(setOpenLogin(true));
                             }}
                         >
-                            {'Login'}
+                            Login
                         </Button>
                     </Box>
                 ) : (
@@ -746,16 +690,27 @@ const GFTHead = () => {
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
-                        <ProfileTooltip title={renderUserMenu} placement="top-end">
-                            <Avatar
-                                aria-controls={menuId}
-                                sx={{ width: 32, height: 32, marginLeft: "12px" }}
-                                edge="end"
-                                alt="GameFi Society"
-                                src={picture}
-                            //   onClick={handleProfileMenuOpen}
-                            />
-                        </ProfileTooltip>
+                        <ClickAwayListener onClickAway={handleTooltipClose}>
+                            <Button>
+                                <ProfileTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={renderUserMenu}
+                                    onClose={handleTooltipClose}
+                                    open={profileOpen}
+                                    placement="top-end"
+                                >
+                                    <Avatar
+                                        sx={{ width: 32, height: 32, marginLeft: "12px" }}
+                                        edge="end"
+                                        alt="GameFi Society"
+                                        src={picture}
+                                        onClick={handleTooltipOpen}
+                                    />
+                                </ProfileTooltip>
+                            </Button>
+                        </ClickAwayListener>
                     </Box>
                 )}
                 <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -772,7 +727,6 @@ const GFTHead = () => {
                 </Box>
             </Toolbar>
             {renderMobileMenu}
-            {renderMenu}
         </AppBar>
     );
 };
