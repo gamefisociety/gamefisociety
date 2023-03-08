@@ -318,7 +318,7 @@ const GFTHead = () => {
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
-                align: "left",
+                textAlign: "left",
               }}
               color={"#FFFFFF"}
             >
@@ -332,7 +332,7 @@ const GFTHead = () => {
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
-                align: "left",
+                textAlign: "left",
               }}
               color={"#919191"}
             >
@@ -701,23 +701,25 @@ const GFTHead = () => {
               </Badge>
             </IconButton>
             <ClickAwayListener onClickAway={handleTooltipClose}>
-              <ProfileTooltip
-                PopperProps={{
-                  disablePortal: true,
-                }}
-                title={renderUserMenu}
-                onClose={handleTooltipClose}
-                open={profileOpen}
-                placement="top-end"
-              >
-                <Avatar
-                  sx={{ width: 32, height: 32, marginLeft: "12px" }}
-                  edge="end"
-                  alt="GameFi Society"
-                  src={picture}
-                  onClick={handleTooltipOpen}
-                />
-              </ProfileTooltip>
+              <Button>
+                <ProfileTooltip
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                  title={renderUserMenu}
+                  onClose={handleTooltipClose}
+                  open={profileOpen}
+                  placement="top-end"
+                >
+                  <Avatar
+                    sx={{ width: 32, height: 32, marginLeft: "12px" }}
+                    edge="end"
+                    alt="GameFi Society"
+                    src={picture}
+                    onClick={handleTooltipOpen}
+                  />
+                </ProfileTooltip>
+              </Button>
             </ClickAwayListener>
           </Box>
         )}

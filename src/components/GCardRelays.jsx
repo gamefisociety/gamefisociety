@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Card from "@mui/material/Card";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { Divider } from "@mui/material/index";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -18,15 +21,21 @@ import Chip from "@mui/material/Chip";
 import { DefaultRelays } from "nostr/Const";
 
 import "./GCardRelays.scss";
-
+let deletingRealy = "";
 const GCardRelays = () => {
   const { relays } = useSelector((s) => s.profile);
   const { publicKey, loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
   const [newRelays, setNewRelays] = useState([]);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const handleClickDialogOpen = () => {
+    setDialogOpen(true);
+  };
 
-  // console.log('init GCardRelays', relays);
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   const fetchRelays = () => {
     // console.log('fetchRelays', Object.entries(relays), sub);
@@ -140,7 +149,9 @@ const GCardRelays = () => {
               height: "24px",
             }}
             onClick={() => {
-              deleteRelays(item[0]);
+              //   deleteRelays(item[0]);
+              deletingRealy = item[0];
+              handleClickDialogOpen();
             }}
           >
             <RemoveCircleOutlineIcon
@@ -304,6 +315,25 @@ const GCardRelays = () => {
       >
         {renderCacheRelays()}
       </Stack>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete this relay?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button onClick={()=>{
+            deleteRelays(deletingRealy);
+            handleDialogClose();
+          }} autoFocus>
+            Sure
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
