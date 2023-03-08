@@ -671,7 +671,7 @@ const GFTHead = () => {
                 </IconButton>
                 <CardMedia
                     component="img"
-                    sx={{ width: 160 }}
+                    sx={{ width: 160, cursor: 'pointer' }}
                     image={ic_logo}
                     alt="Paella dish"
                     onClick={clickLogo}
@@ -699,18 +699,13 @@ const GFTHead = () => {
                             <PublicIcon />
                         </IconButton>
                         <Button
-                            sx={{
-                                px: "24px",
-                                backgroundColor: "rgba(255, 72, 100, 1)",
-                                color: "white",
-                                borderRadius: "24px",
-                            }}
+                            className={'btLogin'}
                             endIcon={<AccountCircle />}
                             onClick={() => {
                                 dispatch(setOpenLogin(true));
                             }}
                         >
-                            Login
+                            {'Login'}
                         </Button>
                     </Box>
                 ) : (
@@ -719,12 +714,7 @@ const GFTHead = () => {
                     >
                         <Box className="wallet_layout" onClick={openDialog}>
                             <Button
-                                sx={{
-                                    px: "24px",
-                                    backgroundColor: "rgba(0, 108, 249, 1)",
-                                    color: "white",
-                                    borderRadius: "24px",
-                                }}
+                                className={'btConnect'}
                                 startIcon={<AdbIcon />}
                             >
                                 {account ? getChainLows() : "CONNECT"}
