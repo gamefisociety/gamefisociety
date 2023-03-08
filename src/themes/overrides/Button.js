@@ -17,14 +17,10 @@ export const Button = (themes) => {
                 root: {
                     fontWeight: 400
                 },
-                contained: ({ theme }) => {
-                    console.log('MuiButton', theme);
-                    return {
-                        color: theme.vars.palette.grey[200]
-                    }
-                },
+                contained: ({ theme }) => ({
+                    color: theme.vars.palette.grey[200]
+                }),
                 outlined: ({ theme }) => ({
-                    // use JavaScript conditional expression
                     color: theme.vars.palette.grey[200]
                 })
             }

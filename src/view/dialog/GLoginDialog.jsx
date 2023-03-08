@@ -15,7 +15,6 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DoneIcon from '@mui/icons-material/Done';
@@ -35,6 +34,7 @@ import logo_blue from "asset/image/logo/logo_blue.png";
 
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
+import copy from "copy-to-clipboard";
 
 const license_1 = 'End User License Agreement\n\n##Introduction\n\nThis End User License Agreement("EULA") is a legal agreement between you and GameFi Society Platform. For the use of our dapp,you agree to be bound of by the terms and conditions of this EULA';
 const license_2 = '## Prohibited Content and Conduct\n\nYou agree not to use our Dapp to create,upload,post,send,or store any content that:\n\n*Is illegal,infringing,or fraudulent\n*Is defamatory,libelous,or threatening\n*Is pornographic,obscene,or offensive\n*Is discriminatory or promotes hate speech\n*Is harmful to minors\n*Is intended to harass or bully others\n*Is intendet to impersonnate others';
@@ -46,7 +46,6 @@ const GLoginDialog = () => {
     const { isOpenLogin } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     const [loginState, setLoginState] = useState(0);
-    const [gen, setGen] = useState(false);
     const [isNip19, setNip19] = useState(true);
     const [keys, setKeys] = useState({
         pri: '',
@@ -57,8 +56,11 @@ const GLoginDialog = () => {
         displayname: '',
         about: ''
     });
+    const [copyState, setCopyState] = useState({
+        pubkey: false,
+        prikey: false,
+    });
     const [errorKey, setErrorKey] = useState(false);
-    //
     const MetaPro = useMetadataPro();
     //
     useEffect(() => {
@@ -98,7 +100,6 @@ const GLoginDialog = () => {
                 let prikey = parseId(keys.pri);
                 if (prikey) {
                     let pubkey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(prikey));
-                    console.log('pubkey', pubkey);
                     dispatch(setKeyPairs({
                         prikey: prikey,
                         pubkey: pubkey,
@@ -413,6 +414,11 @@ const GLoginDialog = () => {
                     {hexToBech32('npub', keys.pub)}
                 </Typography>
                 <Button sx={{ marginTop: '24px', width: '90%' }} variant="contained" color="primary" onClick={() => {
+                    //
+                    copyState.prikey = false;
+                    copyState.pubkey = false;
+                    setCopyState({ ...copyState });
+                    //
                     setLoginState(3);
                 }}>
                     {'Create'}
@@ -441,30 +447,36 @@ const GLoginDialog = () => {
                 <DialogContentText sx={{ marginTop: '6px' }} color={'text.primary'} variant={'subtitle2'}>
                     {'This is your account D, you can give this to your friends so that they can follow you. Click to copy.'}
                 </DialogContentText>
-                <DialogActions disableSpacing={true}>=
-                    <Typography sx={{ marginTop: '6px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                <Stack direction={'row'} alignItems={'center'}>
+                    <Typography sx={{ width: '85%', marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('npub', keys.pub)}
                     </Typography>
-                    <IconButton aria-label="pub-done" color={'white'} onClick={() => {
-                        //
+                    <IconButton color={'white'} onClick={() => {
+                        copy(hexToBech32('npub', keys.pub));
+                        copyState.pubkey = true;
+                        setCopyState({ ...copyState });
                     }}>
-                        <DoneIcon />
+                        {copyState.pubkey === false ? <ContentCopyIcon /> : <DoneIcon />}
                     </IconButton>
-                </DialogActions>
+                </Stack>
                 <DialogContentText sx={{ marginTop: '12px' }} color={'text.primary'} variant={'subtitle1'}>
                     {'Private Key'}
                 </DialogContentText>
                 <DialogContentText sx={{ marginTop: '6px' }} color={'text.primary'} variant={'subtitle2'}>
                     {"This is your secret account key. You need this to access your account. Don't share this with anyone! Save it in a password manager and keep it safe!"}
                 </DialogContentText>
-                <DialogActions disableSpacing={true}>=
-                    <Typography sx={{ marginTop: '6px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
+                <Stack direction={'row'} alignItems={'center'}>
+                    <Typography sx={{ width: '85%', marginTop: '12px', wordBreak: "break-word" }} color={'primary'} variant={'subtitle2'} >
                         {hexToBech32('nsec', keys.pri)}
                     </Typography>
-                    <IconButton aria-label="pri-copy" color={'white'}>
-                        <ContentCopyIcon />
+                    <IconButton color={'white'} onClick={() => {
+                        copy(hexToBech32('nsec', keys.pri));
+                        copyState.prikey = true;
+                        setCopyState({ ...copyState });
+                    }}>
+                        {copyState.prikey === false ? <ContentCopyIcon /> : <DoneIcon />}
                     </IconButton>
-                </DialogActions>
+                </Stack>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 <Button sx={{ width: '75%' }} variant="contained" color="primary" onClick={handleCreate}>
                     {'Let’s go!'}
