@@ -5,7 +5,7 @@ import Loadable from '../../components/Loadable';
 
 import MiniLayout from 'view/layout/MiniLayout';
 const GIntroduce = Loadable(lazy(() => import('view/page/GIntroduce')));
-
+const GMintNFT = Loadable(lazy(() => import('view/page/GMintNFT')));
 const MiniRoutes = {
     path: '/',
     element: <MiniLayout />,
@@ -13,6 +13,10 @@ const MiniRoutes = {
         {
             path: '/introduce',
             element: <GIntroduce />
+        },
+        {
+            path: '/mint',
+            element: <GMintNFT />
         },
     ]
 };

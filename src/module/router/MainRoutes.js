@@ -63,10 +63,10 @@ const MainRoutes = {
             path: '/follow',
             element: <GFTFollow />,
         },
-        {
-            path: '/mint',
-            element: <GFTMintNFT />,
-        },
+        // {
+        //     path: '/mint',
+        //     element: <GFTMintNFT />,
+        // },
         {
             path: '/chat',
             element: <GFTChat />,

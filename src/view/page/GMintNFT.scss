@@ -1,0 +1,21 @@
+.headerImg{
+    width: 1172px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.avatar{
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    border-color: "#0F0F0F";
+    border-width: 4px;
+    // background-color: rgb(200, 162, 250);
+    background-color: white;
+}
+
+.step{
+    font-size: 14px;
+    font-family: "Saira";
+    font-weight: 500;
+}
