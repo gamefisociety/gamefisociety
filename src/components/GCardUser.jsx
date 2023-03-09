@@ -96,6 +96,7 @@ const GCardUser = (props) => {
               <img src={logo_chat} width="40px" alt="chat" />
             </Button>
             <Button
+            variant="contained"
               sx={{
                 width: "96px",
                 height: "36px",

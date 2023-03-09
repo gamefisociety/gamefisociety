@@ -107,7 +107,7 @@ const GFTLeftMenu = () => {
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
-            navigate('/');
+            navigate('/home');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));

@@ -27,10 +27,10 @@ const MainRoutes = {
             path: '/',
             element: <GFTHomeView />,
         },
-        // {
-        //     path: '/introduce',
-        //     element: <GIntroduce />,
-        // },
+        {
+            path: '/home',
+            element: <GFTHomeView />,
+        },
         {
             path: '/detail',
             element: <GFTNFTDetail />,

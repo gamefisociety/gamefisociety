@@ -167,7 +167,7 @@ const GFTHead = () => {
         return "CONNECT";
     };
     const clickLogo = () => {
-        navigate("/");
+        navigate('/home');
     };
 
     const handleProfileMenuOpen = (event) => { };
