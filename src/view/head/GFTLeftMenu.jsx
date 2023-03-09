@@ -90,6 +90,10 @@ const mapData = [
     {
         txt: 'IPFS',
         img: ic_create
+    },
+    {
+        txt: 'GROUP CHAT',
+        img: ic_create
     }
 ];
 
@@ -137,6 +141,8 @@ const GFTLeftMenu = () => {
             navigate('/ipfs');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
+        }else if(item.txt === 'GROUP CHAT'){
+            navigate('/groupchat');
         }
     }
 

@@ -18,7 +18,7 @@ const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
 const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
-
+const GGroupChat = Loadable(lazy(() => import('view/page/GGroupChat')));
 const MainRoutes = {
     path: '/',
     element: <MainLayout />,
@@ -82,6 +82,10 @@ const MainRoutes = {
         {
             path: '/ipfs',
             element: <GTestIPFS />,
+        },
+        {
+            path: '/groupchat',
+            element: <GGroupChat />,
         }
     ]
 };
