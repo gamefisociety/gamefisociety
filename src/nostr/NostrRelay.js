@@ -30,6 +30,80 @@ const NostrRelay = () => {
   }
 
   const Connect = async (client) => {
+
+    // open Function
+    const innerOnOpen = () => {
+      client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
+      client.ConnectTimeout = DefaultConnectTimeout;
+      console.log(`[${client.addr}] Open!`);
+      SendPending(client);
+    }
+
+    const innerOnClose = (e) => {
+      console.log(`[${client.addr}] Close!`, e);
+      client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
+      if (!client.IsClosed) {
+        //reconnect time ervey time * 2
+        client.Stats.Disconnects++;
+        client.ConnectTimeout = client.ConnectTimeout * 2;
+        client.ReconnectTimer = setTimeout(() => {
+          Connect(client);
+        }, client.ConnectTimeout);
+      } else {
+        console.log(`[${client.Address}] Closed!`);
+      }
+    }
+
+    const innerOnError = (e) => {
+      console.log(`[${client.addr}] Error!`, e);
+      client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
+    }
+
+    const innerOnMsg = (e) => {
+      if (e.data.length <= 0) {
+        return;
+      }
+      // process msg
+      const msg = JSON.parse(e.data);
+      let tmpKey = buildKey(e.origin, msg[1]);
+      let procer = listenProcers.get(tmpKey);
+      // console.log('OnMessage', tmpKey, msg);
+      const tag = msg[0];
+      if (tag === 'AUTH') {
+        // this._OnAuthAsync(msg[1]);
+        // this.Stats.EventsReceived++;
+        // this._UpdateState();
+      } else if (tag === 'EVENT') {
+        if (procer && procer.cache) {
+          procer.cache.push(msg[2]);
+        }
+      } else if (tag === 'EOSE') {
+        if (procer) {
+          procer.callback(procer.cache, client);
+          procer.cache = [];
+          if (procer.once === 0) {
+            removeListen(procer);
+            SendClose(client, msg[1]);
+          }
+        }
+        // this._OnEnd(msg[1]);
+      } else if (tag === 'OK') {
+        // console.log(`${client.addr} OK: `, msg);
+        if (procer) {
+          procer.callback(msg);
+          procer.cache = [];
+          if (procer.once === 0) {
+            removeListen(procer);
+          }
+        }
+      } else if (tag === 'NOTICE') {
+        // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
+      } else {
+        // console.warn(`Unknown tag: ${tag}`);
+      }
+    }
+
+
     let flag = false;
     try {
       if (client.info === null) {
@@ -65,82 +139,14 @@ const NostrRelay = () => {
         } else {
           client.IsClosed = false;
           client.Socket = new WebSocket(client.addr);
-          client.Socket.onopen = () => {
-            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
-            client.ConnectTimeout = DefaultConnectTimeout;
-            console.log(`[${client.addr}] Open!`);
-            SendPending(client);
-          };
+          // on open
+          client.Socket.onopen = innerOnOpen;
           // on error
-          client.Socket.onerror = e => {
-            console.log(`[${client.addr}] Error!`, e);
-            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
-          };
+          client.Socket.onerror = innerOnError;
           //on close
-          client.Socket.onclose = e => {
-            console.log(`[${client.addr}] Close!`, e);
-            client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
-            if (!client.IsClosed) {
-              //reconnect time ervey time * 2
-              client.Stats.Disconnects++;
-              client.ConnectTimeout = client.ConnectTimeout * 2;
-              client.ReconnectTimer = setTimeout(() => {
-                Connect(client);
-              }, client.ConnectTimeout);
-            } else {
-              console.log(`[${client.Address}] Closed!`);
-            }
-          };
-          //
-          client.Socket.onmessage = e => {
-            // console.log('relay message', e);
-            if (e.data.length > 0) {
-              const msg = JSON.parse(e.data);
-              let tmpKey = buildKey(e.origin, msg[1]);
-              let procer = listenProcers.get(tmpKey);
-              // console.log('OnMessage', tmpKey, msg);
-              const tag = msg[0];
-              if (tag === 'AUTH') {
-                // this._OnAuthAsync(msg[1]);
-                // this.Stats.EventsReceived++;
-                // this._UpdateState();
-              } else if (tag === 'EVENT') {
-                if (procer && procer.cache) {
-                  procer.cache.push(msg[2]);
-                }
-              } else if (tag === 'EOSE') {
-                if (procer) {
-                  procer.callback(procer.cache, client);
-                  procer.cache = [];
-                  if (procer.once === 0) {
-                    removeListen(procer);
-                    SendClose(client, msg[1]);
-                  }
-                }
-                // this._OnEnd(msg[1]);
-              } else if (tag === 'OK') {
-                // console.log(`${client.addr} OK: `, msg);
-                if (procer) {
-                  procer.callback(msg);
-                  procer.cache = [];
-                  if (procer.once === 0) {
-                    removeListen(procer);
-                  }
-                }
-              } else if (tag === 'NOTICE') {
-                // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
-              } else {
-                // console.warn(`Unknown tag: ${tag}`);
-              }
-            } else {
-              // console.log('no OnMessage');
-            }
-            // if (client.listenMessages) {
-            //   // client.listenMessages.map((proc) => {
-            //   //   proc(e);
-            //   // })
-            // }
-          };
+          client.Socket.onclose = innerOnClose;
+          //on msg
+          client.Socket.onmessage = innerOnMsg;
         }
       }
       return new Promise((resolve, reject) => {
@@ -265,8 +271,6 @@ const NostrRelay = () => {
       console.log('SendSub cache', req);
       client.PendingList.push(req);
     }
-    // client.Stats.EventsSent++;
-    // _UpdateState(client);
   }
 
   const SendAuth = (client, auth) => {
