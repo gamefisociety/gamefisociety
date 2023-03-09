@@ -90,6 +90,10 @@ const mapData = [
     {
         txt: 'IPFS',
         img: ic_create
+    },
+    {
+        txt: 'GROUP CHAT',
+        img: ic_create
     }
 ];
 
@@ -107,7 +111,7 @@ const GFTLeftMenu = () => {
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
-            navigate('/');
+            navigate('/home');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));
@@ -137,6 +141,8 @@ const GFTLeftMenu = () => {
             navigate('/ipfs');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
+        }else if(item.txt === 'GROUP CHAT'){
+            navigate('/groupchat');
         }
     }
 

@@ -103,16 +103,6 @@ const GCardFriends = (props) => {
     });
   };
 
-  const switchTab = (event, newValue) => {
-    console.log("switchTab newValue", newValue);
-    if (newValue === 0) {
-      fetchFollowing();
-    } else if (newValue === 1) {
-      // fetchFollowers();
-    }
-    setTabIndex(newValue);
-  };
-
   //
   useEffect(() => {
     fetchFollowing();
