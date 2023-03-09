@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { EventKind } from "nostr/def";
@@ -20,9 +20,8 @@ import PropTypes from "prop-types";
 import "./GCardUser.scss";
 
 import { dbCache } from "db/DbCache";
-import { updateMetadata } from 'module/store/features/userSlice';
-
-import { setUsersFlag } from "module/store/features/userSlice";
+// import { updateMetadata } from 'module/store/features/userSlice';
+// import { setUsersFlag } from "module/store/features/userSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
@@ -62,7 +61,8 @@ const GCardFriends = (props) => {
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
   const { followsData, follows } = useSelector((s) => s.user);
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [datas, setDatas] = useState([]);
   const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
@@ -74,9 +74,10 @@ const GCardFriends = (props) => {
     System.Broadcast(subMeta, 0, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subMeta.Id, client, null);
+        let dataArrays = db.getAllArray();
+        setDatas(...dataArrays);
       } else if (tag === 'EVENT') {
-        dispatch(updateMetadata(msg));
-        let flag = db.updateMetaData(msg.pubkey, msg.created_at, msg.content);
+        db.updateMetaData(msg.pubkey, msg.created_at, msg.content);
       }
     });
   };
@@ -91,15 +92,10 @@ const GCardFriends = (props) => {
 
   const fetchFollowers = () => {
     let subFollow = FollowPro.get(publicKey);
-    // console.log('saveProfile', ev);
     System.Broadcast(subFollow, 0, (msgs) => {
       if (msgs) {
         //
       }
-      // if (msg[0] === 'OK') {
-      //     // setOpen(true)
-      // }
-      // console.log('fetchFollowers msg', msg);
     });
   };
 

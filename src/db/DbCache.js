@@ -56,11 +56,16 @@ export const dbCache = () => {
     return MetaDataCache;
   }
 
+  const getAllArray = () => {
+    return [...MetaDataCache];
+  }
+
   return {
     getMetaData: getMetaData,
     getMetaDatas: getMetaDatas,
     updateMetaData: updateMetaData,
     updateMetaDatas: updateMetaDatas,
     getAll: getAll,
+    getAllArray: getAllArray,
   }
 }
