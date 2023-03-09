@@ -53,6 +53,7 @@ export class NostrSystem {
     }
   }
 
+  //broadcast
   Broadcast(ev, once, callback, relays) {
     console.log('no relay now', this.Clients, ev);
     if (!ev) {
@@ -70,19 +71,9 @@ export class NostrSystem {
         Relay.SendToRelay(tmpRelay, ev, once, callback);
       }
     }
-
   }
 
-  BroadcastSub(ev, once, callback) {
-    console.log('BroadcastSub', ev);
-    if (!ev) {
-      return;
-    }
-    for (const [, tmpRelay] of this.Clients) {
-      Relay.SendToRelay(tmpRelay, ev, once, callback);
-    }
-  }
-
+  //broadcast event
   BroadcastEvent(ev, once, callback) {
     console.log('BroadcastEvent', ev);
     if (!ev) {
@@ -93,51 +84,26 @@ export class NostrSystem {
     }
   }
 
-  // initSubEvent = (client) => {
-  //   for (const [, s] of this.Subscriptions) {
-  //     client.sendSubscription(s);
-  //   }
-  // }
-  // //process sub event
-  // processSubEvent = (subId, tagged) => {
-  //   this.Subscriptions.get(subId)?.OnEvent(tagged);
-  // }
+  //broadcast sub
+  BroadcastSub(ev, once, callback) {
+    console.log('BroadcastSub', ev);
+    if (!ev) {
+      return;
+    }
+    for (const [, tmpRelay] of this.Clients) {
+      Relay.SendToRelay(tmpRelay, ev, once, callback);
+    }
+  }
 
-  // AddSubscription(sub) {
-  //   for (const [, tmpRelay] of this.ClientRelays) {
-  //     tmpRelay.AddSub(sub.Id, sub)
-  //   }
-  //   this.Subscriptions.set(sub.Id, sub);
-  // }
+  //broadcast close
+  BroadcastClose(subid, client, callback) {
+    console.log('BroadcastClose', subid);
+    if (!subid) {
+      return;
+    }
+    Relay.SendClose(client, subid, callback);
+  }
 
-  // RemoveSubscription(sub) {
-  //   for (const [, tmpRelay] of this.ClientRelays) {
-  //     tmpRelay.RemoveSub(sub.Id, sub)
-  //   }
-  //   this.Subscriptions.delete(sub.Id);
-  // }
-
-  // async WriteOnceToRelay(address, ev) {
-  //   const c = new Relay(address, { write: true, read: false });
-  //   await c.SendAsync(ev);
-  //   c.Close();
-  // }
-
-  // TrackMetadata(pks) {
-  //   for (const p of Array.isArray(pks) ? pks : [pks]) {
-  //     if (pks.length > 0) {
-  //       this.WantsMetadata.add(p);
-  //     }
-  //   }
-  // }
-
-  // UntrackMetadata(pks) {
-  //   for (const p of Array.isArray(pks) ? pks : [pks]) {
-  //     if (p.length > 0) {
-  //       this.WantsMetadata.delete(p);
-  //     }
-  //   }
-  // }
 }
 
 export const System = new NostrSystem();

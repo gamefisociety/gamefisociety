@@ -144,14 +144,14 @@ const NostrFactory = {
       }
       return ret1;
     }
+    //
     let ret = ["REQ", sub.Id];
     let subinfo = NostrFactory.formateSub(sub);
     ret.push(subinfo);
     ret = buildChild(ret, sub);
     return ret;
   }
-  // NostrFactory.formateSub
-  //!
+  //
 }
 
 export default NostrFactory;
