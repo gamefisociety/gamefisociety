@@ -98,39 +98,39 @@ const GFTChat = (props) => {
     return nip04.decrypt(sk, pk, content);
   };
 
-  const getDataList = (key, key1) => {
-    let sub = relay.sub([
-      {
-        kinds: [4],
-        authors: [key, key1],
-        "#p": [key1, key],
-      },
-    ]);
-    let data = [...chatData];
-    sub.on("event", (event) => {
-      decodeContent(privateKey, key1, event.content).then((res) => {
-        event.contentObj = res;
-        data.push(event);
-        data.sort((a, b) => {
-          return a.created_at - b.created_at;
-        });
-        setChatData([...data]);
-      });
-      console.log("getDataList", event);
-    });
-    sub.on("eose", () => {
-      console.log("sub list eose event", data);
-      // sub.unsub()
-    });
+  // const getDataList = (key, key1) => {
+  //   let sub = relay.sub([
+  //     {
+  //       kinds: [4],
+  //       authors: [key, key1],
+  //       "#p": [key1, key],
+  //     },
+  //   ]);
+  //   let data = [...chatData];
+  //   sub.on("event", (event) => {
+  //     decodeContent(privateKey, key1, event.content).then((res) => {
+  //       event.contentObj = res;
+  //       data.push(event);
+  //       data.sort((a, b) => {
+  //         return a.created_at - b.created_at;
+  //       });
+  //       setChatData([...data]);
+  //     });
+  //     console.log("getDataList", event);
+  //   });
+  //   sub.on("eose", () => {
+  //     console.log("sub list eose event", data);
+  //     // sub.unsub()
+  //   });
 
-    sub.off("event", () => {
-      console.log("off event");
-    });
+  //   sub.off("event", () => {
+  //     console.log("off event");
+  //   });
 
-    sub.off("eose", () => {
-      console.log("off eose event");
-    });
-  };
+  //   sub.off("eose", () => {
+  //     console.log("off eose event");
+  //   });
+  // };
 
   const getDMs = () => {
     const chatNode = chatPro.get(publicKey, chatPK);

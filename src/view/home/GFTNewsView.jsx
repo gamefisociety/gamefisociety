@@ -36,18 +36,17 @@ const GFTNewsView = () => {
   }
 
   const fetchNewsNote = (pub) => {
-    //
-    const curRelays = [];
-    curRelays.push('wss://nos.lol');
-    const textNote = TextNotePro.get();
-    textNote.Authors = [pub];
+    // const curRelays = [];
+    // curRelays.push('wss://nos.lol');
+    // const textNote = TextNotePro.get();
+    // textNote.Authors = [pub];
 
-    System.Broadcast(textNote, 1, (msgs) => {
-      console.log('user sub', msgs);
-      if (msgs && msgs.length > 0) {
-        setNewsList(msgs.concat());
-      }
-    }, curRelays);
+    // System.Broadcast(textNote, 1, (msgs) => {
+    //   console.log('user sub', msgs);
+    //   if (msgs && msgs.length > 0) {
+    //     setNewsList(msgs.concat());
+    //   }
+    // }, curRelays);
   }
 
   const renderContent = (elevation, index) => {

@@ -67,36 +67,38 @@ const NostrRelay = () => {
       const msg = JSON.parse(e.data);
       let tmpKey = buildKey(e.origin, msg[1]);
       let procer = listenProcers.get(tmpKey);
+      if (!procer) {
+        return;
+      }
       // console.log('OnMessage', tmpKey, msg);
       const tag = msg[0];
       if (tag === 'AUTH') {
-        // this._OnAuthAsync(msg[1]);
-        // this.Stats.EventsReceived++;
-        // this._UpdateState();
+        if (procer && procer.callback) {
+          procer.callback(tag, client, msg[1]);
+        }
       } else if (tag === 'EVENT') {
-        if (procer && procer.cache) {
-          procer.cache.push(msg[2]);
+        if (procer && procer.callback) {
+          procer.callback(tag, client, msg[2]);
         }
       } else if (tag === 'EOSE') {
         if (procer) {
-          procer.callback(procer.cache, client);
-          procer.cache = [];
-          if (procer.once === 0) {
-            removeListen(procer);
-            SendClose(client, msg[1]);
+          if (procer && procer.callback) {
+            procer.callback(tag, client, msg[1]);
           }
         }
-        // this._OnEnd(msg[1]);
       } else if (tag === 'OK') {
-        // console.log(`${client.addr} OK: `, msg);
-        if (procer) {
-          procer.callback(msg);
-          procer.cache = [];
-          if (procer.once === 0) {
-            removeListen(procer);
-          }
+        console.log(`Relay [${this.Address}] OK: ${msg[1]}`);
+        if (procer && procer.callback) {
+          procer.callback(tag, client, msg[1]);
+        }
+        if (procer.once === 0) {
+          removeListen(procer);
         }
       } else if (tag === 'NOTICE') {
+        console.log(`Relay [${this.Address}] NOTICE: ${msg[1]}`);
+        if (procer && procer.callback) {
+          procer.callback(tag, client, msg[1]);
+        }
         // console.warn(`[${this.Address}] NOTICE: ${msg[1]}`);
       } else {
         // console.warn(`Unknown tag: ${tag}`);
@@ -193,13 +195,14 @@ const NostrRelay = () => {
   }
 
   const SendToRelay = (client, ev, once, callback) => {
-    console.log('SendToRelay', client, ev);
     let tmpkey = buildKey(client.addr, ev.Id);
     addListen(tmpkey, client, once, callback)
     if (ev.type === "EVENT") {
       SendEvent(client, ev);
     } else if (ev.type === "SUB") {
       SendSub(client, ev);
+    } else if (ev.type === "CLOSE") {
+      SendClose(client, ev);
     }
   }
 
@@ -219,46 +222,6 @@ const NostrRelay = () => {
     _UpdateState(client);
   }
 
-  const SendClose = (client, subId) => {
-    // if (!client.Settings.write) {
-    //   return;
-    // }
-    const req = ["CLOSE", subId];
-    if (client.Socket?.readyState === WebSocket.OPEN) {
-      console.log('SendClose direction');
-      _SendReal(client, req);
-    } else {
-      console.log('SendClose cache');
-      client.PendingList.push(req);
-    }
-  }
-
-  const SendEventAsync = async (client, ev, timeout = 5000) => {
-    return new Promise(resolve => {
-      if (!client.Settings.write) {
-        resolve();
-        return;
-      }
-      const t = setTimeout(() => {
-        resolve();
-      }, timeout);
-      client.EventsCallback?.set(ev.Id, () => {
-        clearTimeout(t);
-        resolve();
-      });
-
-      const req = ["EVENT", NostrFactory.formateEvent(ev)];
-      if (client.Socket?.readyState === WebSocket.OPEN) {
-        _SendReal(client, req);
-      } else {
-        //push msg in pendingList
-        client.PendingList.push(req);
-      }
-      client.Stats.EventsSent++;
-      _UpdateState(client);
-    });
-  }
-
   const SendSub = (client, sub) => {
     if (!client.Settings.read) {
       return;
@@ -272,6 +235,21 @@ const NostrRelay = () => {
       client.PendingList.push(req);
     }
   }
+
+  const SendClose = (client, subId) => {
+    // if (!client.Settings.write) {
+    //   return;
+    // }
+    const req = ["CLOSE", subId];
+    if (client.Socket?.readyState === WebSocket.OPEN) {
+      // console.log('SendClose direction');
+      _SendReal(client, req);
+    } else {
+      // console.log('SendClose cache');
+      client.PendingList.push(req);
+    }
+  }
+
 
   const SendAuth = (client, auth) => {
     if (!client.Settings.read) {
@@ -304,88 +282,6 @@ const NostrRelay = () => {
   const _UpdateState = (client) => {
     client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
   }
-
-  // StatusHook(fnHook) {
-  //   const id = uuid();
-  //   this.StateHooks.set(id, fnHook);
-  //   return () => {
-  //     this.StateHooks.delete(id);
-  //   };
-  // }
-
-  // GetState() {
-  //   if (this.HasStateChange) {
-  //     this.LastState = Object.freeze({ ...this.CurrentState });
-  //     this.HasStateChange = false;
-  //   }
-  //   return this.LastState;
-  // },
-
-  // _NotifyState() {
-  //   const state = this.GetState();
-  //   for (const [, h] of this.StateHooks) {
-  //     h(state);
-  //   }
-  // }
-
-  // async _OnAuthAsync(challenge) {
-  //   //
-  //   console.log('auto msg', challenge);
-  //   //
-  //   const authCleanup = () => {
-  //     this.AwaitingAuth.delete(challenge);
-  //   };
-  //   this.AwaitingAuth.set(challenge, true);
-  //   const authEvent = await System.nip42Auth(challenge, this.Address);
-  //   return new Promise(resolve => {
-  //     if (!authEvent) {
-  //       authCleanup();
-  //       return Promise.reject("no event");
-  //     }
-
-  //     const t = setTimeout(() => {
-  //       authCleanup();
-  //       resolve();
-  //     }, 10_000);
-
-  //     this.EventsCallback.set(authEvent.Id, (msgs) => {
-  //       clearTimeout(t);
-  //       authCleanup();
-  //       if (msgs.length > 3 && msgs[2] === true) {
-  //         this.Authed = true;
-  //         this._InitSubscriptions();
-  //       }
-  //       resolve();
-  //     });
-
-  //     const req = ["AUTH", authEvent.ToObject()];
-  //     this._SendJson(req);
-  //     this.Stats.EventsSent++;
-  //     this._UpdateState();
-  //   });
-  // }
-
-  // _OnEnd(subId) {
-  //   const sub = this.Subscriptions.get(subId);
-  //   if (sub) {
-  //     const now = new Date().getTime();
-  //     const started = sub.Started.get(this.Address);
-  //     sub.Finished.set(this.Address, now);
-  //     if (started) {
-  //       const responseTime = now - started;
-  //       if (responseTime > 10_000) {
-  //         console.warn(`[${this.Address}][${subId}] Slow response time ${(responseTime / 1000).toFixed(1)} seconds`);
-  //       }
-  //       this.Stats.Latency.push(responseTime);
-  //     } else {
-  //       console.warn("No started timestamp!");
-  //     }
-  //     sub.OnEnd(this);
-  //     this._UpdateState();
-  //   } else {
-  //     console.warn(`No subscription for end! ${subId}`);
-  //   }
-  // }
 
   const _VerifySig = (rawEv) => {
     const payload = [0, rawEv.pubkey, rawEv.created_at, rawEv.kind, rawEv.tags, rawEv.content];

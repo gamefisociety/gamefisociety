@@ -120,14 +120,13 @@ const GFTHead = () => {
     const [profileOpen, setProfileOPen] = React.useState(false);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const { picture, display_name, name, nip05 } = useSelector((s) => s.profile);
+    const { picture, display_name, name, nip05, created } = useSelector((s) => s.profile);
 
     const MetaPro = useMetadataPro();
     const relayPro = useRelayPro();
 
-    const { mode, setMode } = useColorScheme();
-
-    console.log("current mode", mode);
+    // const { mode, setMode } = useColorScheme();
+    // console.log("current mode", mode);
 
     // const getNip05PubKey = async (addr) => {
     //     const [username, domain] = addr.split("@");
@@ -184,52 +183,58 @@ const GFTHead = () => {
         let subMeta = MetaPro.get(publicKey);
         let subRelay = relayPro.get(publicKey);
         subMeta.childs.push(subRelay);
-        // console.log('MetadataSub', subMeta);
-        System.Broadcast(subMeta, 0, (msgs) => {
-            if (msgs) {
-                console.log("fetchMeta msgs", msgs);
-                msgs.map((msg) => {
-                    if (msg.pubkey === publicKey) {
-                        if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
-                            //meta data
-                            let contentMeta = JSON.parse(msg.content);
-                            contentMeta.created_at = msg.created_at;
-                            dispatch(setProfile(contentMeta));
-                        } else if (msg.kind === EventKind.ContactList) {
-                            if (msg.content !== "") {
-                                //relay info
-                                let content = JSON.parse(msg.content);
-                                let tmpRelays = {
-                                    relays: {
-                                        ...content,
-                                        ...relays,
-                                    },
-                                    createdAt: 1,
-                                };
-                                dispatch(setRelays(tmpRelays));
-                            }
-                            //follows
-                            if (msg.tags.length > 0) {
-                                let follow_pubkes = [];
-                                msg.tags.map((item) => {
-                                    if (item.length === 2 && item[0] === "p") {
-                                        follow_pubkes.push(item[1]);
-                                    }
-                                });
-                                let followsInfo = {
-                                    create_at: msg.created_at,
-                                    follows: follow_pubkes.concat(),
-                                };
-                                dispatch(setFollows(followsInfo));
-                            }
-                            //
+        let SetMetadata_create_at = 0;
+        let ContactList_create_at = 0;
+        System.BroadcastSub(subMeta, 0, (tag, client, msg) => {
+            if (msg) {
+                if (tag === 'EOSE') {
+                    System.BroadcastClose(subMeta.Id, client, null)
+                } else if (tag === 'EVENT') {
+                    if (msg.pubkey !== publicKey) {
+                        return;
+                    }
+                    //compare created_at
+                    if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at) {
+                        SetMetadata_create_at = msg.created_at;
+                        //update
+                        let contentMeta = JSON.parse(msg.content);
+                        contentMeta.created_at = msg.created_at;
+                        dispatch(setProfile(contentMeta));
+                    } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
+                        //contact - relay , tags - follows
+                        ContactList_create_at = msg.created_at;
+                        //update
+                        if (msg.content !== "") {
+                            //relay info
+                            let content = JSON.parse(msg.content);
+                            let tmpRelays = {
+                                relays: {
+                                    ...content,
+                                    ...relays,
+                                },
+                                createdAt: 1,
+                            };
+                            dispatch(setRelays(tmpRelays));
+                        }
+                        //follows
+                        if (msg.tags.length > 0) {
+                            let follow_pubkes = [];
+                            msg.tags.map((item) => {
+                                if (item.length >= 2 && item[0] === "p") {
+                                    follow_pubkes.push(item[1]);
+                                }
+                            });
+                            let followsInfo = {
+                                create_at: msg.created_at,
+                                follows: follow_pubkes.concat(),
+                            };
+                            dispatch(setFollows(followsInfo));
                         }
                     }
-                });
+                }
             }
         });
     };
-    //
     //init param form db or others
     useEffect(() => {
         // console.log('use db from reduce');
