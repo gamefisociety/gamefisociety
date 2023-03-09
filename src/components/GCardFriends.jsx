@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import "./GCardUser.scss";
 
 import { dbCache } from "db/DbCache";
+import { updateMetadata } from 'module/store/features/userSlice';
 
 import { setUsersFlag } from "module/store/features/userSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
@@ -61,8 +62,8 @@ const GCardFriends = (props) => {
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
   const { followsData, follows } = useSelector((s) => s.user);
-  const dispatch = useDispatch();
   const [tabIndex, setTabIndex] = React.useState(0);
+  const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
     let subMeta = MetadataPro.get(publicKey);
@@ -70,23 +71,13 @@ const GCardFriends = (props) => {
       subMeta.Authors.push(item);
     });
     //
-    System.Broadcast(subMeta, 0, (msgs) => {
-      //
-      let metaDatas = [];
-      msgs.map((item) => {
-        let info = {
-          pubkey: item.pubkey,
-          created_at: item.created_at,
-          content: {},
-        };
-        if (item.content !== "") {
-          info.content = JSON.parse(item.content);
-        }
-        info.content.following = 1;
-        metaDatas.push(info);
-      });
-      db.updateMetaDatas(metaDatas);
-      dispatch(setUsersFlag(1));
+    System.Broadcast(subMeta, 0, (tag, client, msg) => {
+      if (tag === 'EOSE') {
+        System.BroadcastClose(subMeta.Id, client, null);
+      } else if (tag === 'EVENT') {
+        dispatch(updateMetadata(msg));
+        let flag = db.updateMetaData(msg.pubkey, msg.created_at, msg.content);
+      }
     });
   };
 
@@ -125,12 +116,12 @@ const GCardFriends = (props) => {
   //
   useEffect(() => {
     fetchFollowing();
-    return () => {};
+    return () => { };
   }, []);
 
   //
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, [follows]);
 
   const renderFollowing = () => {
@@ -142,6 +133,7 @@ const GCardFriends = (props) => {
         {" "}
         {follows.map((pubkey, index) => {
           const item = db.getMetaData(pubkey);
+          // console.log('get metadata', item);
           if (!item) {
             return null;
           }

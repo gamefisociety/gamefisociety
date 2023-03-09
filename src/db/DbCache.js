@@ -18,8 +18,25 @@ export const dbCache = () => {
     return rets;
   }
 
-  const updateMetaData = (pubkey, metadata) => {
-    MetaDataCache.set(pubkey, metadata);
+  const updateMetaData = (pubkey, create_at, content) => {
+    let update_flag = false;
+    let data = MetaDataCache.get(pubkey);
+    if (data) {
+      if (data.create_at < create_at) {
+        update_flag = true;
+      }
+    } else {
+      update_flag = true;
+    }
+    if (update_flag) {
+      let newData = {
+        create_at: create_at,
+        pubkey: pubkey,
+        content: JSON.parse(content)
+      }
+      MetaDataCache.set(pubkey, newData);
+    }
+    return update_flag;
   }
 
   const updateMetaDatas = (metadatas) => {

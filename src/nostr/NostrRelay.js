@@ -304,6 +304,7 @@ const NostrRelay = () => {
     SendToRelay: SendToRelay,
     SendEvent: SendEvent,
     SendSub: SendSub,
+    SendClose: SendClose,
     SupportsNip: SupportsNip,
   }
 };

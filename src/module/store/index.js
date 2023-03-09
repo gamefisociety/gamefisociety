@@ -6,6 +6,9 @@ import dialogReducer from './features/dialogSlice';
 import userReducer from './features/userSlice';
 import loginReducer from './features/loginSlice';
 import profileReducer from './features/profileSlice';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 export const store = configureStore({
   reducer: {

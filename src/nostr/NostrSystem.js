@@ -101,7 +101,7 @@ export class NostrSystem {
     if (!subid) {
       return;
     }
-    Relay.SendClose(client, subid, callback);
+    Relay.SendClose(client, subid);
   }
 
 }

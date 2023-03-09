@@ -1,13 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { dbCache } from 'db/DbCache';
 
+// let dd = new Map();
+// dd.set('1', {
+//   pubkey: '123',
+//   create_at: 1000,
+//   content: {
+//     name: 'dd'
+//   }
+// });
 const InitState = {
   followsData: 0,
   follows: [], //save key
   followsUpdate: 0,
+  metaDatas: {}
 };
-
-const db = dbCache();
 
 const UsersSlice = createSlice({
   name: "Users",
@@ -23,29 +29,19 @@ const UsersSlice = createSlice({
         state.followsUpdate = action.payload.create_at;
         state.follows = action.payload.follows.concat();
       }
-      console.log('user setFollows', state.follows);
+      // console.log('user setFollows', state.follows);
     },
+    updateMetadata: (state, action) => {
+      // const map1 = new Map(Object.entries(state.metaDatas));
+      // console.log('user setFollows', map1);
+    }
   },
 });
 
 export const {
   setUsersFlag,
   setFollows,
+  updateMetadata
 } = UsersSlice.actions;
 
 export default UsersSlice.reducer;
-
-      // action.payload.map((item) => {
-      //   let flag = existing.has(item.pubkey);
-      //   if (flag) {
-      //     const src = db.getMetaData(item.pubkey);
-      //     if (src && src.content && src.content.created_at && item.content.created_at && item.content.created_at > src.content.created_at) {
-      //       db.updateMetaData(item.pubkey, item.content);
-      //     }
-      //   } else {
-      //     existing.add(item.pubkey);
-      //     db.updateMetaData(item.pubkey, item.content);
-      //   }
-      // });
-      // state.follows = Array.from(existing);
-      // console.log('setUsers before', db.getAll());
