@@ -16,7 +16,7 @@ import './GFTConnectDialog.scss';
 const GFTConnectDialog = () => {
     const { enqueueSnackbar } = useSnackbar();
     const injected = new InjectedConnector({
-        supportedChainIds: [ChainId.MATICTEST],
+        supportedChainIds: [ChainId.MATIC],
     })
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const { } = useSelector(s => s.dialog);
@@ -94,8 +94,8 @@ const GFTConnectDialog = () => {
 
     const connectedClick = () => {
         console.log(chainId);
-        if (chainId != ChainId.MATICTEST) {
-            changeNetwork(ChainId.MATICTEST).then(res => {
+        if (chainId !== ChainId.MATIC) {
+            changeNetwork(ChainId.MATIC).then(res => {
                 activateMask();
             })
             return;
@@ -120,17 +120,17 @@ const GFTConnectDialog = () => {
                     <div className='ic_metamask'></div>
                     <div className='ic_menu_right'></div>
                 </div>
-                <div className='item'>
+                {/* <div className='item'>
                     <span className='name' onClick={(event) => itemClickOpenWallet(event, "WalletConnect")} >WalletConnect</span>
                     <div className='ic_walletconnect'></div>
                     <div className='ic_menu_right'></div>
-                </div>
-                <div className='item' onClick={(event) => itemClickOpenWallet(event, "Coinbase Wallet")}>
+                </div> */}
+                {/* <div className='item' onClick={(event) => itemClickOpenWallet(event, "Coinbase Wallet")}>
                     <span className='name'>Coinbase Wallet</span>
                     <div className='ic_coinbase'></div>
                     <div className='ic_menu_right'></div>
-                </div>
-                <span className='privacy'>By continuing you agree to GameFi Society’s <span className='privacy_link'>Privacy Policy</span> and <span className='privacy_link'> Terms and Conditions</span></span>
+                </div> */}
+                {/* <span className='privacy'>By continuing you agree to GameFi Society’s <span className='privacy_link'>Privacy Policy</span> and <span className='privacy_link'> Terms and Conditions</span></span> */}
             </div>
         </div>
     );

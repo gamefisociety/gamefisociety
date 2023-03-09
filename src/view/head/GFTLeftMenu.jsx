@@ -51,10 +51,10 @@ const mapData = [
         txt: 'CHECK IN',
         img: ic_check_in
     },
-    {
-        txt: 'MINT AVATAR',
-        img: ic_free_nft
-    },
+    // {
+    //     txt: 'MINT AVATAR',
+    //     img: ic_free_nft
+    // },
     {
         txt: 'SWAP IN',
         img: ic_swap

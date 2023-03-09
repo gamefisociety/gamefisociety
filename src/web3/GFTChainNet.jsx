@@ -46,7 +46,7 @@ const networkConf = {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
+    rpcUrls: ['https://polygon-mainnet.infura.io', 'https://rpc-mainnet.maticvigil.com'],
     blockExplorerUrls: [SCAN_ADDRESS[ChainId.MATIC]],
   },
   [ChainId.MATICTEST]: {
