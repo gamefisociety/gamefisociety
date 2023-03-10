@@ -133,7 +133,7 @@ const GFTGlobal = () => {
       window.innerHeight + document.documentElement.scrollTop >
       document.scrollingElement.scrollHeight - 50
     ) {
-      moreListData();
+      getDataList();
     }
   };
 
@@ -142,6 +142,7 @@ const GFTGlobal = () => {
     if (curCreateAt === 0) {
       textNote.Until = Date.now();
     } else {
+      setMore(true);
       textNote.Since = curCreateAt;
     }
     textNote.Limit = 50;
@@ -155,6 +156,11 @@ const GFTGlobal = () => {
         dataCaches.sort((a, b) => {
           return a.created_at > b.created_at;
         });
+        if (curCreateAt === 0) {
+          setCurCreateAt(dataCaches[dataCaches.length - 1].created_at);
+        } else {
+          setCurCreateAt(dataCaches[dataCaches.length - 1].created_at);
+        }
         //
         const pubkeys = [];
         dataCaches.map((item) => {
@@ -163,7 +169,12 @@ const GFTGlobal = () => {
         const pubkyes_filter = new Set(pubkeys);
         getInfor(pubkyes_filter, curRelays);
         //
-        setData(dataCaches.concat());
+        if (data.length === 0) {
+          setData(dataCaches.concat());
+        } else {
+          // let new_datas = data.concat(dataCaches)
+          setData(data.concat(dataCaches));
+        }
         console.log('textNote msgs', dataCaches);
       } else if (tag === 'EVENT') {
         dataCaches.push(msg);
@@ -171,43 +182,6 @@ const GFTGlobal = () => {
     },
       curRelays
     );
-  };
-
-  const moreListData = () => {
-    console.log("more");
-    if (isMore || data.length <= 0) {
-      console.log("more-----", data.length);
-      return;
-    }
-    console.log("more++++");
-    setMore(true);
-    const textNote = textNotePro.get();
-    textNote.Since = data[data.length - 1].created_at;
-    textNote.Limit = 50;
-    // //
-    // curRelays.push("wss://nos.lol");
-    // //
-    // System.Broadcast(
-    //   textNote,
-    //   0,
-    //   (msgs, client) => {
-    //     console.log("textNote msgs", msgs);
-    //     let copydata = [...data];
-    //     data.map((item) => {
-    //       copydata.push(item);
-    //     });
-    //     setData(copydata);
-    //     //
-    //     const pubkeys = [];
-    //     msgs.map((item) => {
-    //       pubkeys.push(item.pubkey);
-    //     });
-    //     const pubkyes_filter = new Set(pubkeys);
-    //     getInfor(pubkyes_filter, curRelays);
-    //     setMore(false);
-    //   },
-    //   curRelays
-    // );
   };
 
   const getInfor = (pkeys, relays) => {
