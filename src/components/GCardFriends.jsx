@@ -169,21 +169,12 @@ const GCardFriends = (props) => {
     return null;
   };
 
-  // const renderSke = () => {
-  //     return (
-  //         <React.Fragment>
-  //             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-  //             <Skeleton animation="wave" height={10} width="80%" />
-  //         </React.Fragment>
-  //     )
-  // }
-
   return (
     <Box
       sx={{
         backgroundColor: "#0F0F0F",
         width: "400px",
-        height: "100%",
+        minHeight: "100%",
         paddingLeft: "32px",
         paddingRight: "20px",
       }}

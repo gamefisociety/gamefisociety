@@ -106,21 +106,26 @@ const GFTGlobal = () => {
   //
   const [curLable, setCurLable] = useState("All");
   //
+  const [curCreateAt, setCurCreateAt] = useState(0);
+  //
   const [data, setData] = useState([]);
   const [isMore, setMore] = useState(false);
   const [inforData, setInforData] = useState(new Map());
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
 
+  //
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
     return () => {
       window.removeEventListener("scroll", loadMore);
     };
   }, [data, isMore]);
+
+  //
   useEffect(() => {
     getDataList();
-    return () => {};
+    return () => { };
   }, []);
 
   const loadMore = () => {
@@ -134,25 +139,36 @@ const GFTGlobal = () => {
 
   const getDataList = () => {
     const textNote = textNotePro.get();
-    textNote.Until = Date.now();
+    if (curCreateAt === 0) {
+      textNote.Until = Date.now();
+    } else {
+      textNote.Since = curCreateAt;
+    }
     textNote.Limit = 50;
     //
+    let dataCaches = [];
     curRelays.push("wss://nos.lol");
-    //
-    System.Broadcast(
-      textNote,
-      0,
-      (msgs, client) => {
-        // console.log('textNote msgs', msgs);
-        setData(msgs.concat());
+    System.Broadcast(textNote, 0, (tag, client, msg) => {
+      if (tag === 'EOSE') {
+        System.BroadcastClose(textNote.Id, client, null);
+        //更新create_at
+        dataCaches.sort((a, b) => {
+          return a.created_at > b.created_at;
+        });
         //
         const pubkeys = [];
-        msgs.map((item) => {
+        dataCaches.map((item) => {
           pubkeys.push(item.pubkey);
         });
         const pubkyes_filter = new Set(pubkeys);
         getInfor(pubkyes_filter, curRelays);
-      },
+        //
+        setData(dataCaches.concat());
+        console.log('textNote msgs', dataCaches);
+      } else if (tag === 'EVENT') {
+        dataCaches.push(msg);
+      }
+    },
       curRelays
     );
   };
@@ -168,30 +184,30 @@ const GFTGlobal = () => {
     const textNote = textNotePro.get();
     textNote.Since = data[data.length - 1].created_at;
     textNote.Limit = 50;
-    //
-    curRelays.push("wss://nos.lol");
-    //
-    System.Broadcast(
-      textNote,
-      0,
-      (msgs, client) => {
-        console.log("textNote msgs", msgs);
-        let copydata = [...data];
-        data.map((item) => {
-          copydata.push(item);
-        });
-        setData(copydata);
-        //
-        const pubkeys = [];
-        msgs.map((item) => {
-          pubkeys.push(item.pubkey);
-        });
-        const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, curRelays);
-        setMore(false);
-      },
-      curRelays
-    );
+    // //
+    // curRelays.push("wss://nos.lol");
+    // //
+    // System.Broadcast(
+    //   textNote,
+    //   0,
+    //   (msgs, client) => {
+    //     console.log("textNote msgs", msgs);
+    //     let copydata = [...data];
+    //     data.map((item) => {
+    //       copydata.push(item);
+    //     });
+    //     setData(copydata);
+    //     //
+    //     const pubkeys = [];
+    //     msgs.map((item) => {
+    //       pubkeys.push(item.pubkey);
+    //     });
+    //     const pubkyes_filter = new Set(pubkeys);
+    //     getInfor(pubkyes_filter, curRelays);
+    //     setMore(false);
+    //   },
+    //   curRelays
+    // );
   };
 
   const getInfor = (pkeys, relays) => {
@@ -199,20 +215,19 @@ const GFTGlobal = () => {
     metadata.Authors = Array.from(pkeys);
     //
     const newInfo = new Map();
-    System.Broadcast(
-      metadata,
-      0,
-      (msgs, client) => {
-        msgs.map((item) => {
-          //
-          let info = {};
-          if (item.content !== "") {
-            info = JSON.parse(item.content);
-          }
-          newInfo.set(item.pubkey, info);
-        });
+    System.Broadcast(metadata, 0, (tag, client, msg) => {
+      if (tag === 'EOSE') {
         setInforData(newInfo);
-      },
+        System.BroadcastClose(metadata.Id, client, null);
+        //
+      } else if (tag === 'EVENT') {
+        let info = {};
+        if (msg.content !== "") {
+          info = JSON.parse(msg.content);
+        }
+        newInfo.set(msg.pubkey, info);
+      }
+    },
       relays
     );
   };
@@ -315,7 +330,7 @@ const GFTGlobal = () => {
             // backgroundColor: 'blue',
             overflow: "hidden",
           }}
-          // expanded={true}
+        // expanded={true}
         >
           {labelS.map((item, index) => (
             <Grid item key={"label-index-" + index}>

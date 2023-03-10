@@ -213,7 +213,7 @@ const GCardRelays = () => {
     <Box
       sx={{
         width: "400px",
-        height: "100%",
+        minHeight: "100%",
         backgroundColor: "#0F0F0F",
         display: "flex",
         flexDirection: "column",
@@ -326,7 +326,7 @@ const GCardRelays = () => {
         </DialogTitle>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={()=>{
+          <Button onClick={() => {
             deleteRelays(deletingRealy);
             handleDialogClose();
           }} autoFocus>
