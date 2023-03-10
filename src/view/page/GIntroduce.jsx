@@ -37,24 +37,24 @@ import bg_features_8 from "../../asset/image/introduce/bg_features_8.png";
 const steps = [
   {
     label: "2022-Q4",
-    description: "# a\n# b\n# c\n",
+    description: "# Create Project on Github\n# System Design\n# Determine the target,We hope to build a bridge between game developers and users. \n",
   },
   {
     label: "2023-Q1",
-    description: `For each ad campaign that you create, you can control how much you're willing to spend on clicks and conversions, which networks and geographical locations you want your ads to show on, and more.`,
+    description: `# Project white paper 1.0 released\n# Join the Nostr network to realize basic social functions\n# Start the seed round \n#Start private placement round \n# Users can submit GameFi projects\n# Release the first batch of avatar NFTs for free\n`,
   },
   {
     label: "2023-Q2",
     description:
-      "An ad group contains one or more ads which target a shared set of keywords.",
+      "# Improve the basic functions of blockchain\n# Users can participate in the ecology, realize high-quality content submission, discussion areas, etc.\n# Start the public round\n",
   },
   {
     label: "2023-Q3",
-    description: `Try out different ad text to see what brings in the most customers, and learn how to enhance your ads using features like ad extensions. If you run into any problems with your ads, find out how to tell if they're running and how to resolve approval issues.`,
+    description: `# Build a stable Relay to provide stable services for the project\n# Establish a DAO and build a content review mechanism\n# Increase NFT exchange\n# Realize CEX, DEX on the shelves\n`,
   },
   {
     label: "2023-Q4",
-    description: `Try out different ad text to see what brings in the most customers, and learn how to enhance your ads using features like ad extensions. If you run into any problems with your ads, find out how to tell if they're running and how to resolve approval issues.`,
+    description: `# Detailed community operation activities\n# Increase high-quality content recommendation and advertising bidding\n.# Add artificial intelligence module to optimize project experience\n# Expand new business partners\n`,
   },
 ];
 
