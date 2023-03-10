@@ -1496,7 +1496,7 @@ const GIntroduce = () => {
                   }}
                   onClick={() => {
                     const w = window.open("about:blank");
-                    w.location.href = "https://discord.gg/fWvn6k2J6k";
+                    w.location.href = "https://t.me/+zIWIDNkzWuBlYzNl";
                   }}
                 >
                   {"Join in Telegram"}
