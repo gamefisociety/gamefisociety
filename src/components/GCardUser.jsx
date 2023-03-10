@@ -20,16 +20,39 @@ import logo_link from "../asset/image/social/logo_link.png";
 import "./GCardUser.scss";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
+import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 const default_banner =
   "https://gateway.pinata.cloud/ipfs/QmSif6VWuJ9X7phY8wPMwxR8xPQdDq3ABE93Yo7BUwj68C";
 const default_avatar =
   "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
+
+
 const GCardUser = (props) => {
   const { profile, pubkey, follows, relays } = props;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const followPro = useFollowPro();
+
+  const addFollow = async (key) => {
+    let keys = [key];
+    let event = await followPro.addFollow(keys);
+    // console.log('addFollow event', event);
+    System.BroadcastEvent(event, 1, (tags, client, msg) => {
+      console.log('addFollow event', tags, client, msg);
+    })
+  }
+
+  const removeFollow = async (key) => {
+    let keys = [key];
+    let event = await followPro.removeFollow(keys);
+    console.log('removeFollow event', event);
+  }
+
+  const isFollow = (key) => {
+    return false;
+  }
 
   useEffect(() => {
     console.log("profile", profile);
@@ -102,23 +125,19 @@ const GCardUser = (props) => {
                 height: "36px",
                 backgroundColor: "#006CF9",
                 borderRadius: "18px",
+                color: "text.primary"
               }}
-              onClick={() => { }}
+              onClick={() => {
+                if (isFollow(pubkey) === true) {
+                  removeFollow(pubkey);
+                } else {
+                  addFollow(pubkey);
+                }
+              }}
             >
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                }}
-                color="#FFFFFF"
-                align={"center"}
-              >
-                Follow
-              </Typography>
+              {isFollow(pubkey) === true ? 'Unfollow' : 'Follow'}
             </Button>
           </Box>
-
           <Box
             sx={{
               marginTop: "15px",

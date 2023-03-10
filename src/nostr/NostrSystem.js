@@ -97,7 +97,7 @@ export class NostrSystem {
 
   //broadcast close
   BroadcastClose(subid, client, callback) {
-    console.log('BroadcastClose', subid);
+    // console.log('BroadcastClose', subid);
     if (!subid) {
       return;
     }

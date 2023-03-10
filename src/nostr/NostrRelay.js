@@ -87,7 +87,7 @@ const NostrRelay = () => {
           }
         }
       } else if (tag === 'OK') {
-        console.log(`Relay [${this.Address}] OK: ${msg[1]}`);
+        console.log('OK MSG', msg[1]);
         if (procer && procer.callback) {
           procer.callback(tag, client, msg[1]);
         }
@@ -95,7 +95,6 @@ const NostrRelay = () => {
           removeListen(procer);
         }
       } else if (tag === 'NOTICE') {
-        console.log(`Relay [${this.Address}] NOTICE: ${msg[1]}`);
         if (procer && procer.callback) {
           procer.callback(tag, client, msg[1]);
         }

@@ -5,7 +5,9 @@ import NostrFactory from 'nostr/NostrFactory';
 
 export const useFollowPro = () => {
 
-  const privKey = useSelector(s => s.login.privateKey);
+  const { privateKey, publicKey } = useSelector(s => s.login);
+  const { follows, relays } = useSelector(s => s.profile);
+
 
   const nostrEvent = useNostrEvent();
 
@@ -20,15 +22,23 @@ export const useFollowPro = () => {
         return sub;
       }
     },
-    send: async (pubKey, obj, tmpPrivate) => {
-      if (pubKey) {
-        const ev = NostrFactory.createEvent(pubKey);
-        ev.Kind = EventKind.ContactList;
-        ev.Content = JSON.stringify(obj);
-        if (tmpPrivate) {
-          return await nostrEvent.Sign(tmpPrivate, ev);
-        }
-        return await nostrEvent.Sign(privKey, ev);
+    addFollow: async (newFollows) => {
+      if (Array.isArray(newFollows) === false) {
+        return;
+      }
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ContactList
+      ev.Content = JSON.stringify({ ...relays });
+      let newTags = [follows.concat(newFollows)];
+      newTags.map(item => {
+        ev.Tags.push(['p', item]);
+      });
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    removeFollow: async (newFollows) => {
+      console.log('add follow', newFollows, follows, relays);
+      if (typeof newFollows !== 'array') {
+        return;
       }
     },
   }

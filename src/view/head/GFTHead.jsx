@@ -171,6 +171,7 @@ const GFTHead = () => {
         System.BroadcastSub(subMeta, 0, (tag, client, msg) => {
             if (msg) {
                 if (tag === 'EOSE') {
+                    //
                     System.BroadcastClose(subMeta.Id, client, null)
                 } else if (tag === 'EVENT') {
                     if (msg.pubkey !== publicKey) {

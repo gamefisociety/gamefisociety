@@ -25,6 +25,7 @@ const NostrFactory = {
     relay.AwaitingAuth = new Map();
     relay.Authed = false;
     relay.info = null;
+    relay.TmpData = {}
     return relay;
   },
 
@@ -63,16 +64,13 @@ const NostrFactory = {
   },
 
   formateEvent: (ev) => {
-    // console.log('formate event', ev);
+    console.log('formate event', ev);
     return {
       id: ev.Id,
       pubkey: ev.PubKey,
       created_at: ev.CreatedAt,
       kind: ev.Kind,
       tags: ev.Tags,
-      // tags: ev.Tags.sort((a, b) => a.Index - b.Index)
-      //   .map(a => a.ToObject())
-      //   .filter(a => a !== null), //<string[][] >
       content: ev.Content,
       sig: ev.Signature,
     };
