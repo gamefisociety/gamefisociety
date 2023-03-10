@@ -1600,7 +1600,7 @@ const GIntroduce = () => {
           }}
           color={"#FFFFFF"}
         >
-          {"2000x Freemint GameFi Society Avatar NFTs"}
+          {"1000x Freemint GameFi Society Avatar NFTs"}
         </Typography>
       </Box>
     );

@@ -241,6 +241,17 @@ const GMintNFT = () => {
           >
             {nftInfo.name}
           </Typography>
+          <Typography
+            sx={{
+              marginTop: "20px",
+              fontSize: "20px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+            }}
+            color={"#FFFFFF"}
+          >
+            {nftInfo.description}
+          </Typography>
           <Box
             sx={{
               marginTop: "20px",
@@ -284,20 +295,10 @@ const GMintNFT = () => {
               </Button>
             </Box>
           </Box>
+
           <Typography
             sx={{
               marginTop: "20px",
-              fontSize: "20px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-            }}
-            color={"#FFFFFF"}
-          >
-            {nftInfo.description}
-          </Typography>
-          <Typography
-            sx={{
-              marginTop: "30px",
               height: "20px",
               fontSize: "16px",
               fontFamily: "Saira",
@@ -305,7 +306,7 @@ const GMintNFT = () => {
             }}
             color={"#919191"}
           >
-            {"Follow the steps to get more NFTs"}
+            {"Follow the steps to get more GameFi Society NFTs"}
           </Typography>
           <ul>
             <li className="step">Join our community.</li>
@@ -329,6 +330,7 @@ const GMintNFT = () => {
         >
           <Box
             sx={{
+              marginTop: "10px",
               width: "100%",
               height: "50px",
               display: "flex",
@@ -511,7 +513,7 @@ const GMintNFT = () => {
           </Box>
           <Box
             sx={{
-              marginTop: "30px",
+              marginTop: "10px",
               width: "100%",
               height: "50px",
               display: "flex",
@@ -588,17 +590,41 @@ const GMintNFT = () => {
           </Box>
           <Box
             sx={{
-              marginTop: "40px",
-              marginBottom: "40px",
+              marginTop: "10px",
               width: "100%",
+              height: "50px",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "flex-start",
+              borderBottom: 1,
+              borderColor: "#E7E9ED",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "18px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+              }}
+              color={"#0F0F0F"}
+            >
+              {"Mint Avatar NFT"}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              marginTop: "20px",
+              marginBottom: "20px",
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <LoadingButton
-              sx={{ width: "110px", height: "35px" }}
+              sx={{ width: "140px", height: "40px" }}
               //   color="secondary"
               loading={loading}
               disabled={checkState === 1}
