@@ -133,6 +133,7 @@ const GIntroduce = () => {
                 }}
                 onClick={() => {
                   navigate("/home");
+                  //   navigate("/mint");
                 }}
               >
                 {"Launch"}
@@ -1574,8 +1575,40 @@ const GIntroduce = () => {
     );
   };
 
+  const renderAD = () => {
+    return (
+      <Box
+        className={"ad"}
+        sx={{
+          width: "100%",
+          height: "54px",
+          backgroundColor: "#33AFFF",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onClick={() => {
+          navigate("/mint");
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "18px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+          }}
+          color={"#FFFFFF"}
+        >
+          {"1000x Freemint GameFi Society Avatar NFTs"}
+        </Typography>
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: "#0F0F0F" }}>
+      {renderAD()}
       <Grid sx={{ flexGrow: 1 }} container spacing={2}>
         <Grid item xs={12}>
           {renderHeader()}
