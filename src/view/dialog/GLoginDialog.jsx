@@ -288,7 +288,7 @@ const GLoginDialog = () => {
                     src={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText color="primary" variant={'h6'}>
+                <DialogContentText color="text.secondary" variant={'h6'}>
                     {'Please enter your private key!'}
                 </DialogContentText>
                 <TextField
@@ -298,6 +298,7 @@ const GLoginDialog = () => {
                     id="name"
                     label={isNip19 ? "private key start with nsec" : 'private key start with hex'}
                     fullWidth
+                    multiline
                     variant="standard"
                     error={errorKey}
                     onChange={(event) => {

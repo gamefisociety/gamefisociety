@@ -123,21 +123,6 @@ const GFTHead = () => {
     const MetaPro = useMetadataPro();
     const relayPro = useRelayPro();
 
-    // const { mode, setMode } = useColorScheme();
-    // console.log("current mode", mode);
-
-    // const getNip05PubKey = async (addr) => {
-    //     const [username, domain] = addr.split("@");
-    //     const rsp = await fetch(`https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(username)}`);
-    //     if (rsp.ok) {
-    //         const data = await rsp.json();
-    //         const pKey = data.names[username];
-    //         if (pKey) {
-    //             return pKey;
-    //         }
-    //     }
-    //     throw new Error("User key not found");
-    // }
     const handleTooltipClose = () => {
         setProfileOPen(false);
     };
@@ -201,7 +186,6 @@ const GFTHead = () => {
                     } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
                         //contact - relay , tags - follows
                         ContactList_create_at = msg.created_at;
-                        //update
                         if (msg.content !== "") {
                             //relay info
                             let content = JSON.parse(msg.content);
