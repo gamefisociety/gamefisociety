@@ -27,13 +27,13 @@ const default_banner =
 const default_avatar =
   "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 const GCardUser = (props) => {
-  const { profile, pubkey } = props;
+  const { profile, pubkey, follows, relays } = props;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("profile", profile);
-    return () => {};
+    return () => { };
   }, [props]);
 
   //#1F1F1F
@@ -80,7 +80,7 @@ const GCardUser = (props) => {
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => {}}
+              onClick={() => { }}
             >
               <img src={logo_lighting} width="40px" alt="lighting" />
             </Button>
@@ -96,14 +96,14 @@ const GCardUser = (props) => {
               <img src={logo_chat} width="40px" alt="chat" />
             </Button>
             <Button
-            variant="contained"
+              variant="contained"
               sx={{
                 width: "96px",
                 height: "36px",
                 backgroundColor: "#006CF9",
                 borderRadius: "18px",
               }}
-              onClick={() => {}}
+              onClick={() => { }}
             >
               <Typography
                 sx={{
@@ -286,7 +286,7 @@ const GCardUser = (props) => {
                 color="#FFFFFF"
                 align={"center"}
               >
-                {11}
+                {follows.length}
               </Typography>
               <Typography
                 sx={{
@@ -294,7 +294,7 @@ const GCardUser = (props) => {
                   fontFamily: "Saira",
                   fontWeight: "500",
                 }}
-                color="#666666"
+                color="text.disabled"
                 align={"center"}
               >
                 Following
@@ -327,7 +327,7 @@ const GCardUser = (props) => {
                   fontFamily: "Saira",
                   fontWeight: "500",
                 }}
-                color="#666666"
+                color="text.disabled"
                 align={"center"}
               >
                 Followers
@@ -349,7 +349,7 @@ const GCardUser = (props) => {
                   fontFamily: "Saira",
                   fontWeight: "500",
                 }}
-                color="#FFFFFF"
+                color="text.primary"
                 align={"center"}
               >
                 {11}
@@ -360,10 +360,10 @@ const GCardUser = (props) => {
                   fontFamily: "Saira",
                   fontWeight: "500",
                 }}
-                color="#666666"
+                color="text.disabled"
                 align={"center"}
               >
-                Followers
+                {'Relays'}
               </Typography>
             </Box>
           </Box>

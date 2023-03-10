@@ -7,8 +7,11 @@ import Drawer from "@mui/material/Drawer";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
 import GFTChat from "./GFTChat";
+
+import { EventKind } from "nostr/def";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
+import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 
 import "./GProfile.scss";
@@ -22,9 +25,12 @@ const GProfile = () => {
   //
   const [chatDrawer, setChatDrawer] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [ownRelays, setOwnRelays] = useState({});
+  const [ownFollows, setOwnFollows] = useState([]);
   // console.log('GCardUser profile', profile);
 
   const TextNotePro = useTextNotePro();
+  const FollowPro = useFollowPro();
 
   const fetchTextNote = (pub) => {
     //
@@ -33,16 +39,27 @@ const GProfile = () => {
     //
     const textNote = TextNotePro.get();
     textNote.Authors = [pub];
-
-    System.Broadcast(
-      textNote,
-      1,
-      (msgs) => {
-        console.log("user sub", msgs);
-        if (msgs && msgs.length > 0) {
-          setNotes(msgs.concat());
+    const followPro = FollowPro.get(pubkey);
+    textNote.childs.push(followPro);
+    //
+    let dataCaches = [];
+    System.Broadcast(textNote, 1, (tag, client, msg) => {
+      if (tag === 'EOSE') {
+        setNotes(dataCaches.concat());
+        System.BroadcastClose(textNote.Id, client, null);
+      } else if (tag === 'EVENT') {
+        if (msg.kind === EventKind.TextNote) {
+          dataCaches.push(msg);
+        } else if (msg.kind === EventKind.ContactList) {
+          let relays = JSON.parse(msg.content);
+          setOwnRelays(relays);
+          if (msg.tags.length > 0) {
+            setOwnFollows(msg.tags.concat());
+          }
+          console.log('textNote msgs relays', relays);
         }
-      },
+      }
+    },
       curRelays
     );
   };
@@ -53,7 +70,7 @@ const GProfile = () => {
       lastPubKey = pubkey;
       fetchTextNote(pubkey);
     }
-    return () => {};
+    return () => { };
   }, [pubkey]);
 
   //
@@ -78,6 +95,8 @@ const GProfile = () => {
       <GCardUser
         profile={{ ...info }}
         pubkey={pubkey}
+        follows={ownFollows.concat()}
+        relays={{ ...ownRelays }}
         chatOnClick={(param) => {
           setChatDrawer(true);
         }}

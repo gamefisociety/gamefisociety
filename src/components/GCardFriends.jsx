@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { EventKind } from "nostr/def";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
