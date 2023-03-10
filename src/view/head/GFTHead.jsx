@@ -39,8 +39,7 @@ import {
 
 import { setProfile } from "module/store/features/profileSlice";
 import { logout } from "module/store/features/loginSlice";
-import { setRelays } from "module/store/features/profileSlice";
-import { setFollows } from "module/store/features/userSlice";
+import { setRelays, setFollows } from "module/store/features/profileSlice";
 
 import "./GFTHead.scss";
 
@@ -111,8 +110,7 @@ const GFTHead = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loggedOut, publicKey } = useSelector((s) => s.login);
-    const { relays } = useSelector((s) => s.profile);
-    const { follows, followUpdate } = useSelector((s) => s.user);
+    const { relays, follows, followUpdate } = useSelector((s) => s.profile);
 
     const { account } = useWeb3React();
     const { isOpenMenuLeft } = useSelector((s) => s.dialog);

@@ -26,6 +26,9 @@ export const InitState = {
   lud16: '',
   loaded: 0, //时间戳
   created: 0, //时间戳
+  followsData: 0,
+  follows: [], //save key
+  followsUpdate: 0,
 };
 
 const ProfileSlice = createSlice({
@@ -76,6 +79,18 @@ const ProfileSlice = createSlice({
       state.loaded = 0;//时间戳
       state.created = action.payload.created_at ? action.payload.created_at : 'default';
     },
+    setUsersFlag: (state, action) => {
+      // console.log('setUsersFlag', state.follows, state.usersflag);
+      state.followsData = 1;
+    },
+    setFollows: (state, action) => {
+      //
+      if (action.payload.create_at > state.followsUpdate) {
+        state.followsUpdate = action.payload.create_at;
+        state.follows = action.payload.follows.concat();
+      }
+      // console.log('user setFollows', state.follows);
+    },
   },
 });
 
@@ -84,6 +99,8 @@ export const {
   setRelays,
   removeRelay,
   setProfile,
+  setUsersFlag,
+  setFollows,
 } = ProfileSlice.actions;
 
 export default ProfileSlice.reducer;

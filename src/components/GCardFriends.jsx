@@ -19,8 +19,6 @@ import PropTypes from "prop-types";
 import "./GCardUser.scss";
 
 import { dbCache } from "db/DbCache";
-// import { updateMetadata } from 'module/store/features/userSlice';
-// import { setUsersFlag } from "module/store/features/userSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
@@ -59,7 +57,7 @@ const GCardFriends = (props) => {
   const FollowPro = useFollowPro();
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
-  const { followsData, follows } = useSelector((s) => s.user);
+  const { followsData, follows } = useSelector((s) => s.profile);
   const [tabIndex, setTabIndex] = useState(0);
   const [datas, setDatas] = useState([]);
   const dispatch = useDispatch();
