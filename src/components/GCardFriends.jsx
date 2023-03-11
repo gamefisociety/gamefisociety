@@ -22,6 +22,7 @@ import { dbCache } from "db/DbCache";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
+import { BuildSub } from "nostr/NostrUtils";
 
 const db = dbCache();
 
@@ -63,12 +64,14 @@ const GCardFriends = (props) => {
   const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
-    let subMeta = MetadataPro.get(publicKey);
+    let pubkeys = [];
     follows.map((item) => {
-      subMeta.Authors.push(item);
+      pubkeys.push(item);
     });
+    let filteMeta = MetadataPro.get(pubkeys);
+    let subMeta = BuildSub('follow_meta', [filteMeta]);
     //
-    System.Broadcast(subMeta, 0, (tag, client, msg) => {
+    System.BroadcastSub(subMeta, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subMeta, client, null);
         let dataArrays = db.getAllArray();
