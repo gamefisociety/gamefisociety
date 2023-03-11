@@ -70,7 +70,7 @@ const GCardFriends = (props) => {
     //
     System.Broadcast(subMeta, 0, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        System.BroadcastClose(subMeta.Id, client, null);
+        System.BroadcastClose(subMeta, client, null);
         let dataArrays = db.getAllArray();
         setDatas(...dataArrays);
       } else if (tag === 'EVENT') {

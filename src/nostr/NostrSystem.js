@@ -98,10 +98,10 @@ export class NostrSystem {
   //broadcast close
   BroadcastClose(subid, client, callback) {
     // console.log('BroadcastClose', subid);
-    if (!subid) {
+    if (!subid[1]) {
       return;
     }
-    Relay.SendClose(client, subid);
+    Relay.SendClose(client, subid[1]);
   }
 
 }

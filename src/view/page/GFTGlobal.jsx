@@ -152,7 +152,7 @@ const GFTGlobal = () => {
     curRelays.push("wss://nos.lol");
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        System.BroadcastClose(subTextNode[1], client, null);
+        System.BroadcastClose(subTextNode, client, null);
         //create_at
         dataCaches.sort((a, b) => {
           return a.created_at > b.created_at;
@@ -173,10 +173,8 @@ const GFTGlobal = () => {
         if (data.length === 0) {
           setData(dataCaches.concat());
         } else {
-          // let new_datas = data.concat(dataCaches)
           setData(data.concat(dataCaches));
         }
-        console.log('textNote msgs', dataCaches);
       } else if (tag === 'EVENT') {
         dataCaches.push(msg);
       }
@@ -194,8 +192,7 @@ const GFTGlobal = () => {
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setInforData(newInfo);
-        System.BroadcastClose(subTextNode[1], client, null);
-        //
+        System.BroadcastClose(subTextNode, client, null);
       } else if (tag === 'EVENT') {
         let info = {};
         if (msg.content !== "") {
@@ -340,7 +337,6 @@ const GFTGlobal = () => {
       >
         {data.map((item, index) => {
           const info = inforData.get(item.pubkey);
-          // console.log('time', item);
           return (
             <GCardNote
               key={"global-note-" + index}

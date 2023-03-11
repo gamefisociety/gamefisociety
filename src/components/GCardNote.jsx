@@ -15,7 +15,6 @@ import icon_praise from "../asset/image/social/icon_praise.png";
 import icon_share from "../asset/image/social/icon_share.png";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
-import { CardContent } from "../../node_modules/@mui/material/index";
 const default_avatar =
   "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 

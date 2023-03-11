@@ -12,6 +12,7 @@ import { EventKind } from "nostr/def";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
+import { BuildSub } from "nostr/NostrUtils";
 import { System } from "nostr/NostrSystem";
 
 import "./GProfile.scss";
@@ -36,27 +37,29 @@ const GProfile = () => {
     //
     const curRelays = [];
     curRelays.push("wss://nos.lol");
-    //
-    const textNote = TextNotePro.get();
-    textNote.Authors = [pub];
-    const followPro = FollowPro.get(pubkey);
-    textNote.childs.push(followPro);
-    //
+    const filterTextNote = TextNotePro.get();
+    filterTextNote.authors = [pub];
+    const filterFollowPro = FollowPro.get(pubkey);
+    let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
     let dataCaches = [];
-    System.Broadcast(textNote, 1, (tag, client, msg) => {
+    System.BroadcastSub(textNote, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setNotes(dataCaches.concat());
-        System.BroadcastClose(textNote.Id, client, null);
+        System.BroadcastClose(textNote, client, null);
       } else if (tag === 'EVENT') {
         if (msg.kind === EventKind.TextNote) {
           dataCaches.push(msg);
         } else if (msg.kind === EventKind.ContactList) {
-          let relays = JSON.parse(msg.content);
-          setOwnRelays(relays);
+          console.log('target relays', msg.content);
+          if (msg.content && msg.content !== '') {
+            let relays = JSON.parse(msg.content);
+            setOwnRelays(relays);
+            console.log('textNote msgs relays', relays);
+          }
+
           if (msg.tags.length > 0) {
             setOwnFollows(msg.tags.concat());
           }
-          console.log('textNote msgs relays', relays);
         }
       }
     },
