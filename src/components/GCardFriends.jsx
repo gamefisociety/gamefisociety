@@ -23,6 +23,8 @@ import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
+//
+import { setFollows } from "module/store/features/profileSlice";
 
 const db = dbCache();
 
@@ -102,6 +104,37 @@ const GCardFriends = (props) => {
     });
   };
 
+  const followPro = useFollowPro();
+  const addFollow = async (pubkey) => {
+    let event = await followPro.addFollow(pubkey);
+    let newFollows = follows.concat();
+    newFollows.push(pubkey);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === 'OK' && msg.ret === true) {
+        let followsInfo = {
+          create_at: event.CreatedAt,
+          follows: newFollows,
+        };
+        dispatch(setFollows(followsInfo));
+      }
+    })
+  }
+
+  const removeFollow = async (pubkey) => {
+    let event = await followPro.removeFollow(pubkey);
+    let newFollows = follows.concat();
+    newFollows.splice(follows.indexOf(pubkey), 1);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === 'OK' && msg.ret === true) {
+        let followsInfo = {
+          create_at: event.CreatedAt,
+          follows: newFollows,
+        };
+        dispatch(setFollows(followsInfo));
+      }
+    })
+  }
+
   //
   useEffect(() => {
     fetchFollowing();
@@ -122,7 +155,6 @@ const GCardFriends = (props) => {
         {" "}
         {follows.map((pubkey, index) => {
           const item = db.getMetaData(pubkey);
-          // console.log('get metadata', item);
           if (!item) {
             return null;
           }
@@ -134,6 +166,9 @@ const GCardFriends = (props) => {
                 <Button
                   variant="outlined"
                   sx={{ width: "80px", height: "24px", fontSize: "12px" }}
+                  onClick={() => {
+                    removeFollow(pubkey);
+                  }}
                 >
                   {"unfollow"}
                 </Button>
