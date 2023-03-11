@@ -86,7 +86,6 @@ export class NostrSystem {
 
   //broadcast sub
   BroadcastSub(sub, callback, relay) {
-    console.log('BroadcastSub', sub);
     if (!sub) {
       return;
     }

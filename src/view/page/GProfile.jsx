@@ -33,13 +33,14 @@ const GProfile = () => {
   const FollowPro = useFollowPro();
   const fetchTextNote = (pub) => {
     //
-    const curRelays = [];
-    curRelays.push("wss://nos.lol");
+    const curRelay = "wss://nos.lol";
     const filterTextNote = TextNotePro.get();
     filterTextNote.authors = [pub];
     const filterFollowPro = FollowPro.get(pubkey);
     let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
     let dataCaches = [];
+    let follow_create_at = 0;
+    console.log('BroadcastSub', textNote);
     System.BroadcastSub(textNote, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setNotes(dataCaches.concat());
@@ -49,6 +50,10 @@ const GProfile = () => {
           dataCaches.push(msg);
         } else if (msg.kind === EventKind.ContactList) {
           console.log('profile_note_follow', msg);
+          if (msg.created_at < follow_create_at) {
+            return;
+          }
+          follow_create_at = msg.created_at;
           if (msg.content && msg.content !== '') {
             let relays = JSON.parse(msg.content);
             setOwnRelays(relays);
@@ -59,7 +64,7 @@ const GProfile = () => {
         }
       }
     },
-      curRelays
+      curRelay
     );
   };
 
