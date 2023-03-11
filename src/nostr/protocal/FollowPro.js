@@ -19,28 +19,25 @@ export const useFollowPro = () => {
         return filter;
       }
     },
-    addFollow: async (newFollows) => {
-      if (Array.isArray(newFollows) === false) {
-        return;
-      }
+    addFollow: async (newFollow) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
       ev.Content = JSON.stringify({ ...relays });
-      let newTags = follows.concat(newFollows);
+      let newTags = follows.concat();
+      newTags.push(newFollow);
       newTags.map(item => {
         ev.Tags.push(['p', item]);
       });
       return await nostrEvent.Sign(privateKey, ev);
     },
-    removeFollow: async (newFollows) => {
-      if (Array.isArray(newFollows) === false) {
-        return;
-      }
+    removeFollow: async (newFollow) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
       ev.Content = JSON.stringify({ ...relays });
-      newFollows.map((item) => {
-        follows.remove(item);
+      follows.map(item => {
+        if (item !== newFollow) {
+          ev.Tags.push(['p', item]);
+        }
       });
       return await nostrEvent.Sign(privateKey, ev);
     },

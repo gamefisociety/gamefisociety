@@ -184,7 +184,6 @@ const GFTGlobal = () => {
 
   const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
-    filterMetaData['authors'] = Array.from(pkeys);
     let subTextNode = BuildSub('metadata', [filterMetaData]);
     //
     const newInfo = new Map();

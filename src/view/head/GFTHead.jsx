@@ -187,8 +187,7 @@ const GFTHead = () => {
                         contentMeta.created_at = msg.created_at;
                         dispatch(setProfile(contentMeta));
                     } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
-                        //contact - relay , tags - follows
-                        console.log('ContactList', client.addr, msg);
+                        // console.log('ContactList', client.addr, msg);
                         ContactList_create_at = msg.created_at;
                         if (msg.content !== "") {
                             //relay info

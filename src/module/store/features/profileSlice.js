@@ -80,16 +80,11 @@ const ProfileSlice = createSlice({
       state.created = action.payload.created_at ? action.payload.created_at : 'default';
     },
     setUsersFlag: (state, action) => {
-      // console.log('setUsersFlag', state.follows, state.usersflag);
       state.followsData = 1;
     },
     setFollows: (state, action) => {
-      //
-      if (action.payload.create_at > state.followsUpdate) {
-        state.followsUpdate = action.payload.create_at;
-        state.follows = action.payload.follows.concat();
-      }
-      // console.log('user setFollows', state.follows);
+      state.followsUpdate = action.payload.create_at;
+      state.follows = action.payload.follows.concat();
     },
   },
 });

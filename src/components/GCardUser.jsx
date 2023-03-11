@@ -7,7 +7,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
 import { Button, Link } from "@mui/material";
 import copy from "copy-to-clipboard";
 import Skeleton from "@mui/material/Skeleton";
@@ -19,9 +18,10 @@ import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 import "./GCardUser.scss";
 
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
+import { setRelays, setFollows } from "module/store/features/profileSlice";
+//
 const default_banner =
   "https://gateway.pinata.cloud/ipfs/QmSif6VWuJ9X7phY8wPMwxR8xPQdDq3ABE93Yo7BUwj68C";
 const default_avatar =
@@ -29,33 +29,54 @@ const default_avatar =
 
 
 const GCardUser = (props) => {
-  const { profile, pubkey, follows, relays } = props;
-  const navigate = useNavigate();
+  const { follows } = useSelector(s => s.profile);
+  const { profile, pubkey, ownFollows, ownRelays } = props;
   const dispatch = useDispatch();
-
+  //
+  const relayMap = new Map();
+  for (const [k, v] of Object.entries(ownRelays)) {
+    if (k.startsWith("wss://") || k.startsWith("ws://")) {
+      relayMap.set(k, v);
+    }
+  }
   const followPro = useFollowPro();
-
-  const addFollow = async (key) => {
-    let keys = [key];
-    let event = await followPro.addFollow(keys);
-    // console.log('addFollow event src', event);
+  const addFollow = async (pubkey) => {
+    let event = await followPro.addFollow(pubkey);
+    let newFollows = follows.concat();
+    newFollows.push(pubkey);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      // console.log('addFollow event', tags, client, msg);
+      if (tags === 'OK' && msg.ret === true) {
+        let followsInfo = {
+          create_at: event.CreatedAt,
+          follows: newFollows,
+        };
+        dispatch(setFollows(followsInfo));
+      }
     })
   }
 
-  const removeFollow = async (key) => {
-    let keys = [key];
-    let event = await followPro.removeFollow(keys);
-    console.log('removeFollow event', event);
+  const removeFollow = async (pubkey) => {
+    let event = await followPro.removeFollow(pubkey);
+    let newFollows = follows.concat();
+    newFollows.splice(follows.indexOf(pubkey), 1);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === 'OK' && msg.ret === true) {
+        let followsInfo = {
+          create_at: event.CreatedAt,
+          follows: newFollows,
+        };
+        dispatch(setFollows(followsInfo));
+      }
+    })
   }
 
   const isFollow = (key) => {
-    return false;
+    // console.log('isFollow', key, follows.includes(key), follows);
+    return follows.includes(key);
   }
 
   useEffect(() => {
-    console.log("profile", profile);
+    // console.log("profile", profile);
     return () => { };
   }, [props]);
 
@@ -298,25 +319,19 @@ const GCardUser = (props) => {
               <Typography
                 sx={{
                   marginRight: "8px",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
                 }}
-                color="#FFFFFF"
+                variant={'body'}
+                color="text.primary"
                 align={"center"}
               >
-                {follows.length}
+                {ownFollows.length}
               </Typography>
               <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                }}
+                variant={'body'}
                 color="text.disabled"
                 align={"center"}
               >
-                Following
+                {'Following'}
               </Typography>
             </Box>
             <Box
@@ -331,54 +346,42 @@ const GCardUser = (props) => {
               <Typography
                 sx={{
                   marginRight: "8px",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
                 }}
-                color="#FFFFFF"
-                align={"center"}
-              >
-                {11}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                }}
-                color="text.disabled"
-                align={"center"}
-              >
-                Followers
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                marginRight: "28px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  marginRight: "8px",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                }}
+                variant={'body'}
                 color="text.primary"
                 align={"center"}
               >
                 {11}
               </Typography>
               <Typography
+                variant={'body'}
+                color="text.disabled"
+                align={"center"}
+              >
+                {'Followers'}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                marginRight: "28px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
                 sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
+                  mr: "8px",
                 }}
+                variant={'body'}
+                color="text.primary"
+                align={"center"}
+              >
+                {relayMap.size}
+              </Typography>
+              <Typography
+                variant={'body'}
                 color="text.disabled"
                 align={"center"}
               >

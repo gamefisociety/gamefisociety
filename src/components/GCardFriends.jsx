@@ -64,6 +64,9 @@ const GCardFriends = (props) => {
   const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
+    //
+    console.log('fetchAllMeta follows', follows);
+    //
     let pubkeys = [];
     follows.map((item) => {
       pubkeys.push(item);

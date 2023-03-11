@@ -9,7 +9,6 @@ import GCardNote from "components/GCardNote";
 import GFTChat from "./GFTChat";
 
 import { EventKind } from "nostr/def";
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { BuildSub } from "nostr/NostrUtils";
@@ -36,11 +35,12 @@ const GProfile = () => {
     const curRelay = "wss://nos.lol";
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
+    filterTextNote.limit = 50;
     const filterFollowPro = followPro.get(pub);
     let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
     let dataCaches = [];
     let follow_create_at = 0;
-    console.log('BroadcastSub textNote', textNote);
+    // console.log('BroadcastSub textNote', textNote);
     System.BroadcastSub(textNote, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setNotes(dataCaches.concat());
@@ -99,8 +99,8 @@ const GProfile = () => {
       <GCardUser
         profile={{ ...info }}
         pubkey={pubkey}
-        follows={ownFollows.concat()}
-        relays={{ ...ownRelays }}
+        ownFollows={ownFollows.concat()}
+        ownRelays={{ ...ownRelays }}
         chatOnClick={(param) => {
           setChatDrawer(true);
         }}

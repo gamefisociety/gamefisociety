@@ -11,10 +11,10 @@ export const useMetadataPro = () => {
 
   return {
     get: (pubkey) => {
-      if (typeof pubkey === 'array') {
+      if (Array.isArray(pubkey)) {
         const filter = NostrFactory.createFilter();
         filter.kinds = [EventKind.SetMetadata];
-        filter.authors = [pubkey];
+        filter.authors = pubkey.concat();
         return filter;
       } else {
         const filter = NostrFactory.createFilter();
