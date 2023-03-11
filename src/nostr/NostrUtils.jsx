@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 export const BuildSub = (subname, filters) => {
     // let sub = {};
     let uid = uuid();
-    let subId = subname + uid.slice(0, 8);
+    let subId = subname + '_' + uid.slice(0, 8);
     let ret = ["REQ", subId];
     filters.map((f) => {
         let newF = {};

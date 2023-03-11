@@ -85,25 +85,29 @@ export class NostrSystem {
   }
 
   //broadcast sub
-  BroadcastSub(sub, callback) {
+  BroadcastSub(sub, callback, relay) {
     console.log('BroadcastSub', sub);
     if (!sub) {
       return;
     }
-    for (const [, tmpRelay] of this.Clients) {
-      Relay.SendSub(tmpRelay, sub, callback);
+    for (const [addr, tmpRelay] of this.Clients) {
+      if (relay) {
+        if (relay === addr) {
+          Relay.SendSub(tmpRelay, sub, callback);
+        }
+      } else {
+        Relay.SendSub(tmpRelay, sub, callback);
+      }
     }
   }
 
   //broadcast close
   BroadcastClose(subid, client, callback) {
-    // console.log('BroadcastClose', subid);
     if (!subid[1]) {
       return;
     }
-    Relay.SendClose(client, subid[1]);
+    Relay.SendClose(client, subid[1], callback);
   }
-
 }
 
 export const System = new NostrSystem();

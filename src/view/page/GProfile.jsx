@@ -28,11 +28,9 @@ const GProfile = () => {
   const [notes, setNotes] = useState([]);
   const [ownRelays, setOwnRelays] = useState({});
   const [ownFollows, setOwnFollows] = useState([]);
-  // console.log('GCardUser profile', profile);
-
+  //
   const TextNotePro = useTextNotePro();
   const FollowPro = useFollowPro();
-
   const fetchTextNote = (pub) => {
     //
     const curRelays = [];
@@ -50,14 +48,12 @@ const GProfile = () => {
         if (msg.kind === EventKind.TextNote) {
           dataCaches.push(msg);
         } else if (msg.kind === EventKind.ContactList) {
-          console.log('target relays', msg.content);
+          console.log('profile_note_follow', msg);
           if (msg.content && msg.content !== '') {
             let relays = JSON.parse(msg.content);
             setOwnRelays(relays);
-            console.log('textNote msgs relays', relays);
           }
-
-          if (msg.tags.length > 0) {
+          if (msg.tags && msg.tags.length > 0) {
             setOwnFollows(msg.tags.concat());
           }
         }

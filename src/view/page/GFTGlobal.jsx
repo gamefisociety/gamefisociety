@@ -63,7 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const curRelays = [];
+let curRelay = '';
 const labelS = [
   "All",
   "ETH",
@@ -103,7 +103,6 @@ const labelS = [
 ];
 
 const GFTGlobal = () => {
-  // const [curRelays, setCurRelays] = useState([]);
   //
   const [curLable, setCurLable] = useState("All");
   //
@@ -149,7 +148,7 @@ const GFTGlobal = () => {
     filterTextNote.limit = 50;
     let subTextNode = BuildSub('textnode', [filterTextNote]);
     let dataCaches = [];
-    curRelays.push("wss://nos.lol");
+    curRelay = "wss://nos.lol";
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subTextNode, client, null);
@@ -168,7 +167,7 @@ const GFTGlobal = () => {
           pubkeys.push(item.pubkey);
         });
         const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, curRelays);
+        getInfor(pubkyes_filter, curRelay);
         //
         if (data.length === 0) {
           setData(dataCaches.concat());
@@ -179,11 +178,11 @@ const GFTGlobal = () => {
         dataCaches.push(msg);
       }
     },
-      curRelays
+      curRelay
     );
   };
 
-  const getInfor = (pkeys, relays) => {
+  const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     filterMetaData['authors'] = Array.from(pkeys);
     let subTextNode = BuildSub('metadata', [filterMetaData]);
@@ -201,7 +200,7 @@ const GFTGlobal = () => {
         newInfo.set(msg.pubkey, info);
       }
     },
-      relays
+      curRelay
     );
   };
 

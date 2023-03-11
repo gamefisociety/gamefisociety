@@ -230,12 +230,11 @@ const NostrRelay = () => {
   }
 
   const SendClose = (client, subId) => {
+    console.log('SendClose:', client.addr, subId);
     const req = ["CLOSE", subId];
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      // console.log('SendClose direction');
       _SendReal(client, req);
     } else {
-      // console.log('SendClose cache');
       client.PendingList.push(req);
     }
   }
