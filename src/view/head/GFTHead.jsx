@@ -267,6 +267,7 @@ const GFTHead = () => {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
+
     const renderUserMenu = (
         <React.Fragment>
             <Box
@@ -313,10 +314,11 @@ const GFTHead = () => {
                             }}
                             color={"#FFFFFF"}
                         >
-                            {display_name !== "default"
+                            {display_name}
+                            {/* {display_name !== "default"
                                 ? display_name
                                 : "Nostr#" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)}
+                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
                         </Typography>
                         <Typography
                             sx={{
@@ -327,10 +329,11 @@ const GFTHead = () => {
                             }}
                             color={"#919191"}
                         >
-                            {name !== "default"
+                            {name}
+                            {/* {name !== "default"
                                 ? "@" + name
                                 : "@" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)}
+                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
                         </Typography>
                     </Box>
                 </Box>
