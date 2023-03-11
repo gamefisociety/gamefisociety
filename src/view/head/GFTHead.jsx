@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { useRelayPro } from "nostr/protocal/RelayPro";
+import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
@@ -122,7 +122,7 @@ const GFTHead = () => {
     const { picture, display_name, name, nip05, created } = useSelector((s) => s.profile);
 
     const MetaPro = useMetadataPro();
-    const relayPro = useRelayPro();
+    const followPro = useFollowPro();
 
     const handleTooltipClose = () => {
         setProfileOPen(false);
@@ -165,14 +165,14 @@ const GFTHead = () => {
 
     const fetchMeta = () => {
         let filterMeta = MetaPro.get(publicKey);
-        let filterRelay = relayPro.get(publicKey);
-        let subMeta = BuildSub('profile_contact', [filterMeta, filterRelay]);
+        let filterFollow = followPro.get(publicKey);
+        let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
         let SetMetadata_create_at = 0;
         let ContactList_create_at = 0;
-        //
+        console.log('BroadcastSub subMeta self', subMeta);
         System.BroadcastSub(subMeta, (tag, client, msg) => {
             if (msg) {
-                // console.log('fetchMeta', msg);
+                console.log('fetchMeta', client.addr, msg);
                 if (tag === 'EOSE') {
                     System.BroadcastClose(subMeta, client, null)
                 } else if (tag === 'EVENT') {
@@ -188,7 +188,7 @@ const GFTHead = () => {
                         dispatch(setProfile(contentMeta));
                     } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
                         //contact - relay , tags - follows
-                        console.log('ContactList', msg);
+                        console.log('ContactList', client.addr, msg);
                         ContactList_create_at = msg.created_at;
                         if (msg.content !== "") {
                             //relay info

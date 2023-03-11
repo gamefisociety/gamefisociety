@@ -7,19 +7,16 @@ export const useFollowPro = () => {
 
   const { privateKey, publicKey } = useSelector(s => s.login);
   const { follows, relays } = useSelector(s => s.profile);
-
-
   const nostrEvent = useNostrEvent();
 
   return {
     get: (pubkey) => {
       if (pubkey) {
-        const sub = NostrFactory.createSub();
-        sub.Id = `follow:${sub.Id.slice(0, 8)}`;
-        sub.Kinds = [EventKind.ContactList];
-        sub.PTags = [pubkey];
-        sub.Authors = [pubkey];
-        return sub;
+        const filter = NostrFactory.createFilter();
+        filter['kinds'] = [EventKind.ContactList];
+        // filter['#p'] = [pubkey];
+        filter['authors'] = [pubkey];
+        return filter;
       }
     },
     addFollow: async (newFollows) => {

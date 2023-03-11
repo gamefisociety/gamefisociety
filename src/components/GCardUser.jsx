@@ -38,9 +38,9 @@ const GCardUser = (props) => {
   const addFollow = async (key) => {
     let keys = [key];
     let event = await followPro.addFollow(keys);
-    console.log('addFollow event src', event);
+    // console.log('addFollow event src', event);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      console.log('addFollow event', tags, client, msg);
+      // console.log('addFollow event', tags, client, msg);
     })
   }
 
