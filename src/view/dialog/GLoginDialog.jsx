@@ -86,10 +86,10 @@ const GLoginDialog = () => {
         }));
         dispatch(setOpenLogin(false));
         //
-        let ev = await MetaPro.send(keys.pub, profile, keys.pri);
-        console.log('MetadataPro', ev);
-        System.Broadcast(ev, 0, (msg) => {
-            console.log('create profile msg', msg);
+        let ev = await MetaPro.create(keys.pub, keys.pri, profile);
+        System.BroadcastEvent(ev, (tags, client, msg) => {
+            console.log('MetaPro create', tags, msg);
+            // console.log('create profile msg', msg);
         });
     }
 

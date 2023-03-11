@@ -50,13 +50,13 @@ const GCardUserSetting = (props) => {
     }, [props])
 
     const saveProfile = async () => {
-        let ev = await MetaPro.send(publicKey, localProfile, privateKey);
-        console.log('saveProfile', ev);
-        System.Broadcast(ev, 0, (msg) => {
-            if (msg[0] === 'OK') {
+        let ev = await MetaPro.modify(localProfile);
+        // console.log('saveProfile', ev);
+        System.BroadcastEvent(ev, (tags, client, msg) => {
+            if (tags === 'OK') {
                 setOpen(true)
             }
-            console.log('modify profile msg', msg);
+            console.log('modify profile msg', tags, msg);
         });
     }
 

@@ -5,7 +5,7 @@ import NostrFactory from 'nostr/NostrFactory';
 
 export const useMetadataPro = () => {
 
-  const privKey = useSelector(s => s.login.privateKey);
+  const { privateKey, publicKey } = useSelector(s => s.login);
 
   const nostrEvent = useNostrEvent();
 
@@ -23,16 +23,19 @@ export const useMetadataPro = () => {
         return filter;
       }
     },
-    send: async (pubKey, obj, tmpPrivate) => {
+    create: async (pubKey, priKey, obj) => {
       if (pubKey) {
         const ev = NostrFactory.createEvent(pubKey);
         ev.Kind = EventKind.SetMetadata;
         ev.Content = JSON.stringify(obj);
-        if (tmpPrivate) {
-          return await nostrEvent.Sign(tmpPrivate, ev);
-        }
-        return await nostrEvent.Sign(privKey, ev);
+        return await nostrEvent.Sign(priKey, ev);
       }
+    },
+    modify: async (obj) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.SetMetadata;
+      ev.Content = JSON.stringify(obj);
+      return await nostrEvent.Sign(privateKey, ev);
     },
   }
 }

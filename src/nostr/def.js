@@ -11,7 +11,7 @@ export class ClientState {
     this.Subs = 0;
     this.SubsTimeout = 0;
     this.EventsReceived = 0;
-    this.EventsSent = 0;
+    this.EventsSend = 0;
     this.Disconnects = 0;
   }
 }

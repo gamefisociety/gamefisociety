@@ -6,8 +6,8 @@ const NostrRelay = () => {
 
   const listenProcers = new Map();
 
-  const buildKey = (addr, subid) => {
-    let key = addr + '-' + subid;
+  const buildKey = (addr, flag) => {
+    let key = addr + '-' + flag;
     return key;
   }
 
@@ -19,9 +19,9 @@ const NostrRelay = () => {
       key: key,
       client: client,
       once: once,
-      callback: callback,
-      cache: []
+      callback: callback
     };
+    // console.log('addListen', key, client, once, procer);
     listenProcers.set(key, procer);
   }
 
@@ -63,14 +63,9 @@ const NostrRelay = () => {
       if (e.data.length <= 0) {
         return;
       }
-      // process msg
       const msg = JSON.parse(e.data);
       let tmpKey = buildKey(e.origin, msg[1]);
       let procer = listenProcers.get(tmpKey);
-      if (!procer) {
-        return;
-      }
-      // console.log('OnMessage', tmpKey, msg);
       const tag = msg[0];
       if (tag === 'AUTH') {
         if (procer && procer.callback) {
@@ -87,11 +82,14 @@ const NostrRelay = () => {
           }
         }
       } else if (tag === 'OK') {
-        console.log('OK MSG', msg[1]);
-        if (procer && procer.callback) {
-          procer.callback(tag, client, msg[1]);
-        }
-        if (procer.once === 0) {
+        // console.log('OK MSG msg', msg, e, procer, listenProcers);
+        if (procer) {
+          if (procer.callback) {
+            procer.callback(tag, client, {
+              eventid: msg[1],
+              ret: msg[2]
+            });
+          }
           removeListen(procer);
         }
       } else if (tag === 'NOTICE') {
@@ -197,19 +195,17 @@ const NostrRelay = () => {
     if (!client.Settings.write) {
       return;
     }
-    //
-    let tmpkey = buildKey(client.addr, ev[1]);
-    addListen(tmpkey, client, 1, callback)
-    //
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
+    let tmpkey = buildKey(client.addr, ev.Id);
+    addListen(tmpkey, client, 1, callback);
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      console.log('SendEvent direction', req);
+      // console.log('SendEvent direction', req);
       _SendReal(client, req);
     } else {
-      console.log('SendEvent cache', ev);
+      // console.log('SendEvent cache', ev);
       client.PendingList.push(req);
     }
-    client.Stats.EventsSent++;
+    client.Stats.EventsSend++;
     _UpdateState(client);
   }
 

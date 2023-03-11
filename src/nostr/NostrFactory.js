@@ -31,7 +31,6 @@ const NostrFactory = {
 
   createEvent: (pubKey) => {
     let ev = {};
-    ev.type = "EVENT";
     ev.Original = null;
     ev.Id = '';
     ev.PubKey = pubKey ? pubKey : "";
@@ -45,7 +44,6 @@ const NostrFactory = {
 
   createSub: () => {
     let sub = {};
-    sub.type = "SUB";
     sub.Id = uuid();
     sub.Ids = undefined;
     sub.Authors = undefined;
