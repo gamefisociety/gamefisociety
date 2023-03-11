@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -186,7 +186,7 @@ const GFTHead = () => {
                         let contentMeta = JSON.parse(msg.content);
                         contentMeta.created_at = msg.created_at;
                         dispatch(setProfile(contentMeta));
-                    } else if (msg.kind === EventKind.ContactList) { //&& msg.created_at > ContactList_create_at
+                    } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
                         //contact - relay , tags - follows
                         console.log('ContactList', msg);
                         ContactList_create_at = msg.created_at;

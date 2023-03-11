@@ -13,6 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
+import { BuildSub } from "nostr/NostrUtils";
 
 import "./GFTGlobal.scss";
 import {
@@ -138,21 +139,21 @@ const GFTGlobal = () => {
   };
 
   const getDataList = () => {
-    const textNote = textNotePro.get();
+    const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
-      textNote.Until = Date.now();
+      filterTextNote.until = Date.now();
     } else {
       setMore(true);
-      textNote.Since = curCreateAt;
+      filterTextNote.since = curCreateAt;
     }
-    textNote.Limit = 50;
-    //
+    filterTextNote.limit = 50;
+    let subTextNode = BuildSub('textnode', [filterTextNote]);
     let dataCaches = [];
     curRelays.push("wss://nos.lol");
-    System.Broadcast(textNote, 0, (tag, client, msg) => {
+    System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        System.BroadcastClose(textNote.Id, client, null);
-        //更新create_at
+        System.BroadcastClose(subTextNode[1], client, null);
+        //create_at
         dataCaches.sort((a, b) => {
           return a.created_at > b.created_at;
         });
@@ -185,14 +186,15 @@ const GFTGlobal = () => {
   };
 
   const getInfor = (pkeys, relays) => {
-    const metadata = metadataPro.get(Array.from(pkeys));
-    metadata.Authors = Array.from(pkeys);
+    const filterMetaData = metadataPro.get(Array.from(pkeys));
+    filterMetaData['authors'] = Array.from(pkeys);
+    let subTextNode = BuildSub('metadata', [filterMetaData]);
     //
     const newInfo = new Map();
-    System.Broadcast(metadata, 0, (tag, client, msg) => {
+    System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setInforData(newInfo);
-        System.BroadcastClose(metadata.Id, client, null);
+        System.BroadcastClose(subTextNode[1], client, null);
         //
       } else if (tag === 'EVENT') {
         let info = {};

@@ -11,10 +11,9 @@ export const useTextNotePro = () => {
 
   return {
     get: () => {
-      const sub = NostrFactory.createSub();
-      sub.Id = `textnote:${sub.Id.slice(0, 8)}`;
-      sub.Kinds = [EventKind.TextNote];
-      return sub;
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.TextNote];
+      return filter;
     },
     send: async (pubKey, obj, tmpPrivate) => {
       if (pubKey) {
