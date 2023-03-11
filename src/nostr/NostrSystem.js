@@ -56,21 +56,21 @@ export class NostrSystem {
   //broadcast
   Broadcast(ev, once, callback, relays) {
     console.log('no relay now', this.Clients, ev);
-    if (!ev) {
-      return;
-    }
-    if (relays && relays.length !== 0) {
-      for (const [addr, tmpRelay] of this.Clients) {
-        if (relays.includes(addr)) {
-          Relay.SendToRelay(tmpRelay, ev, once, callback);
-        }
-      }
-    } else {
-      for (const [addr, tmpRelay] of this.Clients) {
-        // relays.relays();
-        Relay.SendToRelay(tmpRelay, ev, once, callback);
-      }
-    }
+    // if (!ev) {
+    //   return;
+    // }
+    // if (relays && relays.length !== 0) {
+    //   for (const [addr, tmpRelay] of this.Clients) {
+    //     if (relays.includes(addr)) {
+    //       Relay.SendToRelay(tmpRelay, ev, once, callback);
+    //     }
+    //   }
+    // } else {
+    //   for (const [addr, tmpRelay] of this.Clients) {
+    //     // relays.relays();
+    //     Relay.SendToRelay(tmpRelay, ev, once, callback);
+    //   }
+    // }
   }
 
   //broadcast event
@@ -80,18 +80,18 @@ export class NostrSystem {
       return;
     }
     for (const [, tmpRelay] of this.Clients) {
-      Relay.SendToRelay(tmpRelay, ev, once, callback);
+      Relay.SendEvent(tmpRelay, ev, callback);
     }
   }
 
   //broadcast sub
-  BroadcastSub(ev, once, callback) {
-    console.log('BroadcastSub', ev);
-    if (!ev) {
+  BroadcastSub(sub, callback) {
+    console.log('BroadcastSub', sub);
+    if (!sub) {
       return;
     }
     for (const [, tmpRelay] of this.Clients) {
-      Relay.SendToRelay(tmpRelay, ev, once, callback);
+      Relay.SendSub(tmpRelay, sub, callback);
     }
   }
 

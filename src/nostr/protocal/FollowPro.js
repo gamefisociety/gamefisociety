@@ -29,17 +29,23 @@ export const useFollowPro = () => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
       ev.Content = JSON.stringify({ ...relays });
-      let newTags = [follows.concat(newFollows)];
+      let newTags = follows.concat(newFollows);
       newTags.map(item => {
         ev.Tags.push(['p', item]);
       });
       return await nostrEvent.Sign(privateKey, ev);
     },
     removeFollow: async (newFollows) => {
-      console.log('add follow', newFollows, follows, relays);
-      if (typeof newFollows !== 'array') {
+      if (Array.isArray(newFollows) === false) {
         return;
       }
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ContactList
+      ev.Content = JSON.stringify({ ...relays });
+      newFollows.map((item) => {
+        follows.remove(item);
+      });
+      return await nostrEvent.Sign(privateKey, ev);
     },
   }
 }

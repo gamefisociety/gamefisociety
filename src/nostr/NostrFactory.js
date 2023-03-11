@@ -63,6 +63,20 @@ const NostrFactory = {
     return sub;
   },
 
+  createFilter: () => {
+    let filter = {};
+    filter.ids = undefined;
+    filter.authors = undefined;
+    filter.kinds = undefined;
+    filter['#e'] = undefined;
+    filter['#p'] = undefined;
+    filter.since = undefined;
+    filter.until = undefined;
+    filter.limit = undefined;
+    return filter;
+  },
+
+
   formateEvent: (ev) => {
     console.log('formate event', ev);
     return {

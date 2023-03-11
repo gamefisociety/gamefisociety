@@ -12,17 +12,15 @@ export const useMetadataPro = () => {
   return {
     get: (pubkey) => {
       if (typeof pubkey === 'array') {
-        const sub = NostrFactory.createSub();
-        sub.Id = `profiles:${sub.Id.slice(0, 8)}`;
-        sub.Kinds = [EventKind.SetMetadata];
-        sub.Authors = [pubkey];
-        return sub;
+        const filter = NostrFactory.createFilter();
+        filter.kinds = [EventKind.SetMetadata];
+        filter.authors = [pubkey];
+        return filter;
       } else {
-        const sub = NostrFactory.createSub();
-        sub.Id = `profiles:${sub.Id.slice(0, 8)}`;
-        sub.Kinds = [EventKind.SetMetadata];
-        sub.Authors = [pubkey];
-        return sub;
+        const filter = NostrFactory.createFilter();
+        filter.kinds = [EventKind.SetMetadata];
+        filter.authors = [pubkey];
+        return filter;
       }
     },
     send: async (pubKey, obj, tmpPrivate) => {

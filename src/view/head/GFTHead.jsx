@@ -6,6 +6,7 @@ import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import { System } from "nostr/NostrSystem";
+import { BuildSub } from "nostr/NostrUtils";
 //
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -163,16 +164,17 @@ const GFTHead = () => {
     };
 
     const fetchMeta = () => {
-        let subMeta = MetaPro.get(publicKey);
-        let subRelay = relayPro.get(publicKey);
-        subMeta.childs.push(subRelay);
+        let filterMeta = MetaPro.get(publicKey);
+        let filterRelay = relayPro.get(publicKey);
+        let subMeta = BuildSub('profile_contact', [filterMeta, filterRelay]);
         let SetMetadata_create_at = 0;
         let ContactList_create_at = 0;
-        System.BroadcastSub(subMeta, 0, (tag, client, msg) => {
+        //
+        System.BroadcastSub(subMeta, (tag, client, msg) => {
             if (msg) {
+                console.log('fetchMeta', msg);
                 if (tag === 'EOSE') {
-                    //
-                    System.BroadcastClose(subMeta.Id, client, null)
+                    System.BroadcastClose(subMeta[1], client, null)
                 } else if (tag === 'EVENT') {
                     if (msg.pubkey !== publicKey) {
                         return;
@@ -184,8 +186,9 @@ const GFTHead = () => {
                         let contentMeta = JSON.parse(msg.content);
                         contentMeta.created_at = msg.created_at;
                         dispatch(setProfile(contentMeta));
-                    } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
+                    } else if (msg.kind === EventKind.ContactList) { //&& msg.created_at > ContactList_create_at
                         //contact - relay , tags - follows
+                        console.log('ContactList', msg);
                         ContactList_create_at = msg.created_at;
                         if (msg.content !== "") {
                             //relay info

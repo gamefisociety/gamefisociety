@@ -186,29 +186,21 @@ const NostrRelay = () => {
       return;
     }
     client.PendingList.map(req => {
-      console.log('pendding msg', req);
+      // console.log('pendding msg', req);
       const json = JSON.stringify(req);
       client.Socket.send(json);
     });
     client.PendingList = [];
   }
 
-  const SendToRelay = (client, ev, once, callback) => {
-    let tmpkey = buildKey(client.addr, ev.Id);
-    addListen(tmpkey, client, once, callback)
-    if (ev.type === "EVENT") {
-      SendEvent(client, ev);
-    } else if (ev.type === "SUB") {
-      SendSub(client, ev);
-    } else if (ev.type === "CLOSE") {
-      SendClose(client, ev);
-    }
-  }
-
-  const SendEvent = (client, ev) => {
+  const SendEvent = (client, ev, callback) => {
     if (!client.Settings.write) {
       return;
     }
+    //
+    let tmpkey = buildKey(client.addr, ev[1]);
+    addListen(tmpkey, client, 1, callback)
+    //
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       console.log('SendEvent direction', req);
@@ -221,24 +213,23 @@ const NostrRelay = () => {
     _UpdateState(client);
   }
 
-  const SendSub = (client, sub) => {
+  const SendSub = (client, sub, callback) => {
     if (!client.Settings.read) {
       return;
     }
-    let req = NostrFactory.buildReq(sub);
+    let tmpkey = buildKey(client.addr, sub[1]);
+    addListen(tmpkey, client, 1, callback)
+    //
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      console.log('SendSub direction', req);
-      _SendReal(client, req);
+      // console.log('SendSub direction', sub);
+      _SendReal(client, sub);
     } else {
-      console.log('SendSub cache', req);
-      client.PendingList.push(req);
+      // console.log('SendSub cache', sub);
+      client.PendingList.push(sub);
     }
   }
 
   const SendClose = (client, subId) => {
-    // if (!client.Settings.write) {
-    //   return;
-    // }
     const req = ["CLOSE", subId];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendClose direction');
@@ -300,7 +291,6 @@ const NostrRelay = () => {
   return {
     Connect: Connect,
     Close: Close,
-    SendToRelay: SendToRelay,
     SendEvent: SendEvent,
     SendSub: SendSub,
     SendClose: SendClose,
