@@ -129,7 +129,12 @@ const GFTHead = () => {
     }
 
     const searchMetadata = (msg) => {
-        console.log('searchMeata Data', msg);
+        if (msg.kind === EventKind.SetMetadata && msg.content !== '') {
+            let tmpInfo = JSON.parse(msg.content);
+            navigate("/profile", {
+                state: { info: { ...tmpInfo }, pubkey: msg.pubkey },
+            });
+        }
     }
 
     const fetchMeta = (pubkey, callback) => {
