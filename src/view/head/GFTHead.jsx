@@ -17,10 +17,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import Popover from '@mui/material/Popover';
 import Typography from "@mui/material/Typography";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import CardMedia from "@mui/material/CardMedia";
-import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -28,6 +28,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import AdbIcon from "@mui/icons-material/Adb";
@@ -44,6 +45,7 @@ import {
 import { setProfile } from "module/store/features/profileSlice";
 import { logout } from "module/store/features/loginSlice";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
+import { parseId } from 'nostr/Util';
 
 import "./GFTHead.scss";
 
@@ -76,16 +78,89 @@ const GFTHead = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loggedOut, publicKey } = useSelector((s) => s.login);
-    const { profile, relays, follows, followUpdate } = useSelector((s) => s.profile);
+    const { profile, relays } = useSelector((s) => s.profile);
     const { account } = useWeb3React();
     const { isOpenMenuLeft } = useSelector((s) => s.dialog);
     const [profileOpen, setProfileOPen] = React.useState(false);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const [searchValue, setSearchValue] = React.useState('');
+    const [searchProp, setSearchProp] = React.useState({
+        value: '',
+        open: false,
+        anchorEl: null,
+    });
 
     const MetaPro = useMetadataPro();
     const followPro = useFollowPro();
+
+    const selfMetadata = (msg) => {
+        if (msg.kind === EventKind.SetMetadata) {
+            let contentMeta = JSON.parse(msg.content);
+            contentMeta.created_at = msg.created_at;
+            dispatch(setProfile(contentMeta));
+        } else if (msg.kind === EventKind.ContactList) {
+            //relays
+            if (msg.content !== "") {
+                let content = JSON.parse(msg.content);
+                let tmpRelays = {
+                    relays: {
+                        ...content,
+                        ...relays,
+                    },
+                    createdAt: 1,
+                };
+                dispatch(setRelays(tmpRelays));
+            }
+            //follows
+            if (msg.tags.length > 0) {
+                let follow_pubkes = [];
+                msg.tags.map((item) => {
+                    if (item.length >= 2 && item[0] === "p") {
+                        follow_pubkes.push(item[1]);
+                    }
+                });
+                let followsInfo = {
+                    create_at: msg.created_at,
+                    follows: follow_pubkes.concat(),
+                };
+                dispatch(setFollows(followsInfo));
+            }
+        }
+    }
+
+    const searchMetadata = (msg) => {
+        console.log('searchMeata Data', msg);
+    }
+
+    const fetchMeta = (pubkey, callback) => {
+        let filterMeta = MetaPro.get(pubkey);
+        let filterFollow = followPro.get(pubkey);
+        let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
+        let SetMetadata_create_at = 0;
+        let ContactList_create_at = 0;
+        System.BroadcastSub(subMeta, (tag, client, msg) => {
+            if (!msg)
+                return;
+            if (tag === 'EOSE') {
+                System.BroadcastClose(subMeta, client, null)
+            } else if (tag === 'EVENT') {
+                if (msg.pubkey !== pubkey) {
+                    return;
+                }
+                if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at) {
+                    SetMetadata_create_at = msg.created_at;
+                    if (callback) {
+                        callback(msg);
+                    }
+                } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
+                    ContactList_create_at = msg.created_at;
+                    if (callback) {
+                        callback(msg);
+                    }
+                }
+            }
+        });
+    };
 
     const handleTooltipClose = () => {
         setProfileOPen(false);
@@ -94,6 +169,18 @@ const GFTHead = () => {
     const handleTooltipOpen = () => {
         setProfileOPen(true);
     };
+
+    const handleSearch = (e, value) => {
+        searchProp.value = value;
+        if (value.startsWith('npub') && value.length === 63) {
+            searchProp.open = true;
+            searchProp.anchorEl = e.currentTarget;
+        } else if (value.length === 80) {
+            //
+        }
+        setSearchProp({ ...searchProp });
+    }
+
     const openDialog = () => {
         if (account) {
             dispatch(setIsOpenWallet(true));
@@ -126,67 +213,9 @@ const GFTHead = () => {
         handleMobileMenuClose();
     };
 
-    const fetchMeta = () => {
-        let filterMeta = MetaPro.get(publicKey);
-        let filterFollow = followPro.get(publicKey);
-        let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
-        let SetMetadata_create_at = 0;
-        let ContactList_create_at = 0;
-        // console.log('BroadcastSub subMeta self', subMeta);
-        System.BroadcastSub(subMeta, (tag, client, msg) => {
-            if (!msg)
-                return;
-            // console.log('fetchMeta', client.addr, msg);
-            if (tag === 'EOSE') {
-                System.BroadcastClose(subMeta, client, null)
-            } else if (tag === 'EVENT') {
-                if (msg.pubkey !== publicKey) {
-                    return;
-                }
-                //compare created_at
-                if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at) {
-                    SetMetadata_create_at = msg.created_at;
-                    //update
-                    let contentMeta = JSON.parse(msg.content);
-                    contentMeta.created_at = msg.created_at;
-                    dispatch(setProfile(contentMeta));
-                } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
-                    // console.log('ContactList', client.addr, msg);
-                    ContactList_create_at = msg.created_at;
-                    if (msg.content !== "") {
-                        //relay info
-                        let content = JSON.parse(msg.content);
-                        let tmpRelays = {
-                            relays: {
-                                ...content,
-                                ...relays,
-                            },
-                            createdAt: 1,
-                        };
-                        dispatch(setRelays(tmpRelays));
-                    }
-                    //follows
-                    if (msg.tags.length > 0) {
-                        let follow_pubkes = [];
-                        msg.tags.map((item) => {
-                            if (item.length >= 2 && item[0] === "p") {
-                                follow_pubkes.push(item[1]);
-                            }
-                        });
-                        let followsInfo = {
-                            create_at: msg.created_at,
-                            follows: follow_pubkes.concat(),
-                        };
-                        dispatch(setFollows(followsInfo));
-                    }
-                }
-            }
-        });
-    };
-
     useEffect(() => {
         if (loggedOut === false) {
-            fetchMeta();
+            fetchMeta(publicKey, selfMetadata);
         }
         return () => {
             //
@@ -572,32 +601,53 @@ const GFTHead = () => {
                         onClick={clickLogo}
                     />
                 </Stack>
-                <Autocomplete
-                    freeSolo
-                    disableClearable
-                    options={top100Films.map((option) => option)}
-                    renderInput={(params) => (
-                        <TextField
-                            sx={{
-                                width: '420px',
-                                // height: '32px',
-                                // borderRadius: '32px',
-                            }}
-                            {...params}
-                            placeholder="Search input"
-                            value={searchValue}
-                            onChange={(e) => {
-                                if (e.target) {
-                                    setSearchValue(e.target.value);
-                                }
-                            }}
-                            InputProps={{
-                                ...params.InputProps,
-                                type: 'search',
-                            }}
-                        />
-                    )}
+                <TextField
+                    sx={{
+                        width: '450px',
+                    }}
+                    placeholder="Search input"
+                    value={searchProp.value}
+                    onChange={(e) => {
+                        if (e.target) {
+                            handleSearch(e, e.target.value);
+                        }
+                    }}
+                    InputProps={{
+                        // ...params.InputProps,
+                        type: 'search',
+                    }}
                 />
+                <Popover
+                    open={searchProp.open}
+                    anchorEl={searchProp.anchorEl}
+                    onClose={() => {
+                        searchProp.open = false;
+                        searchProp.anchorEl = null;
+                        setSearchProp({ ...searchProp });
+                    }}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            p: '18px',
+                            cursor: 'pointer',
+                        }}
+                        color={'primary'}
+                        onClick={() => {
+                            let pub = parseId(searchProp.value);
+                            fetchMeta(pub, searchMetadata);
+                            //
+                            searchProp.value = '';
+                            searchProp.open = false;
+                            searchProp.anchorEl = null;
+                            setSearchProp({ ...searchProp });
+                        }}>
+                        {'Get Profile: ' + searchProp.value}
+                    </Typography>
+                </Popover>
                 {loggedOut === true ? (
                     <Box
                         sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
