@@ -20,14 +20,14 @@ const NormalCache = () => {
   const getMetadata = (key, pubkey) => {
     let cache = NorCache.get(key);
     if (!cache) {
-      return null;
+      return { info: null, index: -1 };
     }
     for (let i = 0; i < cache.length; i++) {
       if (cache[i].pubkey === pubkey) {
-        return cache[i].msg;
+        return { info: cache[i].msg, index: i };
       }
     }
-    return null;
+    return { info: null, index: -1 };
   }
 
   const hasMetadata = (key, pubkey) => {
@@ -48,14 +48,20 @@ const NormalCache = () => {
     if (!cache) {
       cache = create(key);
     }
-    if (hasMetadata(key, pubkey) === true) {
+    const { info, index } = getMetadata(key, pubkey);
+    if (info !== null) {
+      if (info.created_at < msg.created_at) {
+        //instead by timestamp
+        cache[index].msg = { ...msg };
+        return true;
+      }
       return false;
     }
-    let info = {
+    let newInfo = {
       pubkey: pubkey,
       msg: msg,
     }
-    cache.push(info);
+    cache.push(newInfo);
     return true;
   }
 
