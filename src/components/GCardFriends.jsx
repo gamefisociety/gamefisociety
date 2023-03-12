@@ -102,6 +102,22 @@ const GCardFriends = (props) => {
   };
 
   //
+  const addFollow = async (pubkey) => {
+    let event = await followPro.addFollow(pubkey);
+    let newFollows = follows.concat();
+    newFollows.push(pubkey);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === 'OK' && msg.ret === true) {
+        let followsInfo = {
+          create_at: event.CreatedAt,
+          follows: newFollows,
+        };
+        dispatch(setFollows(followsInfo));
+      }
+    });
+  }
+
+  //
   const removeFollow = async (pubkey) => {
     let event = await followPro.removeFollow(pubkey);
     let newFollows = follows.concat();
@@ -115,6 +131,15 @@ const GCardFriends = (props) => {
         dispatch(setFollows(followsInfo));
       }
     })
+  }
+
+  const isFollowYou = (pubkey) => {
+    for (let i = 0; i < follows.length; i++) {
+      if (pubkey === follows[i]) {
+        return true;
+      }
+    }
+    return false;
   }
 
   //
@@ -214,10 +239,15 @@ const GCardFriends = (props) => {
                   variant="outlined"
                   sx={{ width: "80px", height: "24px", fontSize: "12px" }}
                   onClick={() => {
-                    // removeFollow(pubkey);
+                    if (isFollowYou(item.pubkey) === true) {
+                      removeFollow(item.pubkey);
+                    } else {
+                      addFollow(item.pubkey);
+                    }
+                    // 
                   }}
                 >
-                  {"unfollow"}
+                  {isFollowYou(item.pubkey) === true ? "unfollow" : 'follow'}
                 </Button>
               }
               disablePadding
