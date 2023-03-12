@@ -20,13 +20,12 @@ const GFTChatDialog = () => {
     })
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const { } = useSelector(s => s.dialog);
+    
     const dispatch = useDispatch();
     useEffect(() => {
         requsetData();
         return () => {
-
         }
-
     }, [])
 
     const requsetData = () => {

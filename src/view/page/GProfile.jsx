@@ -125,6 +125,7 @@ const GProfile = () => {
       >
         <GFTChat
           chatPK={pubkey}
+          chatProfile={{ ...info }}
           closeHandle={() => {
             setChatDrawer(false);
           }}

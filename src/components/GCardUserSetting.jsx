@@ -186,6 +186,26 @@ const GCardUserSetting = (props) => {
                             setLocalProfile({ ...localProfile });
                         }}
                     />
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'PUBKEY'}
+                    </Typography>
+                    <TextField
+                        value={publicKey}
+                        margin="dense"
+                        id="name"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <Typography sx={{ mt: '16px' }} variant="subtitle2" color='gray' align={'left'}>
+                        {'PRIVATE KEY'}
+                    </Typography>
+                    <TextField
+                        value={privateKey}
+                        margin="dense"
+                        id="name"
+                        fullWidth
+                        variant="standard"
+                    />
                 </CardContent>
             </CardActionArea>
             <CardActions>

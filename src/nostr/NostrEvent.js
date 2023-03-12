@@ -10,7 +10,6 @@ const useNostrEvent = () => {
   }
 
   const CreateId = async (ev) => {
-    console.log('CreateId ev', ev);
     const payload = [
       0,
       ev.PubKey,
@@ -19,11 +18,9 @@ const useNostrEvent = () => {
       ev.Tags,
       ev.Content,
     ];
-    console.log('createID payload', payload);
     const payloadData = new TextEncoder().encode(JSON.stringify(payload));
     const data = await secp.utils.sha256(payloadData);
     const hash = secp.utils.bytesToHex(data);
-    console.log('createID hash', hash);
     if (ev.Id !== "" && hash !== ev.Id) {
       console.debug(payload);
       throw "ID doesnt match!";
@@ -44,7 +41,6 @@ const useNostrEvent = () => {
     if (!(await Verify(ev))) {
       throw "Signing failed";
     }
-    // console.log('event self sign', ev);
     return ev;
   }
 
@@ -75,21 +71,27 @@ const useNostrEvent = () => {
   }
 
   const DecryptData = async (cyphertext, privkey, pubkey) => {
-    const key = await _GetDmSharedKey(pubkey, privkey);
-    const cSplit = cyphertext.split("?iv=");
-    const data = new Uint8Array(base64.length(cSplit[0]));
-    base64.decode(cSplit[0], data, 0);
-    const iv = new Uint8Array(base64.length(cSplit[1]));
-    base64.decode(cSplit[1], iv, 0);
-    const result = await window.crypto.subtle.decrypt(
-      {
-        name: "AES-CBC",
-        iv: iv,
-      },
-      key,
-      data
-    );
-    return new TextDecoder().decode(result);
+    try {
+      const key = await _GetDmSharedKey(pubkey, privkey);
+      const cSplit = cyphertext.split("?iv=");
+      const data = new Uint8Array(base64.length(cSplit[0]));
+      base64.decode(cSplit[0], data, 0);
+      const iv = new Uint8Array(base64.length(cSplit[1]));
+      base64.decode(cSplit[1], iv, 0);
+      // console.log('DecryptData1', cyphertext);
+      const result = await window.crypto.subtle.decrypt(
+        {
+          name: "AES-CBC",
+          iv: iv,
+        },
+        key,
+        data
+      );
+      // console.log('DecryptData success', cyphertext, new TextDecoder().decode(result));
+      return new TextDecoder().decode(result);
+    } catch (e) {
+      console.log('DecryptData error', cyphertext);
+    }
   }
 
   /**
@@ -112,28 +114,3 @@ const useNostrEvent = () => {
 };
 
 export default useNostrEvent;
-
-  // constructor(rewEv) {
-  //   this.Original = rewEv ?? null;
-  //   this.Id = rewEv?.id ?? "";
-  //   this.PubKey = rewEv?.pubkey ?? "";
-  //   this.CreatedAt = rewEv?.created_at ?? Math.floor(new Date().getTime() / 1000);
-  //   this.Kind = rewEv?.kind ?? EventKind.Unknown;
-  //   this.Tags = rewEv?.tags.map((a, i) => new Tag(a, i)) ?? [];
-  //   this.Content = rewEv?.content ?? "";
-  //   this.Signature = rewEv?.sig ?? "";
-  // }
-
-  // static Create(pubKey) {
-  //   const ev = new NostrEvent();
-  //   ev.PubKey = pubKey;
-  //   return ev;
-  // }
-
-  // get RootPubKey() {
-  //   const delegation = this.Tags.find(a => a.Key === "delegation");
-  //   if (delegation?.PubKey) {
-  //     return delegation.PubKey;
-  //   }
-  //   return this.PubKey;
-  // }
