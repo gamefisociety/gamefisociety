@@ -15,6 +15,7 @@ export const InitState = {
   newUserKey: false,
   relays: {},
   latestRelays: 0,
+  profile: {},
   name: 'aaaa',
   display_name: 'bbbb',
   about: '',
@@ -67,6 +68,7 @@ const ProfileSlice = createSlice({
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
     },
     setProfile: (state, action) => {
+      state.profile = { ...action.payload }
       state.name = action.payload.name ? action.payload.name : 'default';
       state.display_name = action.payload.display_name ? action.payload.display_name : 'default';
       state.about = action.payload.about ? action.payload.about : 'default';

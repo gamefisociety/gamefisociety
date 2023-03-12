@@ -11,6 +11,7 @@ import { BuildSub } from "nostr/NostrUtils";
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AppBar from "@mui/material/AppBar";
+import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Avatar from "@mui/material/Avatar";
@@ -24,6 +25,8 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
@@ -56,46 +59,6 @@ import icon_qr from "../../asset/image/login/icon_qr.png";
 import icon_logout from "../../asset/image/login/icon_logout.png";
 import { EventKind } from "nostr/def";
 
-const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(3),
-        width: "auto",
-    },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create("width"),
-        width: "100%",
-        [theme.breakpoints.up("md")]: {
-            width: "20ch",
-        },
-    },
-}));
-
 const ProfileTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -107,19 +70,19 @@ const ProfileTooltip = styled(({ className, ...props }) => (
     },
 }));
 
+const top100Films = [];
+
 const GFTHead = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loggedOut, publicKey } = useSelector((s) => s.login);
-    const { relays, follows, followUpdate } = useSelector((s) => s.profile);
-
+    const { profile, relays, follows, followUpdate } = useSelector((s) => s.profile);
     const { account } = useWeb3React();
     const { isOpenMenuLeft } = useSelector((s) => s.dialog);
-    //
     const [profileOpen, setProfileOPen] = React.useState(false);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const { picture, display_name, name, nip05, created } = useSelector((s) => s.profile);
+    const [searchValue, setSearchValue] = React.useState('');
 
     const MetaPro = useMetadataPro();
     const followPro = useFollowPro();
@@ -169,63 +132,57 @@ const GFTHead = () => {
         let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
         let SetMetadata_create_at = 0;
         let ContactList_create_at = 0;
-        console.log('BroadcastSub subMeta self', subMeta);
+        // console.log('BroadcastSub subMeta self', subMeta);
         System.BroadcastSub(subMeta, (tag, client, msg) => {
-            if (msg) {
-                console.log('fetchMeta', client.addr, msg);
-                if (tag === 'EOSE') {
-                    System.BroadcastClose(subMeta, client, null)
-                } else if (tag === 'EVENT') {
-                    if (msg.pubkey !== publicKey) {
-                        return;
+            if (!msg)
+                return;
+            // console.log('fetchMeta', client.addr, msg);
+            if (tag === 'EOSE') {
+                System.BroadcastClose(subMeta, client, null)
+            } else if (tag === 'EVENT') {
+                if (msg.pubkey !== publicKey) {
+                    return;
+                }
+                //compare created_at
+                if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at) {
+                    SetMetadata_create_at = msg.created_at;
+                    //update
+                    let contentMeta = JSON.parse(msg.content);
+                    contentMeta.created_at = msg.created_at;
+                    dispatch(setProfile(contentMeta));
+                } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
+                    // console.log('ContactList', client.addr, msg);
+                    ContactList_create_at = msg.created_at;
+                    if (msg.content !== "") {
+                        //relay info
+                        let content = JSON.parse(msg.content);
+                        let tmpRelays = {
+                            relays: {
+                                ...content,
+                                ...relays,
+                            },
+                            createdAt: 1,
+                        };
+                        dispatch(setRelays(tmpRelays));
                     }
-                    //compare created_at
-                    if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at) {
-                        SetMetadata_create_at = msg.created_at;
-                        //update
-                        let contentMeta = JSON.parse(msg.content);
-                        contentMeta.created_at = msg.created_at;
-                        dispatch(setProfile(contentMeta));
-                    } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at) {
-                        // console.log('ContactList', client.addr, msg);
-                        ContactList_create_at = msg.created_at;
-                        if (msg.content !== "") {
-                            //relay info
-                            let content = JSON.parse(msg.content);
-                            let tmpRelays = {
-                                relays: {
-                                    ...content,
-                                    ...relays,
-                                },
-                                createdAt: 1,
-                            };
-                            dispatch(setRelays(tmpRelays));
-                        }
-                        //follows
-                        if (msg.tags.length > 0) {
-                            let follow_pubkes = [];
-                            msg.tags.map((item) => {
-                                if (item.length >= 2 && item[0] === "p") {
-                                    follow_pubkes.push(item[1]);
-                                }
-                            });
-                            let followsInfo = {
-                                create_at: msg.created_at,
-                                follows: follow_pubkes.concat(),
-                            };
-                            dispatch(setFollows(followsInfo));
-                        }
+                    //follows
+                    if (msg.tags.length > 0) {
+                        let follow_pubkes = [];
+                        msg.tags.map((item) => {
+                            if (item.length >= 2 && item[0] === "p") {
+                                follow_pubkes.push(item[1]);
+                            }
+                        });
+                        let followsInfo = {
+                            create_at: msg.created_at,
+                            follows: follow_pubkes.concat(),
+                        };
+                        dispatch(setFollows(followsInfo));
                     }
                 }
             }
         });
     };
-    //init param form db or others
-    useEffect(() => {
-        // console.log('use db from reduce');
-        // dispatch(init('redux'));
-        // dispatch(initRelays())
-    }, []);
 
     useEffect(() => {
         if (loggedOut === false) {
@@ -290,7 +247,7 @@ const GFTHead = () => {
                         sx={{ width: "40px", height: "40px" }}
                         // edge="end"
                         alt="GameFi Society"
-                        src={picture}
+                        src={profile.picture ? profile.picture : ''}
                     />
                     <Box
                         sx={{
@@ -313,7 +270,7 @@ const GFTHead = () => {
                             }}
                             color={"#FFFFFF"}
                         >
-                            {display_name}
+                            {profile.display_name ? profile.display_name : 'default'}
                             {/* {display_name !== "default"
                                 ? display_name
                                 : "Nostr#" +
@@ -328,7 +285,7 @@ const GFTHead = () => {
                             }}
                             color={"#919191"}
                         >
-                            {name}
+                            {profile.name ? profile.name : 'default'}
                             {/* {name !== "default"
                                 ? "@" + name
                                 : "@" +
@@ -592,37 +549,55 @@ const GFTHead = () => {
 
     return (
         <AppBar className="head_bg">
-            <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="open drawer"
-                    sx={{ mr: 2 }}
-                    onClick={() => {
-                        console.log("click menu");
-                        dispatch(setOpenMenuLeft(!isOpenMenuLeft));
-                    }}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <CardMedia
-                    component="img"
-                    sx={{ width: 160, cursor: 'pointer' }}
-                    image={ic_logo}
-                    alt="Paella dish"
-                    onClick={clickLogo}
-                />
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Search…"
-                        inputProps={{ "aria-label": "search" }}
+            <Toolbar className="toolbar_bg">
+                <Stack flexDirection='row'>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        sx={{ mr: 2 }}
+                        onClick={() => {
+                            console.log("click menu");
+                            dispatch(setOpenMenuLeft(!isOpenMenuLeft));
+                        }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <CardMedia
+                        component="img"
+                        sx={{ width: 160, cursor: 'pointer' }}
+                        image={ic_logo}
+                        alt="Paella dish"
+                        onClick={clickLogo}
                     />
-                </Search>
-                <Box sx={{ flexGrow: 1 }} />
+                </Stack>
+                <Autocomplete
+                    freeSolo
+                    disableClearable
+                    options={top100Films.map((option) => option)}
+                    renderInput={(params) => (
+                        <TextField
+                            sx={{
+                                width: '420px',
+                                // height: '32px',
+                                // borderRadius: '32px',
+                            }}
+                            {...params}
+                            placeholder="Search input"
+                            value={searchValue}
+                            onChange={(e) => {
+                                if (e.target) {
+                                    setSearchValue(e.target.value);
+                                }
+                            }}
+                            InputProps={{
+                                ...params.InputProps,
+                                type: 'search',
+                            }}
+                        />
+                    )}
+                />
                 {loggedOut === true ? (
                     <Box
                         sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
@@ -698,7 +673,7 @@ const GFTHead = () => {
                                         sx={{ width: 32, height: 32, marginLeft: "12px" }}
                                         edge="end"
                                         alt="GameFi Society"
-                                        src={picture}
+                                        src={profile.picture ? profile.picture : ''}
                                         onClick={handleTooltipOpen}
                                     />
                                 </ProfileTooltip>
