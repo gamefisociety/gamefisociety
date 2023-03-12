@@ -13,8 +13,8 @@ const PublicKeyItem = "pubkey";
 export const InitState = {
   useDb: "redux",
   loggedOut: true,
-  publicKey: undefined,
-  privateKey: undefined,
+  publicKey: '',
+  privateKey: '',
   newUserKey: false,
 };
 

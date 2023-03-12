@@ -124,8 +124,9 @@ const GCardNote = (props) => {
     <Card
       sx={{
         width: "100%",
-        backgroundColor: "transparent",
+        backgroundColor: "background.paper",
       }}
+      elevation={0}
     >
       <CardActionArea
         sx={{
