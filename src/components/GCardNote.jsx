@@ -30,7 +30,7 @@ const GCardNote = (props) => {
 
   useEffect(() => {
     //
-    return () => {};
+    return () => { };
   }, [props]);
 
   const renderContent = (str) => {
@@ -67,6 +67,7 @@ const GCardNote = (props) => {
                 stritem.startsWith("https://")) &&
               (stritem.endsWith(".png") ||
                 stritem.endsWith(".jpg") ||
+                stritem.endsWith(".jpeg") ||
                 stritem.endsWith(".gif"))
             ) {
               // console.log('render image', stritem);
@@ -202,7 +203,7 @@ const GCardNote = (props) => {
               height: "28px",
               marginRight: "28px",
             }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={icon_comment} width="28px" alt="comment" />
           </Button>
@@ -212,7 +213,7 @@ const GCardNote = (props) => {
               width: "28px",
               height: "28px",
             }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={icon_praise} width="28px" alt="praise" />
           </Button>

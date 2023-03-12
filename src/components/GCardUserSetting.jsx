@@ -14,49 +14,35 @@ import './GCardUserSetting.scss';
 
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
 import { System } from 'nostr/NostrSystem';
+import { setProfile } from 'module/store/features/profileSlice';
 
 const GCardUserSetting = (props) => {
 
-    const MetaPro = useMetadataPro();
-
-    const [localProfile, setLocalProfile] = useState({
-        picture: '',
-        banner: '',
-        name: 'default',
-        display_name: 'default',
-        about: 'default',
-        website: 'default',
-        lud06: '',
-        created: 'default',
-    });
+    const { profile } = props;
     const { publicKey, privateKey } = useSelector(s => s.login);
+
+    const [localProfile, setLocalProfile] = useState({});
+
+    const MetaPro = useMetadataPro();
     const dispatch = useDispatch();
 
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
-        localProfile.picture = props.profile.picture;
-        localProfile.banner = props.profile.banner;
-        localProfile.name = props.profile.name;
-        localProfile.display_name = props.profile.display_name;
-        localProfile.about = props.profile.about;
-        localProfile.website = props.profile.website;
-        localProfile.nip05 = props.profile.nip05;
-        localProfile.lud06 = props.profile.lud06;
-        localProfile.created = props.profile.created;
-        setLocalProfile({ ...localProfile });
+        setLocalProfile({ ...profile });
         return () => {
         }
     }, [props])
 
     const saveProfile = async () => {
-        let ev = await MetaPro.modify(localProfile);
-        // console.log('saveProfile', ev);
-        System.BroadcastEvent(ev, (tags, client, msg) => {
-            if (tags === 'OK') {
+        let evMetadata = await MetaPro.modify(localProfile);
+        System.BroadcastEvent(evMetadata, (tags, client, msg) => {
+            if (tags === 'OK' && msg.ret && msg.ret === true) {
+                localProfile.created_at = evMetadata.createAt;
+                dispatch(setProfile(localProfile));
                 setOpen(true)
             }
-            console.log('modify profile msg', tags, msg);
+            // console.log('modify profile msg', tags, msg);
         });
     }
 
