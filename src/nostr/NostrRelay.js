@@ -68,7 +68,7 @@ const NostrRelay = () => {
       let procer = listenProcers.get(tmpKey);
       const tag = msg[0];
       //
-      console.log('relay msg', e.origin, msg);
+      // console.log('relay msg', e.origin, msg);
       //
       if (tag === 'AUTH') {
         if (procer && procer.callback) {

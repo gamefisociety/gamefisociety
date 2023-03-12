@@ -22,7 +22,7 @@ export const useFollowPro = () => {
       if (pubkey) {
         const filter = NostrFactory.createFilter();
         filter['kinds'] = [EventKind.ContactList];
-        filter['authors'] = [pubkey];
+        filter['#p'] = [pubkey];
         return filter;
       }
     },

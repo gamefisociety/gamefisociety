@@ -17,7 +17,7 @@ const TimelineCache = () => {
     return TLCache.get(key);
   }
 
-  const has = (key, pubkey, createAt) => {
+  const hasChat = (key, pubkey, createAt) => {
     let cache = TLCache.get(key);
     if (!cache) {
       return false;
@@ -34,9 +34,9 @@ const TimelineCache = () => {
   const pushChat = (key, pubkey, createAt, content) => {
     let cache = TLCache.get(key);
     if (!cache) {
-      cache = create();
+      cache = create(key);
     }
-    if (has(key, pubkey, createAt) === true) {
+    if (hasChat(key, pubkey, createAt) === true) {
       return false;
     }
     let info = {
@@ -53,12 +53,43 @@ const TimelineCache = () => {
     return true;
   }
 
+  const hasFollower = (key, pubkey) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      return false;
+    }
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].pubkey === pubkey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const pushFollowers = (key, pubkey, msg) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      cache = create(key);
+    }
+    if (hasFollower(key, pubkey) === true) {
+      return false;
+    }
+    let info = {
+      pubkey: pubkey,
+      msg: msg,
+    }
+    cache.push(info);
+    return true;
+  }
+
   return {
     create: create,
     clear: clear,
     get: get,
-    has: has,
+    hasChat: hasChat,
     pushChat: pushChat,
+    hasFollower: hasFollower,
+    pushFollowers: pushFollowers,
   }
 }
 

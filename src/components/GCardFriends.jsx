@@ -5,9 +5,6 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
-import Snackbar from "@mui/material/Snackbar";
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -25,6 +22,8 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
+
+import NormalCache from 'db/NormalCache';
 
 const db = dbCache();
 
@@ -59,11 +58,14 @@ const GCardFriends = (props) => {
   const navigate = useNavigate();
   const followPro = useFollowPro();
 
+  const NorCache = NormalCache();
+
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
-  const { followsData, follows } = useSelector((s) => s.profile);
+  const { follows } = useSelector((s) => s.profile);
   const [tabIndex, setTabIndex] = useState(0);
   const [datas, setDatas] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
@@ -85,14 +87,21 @@ const GCardFriends = (props) => {
     });
   };
 
+  let followers_cache_flag = 'followers';
   const fetchFollowers = () => {
-    let filterFollowing = followPro.getFollowing(publicKey);
-    let subFollowing = BuildSub('following_meta', [filterFollowing]);
+    // TLCache.clear(followers_cache_flag);
+    let filterFollowing = followPro.getFollowings(publicKey);
+    let subFollowing = BuildSub('followings_metadata', [filterFollowing]);
     System.BroadcastSub(subFollowing, (tag, client, msg) => {
-      console.log('following_meta', tag, msg);
+      if (tag === 'EOSE') {
+        System.BroadcastClose(subFollowing, client, null);
+        let cache = NorCache.get(followers_cache_flag);
+        setFollowers(cache.concat());
+      } else if (tag === 'EVENT') {
+        NorCache.pushFollowers(followers_cache_flag, msg.pubkey, msg)
+      }
     });
   };
-
 
   const removeFollow = async (pubkey) => {
     let event = await followPro.removeFollow(pubkey);
@@ -239,7 +248,7 @@ const GCardFriends = (props) => {
             }
           }}
         >
-          {"Followers"}
+          {"Followers " + followers.length}
         </Button>
       </Box>
       {tabIndex === 0 ? renderFollowing() : renderFollowers()}
