@@ -175,6 +175,7 @@ const GFTGlobal = () => {
           setData(data.concat(dataCaches));
         }
       } else if (tag === 'EVENT') {
+        // console.log('text note', msg);
         dataCaches.push(msg);
       }
     },
@@ -337,6 +338,10 @@ const GFTGlobal = () => {
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
           const info = inforData.get(item.pubkey);
+          if (item.tags.length !== 0) {
+            console.log('renderContent item', item);
+            return null;
+          }
           return (
             <GCardNote
               key={"global-note-" + index}
