@@ -140,7 +140,7 @@ const GFTHead = () => {
 
     const fetchMeta = (pubkey, callback) => {
         let filterMeta = MetaPro.get(pubkey);
-        let filterFollow = followPro.get(pubkey);
+        let filterFollow = followPro.getFollows(pubkey);
         let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
         let SetMetadata_create_at = 0;
         let ContactList_create_at = 0;

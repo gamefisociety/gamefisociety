@@ -36,7 +36,7 @@ const GProfile = () => {
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
-    const filterFollowPro = followPro.get(pub);
+    const filterFollowPro = followPro.getFollows(pub);
     let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
     let dataCaches = [];
     let follow_create_at = 0;

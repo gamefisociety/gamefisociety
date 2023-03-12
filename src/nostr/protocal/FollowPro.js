@@ -10,11 +10,18 @@ export const useFollowPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: (pubkey) => {
+    getFollows: (pubkey) => {
       if (pubkey) {
         const filter = NostrFactory.createFilter();
         filter['kinds'] = [EventKind.ContactList];
-        // filter['#p'] = [pubkey];
+        filter['authors'] = [pubkey];
+        return filter;
+      }
+    },
+    getFollowings: (pubkey) => {
+      if (pubkey) {
+        const filter = NostrFactory.createFilter();
+        filter['kinds'] = [EventKind.ContactList];
         filter['authors'] = [pubkey];
         return filter;
       }

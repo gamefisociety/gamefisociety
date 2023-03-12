@@ -57,7 +57,8 @@ const GCardFriends = (props) => {
   const { callback } = props;
 
   const navigate = useNavigate();
-  const FollowPro = useFollowPro();
+  const followPro = useFollowPro();
+
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
   const { followsData, follows } = useSelector((s) => s.profile);
@@ -66,9 +67,6 @@ const GCardFriends = (props) => {
   const dispatch = useDispatch();
 
   const fetchAllMeta = () => {
-    //
-    console.log('fetchAllMeta follows', follows);
-    //
     let pubkeys = [];
     follows.map((item) => {
       pubkeys.push(item);
@@ -87,38 +85,14 @@ const GCardFriends = (props) => {
     });
   };
 
-  const fetchFollowing = () => {
-    if (followsData === 0) {
-      fetchAllMeta();
-    } else if (followsData === 1) {
-      //update
-    }
-  };
-
   const fetchFollowers = () => {
-    let subFollow = FollowPro.get(publicKey);
-    System.Broadcast(subFollow, 0, (msgs) => {
-      if (msgs) {
-        //
-      }
+    let filterFollowing = followPro.getFollowing(publicKey);
+    let subFollowing = BuildSub('following_meta', [filterFollowing]);
+    System.BroadcastSub(subFollowing, (tag, client, msg) => {
+      console.log('following_meta', tag, msg);
     });
   };
 
-  const followPro = useFollowPro();
-  const addFollow = async (pubkey) => {
-    let event = await followPro.addFollow(pubkey);
-    let newFollows = follows.concat();
-    newFollows.push(pubkey);
-    System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === 'OK' && msg.ret === true) {
-        let followsInfo = {
-          create_at: event.CreatedAt,
-          follows: newFollows,
-        };
-        dispatch(setFollows(followsInfo));
-      }
-    })
-  }
 
   const removeFollow = async (pubkey) => {
     let event = await followPro.removeFollow(pubkey);
@@ -137,14 +111,14 @@ const GCardFriends = (props) => {
 
   //
   useEffect(() => {
-    fetchFollowing();
+    if (tabIndex === 0) {
+      fetchAllMeta();
+    } else if (tabIndex === 1) {
+      fetchFollowers();
+    }
     return () => { };
-  }, []);
+  }, [tabIndex]);
 
-  //
-  useEffect(() => {
-    return () => { };
-  }, [follows]);
 
   const renderFollowing = () => {
     if (follows.length === 0) {
