@@ -736,13 +736,23 @@ const GFTHead = () => {
                                     open={profileOpen}
                                     placement="top-end"
                                 >
-                                    <Avatar
-                                        sx={{ width: 32, height: 32, marginLeft: "12px" }}
-                                        edge="end"
-                                        alt="GameFi Society"
-                                        src={profile.picture ? profile.picture : ''}
-                                        onClick={handleTooltipOpen}
-                                    />
+                                    <Stack sx={{
+                                        backgroundColor: 'background.default',
+                                        px: '12px',
+                                        py: '6px',
+                                        borderRadius: '24px'
+                                    }}
+                                        direction='row'
+                                        alignItems='center'
+                                        onClick={handleTooltipOpen}>
+                                        <Avatar
+                                            sx={{ width: 32, height: 32 }}
+                                            edge="end"
+                                            alt="GameFi Society"
+                                            src={profile.picture ? profile.picture : ''}
+                                        />
+                                        <Typography sx={{ ml: '6px' }} color={'text.primary'}>{profile.display_name}</Typography>
+                                    </Stack>
                                 </ProfileTooltip>
                             </Button>
                         </ClickAwayListener>
