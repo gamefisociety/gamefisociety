@@ -613,6 +613,7 @@ const GFTHead = () => {
                 <TextField
                     sx={{
                         width: '450px',
+                        // borderColor: 'white',
                     }}
                     placeholder="Search input"
                     value={searchProp.value}
@@ -622,8 +623,11 @@ const GFTHead = () => {
                         }
                     }}
                     InputProps={{
-                        // ...params.InputProps,
+                        sx: { height: '42px', borderRadius: '24px', },
                         type: 'search',
+                    }}
+                    SelectProps={{
+                        sx: { borderColor: 'red' },
                     }}
                 />
                 <Popover
