@@ -306,13 +306,9 @@ const GFTHead = () => {
                                 fontWeight: "500",
                                 textAlign: "left",
                             }}
-                            color={"#FFFFFF"}
+                            color={'text.primary'}
                         >
-                            {profile.display_name ? profile.display_name : 'default'}
-                            {/* {display_name !== "default"
-                                ? display_name
-                                : "Nostr#" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
+                            {profile.display_name ? profile.display_name : publicKey !== '' ? 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length) : 'gfs'}
                         </Typography>
                         <Typography
                             sx={{
@@ -321,13 +317,9 @@ const GFTHead = () => {
                                 fontWeight: "500",
                                 textAlign: "left",
                             }}
-                            color={"#919191"}
+                            color={'text.secondary'}
                         >
-                            {profile.name ? profile.name : 'default'}
-                            {/* {name !== "default"
-                                ? "@" + name
-                                : "@" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
+                            {profile.name ? '@' + profile.name : publicKey !== '' ? '@' + publicKey.substring(publicKey.length - 4, publicKey.length) : 'gfs'}
                         </Typography>
                     </Box>
                 </Box>
