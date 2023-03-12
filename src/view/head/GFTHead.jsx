@@ -86,6 +86,7 @@ const GFTHead = () => {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const [searchProp, setSearchProp] = React.useState({
         value: '',
+        nip19: false,
         open: false,
         anchorEl: null,
     });
@@ -178,10 +179,13 @@ const GFTHead = () => {
     const handleSearch = (e, value) => {
         searchProp.value = value;
         if (value.startsWith('npub') && value.length === 63) {
+            searchProp.nip19 = true;
             searchProp.open = true;
             searchProp.anchorEl = e.currentTarget;
-        } else if (value.length === 80) {
-            //
+        } else if (value.length === 64) {
+            searchProp.nip19 = false;
+            searchProp.open = true;
+            searchProp.anchorEl = e.currentTarget;
         }
         setSearchProp({ ...searchProp });
     }
@@ -642,8 +646,12 @@ const GFTHead = () => {
                         }}
                         color={'primary'}
                         onClick={() => {
-                            let pub = parseId(searchProp.value);
-                            fetchMeta(pub, searchMetadata);
+                            if (searchProp.nip19 === true) {
+                                let pub = parseId(searchProp.value);
+                                fetchMeta(pub, searchMetadata);
+                            } else {
+                                fetchMeta(searchProp.value, searchMetadata);
+                            }
                             //
                             searchProp.value = '';
                             searchProp.open = false;
