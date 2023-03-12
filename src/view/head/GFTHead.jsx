@@ -700,6 +700,7 @@ const GFTHead = () => {
                             </Button>
                         </Box>
                         <IconButton
+                            sx={{ mr: '12px' }}
                             size="large"
                             aria-label="relay icon"
                             color="inherit"
@@ -707,7 +708,7 @@ const GFTHead = () => {
                         >
                             <PublicIcon />
                         </IconButton>
-                        <IconButton
+                        {/* <IconButton
                             size="large"
                             aria-label="show 4 new mails"
                             color="inherit"
@@ -724,7 +725,7 @@ const GFTHead = () => {
                             <Badge badgeContent={17} color="error">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <ClickAwayListener onClickAway={handleTooltipClose}>
                             <Button>
                                 <ProfileTooltip
