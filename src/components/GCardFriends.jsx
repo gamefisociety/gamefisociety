@@ -15,7 +15,6 @@ import PropTypes from "prop-types";
 
 import "./GCardUser.scss";
 
-import { dbCache } from "db/DbCache";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
@@ -24,8 +23,6 @@ import { BuildSub } from "nostr/NostrUtils";
 import { setFollows } from "module/store/features/profileSlice";
 
 import NormalCache from 'db/NormalCache';
-
-const db = dbCache();
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,28 +65,29 @@ const GCardFriends = (props) => {
   const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
 
-  const fetchAllMeta = () => {
-    let pubkeys = [];
-    follows.map((item) => {
-      pubkeys.push(item);
-    });
+  let metadata_cache_flag = 'metadata_cache';
+  let followers_cache_flag = 'followers_cache';
+  //
+  const fetchAllMeta = (pubkeys) => {
     let filteMeta = MetadataPro.get(pubkeys);
     let subMeta = BuildSub('follow_meta', [filteMeta]);
-    //
     System.BroadcastSub(subMeta, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subMeta, client, null);
-        let dataArrays = db.getAllArray();
-        setDatas(...dataArrays);
+        let metadatas = NorCache.get(metadata_cache_flag);
+        console.log('subMeta', metadatas);
+        if (metadatas) {
+          setDatas(metadatas.concat());
+        }
       } else if (tag === 'EVENT') {
-        db.updateMetaData(msg.pubkey, msg.created_at, msg.content);
+        NorCache.pushMetadata(metadata_cache_flag, msg.pubkey, msg)
       }
     });
   };
 
-  let followers_cache_flag = 'followers';
+  //
   const fetchFollowers = () => {
-    // TLCache.clear(followers_cache_flag);
+    NorCache.clear(followers_cache_flag);
     let filterFollowing = followPro.getFollowings(publicKey);
     let subFollowing = BuildSub('followings_metadata', [filterFollowing]);
     System.BroadcastSub(subFollowing, (tag, client, msg) => {
@@ -103,6 +101,7 @@ const GCardFriends = (props) => {
     });
   };
 
+  //
   const removeFollow = async (pubkey) => {
     let event = await followPro.removeFollow(pubkey);
     let newFollows = follows.concat();
@@ -121,7 +120,7 @@ const GCardFriends = (props) => {
   //
   useEffect(() => {
     if (tabIndex === 0) {
-      fetchAllMeta();
+      fetchAllMeta(follows);
     } else if (tabIndex === 1) {
       fetchFollowers();
     }
@@ -137,10 +136,11 @@ const GCardFriends = (props) => {
       <List>
         {" "}
         {follows.map((pubkey, index) => {
-          const item = db.getMetaData(pubkey);
-          if (!item) {
+          const item = NorCache.getMetadata(metadata_cache_flag, pubkey);
+          if (item === null) {
             return null;
           }
+          let info = JSON.parse(item.content);
           return (
             <ListItem
               sx={{ my: "2px", backgroundColor: "#202020" }}
@@ -162,7 +162,7 @@ const GCardFriends = (props) => {
                 <ListItemAvatar
                   onClick={() => {
                     navigate("/profile", {
-                      state: { info: { ...item.content }, pubkey: pubkey },
+                      state: { info: { ...info }, pubkey: pubkey },
                     });
                     if (callback) {
                       callback();
@@ -171,11 +171,11 @@ const GCardFriends = (props) => {
                 >
                   <Avatar
                     alt={"GameFi Society"}
-                    src={item.content.picture ? item.content.picture : ""}
+                    src={info.picture ? info.picture : ""}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={item.content.name}
+                  primary={info.name}
                   color="text.secondary"
                 />
               </ListItemButton>
