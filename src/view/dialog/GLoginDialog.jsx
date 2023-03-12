@@ -194,7 +194,7 @@ const GLoginDialog = () => {
                 }} color={'text.secondary'} variant={'h5'}>
                     {'EULA'}
                 </DialogContentText>
-                <DialogContent dividers={true} sx={{ border: 0, boxSizing: 'border-box' }}>
+                <DialogContent class={'eula_content'} dividers={true} sx={{ border: 0, boxSizing: 'border-box' }}>
                     <DialogContentText
                         sx={{
                             marginTop: '12px',
