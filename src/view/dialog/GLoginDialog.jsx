@@ -172,7 +172,6 @@ const GLoginDialog = () => {
                     backgroundColor: 'transparent',
                     color: 'text.primary'
                 }}
-                    // variant="contained"
                     color="primary"
                     onClick={() => {
                         setLoginState(100);
@@ -254,7 +253,12 @@ const GLoginDialog = () => {
                 }}>
                     {'Accept'}
                 </Button>
-                <Button sx={{ marginTop: '24px', backgroundColor: 'transparent' }} onClick={handleClose}>
+                <Button sx={{
+                    marginTop: '24px',
+                    backgroundColor: 'transparent',
+                    color: 'text.primary'
+                }}
+                    onClick={handleClose}>
                     {'Reject'}
                 </Button>
             </DialogContent >
@@ -273,19 +277,16 @@ const GLoginDialog = () => {
                     src={logo_blue}
                     alt="Paella dish"
                 />
-                <DialogContentText color="text.secondary" variant={'h6'}>
+                <DialogContentText color="text.secondary" variant={'h5'} sx={{ mt: '40px', width: '100%' }}>
                     {'Please enter your private key!'}
                 </DialogContentText>
                 <TextField
-                    sx={{ mt: '24px' }}
+                    sx={{ mt: '24px', height: '42px' }}
                     autoFocus
-                    margin="dense"
-                    id="name"
-                    label={isNip19 ? "private key start with nsec" : 'private key start with hex'}
+                    placeholder={isNip19 ? "private key start with nsec" : 'private key start with hex'}
                     fullWidth
                     multiline
-                    variant="standard"
-                    error={errorKey}
+                    variant="outlined"
                     onChange={(event) => {
                         setErrorKey(false);
                         keys.pri = event.target.value;
@@ -293,7 +294,7 @@ const GLoginDialog = () => {
                         setKeys({ ...keys });
                     }}
                 />
-                <FormGroup sx={{ width: '100%' }}>
+                <FormGroup sx={{ width: '100%', mt: '12px' }}>
                     <FormControlLabel sx={{ mt: '12px' }} control={<Switch checked={isNip19}
                         onChange={(ev) => {
                             console.log('target', ev.target.checked);
@@ -311,9 +312,9 @@ const GLoginDialog = () => {
                 </Button>
                 <Button sx={{
                     marginTop: '24px',
-                    width: '90%'
+                    backgroundColor: 'transparent',
+                    color: 'text.primary'
                 }}
-                    variant="contained"
                     onClick={handleClose}>
                     {'Cancle'}
                 </Button>
