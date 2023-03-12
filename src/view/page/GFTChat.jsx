@@ -103,15 +103,16 @@ const GFTChat = (props) => {
             }
           });
         } catch (e) {
-
+          //
         }
       }
     });
   }
 
   const unlistenDM = (chatPK) => {
+    console.log('unlistenDM', unlistenDM);
     TLCache.clear(subChat[1]);
-    // System.BroadcastClose(subMeta, client, null);
+    System.BroadcastClose(subChat, null, null);
   }
   //
   useEffect(() => {
