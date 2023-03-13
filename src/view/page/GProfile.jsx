@@ -83,7 +83,7 @@ const GProfile = () => {
       lastPubKey = pubkey;
       fetchTextNote(pubkey);
     }
-    return () => {};
+    return () => { };
   }, [pubkey]);
 
   return (
@@ -146,6 +146,7 @@ const GProfile = () => {
         {notes.map((item, index) => (
           <GCardNote
             key={"profile-note-index" + index}
+            note={{ ...item }}
             pubkey={item.pubkey}
             content={item.content}
             time={item.created_at}

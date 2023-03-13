@@ -21,12 +21,7 @@ const default_avatar =
 const GCardNote = (props) => {
   const navigate = useNavigate();
 
-  const { pubkey, info, content, time } = props;
-
-  const MetaPro = useMetadataPro();
-
-  const { publicKey, privateKey } = useSelector((s) => s.login);
-  const dispatch = useDispatch();
+  const { note, pubkey, info, content, time } = props;
 
   useEffect(() => {
     //
@@ -172,7 +167,7 @@ const GCardNote = (props) => {
           }}
           color="#666666"
         >
-          {xhelp.formateSinceTime(time*1000)}
+          {xhelp.formateSinceTime(time * 1000)}
         </Typography>
       </CardActionArea>
       <Box
@@ -180,6 +175,11 @@ const GCardNote = (props) => {
           width: "100%",
           paddingLeft: "64px",
           paddingRight: "64px",
+        }}
+        onClick={() => {
+          navigate("/notethread", {
+            state: { note: { ...note } },
+          });
         }}
       >
         {/* <CardContent>{content && renderContent(content)}</CardContent> */}

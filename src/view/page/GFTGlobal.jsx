@@ -345,6 +345,7 @@ const GFTGlobal = () => {
           return (
             <GCardNote
               key={"global-note-" + index}
+              note={{ ...item }}
               pubkey={item.pubkey}
               content={item.content}
               time={item.created_at}

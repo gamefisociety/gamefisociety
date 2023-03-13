@@ -37,8 +37,9 @@ export const BuildSub = (subname, filters) => {
 }
 
 export const parseTextNote = (textnote) => {
+    let notestate = 0;
     if (textnote.tags.length === 0) {
-        return { state: 0 }
+        return { state: notestate }
     }
     let eNum = 0;
     let eArray = [];
@@ -51,4 +52,17 @@ export const parseTextNote = (textnote) => {
             pArray.push(item[1]);
         }
     });
+    if (eNum === 1) {
+        notestate = 1;
+    } else if (eNum === 2) {
+        notestate = 2;
+    } else {
+        notestate = 3;
+    }
+    return {
+        state: notestate,
+        eNum: eNum,
+        eArray: eArray.concat(),
+        pArray: pArray.concat(),
+    }
 }
