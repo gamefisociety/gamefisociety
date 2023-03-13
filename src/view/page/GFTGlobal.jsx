@@ -148,7 +148,7 @@ const GFTGlobal = () => {
     filterTextNote.limit = 50;
     let subTextNode = BuildSub('textnode', [filterTextNote]);
     let dataCaches = [];
-    curRelay = "wss://nos.lol";
+    // curRelay = "wss://nos.lol";
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subTextNode, client, null);
@@ -179,7 +179,7 @@ const GFTGlobal = () => {
         dataCaches.push(msg);
       }
     },
-      curRelay
+      null
     );
   };
 
