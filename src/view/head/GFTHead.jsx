@@ -693,7 +693,7 @@ const GFTHead = () => {
                         <Box className="wallet_layout" onClick={openDialog}>
                             <Button
                                 className={'btConnect'}
-                                startIcon={<AdbIcon />}
+                                startIcon={<img src={ic_wallet} width="28px"/>}
                             >
                                 {account ? getChainLows() : "CONNECT"}
                             </Button>

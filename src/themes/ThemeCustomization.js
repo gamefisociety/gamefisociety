@@ -3,7 +3,8 @@ import { useMemo, useState } from 'react';
 // material-ui
 import {
     CssBaseline,
-    StyledEngineProvider
+    StyledEngineProvider,
+    Divider
 } from '@mui/material';
 import {
     experimental_extendTheme as extendTheme,

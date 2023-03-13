@@ -20,6 +20,7 @@ const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 const GGroupChat = Loadable(lazy(() => import('view/page/GGroupChat')));
 const GNoteThread = Loadable(lazy(() => import('view/page/GNoteThread')));
+const GFTWallet = Loadable(lazy(() => import('view/page/GFTWallet')));
 
 const MainRoutes = {
     path: '/',
@@ -92,6 +93,10 @@ const MainRoutes = {
         {
             path: '/notethread',
             element: <GNoteThread />,
+        },
+        {
+            path: '/wallet',
+            element: <GFTWallet />,
         }
 
     ]

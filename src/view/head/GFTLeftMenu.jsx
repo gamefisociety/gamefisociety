@@ -28,6 +28,7 @@ import ic_create from 'asset/image/home/ic_create.png';
 import ic_home from 'asset/image/logo/ic_home.png';
 import ic_chat from 'asset/image/logo/ic_chat.png';
 import ic_sub from 'asset/image/logo/ic_sub.png';
+import ic_menu_wallet from 'asset/image/home/ic_menu_wallet.png';
 
 const mapData = [
     {
@@ -62,6 +63,10 @@ const mapData = [
     {
         txt: 'DIVIDER',
         img: ''
+    },
+    {
+        txt: 'WALLET',
+        img: ic_menu_wallet
     },
     {
         txt: 'NEWS',
@@ -143,6 +148,8 @@ const GFTLeftMenu = () => {
             navigate('/introduce');
         }else if(item.txt === 'GROUP CHAT'){
             navigate('/groupchat');
+        }else if(item.txt === 'WALLET'){
+            navigate('/wallet');
         }
     }
 
@@ -156,7 +163,7 @@ const GFTLeftMenu = () => {
 
     const renderMenu = (item, index) => {
         if (item.txt === 'DIVIDER') {
-            return (<Divider key={'main-menu-' + index} />);
+            return (<Divider  key={'main-menu-' + index} />);
         }
         if (item.out) {
             let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };

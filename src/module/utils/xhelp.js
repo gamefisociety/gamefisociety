@@ -9,14 +9,10 @@ const formateDateInner = (datenum) => {
 };
 
 const formateSinceTimeInner = (timesince) => {
-  console.log("formateSinceTimeInner", timesince);
   const curTime = Number(Date.now());
   const datenum = curTime - Number(timesince);
-  console.log("curTime", curTime);
-  console.log("datenum", datenum);
   if (datenum < 60 * 1000) {
-    let second = Math.floor(datenum / 1000);
-    return second + "s";
+    return "NOW";
   } else if (datenum < 60 * 60 * 1000) {
     let second = Math.floor(datenum / 1000);
     let minute = Math.floor(datenum / 60000);
