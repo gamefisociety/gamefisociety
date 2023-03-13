@@ -18,6 +18,7 @@ import { Stepper, Step, StepLabel, StepContent } from "@mui/material";
 import "./GIntroduce.scss";
 
 import footer_logo from "../../asset/image/logo/footer_logo.png";
+import image_bg from "../../asset/image/introduce/bg.png";
 import logo_nostr from "../../asset/image/introduce/logo_nostr.png";
 import logo_twitter from "../../asset/image/introduce/logo_twitter.png";
 import logo_github from "../../asset/image/introduce/logo_github.png";
@@ -37,7 +38,8 @@ import bg_features_8 from "../../asset/image/introduce/bg_features_8.png";
 const steps = [
   {
     label: "2022-Q4",
-    description: "# Create Project on Github\n# System Design\n# Determine the target,We hope to build a bridge between game developers and users. \n",
+    description:
+      "# Create Project on Github\n# System Design\n# Determine the target,We hope to build a bridge between game developers and users. \n",
   },
   {
     label: "2023-Q1",
@@ -1524,11 +1526,13 @@ const GIntroduce = () => {
       >
         <Box
           sx={{
-            width: "60%",
+            width: "1172px",
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "flex-start",
+            paddingLeft: "20px",
+            paddingRight: "20px",
           }}
         >
           <img src={footer_logo} width="134px" alt="footer_logo" />
@@ -1587,6 +1591,7 @@ const GIntroduce = () => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          zIndex: 2,
         }}
         onClick={() => {
           navigate("/mint");
@@ -1607,31 +1612,103 @@ const GIntroduce = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: "#0F0F0F" }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        position: "relative",
+        backgroundColor: "#0F0F0F",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {renderAD()}
-      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
-        <Grid item xs={12}>
+      <Grid
+        sx={{
+          flexGrow: 1,
+          width: "1420px",
+          //   backgroundColor: "red",
+          position: "relative",
+        }}
+        container
+        spacing={2}
+      >
+        {/* <img className="bg" src={image_bg} width="1300px" alt="image_bg" /> */}
+        <Box
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            zIndex: 0,
+          }}
+        >
+          <img className="bg" src={image_bg} width="1420px" alt="image_bg" />
+        </Box>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderHeader()}
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderPartOne()}
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderTwoNet()}
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderFeatures()}
         </Grid>
         {/* <Grid item xs={12}>
                     {renderToken()}
                 </Grid> */}
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderRoadMap()}
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderUs()}
         </Grid>
-        <Grid item xs={12}>
+        <Grid
+          sx={{
+            zIndex: 2,
+          }}
+          item
+          xs={12}
+        >
           {renderFooter()}
         </Grid>
       </Grid>

@@ -10,3 +10,11 @@
 .ad {
     cursor: pointer;
 }
+
+.bg{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    // transform: scale(0.8);
+    z-index: 0;
+}
