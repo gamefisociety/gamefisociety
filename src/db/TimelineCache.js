@@ -82,6 +82,42 @@ const TimelineCache = () => {
     return true;
   }
 
+  const hasGlobalNote = (key, evid, createAt) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      return false;
+    }
+    let uid = evid + '-' + createAt;
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].uid === uid) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const pushGlobalNote = (key, evid, createAt, msg) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      cache = create(key);
+    }
+    if (hasGlobalNote(key, evid, createAt) === true) {
+      return false;
+    }
+    let info = {
+      uid: evid + '-' + createAt,
+      evid: evid,
+      create: createAt,
+      msg: msg,
+    }
+    cache.push(info);
+    //
+    cache.sort((a, b) => {
+      return a.create - b.create;
+    })
+    return true;
+  }
+
   return {
     create: create,
     clear: clear,
@@ -90,6 +126,7 @@ const TimelineCache = () => {
     pushChat: pushChat,
     hasFollower: hasFollower,
     pushFollowers: pushFollowers,
+    pushGlobalNote: pushGlobalNote,
   }
 }
 

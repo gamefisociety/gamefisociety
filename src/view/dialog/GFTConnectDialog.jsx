@@ -16,7 +16,7 @@ import './GFTConnectDialog.scss';
 const GFTConnectDialog = () => {
     const { enqueueSnackbar } = useSnackbar();
     const injected = new InjectedConnector({
-        supportedChainIds: [ChainId.MATIC],
+        supportedChainIds: [ChainId.MATICTEST],
     })
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const { } = useSelector(s => s.dialog);
@@ -76,31 +76,26 @@ const GFTConnectDialog = () => {
     const activateMask = async () => {
         try {
             await activate(injected, undefined, true).then(res => {
+                console.log(res,"aaaa");
                 cancelDialog();
             }).catch(error => {
-                enqueueSnackbar(error, {
-                    variant: "error",
-                    anchorOrigin: { horizontal: "center", vertical: "top" }
-                });
+                console.log(error,"aaaaa");
             })
         } catch (ex) {
-            enqueueSnackbar(ex, {
-                variant: "error",
-                anchorOrigin: { horizontal: "center", vertical: "top" }
-            });
+
             console.log(ex, "ex");
         }
     }
 
     const connectedClick = () => {
         console.log(chainId);
-        if (chainId !== ChainId.MATIC) {
-            changeNetwork(ChainId.MATIC).then(res => {
+        if (chainId !== ChainId.MATICTEST) {
+            changeNetwork(ChainId.MATICTEST).then(res => {
                 activateMask();
             })
             return;
         }
-        activateMask();
+        // activateMask();
     }
 
     const getChainLows = () => {
