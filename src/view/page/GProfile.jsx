@@ -1,11 +1,12 @@
 import { React, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Drawer from "@mui/material/Drawer";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
+import Typography from "@mui/material/Typography";
 import GFTChat from "./GFTChat";
 
 import { EventKind } from "nostr/def";
@@ -13,13 +14,14 @@ import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { BuildSub } from "nostr/NostrUtils";
 import { System } from "nostr/NostrSystem";
-
+import icon_back from "../../asset/image/social/icon_back.png";
 import "./GProfile.scss";
 
 let lastPubKey = "";
 
 const GProfile = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   console.log("GProfile enter", location);
   const { info, pubkey } = location.state;
   //
@@ -38,34 +40,39 @@ const GProfile = () => {
     // filterTextNote['#p'] = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
-    let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
+    let textNote = BuildSub("profile_note_follow", [
+      filterTextNote,
+      filterFollowPro,
+    ]);
     let dataCaches = [];
     let follow_create_at = 0;
     // console.log('BroadcastSub textNote', textNote);
-    System.BroadcastSub(textNote, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        setNotes(dataCaches.concat());
-        System.BroadcastClose(textNote, client, null);
-      } else if (tag === 'EVENT') {
-        if (msg.kind === EventKind.TextNote) {
-          console.log('BroadcastSub textNote', msg);
-          dataCaches.push(msg);
-        } else if (msg.kind === EventKind.ContactList) {
-          console.log('profile_note_follow', client.addr, msg);
-          if (msg.created_at < follow_create_at) {
-            return;
-          }
-          follow_create_at = msg.created_at;
-          if (msg.content && msg.content !== '') {
-            let relays = JSON.parse(msg.content);
-            setOwnRelays(relays);
-          }
-          if (msg.tags && msg.tags.length > 0) {
-            setOwnFollows(msg.tags.concat());
+    System.BroadcastSub(
+      textNote,
+      (tag, client, msg) => {
+        if (tag === "EOSE") {
+          setNotes(dataCaches.concat());
+          System.BroadcastClose(textNote, client, null);
+        } else if (tag === "EVENT") {
+          if (msg.kind === EventKind.TextNote) {
+            console.log("BroadcastSub textNote", msg);
+            dataCaches.push(msg);
+          } else if (msg.kind === EventKind.ContactList) {
+            console.log("profile_note_follow", client.addr, msg);
+            if (msg.created_at < follow_create_at) {
+              return;
+            }
+            follow_create_at = msg.created_at;
+            if (msg.content && msg.content !== "") {
+              let relays = JSON.parse(msg.content);
+              setOwnRelays(relays);
+            }
+            if (msg.tags && msg.tags.length > 0) {
+              setOwnFollows(msg.tags.concat());
+            }
           }
         }
-      }
-    },
+      },
       null
     );
   };
@@ -76,7 +83,7 @@ const GProfile = () => {
       lastPubKey = pubkey;
       fetchTextNote(pubkey);
     }
-    return () => { };
+    return () => {};
   }, [pubkey]);
 
   return (
@@ -91,6 +98,41 @@ const GProfile = () => {
         my: "24px",
       }}
     >
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box
+          className={"goback"}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <img src={icon_back} width="38px" alt="icon_back" />
+          <Typography
+            sx={{
+              marginLeft: "5px",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+          >
+            {"Global"}
+          </Typography>
+        </Box>
+      </Box>
       <GCardUser
         profile={{ ...info }}
         pubkey={pubkey}

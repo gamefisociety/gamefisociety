@@ -55,10 +55,10 @@ const mapData = [
     //     txt: 'MINT AVATAR',
     //     img: ic_free_nft
     // },
-    {
-        txt: 'SWAP IN',
-        img: ic_swap
-    },
+    // {
+    //     txt: 'SWAP IN',
+    //     img: ic_swap
+    // },
     {
         txt: 'DIVIDER',
         img: ''

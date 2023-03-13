@@ -98,8 +98,8 @@ const GIntroduce = () => {
                 fontSize: "54px",
                 fontFamily: "Saira",
                 fontWeight: "600",
+                color: "#FFFFFF",
               }}
-              color={"#FFFFFF"}
             >
               {"GameFi Society"}
             </Typography>
@@ -108,8 +108,8 @@ const GIntroduce = () => {
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#FFFFFF",
               }}
-              color={"#FFFFFF"}
             >
               {
                 "A truly decentralized game social media, all information is the real reaction of users."
@@ -201,8 +201,8 @@ const GIntroduce = () => {
               fontFamily: "Saira",
               fontWeight: "600",
               marginBottom: "20px",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {"Nostr & Polygon"}
           </Typography>
@@ -245,8 +245,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# keypairs to user system, say no to email & phone "}
                 </Typography>
@@ -255,8 +255,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# Encrypted private chat days "}
                 </Typography>
@@ -265,8 +265,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# Feel free to post to the relays "}
                 </Typography>
@@ -275,8 +275,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# Content that never goes away "}
                 </Typography>
@@ -285,8 +285,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# Censorship resistant content "}
                 </Typography>
@@ -322,8 +322,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# GFS Token ecology "}
                 </Typography>
@@ -332,8 +332,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# NFT mint & market "}
                 </Typography>
@@ -342,8 +342,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# Store key information on the chain "}
                 </Typography>
@@ -352,8 +352,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# High-quality content on the chain "}
                 </Typography>
@@ -362,8 +362,8 @@ const GIntroduce = () => {
                     fontSize: "14px",
                     fontFamily: "Saira",
                     fontWeight: "500",
+                    color: "#FFFFFF",
                   }}
-                  color={"#FFFFFF"}
                 >
                   {"# GameFi Society DAO "}
                 </Typography>
@@ -405,8 +405,8 @@ const GIntroduce = () => {
               fontFamily: "Saira",
               fontWeight: "600",
               marginBottom: "20px",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {"Features"}
           </Typography>
@@ -481,8 +481,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can freely publish posts to the relays, and can also private message each other through the relays"
@@ -541,8 +541,8 @@ const GIntroduce = () => {
                       fontSize: "18px",
                       fontFamily: "Saira",
                       fontWeight: "500",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {"Follows"}
                   </Typography>
@@ -552,8 +552,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can follow each other and be followed by each other."
@@ -623,8 +623,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can spend some fees to push content to the blockchain. Obtain the display of the platform,"
@@ -694,8 +694,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can purchase, bid for slots on the platform, and place their own content for display."
@@ -765,8 +765,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can push game items to the platform to get more traffic."
@@ -825,8 +825,8 @@ const GIntroduce = () => {
                       fontSize: "18px",
                       fontFamily: "Saira",
                       fontWeight: "500",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {"Topic Group"}
                   </Typography>
@@ -836,8 +836,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "19px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users join topic groups and can communicate around fixed topics. These subjects can be games,hobbies, news, etc."
@@ -896,8 +896,8 @@ const GIntroduce = () => {
                       fontSize: "18px",
                       fontFamily: "Saira",
                       fontWeight: "500",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {"NFT Swap & Mint"}
                   </Typography>
@@ -907,8 +907,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can mint NFT, issue their own NFT, and conduct NFT transactions in the NFT market."
@@ -978,8 +978,8 @@ const GIntroduce = () => {
                       fontFamily: "Saira",
                       fontWeight: "500",
                       lineHeight: "22px",
+                      color: "#FFFFFF",
                     }}
-                    color={"#FFFFFF"}
                   >
                     {
                       "Users can participate in ecological governance, content review and receive certain rewards."
@@ -1061,8 +1061,8 @@ const GIntroduce = () => {
               fontFamily: "Saira",
               fontWeight: "600",
               marginBottom: "20px",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {"RoadMap"}
           </Typography>
@@ -1126,8 +1126,8 @@ const GIntroduce = () => {
               fontFamily: "Saira",
               fontWeight: "600",
               marginBottom: "20px",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {"Join our community"}
           </Typography>
@@ -1543,8 +1543,8 @@ const GIntroduce = () => {
               fontSize: "12px",
               fontFamily: "Saira",
               fontWeight: "500",
+              color: "#909090",
             }}
-            color={"#909090"}
           >
             {"The gamefi paradise of the world"}
           </Typography>
@@ -1602,8 +1602,8 @@ const GIntroduce = () => {
             fontSize: "18px",
             fontFamily: "Saira",
             fontWeight: "500",
+            color: "#FFFFFF",
           }}
-          color={"#FFFFFF"}
         >
           {"1000x Freemint GameFi Society Avatar NFTs"}
         </Typography>
