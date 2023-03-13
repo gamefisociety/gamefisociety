@@ -3,11 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Divider } from "@mui/material/index";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Button, CardActions } from "@mui/material";
@@ -16,10 +11,11 @@ import { useRelayPro } from "nostr/protocal/RelayPro";
 import { System } from "nostr/NostrSystem";
 import { EventKind } from "nostr/def";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddTaskIcon from '@mui/icons-material/AddTask';
 import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import { DefaultRelays } from "nostr/Const";
-
+import logo_delete from "../asset/image/social/icon_delete.png";
 import "./GCardRelays.scss";
 let deletingRealy = "";
 const GCardRelays = () => {
@@ -114,6 +110,7 @@ const GCardRelays = () => {
         <Box
           key={"relaycard-index-" + index}
           sx={{
+            position: "relative",
             width: "100%",
             height: "36px",
             display: "flex",
@@ -140,27 +137,21 @@ const GCardRelays = () => {
             sx={{ ml: "6px", width: "12px", height: "12px" }}
             color={item[1].write ? "success" : "error"}
           />
-          <IconButton
+          <Button
+            variant="contained"
             sx={{
-              ml: "6px",
               position: "absolute",
-              right: "32px",
-              width: "24px",
-              height: "24px",
+              right: "-20px",
+              width: "40px",
+              backgroundColor: "transparent",
             }}
             onClick={() => {
-              //   deleteRelays(item[0]);
               deletingRealy = item[0];
               handleClickDialogOpen();
             }}
           >
-            <RemoveCircleOutlineIcon
-              sx={{
-                width: "24px",
-                height: "24px",
-              }}
-            />
-          </IconButton>
+            <img src={logo_delete} width="40px" alt="copy" />
+          </Button>
         </Box>
       );
     });
@@ -173,6 +164,7 @@ const GCardRelays = () => {
         <Box
           key={"add-new-relay-" + index}
           sx={{
+            position: "relative",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
@@ -180,7 +172,7 @@ const GCardRelays = () => {
           }}
         >
           <TextField
-            sx={{ width: "80%" }}
+            sx={{ width: "60%" }}
             value={item}
             margin="dense"
             size="small"
@@ -189,21 +181,37 @@ const GCardRelays = () => {
               setNewRelays(newRelays.concat());
             }}
           />
-          <IconButton
+          <Box
             sx={{
-              ml: "6px",
               position: "absolute",
-              right: "32px",
-              width: "24px",
-              height: "24px",
-            }}
-            onClick={() => {
-              newRelays.splice(index, 1);
-              setNewRelays(newRelays.concat());
+              right: "-20px",
             }}
           >
-            <RemoveCircleOutlineIcon sx={{ width: "24px", height: "24px" }} />
-          </IconButton>
+            <IconButton
+              sx={{
+                width: "24px",
+                height: "24px",
+              }}
+              onClick={() => {
+                saveRelays();
+              }}
+            >
+              <AddTaskIcon sx={{ width: "24px", height: "24px" }} />
+            </IconButton>
+            <Button
+              variant="contained"
+              sx={{
+                width: "40px",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => {
+                newRelays.splice(index, 1);
+                setNewRelays(newRelays.concat());
+              }}
+            >
+              <img src={logo_delete} width="40px" alt="copy" />
+            </Button>
+          </Box>
         </Box>
       );
     });
@@ -267,22 +275,7 @@ const GCardRelays = () => {
           justifyContent: "space-evenly",
         }}
       >
-        {newRelays.length > 0 && (
-          <Button
-            variant="text"
-            sx={{
-              width: "80px",
-              fontSize: "20px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              fontColor: "#454FBF",
-            }}
-            onClick={saveRelays}
-          >
-            {"Save"}
-          </Button>
-        )}
-        {loggedOut === false && (
+        {/* {loggedOut === false && (
           <Button
             variant="text"
             sx={{
@@ -296,7 +289,7 @@ const GCardRelays = () => {
           >
             {"Sync"}
           </Button>
-        )}
+        )} */}
       </CardActions>
       <Stack
         sx={{
@@ -315,24 +308,85 @@ const GCardRelays = () => {
       >
         {renderCacheRelays()}
       </Stack>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure you want to delete this relay?"}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={() => {
-            deleteRelays(deletingRealy);
-            handleDialogClose();
-          }} autoFocus>
-            Sure
+
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <Box
+          sx={{
+            width: "400px",
+            height: "463px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            backgroundColor: "#0F0F0F",
+            paddingLeft: "24px",
+            paddingRight: "24px",
+          }}
+        >
+          <Typography
+            color={"#919191"}
+            sx={{
+              marginTop: "75px",
+              fontSize: "24px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              lineHeight: "29px",
+              textAlign: "center",
+            }}
+          >
+            {"Are you sure to delete this repeater"}
+          </Typography>
+          <Typography
+            color={"#919191"}
+            sx={{
+              marginTop: "25px",
+              fontSize: "24px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              lineHeight: "29px",
+              textAlign: "center",
+            }}
+          >
+            {"This operation cannot be undone"}
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "69px",
+              width: "100%",
+              height: "48px",
+              fontSize: "16px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              backgroundColor: "#FF0000",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+            }}
+            onClick={() => {
+              deleteRelays(deletingRealy);
+              handleDialogClose();
+            }}
+          >
+            {"Confirm"}
           </Button>
-        </DialogActions>
+          <Button
+            variant="text"
+            sx={{
+              marginTop: "35px",
+              width: "100%",
+              height: "48px",
+              fontSize: "16px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            onClick={() => {
+              handleDialogClose();
+            }}
+          >
+            {"Cancel"}
+          </Button>
+        </Box>
       </Dialog>
     </Box>
   );
