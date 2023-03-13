@@ -232,8 +232,9 @@ const GFTHead = () => {
     }, [loggedOut]);
 
     const openProfile = () => {
-        // fetchMeta();
-        navigate("/setting");
+        navigate("/profile", {
+            state: { info: { ...profile }, pubkey: publicKey },
+        });
         handleMenuClose();
     };
 
@@ -257,6 +258,12 @@ const GFTHead = () => {
             })
         );
     };
+
+    const openSetting = () => {
+        navigate("/setting");
+        handleMenuClose();
+    };
+
 
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
@@ -427,7 +434,7 @@ const GFTHead = () => {
                         height: "36px",
                     }}
                     onClick={() => {
-                        // openProfile();
+                        openSetting();
                     }}
                 >
                     <img
