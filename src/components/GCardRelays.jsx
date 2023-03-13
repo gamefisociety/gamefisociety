@@ -10,12 +10,12 @@ import { setRelays, removeRelay } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import { System } from "nostr/NostrSystem";
 import { EventKind } from "nostr/def";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import AddTaskIcon from '@mui/icons-material/AddTask';
+import AddTaskIcon from "@mui/icons-material/AddTask";
 import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import { DefaultRelays } from "nostr/Const";
 import logo_delete from "../asset/image/social/icon_delete.png";
+import icon_save from "../asset/image/social/icon_save.png";
 import "./GCardRelays.scss";
 let deletingRealy = "";
 const GCardRelays = () => {
@@ -187,7 +187,7 @@ const GCardRelays = () => {
               right: "-20px",
             }}
           >
-            <IconButton
+            {/* <IconButton
               sx={{
                 width: "24px",
                 height: "24px",
@@ -197,7 +197,20 @@ const GCardRelays = () => {
               }}
             >
               <AddTaskIcon sx={{ width: "24px", height: "24px" }} />
-            </IconButton>
+            </IconButton> */}
+            <Button
+              variant="contained"
+              sx={{
+                width: "30px",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => {
+                saveRelays();
+              }}
+            >
+              <img src={icon_save} width="30px" alt="icon_save" />
+            </Button>
+
             <Button
               variant="contained"
               sx={{
@@ -209,7 +222,7 @@ const GCardRelays = () => {
                 setNewRelays(newRelays.concat());
               }}
             >
-              <img src={logo_delete} width="40px" alt="copy" />
+              <img src={logo_delete} width="40px" alt="logo_delete" />
             </Button>
           </Box>
         </Box>

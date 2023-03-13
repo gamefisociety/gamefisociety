@@ -152,8 +152,8 @@ const GMintNFT = () => {
                 fontSize: "15px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#FFFFFF",
               }}
-              color={"#FFFFFF"}
             >
               {"Polygon Mainnet"}
             </Typography>
@@ -174,8 +174,8 @@ const GMintNFT = () => {
                   fontSize: "15px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#FFFFFF",
                 }}
-                color={"#FFFFFF"}
               >
                 {!account
                   ? "Connect Wallet"
@@ -236,8 +236,8 @@ const GMintNFT = () => {
               fontFamily: "Saira",
               fontWeight: "600",
               lineHeight: "28px",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {nftInfo.name}
           </Typography>
@@ -247,8 +247,8 @@ const GMintNFT = () => {
               fontSize: "20px",
               fontFamily: "Saira",
               fontWeight: "500",
+              color: "#FFFFFF",
             }}
-            color={"#FFFFFF"}
           >
             {nftInfo.description}
           </Typography>
@@ -267,8 +267,8 @@ const GMintNFT = () => {
                 fontSize: "16px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#919191",
               }}
-              color={"#919191"}
             >
               {"CONTRACT LINK"}
             </Typography>
@@ -303,8 +303,8 @@ const GMintNFT = () => {
               fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
+              color: "#919191",
             }}
-            color={"#919191"}
           >
             {"Follow the steps to get more GameFi Society NFTs"}
           </Typography>
@@ -346,8 +346,8 @@ const GMintNFT = () => {
                 fontSize: "18px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#0F0F0F",
               }}
-              color={"#0F0F0F"}
             >
               {"Join our community"}
             </Typography>
@@ -379,8 +379,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#0F0F0F",
                 }}
-                color={"#0F0F0F"}
               >
                 {"Twitter(@GameFi_Society)"}
               </Typography>
@@ -398,8 +398,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#85BBE6",
                 }}
-                color={"#85BBE6"}
               >
                 {"Connect"}
               </Typography>
@@ -432,8 +432,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#0F0F0F",
                 }}
-                color={"#0F0F0F"}
               >
                 {"Discord"}
               </Typography>
@@ -451,8 +451,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#85BBE6",
                 }}
-                color={"#85BBE6"}
               >
                 {"Connect"}
               </Typography>
@@ -485,8 +485,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#0F0F0F",
                 }}
-                color={"#0F0F0F"}
               >
                 {"Telegram"}
               </Typography>
@@ -504,8 +504,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#85BBE6",
                 }}
-                color={"#85BBE6"}
               >
                 {"Connect"}
               </Typography>
@@ -529,8 +529,8 @@ const GMintNFT = () => {
                 fontSize: "18px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#0F0F0F",
               }}
-              color={"#0F0F0F"}
             >
               {"Fill out the google form"}
             </Typography>
@@ -561,8 +561,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#0F0F0F",
                 }}
-                color={"#0F0F0F"}
               >
                 {"Google Form"}
               </Typography>
@@ -581,8 +581,8 @@ const GMintNFT = () => {
                   fontSize: "14px",
                   fontFamily: "Saira",
                   fontWeight: "500",
+                  color: "#85BBE6",
                 }}
-                color={"#85BBE6"}
               >
                 {"Connect"}
               </Typography>
@@ -606,8 +606,8 @@ const GMintNFT = () => {
                 fontSize: "18px",
                 fontFamily: "Saira",
                 fontWeight: "500",
+                color: "#0F0F0F",
               }}
-              color={"#0F0F0F"}
             >
               {"Mint Avatar NFT"}
             </Typography>
