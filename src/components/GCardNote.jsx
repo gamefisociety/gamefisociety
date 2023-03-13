@@ -172,7 +172,7 @@ const GCardNote = (props) => {
           }}
           color="#666666"
         >
-          {xhelp.formateSinceTime(time)}
+          {xhelp.formateSinceTime(time*1000)}
         </Typography>
       </CardActionArea>
       <Box
