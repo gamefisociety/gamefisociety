@@ -148,6 +148,8 @@ const GFTLeftMenu = () => {
             navigate('/introduce');
         }else if(item.txt === 'GROUP CHAT'){
             navigate('/groupchat');
+        }else if(item.txt === 'WALLET'){
+            navigate('/wallet');
         }
     }
 
