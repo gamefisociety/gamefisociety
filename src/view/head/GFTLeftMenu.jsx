@@ -156,7 +156,7 @@ const GFTLeftMenu = () => {
 
     const renderMenu = (item, index) => {
         if (item.txt === 'DIVIDER') {
-            return (<Divider key={'main-menu-' + index} />);
+            return (<Divider sx={{  backgroundColor: "#00000000" }} key={'main-menu-' + index} />);
         }
         if (item.out) {
             let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };
