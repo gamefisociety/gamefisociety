@@ -32,9 +32,10 @@ const GProfile = () => {
   const followPro = useFollowPro();
   const fetchTextNote = (pub) => {
     //
-    const curRelay = "wss://nos.lol";
+    // const curRelay = "wss://nos.lol";
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
+    // filterTextNote['#p'] = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
     let textNote = BuildSub('profile_note_follow', [filterTextNote, filterFollowPro]);
@@ -47,6 +48,7 @@ const GProfile = () => {
         System.BroadcastClose(textNote, client, null);
       } else if (tag === 'EVENT') {
         if (msg.kind === EventKind.TextNote) {
+          console.log('BroadcastSub textNote', msg);
           dataCaches.push(msg);
         } else if (msg.kind === EventKind.ContactList) {
           console.log('profile_note_follow', client.addr, msg);
@@ -64,7 +66,7 @@ const GProfile = () => {
         }
       }
     },
-      curRelay
+      null
     );
   };
 
@@ -76,13 +78,6 @@ const GProfile = () => {
     }
     return () => { };
   }, [pubkey]);
-
-  //
-  useEffect(() => {
-    return () => {
-      //
-    };
-  }, []);
 
   return (
     <Box
