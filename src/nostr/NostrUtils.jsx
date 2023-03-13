@@ -35,3 +35,20 @@ export const BuildSub = (subname, filters) => {
     })
     return ret;
 }
+
+export const parseTextNote = (textnote) => {
+    if (textnote.tags.length === 0) {
+        return { state: 0 }
+    }
+    let eNum = 0;
+    let eArray = [];
+    let pArray = [];
+    textnote.tags.map(item => {
+        if (item[0] === 'e') {
+            eArray.push(item[1]);
+            eNum = eNum + 1;
+        } else if (item[0] === 'p') {
+            pArray.push(item[1]);
+        }
+    });
+}
