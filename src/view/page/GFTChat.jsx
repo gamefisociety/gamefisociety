@@ -14,26 +14,14 @@ import Button from "@mui/material/Button";
 import { VariableSizeList as List } from "react-window";
 import closeImg from "./../../asset/image/social/close.png";
 import dmLeftImg from "./../../asset/image/social/dm_left.png";
-import {
-  nip05,
-  nip04,
-  SimplePool,
-  relayInit,
-  generatePrivateKey,
-  getPublicKey,
-  getEventHash,
-  signEvent,
-  validateEvent,
-  verifySignature,
-} from "nostr-tools";
-import { alpha, styled } from "@mui/material/styles";
 import { useChatPro } from "nostr/protocal/ChatPro";
 import { System } from "nostr/NostrSystem";
-import useNostrEvent from "nostr/NostrEvent";
-
-const relay = relayInit("wss://relay.damus.io");
+import { BuildSub } from "nostr/NostrUtils";
+import TimelineCache from 'db/TimelineCache';
+import useNostrEvent from 'nostr/NostrEvent';
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
+  //
   const rowRef = useRef();
   const item = data[index];
   useEffect(() => {
@@ -65,7 +53,7 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
         color="#FFFFFF"
         align={"left"}
       >
-        {item.decontent}
+        {item.content}
       </Typography>
     </Box>
   );
@@ -73,106 +61,84 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
 
 const GFTChat = (props) => {
   const listRef = useRef();
-  const { chatPK } = props;
-  const nostrEvent = useNostrEvent();
-  const publicKey = useSelector((s) => s.login.publicKey);
-  const privateKey = useSelector((s) => s.login.privateKey);
+  const { chatPK, chatProfile } = props;
+  const { publicKey, privateKey } = useSelector((s) => s.login);
   const chatPro = useChatPro();
   const [chatData, setChatData] = useState([]);
   const [inValue, setInValue] = useState("");
+  const [subChat, setSubChat] = useState([]);
+
+  const nostrEvent = useNostrEvent();
+
+  const TLCache = TimelineCache();
+
   const sizeMap = useRef({});
+
   const setSize = useCallback((index, size) => {
     sizeMap.current = { ...sizeMap.current, [index]: size };
     listRef.current.resetAfterIndex(index);
   }, []);
   const getSize = (index) => sizeMap.current[index] || 50;
-  useEffect(() => {
-    getDMs();
-    return () => {
-      chatData.splice(0, chatData.length);
-      setChatData([...chatData]);
-    };
-  }, []);
-
-  const decodeContent = (sk, pk, content) => {
-    return nip04.decrypt(sk, pk, content);
-  };
-
-  // const getDataList = (key, key1) => {
-  //   let sub = relay.sub([
-  //     {
-  //       kinds: [4],
-  //       authors: [key, key1],
-  //       "#p": [key1, key],
-  //     },
-  //   ]);
-  //   let data = [...chatData];
-  //   sub.on("event", (event) => {
-  //     decodeContent(privateKey, key1, event.content).then((res) => {
-  //       event.contentObj = res;
-  //       data.push(event);
-  //       data.sort((a, b) => {
-  //         return a.created_at - b.created_at;
-  //       });
-  //       setChatData([...data]);
-  //     });
-  //     console.log("getDataList", event);
-  //   });
-  //   sub.on("eose", () => {
-  //     console.log("sub list eose event", data);
-  //     // sub.unsub()
-  //   });
-
-  //   sub.off("event", () => {
-  //     console.log("off event");
-  //   });
-
-  //   sub.off("eose", () => {
-  //     console.log("off eose event");
-  //   });
-  // };
-
-  const getDMs = () => {
-    const chatNode = chatPro.get(publicKey, chatPK);
-    console.log("chatNode", chatNode);
-    System.BroadcastSub(chatNode, 0, (msgs) => {
-      console.log("getDMs user chat sub", msgs);
-      if (msgs && msgs.length > 0) {
-        let t_chatData = [];
-        msgs.map((item, index) => {
-          decodeContent(privateKey, publicKey, item.content).then((demsg) => {
-            item.decontent = demsg;
-            t_chatData.push(item);
-            t_chatData.sort((a, b) => {
-              return a.created_at - b.created_at;
-            });
-            console.log(demsg);
-            setChatData([...t_chatData]);
+  //
+  const listenDM = (targetPubkey) => {
+    const filterDM = chatPro.get(targetPubkey);
+    let subDM = BuildSub('chat_with', [filterDM]);
+    TLCache.create(subChat[1]);
+    //
+    setSubChat(subDM.concat());
+    System.BroadcastSub(subDM, (tag, client, msg) => {
+      if (tag === 'EVENT') {
+        try {
+          nostrEvent.DecryptData(msg.content, privateKey, targetPubkey).then((dmsg) => {
+            if (dmsg) {
+              let flag = TLCache.pushChat(subChat[1], msg.pubkey, msg.created_at, dmsg);
+              if (flag === false) {
+                return;
+              }
+              let chat_datas = TLCache.get(subChat[1]);
+              if (chat_datas) {
+                setChatData(chat_datas.concat());
+              }
+              // console.log('dm targetPubkey', chat_datas);
+            }
           });
-        });
+        } catch (e) {
+          //
+        }
       }
     });
-  };
+  }
+
+  const unlistenDM = (chatPK) => {
+    console.log('unlistenDM', unlistenDM);
+    TLCache.clear(subChat[1]);
+    System.BroadcastClose(subChat, null, null);
+  }
+  //
+  useEffect(() => {
+    listenDM(chatPK);
+    return () => {
+      unlistenDM()
+    };
+  }, [chatPK]);
 
   const sendDM = async () => {
     if (inValue.length === 0) {
       return;
     }
-    const chatNode = await chatPro.send(publicKey, chatPK, undefined, inValue);
-    const curRelays = [];
-    curRelays.push("wss://nos.lol");
-    //
-    console.log("chatnode", chatNode);
-    System.Broadcast(
-      chatNode,
-      1,
-      (msgs) => {
-        console.log("sendDM user chat sub", msgs);
-        if (msgs && msgs.length > 0) {
-          setInValue("");
+    const chatEv = await chatPro.send(chatPK, inValue);
+    System.BroadcastEvent(chatEv, (tag, client, msg) => {
+      if (tag === 'OK' && msg.ret && msg.ret === true) {
+        let flag = TLCache.pushChat(subChat[1], publicKey, chatEv.CreatedAt, inValue);
+        if (flag === false) {
+          return;
         }
-      },
-      curRelays
+        let chat_datas = TLCache.get(subChat[1]);
+        if (chat_datas) {
+          setChatData(chat_datas.concat());
+        }
+      }
+    }
     );
   };
 

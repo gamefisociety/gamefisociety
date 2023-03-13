@@ -52,7 +52,7 @@ const GCardUser = (props) => {
         };
         dispatch(setFollows(followsInfo));
       }
-    })
+    });
   }
 
   const removeFollow = async (pubkey) => {

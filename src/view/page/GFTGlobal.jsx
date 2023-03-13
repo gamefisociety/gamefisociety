@@ -175,6 +175,7 @@ const GFTGlobal = () => {
           setData(data.concat(dataCaches));
         }
       } else if (tag === 'EVENT') {
+        // console.log('text note', msg);
         dataCaches.push(msg);
       }
     },
@@ -212,27 +213,29 @@ const GFTGlobal = () => {
           flexDirection: "row",
           alighItems: "center",
           justifyContent: "space-around",
-          // backgroundColor: 'red'
+          backgroundColor: 'background.paper'
         }}
       >
         <Typography
+          className={'top_button'}
           sx={{ px: "18px", py: "6px" }}
           variant="subtitle2"
-          color="primary"
-          backgroundColor={"gray"}
+          color="text.primary"
+          backgroundColor={"background.default"}
           align={"center"}
           borderRadius={"4px"}
           onClick={() => {
             // setCurLable(item);
           }}
         >
-          {"Post&Replay"}
+          {"Post & Replay"}
         </Typography>
         <Typography
+          className={'top_button'}
           sx={{ px: "18px", py: "6px" }}
           variant="subtitle2"
-          color="primary"
-          backgroundColor={"gray"}
+          color="text.primary"
+          backgroundColor={"background.default"}
           align={"center"}
           borderRadius={"4px"}
           onClick={() => {
@@ -242,10 +245,11 @@ const GFTGlobal = () => {
           {"Global"}
         </Typography>
         <Typography
+          className={'top_button'}
           sx={{ px: "18px", py: "6px" }}
           variant="subtitle2"
-          color="primary"
-          backgroundColor={"gray"}
+          color="text.primary"
+          backgroundColor={"background.default"}
           align={"center"}
           borderRadius={"4px"}
           onClick={() => {
@@ -255,10 +259,11 @@ const GFTGlobal = () => {
           {"DMs"}
         </Typography>
         <Typography
+          className={'top_button'}
           sx={{ px: "18px", py: "6px" }}
           variant="subtitle2"
-          color="primary"
-          backgroundColor={"gray"}
+          color="text.primary"
+          backgroundColor={"background.default"}
           align={"center"}
           borderRadius={"4px"}
           onClick={() => {
@@ -330,11 +335,13 @@ const GFTGlobal = () => {
 
   const renderContent = () => {
     return (
-      <List
-        sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}
-      >
+      <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
           const info = inforData.get(item.pubkey);
+          if (item.tags.length !== 0) {
+            console.log('renderContent item', item);
+            return null;
+          }
           return (
             <GCardNote
               key={"global-note-" + index}
@@ -350,16 +357,9 @@ const GFTGlobal = () => {
   };
 
   return (
-    <Paper
-      style={{
-        minHeight: "800px",
-        width: "100%",
-        maxWidth: "960px",
-        backgroundColor: "transparent",
-      }}
-    >
+    <Paper className={'global_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
       {renderPartment()}
-      {renderLables()}
+      {/* {renderLables()} */}
       {renderContent()}
     </Paper>
   );

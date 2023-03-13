@@ -5,35 +5,26 @@ import NostrFactory from 'nostr/NostrFactory';
 
 export const useChatPro = () => {
 
-  const privKey = useSelector(s => s.login.privateKey);
+  const { publicKey, privateKey } = useSelector(s => s.login);
 
   const nostrEvent = useNostrEvent();
 
   return {
-    get: (pubkey, targetpubkey) => {
-      if (pubkey) {
-        const sub = NostrFactory.createSub();
-        sub.Id = `chat:${sub.Id.slice(0, 8)}`;
-        sub.Kinds = [EventKind.DirectMessage];
-        sub.Authors = [pubkey, targetpubkey];
-        sub.PTags = [targetpubkey, pubkey]
-        return sub;
-      }
+    get: (targetPubkey) => {
+      const filter = NostrFactory.createFilter();
+      filter['kinds'] = [EventKind.DirectMessage];
+      filter['#p'] = [publicKey, targetPubkey];
+      // filter['authors'] = [publicKey, targetPubkey];
+      return filter;
     },
-    send: async (pubkey, targetpubkey, tmpPrivate, content) => {
-      if (pubkey) {
-        const ev = NostrFactory.createEvent(pubkey);
-        ev.Kind = EventKind.DirectMessage;
-        ev.PubKey = pubkey;
-        ev.Tags = [["p", targetpubkey]];
-        ev.Content = content;
-        if (tmpPrivate) {
-          await nostrEvent.EncryptDm(ev, pubkey, tmpPrivate);
-          return await nostrEvent.Sign(tmpPrivate, ev);
-        }
-        await nostrEvent.EncryptDm(ev, pubkey, privKey);
-        return await nostrEvent.Sign(privKey, ev);
-      }
+    send: async (targetPubkey, content) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.DirectMessage;
+      ev.PubKey = publicKey;
+      ev.Tags.push(['p', targetPubkey]);
+      ev.Content = content;
+      await nostrEvent.EncryptDm(ev, targetPubkey, privateKey);
+      return await nostrEvent.Sign(privateKey, ev);
     },
   }
 }

@@ -40,6 +40,9 @@ const MainLayout = () => {
       </Box>
       <Grid sx={{ flexGrow: 1 }} container>
         <Stack
+          sx={{
+            backgroundColor: 'background.paper'
+          }}
           className="main_content"
           direction="row"
           alignItems={"flex-start"}
@@ -60,7 +63,7 @@ const MainLayout = () => {
         PaperProps={{
           style: {
             borderRadius: "12px",
-            backgroundColor: "#0F0F0F",
+            backgroundColor: "background.paper",
           },
         }}
         anchor={placeDrawer}

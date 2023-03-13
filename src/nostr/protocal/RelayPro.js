@@ -6,7 +6,7 @@ import NostrFactory from 'nostr/NostrFactory';
 export const useRelayPro = () => {
 
   const { privateKey, publicKey } = useSelector(s => s.login);
-  const { follows, relays } = useSelector(s => s.profile);
+  const { relays } = useSelector(s => s.profile);
 
   const nostrEvent = useNostrEvent();
 

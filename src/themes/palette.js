@@ -47,7 +47,7 @@ const Palette = (mode) => {
             divider: mode === 'dark' ? paletteColor.grey[0] : paletteColor.grey[900],
             background: {
                 paper: mode === 'dark' ? '#0F0F0F' : '#FFFFFF',
-                default: mode === 'dark' ? paletteColor.grey.A50 : paletteColor.grey.A50,
+                default: mode === 'dark' ? '#202122' : '#FFFFFF',
             },
         }
     };

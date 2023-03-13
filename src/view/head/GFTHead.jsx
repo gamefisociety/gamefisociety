@@ -140,7 +140,7 @@ const GFTHead = () => {
 
     const fetchMeta = (pubkey, callback) => {
         let filterMeta = MetaPro.get(pubkey);
-        let filterFollow = followPro.get(pubkey);
+        let filterFollow = followPro.getFollows(pubkey);
         let subMeta = BuildSub('profile_contact', [filterMeta, filterFollow]);
         let SetMetadata_create_at = 0;
         let ContactList_create_at = 0;
@@ -306,13 +306,9 @@ const GFTHead = () => {
                                 fontWeight: "500",
                                 textAlign: "left",
                             }}
-                            color={"#FFFFFF"}
+                            color={'text.primary'}
                         >
-                            {profile.display_name ? profile.display_name : 'default'}
-                            {/* {display_name !== "default"
-                                ? display_name
-                                : "Nostr#" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
+                            {profile.display_name ? profile.display_name : publicKey !== '' ? 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length) : 'gfs'}
                         </Typography>
                         <Typography
                             sx={{
@@ -321,13 +317,9 @@ const GFTHead = () => {
                                 fontWeight: "500",
                                 textAlign: "left",
                             }}
-                            color={"#919191"}
+                            color={'text.secondary'}
                         >
-                            {profile.name ? profile.name : 'default'}
-                            {/* {name !== "default"
-                                ? "@" + name
-                                : "@" +
-                                publicKey.substring(publicKey.length - 4, publicKey.length)} */}
+                            {profile.name ? '@' + profile.name : publicKey !== '' ? '@' + publicKey.substring(publicKey.length - 4, publicKey.length) : 'gfs'}
                         </Typography>
                     </Box>
                 </Box>
@@ -613,6 +605,7 @@ const GFTHead = () => {
                 <TextField
                     sx={{
                         width: '450px',
+                        // borderColor: 'white',
                     }}
                     placeholder="Search input"
                     value={searchProp.value}
@@ -622,8 +615,11 @@ const GFTHead = () => {
                         }
                     }}
                     InputProps={{
-                        // ...params.InputProps,
+                        sx: { height: '42px', borderRadius: '24px', },
                         type: 'search',
+                    }}
+                    SelectProps={{
+                        sx: { borderColor: 'red' },
                     }}
                 />
                 <Popover
@@ -696,6 +692,7 @@ const GFTHead = () => {
                             </Button>
                         </Box>
                         <IconButton
+                            sx={{ mr: '12px' }}
                             size="large"
                             aria-label="relay icon"
                             color="inherit"
@@ -703,7 +700,7 @@ const GFTHead = () => {
                         >
                             <PublicIcon />
                         </IconButton>
-                        <IconButton
+                        {/* <IconButton
                             size="large"
                             aria-label="show 4 new mails"
                             color="inherit"
@@ -720,7 +717,7 @@ const GFTHead = () => {
                             <Badge badgeContent={17} color="error">
                                 <NotificationsIcon />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <ClickAwayListener onClickAway={handleTooltipClose}>
                             <Button>
                                 <ProfileTooltip
@@ -732,13 +729,23 @@ const GFTHead = () => {
                                     open={profileOpen}
                                     placement="top-end"
                                 >
-                                    <Avatar
-                                        sx={{ width: 32, height: 32, marginLeft: "12px" }}
-                                        edge="end"
-                                        alt="GameFi Society"
-                                        src={profile.picture ? profile.picture : ''}
-                                        onClick={handleTooltipOpen}
-                                    />
+                                    <Stack sx={{
+                                        backgroundColor: 'background.default',
+                                        px: '12px',
+                                        py: '6px',
+                                        borderRadius: '24px'
+                                    }}
+                                        direction='row'
+                                        alignItems='center'
+                                        onClick={handleTooltipOpen}>
+                                        <Avatar
+                                            sx={{ width: 32, height: 32 }}
+                                            edge="end"
+                                            alt="GameFi Society"
+                                            src={profile.picture ? profile.picture : ''}
+                                        />
+                                        <Typography sx={{ ml: '6px' }} color={'text.primary'}>{profile.display_name}</Typography>
+                                    </Stack>
                                 </ProfileTooltip>
                             </Button>
                         </ClickAwayListener>
