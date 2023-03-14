@@ -5,15 +5,13 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Button, Box } from "@mui/material";
 import xhelp from "module/utils/xhelp";
+import { default_avatar, default_banner } from "module/utils/xdef";
 import "./GSetting.scss";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
 import { setProfile } from "module/store/features/profileSlice";
-const default_banner =
-  "https://gateway.pinata.cloud/ipfs/QmSif6VWuJ9X7phY8wPMwxR8xPQdDq3ABE93Yo7BUwj68C";
-const default_avatar =
-  "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
+
 const GSetting = () => {
   const profile = useSelector((s) => s.profile);
   const { publicKey, privateKey } = useSelector((s) => s.login);
@@ -58,10 +56,10 @@ const GSetting = () => {
       <img
         className="banner"
         src={
-          localProfile.banner && localProfile.banner !== "default"
-            ? localProfile.banner
-            : default_banner
-        }
+            localProfile.banner && localProfile.banner !== "default"
+              ? localProfile.banner
+              : default_banner
+          }
         width="100%"
         height="156px"
         alt="banner"
@@ -136,10 +134,10 @@ const GSetting = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            value={localProfile.display_name}
+            value={localProfile.displayname}
             variant="outlined"
             onChange={(event) => {
-              localProfile.display_name = event.target.value;
+              localProfile.displayname = event.target.value;
               setLocalProfile({ ...localProfile });
             }}
           />
@@ -176,10 +174,10 @@ const GSetting = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            value={localProfile.name}
+            value={localProfile.nickname}
             variant="outlined"
             onChange={(event) => {
-              localProfile.name = event.target.value;
+              localProfile.nickname = event.target.value;
               setLocalProfile({ ...localProfile });
             }}
           />
@@ -480,4 +478,4 @@ const GSetting = () => {
   );
 };
 
-export default (GSetting);
+export default GSetting;
