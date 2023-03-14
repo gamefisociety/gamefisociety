@@ -30,7 +30,7 @@ export const useTextNotePro = () => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.TextNote];
       // filter.ids = eventIds.concat();
-      filter['#e'] = eventIds.concat();
+      filter['#e'] = eventIds?.concat();
       return filter;
     },
   }

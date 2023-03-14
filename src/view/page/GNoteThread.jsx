@@ -31,8 +31,10 @@ const GNoteThread = () => {
                 }
             })
         } else {
-            // const filterMetadata = metadataPro.get(parseRet.pArray);
-            const filterTextNote = textnotePro.getEvents(parseRet.eArray);
+            // const filterMetadata = metadataPro.get(parseRet.pArray); //parseRet.eArray
+            const filterTextNote = textnotePro.getEvents([curNote.id]); //
+            // filterTextNote.ids = [parseRet.eArray[0]];
+            // filterTextNote['#e'] = [parseRet.eArray[1]];
             const sueThread = BuildSub(notethread_flag, [filterTextNote]);
             console.log('root msg textnotes curNote', curNote);
             console.log('root msg textnotes send', sueThread);
