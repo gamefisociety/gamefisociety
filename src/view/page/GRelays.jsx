@@ -8,17 +8,12 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActions } from "@mui/material";
 import { setRelays, removeRelay } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
-import { System } from "nostr/NostrSystem";
-import { EventKind } from "nostr/def";
-import AddTaskIcon from "@mui/icons-material/AddTask";
-import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
-import { DefaultRelays } from "nostr/Const";
-import logo_delete from "../asset/image/social/icon_delete.png";
-import icon_save from "../asset/image/social/icon_save.png";
-import "./GCardRelays.scss";
+import logo_delete from "asset/image/social/icon_delete.png";
+import icon_save from "asset/image/social/icon_save.png";
+import "./GRelays.scss";
 let deletingRealy = "";
-const GCardRelays = () => {
+const GRelays = () => {
   const { relays } = useSelector((s) => s.profile);
   const { publicKey, loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
@@ -405,4 +400,4 @@ const GCardRelays = () => {
   );
 };
 
-export default React.memo(GCardRelays);
+export default GRelays;
