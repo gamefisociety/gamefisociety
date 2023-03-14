@@ -455,7 +455,7 @@ const GFTHead = () => {
                         {"Settings"}
                     </Typography>
                 </Button>
-                <Button
+                {/* <Button
                     sx={{
                         borderTop: 1,
                         borderColor: "#202122",
@@ -482,7 +482,7 @@ const GFTHead = () => {
                     >
                         {"QR Code"}
                     </Typography>
-                </Button>
+                </Button> */}
                 <Button
                     sx={{
                         borderTop: 1,

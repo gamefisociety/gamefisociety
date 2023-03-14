@@ -76,14 +76,14 @@ const ProfileSlice = createSlice({
       state.about = action.payload.about ? action.payload.about : "";
       state.picture = action.payload.picture
         ? action.payload.picture
-        : "default";
+        : "";
       state.website = action.payload.website
         ? action.payload.website
-        : "default";
-      state.banner = action.payload.banner ? action.payload.banner : "default";
-      state.nip05 = action.payload.nip05 ? action.payload.nip05 : "default";
-      state.lud06 = action.payload.lud06 ? action.payload.lud06 : "default";
-      state.lud16 = action.payload.lud16 ? action.payload.lud16 : "default";
+        : "";
+      state.banner = action.payload.banner ? action.payload.banner : "";
+      state.nip05 = action.payload.nip05 ? action.payload.nip05 : "";
+      state.lud06 = action.payload.lud06 ? action.payload.lud06 : "";
+      state.lud16 = action.payload.lud16 ? action.payload.lud16 : "";
       state.loaded = 0; //时间戳
       state.created = action.payload.created_at
         ? Number(action.payload.created_at)
