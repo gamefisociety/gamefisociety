@@ -75,7 +75,7 @@ const GCardUser = (props) => {
   }
 
   useEffect(() => {
-    // console.log("profile", profile);
+    console.log("profile", profile);
     return () => { };
   }, [props]);
 
@@ -91,7 +91,7 @@ const GCardUser = (props) => {
           component="img"
           sx={{ height: "140px", borderRadius: "6px" }}
           src="localProfile.banner"
-          image={profile.banner ? profile.banner : default_banner}
+          image={(profile.banner && profile.banner !== "default") ? profile.banner : default_banner}
           alt="no banner"
         />
         <Box
@@ -116,7 +116,7 @@ const GCardUser = (props) => {
               sx={{ width: "86px", height: "86px", mt: "-43px" }}
               edge="end"
               alt="GameFi Society"
-              src={profile.picture ? profile.picture : default_avatar}
+              src={(profile.picture && profile.picture !== "default") ? profile.picture : default_avatar}
             />
             <Button
               sx={{
@@ -267,7 +267,7 @@ const GCardUser = (props) => {
               {profile.about}
             </Typography>
           ) : null}
-          {profile.website ? (
+          {(profile.website && profile.website !== "default") ? (
             <Box
               sx={{
                 marginTop: "12px",
