@@ -78,6 +78,7 @@ const GProfile = () => {
   };
 
   useEffect(() => {
+    console.log("profile info", info);
     console.log("profile user", lastPubKey, "pub", pubkey);
     if (pubkey && lastPubKey !== pubkey) {
       lastPubKey = pubkey;
