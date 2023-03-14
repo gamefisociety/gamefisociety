@@ -75,7 +75,6 @@ const GFTGlobal = () => {
   const TLCache = TimelineCache();
   let global_note_cache_flag = 'global_not_cache';
 
-  //
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
     return () => {
@@ -108,37 +107,21 @@ const GFTGlobal = () => {
     }
     filterTextNote.limit = 50;
     let subTextNode = BuildSub('textnode', [filterTextNote]);
-    let dataCaches = [];
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subTextNode, client, null);
-        // //create_at
-        // dataCaches.sort((a, b) => {
-        //   return a.created_at > b.created_at;
-        // });
-        // if (curCreateAt === 0) {
-        //   setCurCreateAt(dataCaches[dataCaches.length - 1].created_at);
-        // } else {
-        //   setCurCreateAt(dataCaches[dataCaches.length - 1].created_at);
-        // }
-        //
         const noteCache = TLCache.get(global_note_cache_flag);
         setData(noteCache.concat());
-        // const pubkeys = [];
-        // dataCaches.map((item) => {
-        //   pubkeys.push(item.pubkey);
-        // });
-        // const pubkyes_filter = new Set(pubkeys);
-        // getInfor(pubkyes_filter, null);
-        // if (data.length === 0) {
-        //   setData(noteCache.concat());
-        // } else {
-        //   setData(data.concat(dataCaches));
-        // }
+        //
+        const pubkeys = [];
+        noteCache.map((item) => {
+          pubkeys.push(item.msg.pubkey);
+        });
+        const pubkyes_filter = new Set(pubkeys);
+        getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
         // console.log('text note', msg);
         TLCache.pushGlobalNote(global_note_cache_flag, msg)
-        // dataCaches.push(msg);
       }
     },
       null
@@ -155,6 +138,7 @@ const GFTGlobal = () => {
         setInforData(newInfo);
         System.BroadcastClose(subTextNode, client, null);
       } else if (tag === 'EVENT') {
+        console.log('info', msg);
         let info = {};
         if (msg.content !== "") {
           info = JSON.parse(msg.content);
@@ -298,7 +282,7 @@ const GFTGlobal = () => {
     return (
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
-          const info = inforData.get(item.pubkey);
+          const info = inforData.get(item.msg.pubkey);
           return (
             <GCardNote
               key={"global-note-" + index}
