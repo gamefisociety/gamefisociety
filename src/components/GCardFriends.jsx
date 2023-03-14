@@ -22,7 +22,7 @@ import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
 
-import NormalCache from 'db/NormalCache';
+import NormalCache from "db/NormalCache";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,22 +65,22 @@ const GCardFriends = (props) => {
   const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
 
-  let metadata_cache_flag = 'metadata_cache';
-  let followers_cache_flag = 'followers_cache';
+  let metadata_cache_flag = "metadata_cache";
+  let followers_cache_flag = "followers_cache";
   //
   const fetchAllMeta = (pubkeys) => {
     let filteMeta = MetadataPro.get(pubkeys);
-    let subMeta = BuildSub('follow_meta', [filteMeta]);
+    let subMeta = BuildSub("follow_meta", [filteMeta]);
     System.BroadcastSub(subMeta, (tag, client, msg) => {
-      if (tag === 'EOSE') {
+      if (tag === "EOSE") {
         System.BroadcastClose(subMeta, client, null);
         let metadatas = NorCache.get(metadata_cache_flag);
         // console.log('subMeta', metadatas);
         if (metadatas) {
           setDatas(metadatas.concat());
         }
-      } else if (tag === 'EVENT') {
-        NorCache.pushMetadata(metadata_cache_flag, msg.pubkey, msg)
+      } else if (tag === "EVENT") {
+        NorCache.pushMetadata(metadata_cache_flag, msg.pubkey, msg);
       }
     });
   };
@@ -89,14 +89,14 @@ const GCardFriends = (props) => {
   const fetchFollowers = () => {
     NorCache.clear(followers_cache_flag);
     let filterFollowing = followPro.getFollowings(publicKey);
-    let subFollowing = BuildSub('followings_metadata', [filterFollowing]);
+    let subFollowing = BuildSub("followings_metadata", [filterFollowing]);
     System.BroadcastSub(subFollowing, (tag, client, msg) => {
-      if (tag === 'EOSE') {
+      if (tag === "EOSE") {
         System.BroadcastClose(subFollowing, client, null);
         let cache = NorCache.get(followers_cache_flag);
         setFollowers(cache.concat());
-      } else if (tag === 'EVENT') {
-        NorCache.pushFollowers(followers_cache_flag, msg.pubkey, msg)
+      } else if (tag === "EVENT") {
+        NorCache.pushFollowers(followers_cache_flag, msg.pubkey, msg);
       }
     });
   };
@@ -107,7 +107,7 @@ const GCardFriends = (props) => {
     let newFollows = follows.concat();
     newFollows.push(pubkey);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === 'OK' && msg.ret === true) {
+      if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
           follows: newFollows,
@@ -115,7 +115,7 @@ const GCardFriends = (props) => {
         dispatch(setFollows(followsInfo));
       }
     });
-  }
+  };
 
   //
   const removeFollow = async (pubkey) => {
@@ -123,15 +123,15 @@ const GCardFriends = (props) => {
     let newFollows = follows.concat();
     newFollows.splice(follows.indexOf(pubkey), 1);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === 'OK' && msg.ret === true) {
+      if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
           follows: newFollows,
         };
         dispatch(setFollows(followsInfo));
       }
-    })
-  }
+    });
+  };
 
   const isFollowYou = (pubkey) => {
     for (let i = 0; i < follows.length; i++) {
@@ -140,23 +140,29 @@ const GCardFriends = (props) => {
       }
     }
     return false;
-  }
+  };
 
   //
   useEffect(() => {
     if (tabIndex === 0) {
       fetchAllMeta(follows);
     } else if (tabIndex === 1) {
-      console.log('change followers', followers);
+      console.log("change followers", followers);
       let pubkeys = [];
-      followers.map(item => {
+      followers.map((item) => {
         pubkeys.push(item.pubkey);
       });
       fetchAllMeta(pubkeys);
     }
-    return () => { };
+    return () => {};
   }, [tabIndex]);
 
+  useEffect(() => {
+    if (followers.length === 0) {
+      fetchFollowers();
+    }
+    return () => {};
+  }, []);
 
   const renderFollowing = () => {
     if (follows.length === 0) {
@@ -205,10 +211,7 @@ const GCardFriends = (props) => {
                     src={cxt.picture ? cxt.picture : ""}
                   />
                 </ListItemAvatar>
-                <ListItemText
-                  primary={cxt.name}
-                  color="text.secondary"
-                />
+                <ListItemText primary={cxt.name} color="text.secondary" />
               </ListItemButton>
             </ListItem>
           );
@@ -225,7 +228,10 @@ const GCardFriends = (props) => {
       <List>
         {" "}
         {followers.map((item, index) => {
-          const { info } = NorCache.getMetadata(metadata_cache_flag, item.pubkey);
+          const { info } = NorCache.getMetadata(
+            metadata_cache_flag,
+            item.pubkey
+          );
           if (info === null) {
             return null;
           }
@@ -244,10 +250,10 @@ const GCardFriends = (props) => {
                     } else {
                       addFollow(item.pubkey);
                     }
-                    // 
+                    //
                   }}
                 >
-                  {isFollowYou(item.pubkey) === true ? "unfollow" : 'follow'}
+                  {isFollowYou(item.pubkey) === true ? "unfollow" : "follow"}
                 </Button>
               }
               disablePadding
@@ -268,10 +274,7 @@ const GCardFriends = (props) => {
                     src={cxt.picture ? cxt.picture : ""}
                   />
                 </ListItemAvatar>
-                <ListItemText
-                  primary={cxt.name}
-                  color="text.secondary"
-                />
+                <ListItemText primary={cxt.name} color="text.secondary" />
               </ListItemButton>
             </ListItem>
           );
@@ -334,11 +337,7 @@ const GCardFriends = (props) => {
           }}
           onClick={() => {
             if (tabIndex !== 1) {
-              if (followers.length === 0) {
-                fetchFollowers();
-              } else {
-                setTabIndex(1);
-              }
+              setTabIndex(1);
             }
           }}
         >

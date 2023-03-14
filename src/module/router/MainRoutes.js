@@ -15,7 +15,6 @@ const GHall = Loadable(lazy(() => import('view/page/GHall')));
 const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
 const GSetting = Loadable(lazy(() => import('view/page/GSetting')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
-const GFTFollow = Loadable(lazy(() => import('view/page/GFTFollow')));
 const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 const GGroupChat = Loadable(lazy(() => import('view/page/GGroupChat')));
@@ -61,10 +60,6 @@ const MainRoutes = {
         {
             path: '/videopage',
             element: <GVideoPage />,
-        },
-        {
-            path: '/follow',
-            element: <GFTFollow />,
         },
         // {
         //     path: '/mint',
