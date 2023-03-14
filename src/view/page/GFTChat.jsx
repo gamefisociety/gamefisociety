@@ -47,9 +47,9 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
           borderRadius: "6px",
           fontFamily: "Saira",
           fontWeight: "500",
-          fontSize:"12px",
-          color:"#FFFFFF",
-          whiteSpace: 'pre-line'
+          fontSize: "12px",
+          color: "#FFFFFF",
+          whiteSpace: "pre-line",
         }}
         align={"left"}
       >
@@ -105,7 +105,6 @@ const GFTChat = (props) => {
                 let chat_datas = TLCache.get(subChat[1]);
                 if (chat_datas) {
                   setChatData(chat_datas.concat());
-                //   scrollToBottom();
                 }
                 // console.log('dm targetPubkey', chat_datas);
               }
@@ -130,6 +129,13 @@ const GFTChat = (props) => {
     };
   }, [chatPK]);
 
+  useEffect(() => {
+    if (chatData.length > 0) {
+      scrollToBottom();
+    }
+    return () => {};
+  }, [chatData]);
+
   const sendDM = async () => {
     if (inValue.length === 0) {
       return;
@@ -150,14 +156,13 @@ const GFTChat = (props) => {
         if (chat_datas) {
           setChatData(chat_datas.concat());
           setInValue("");
-          scrollToBottom();
         }
       }
     });
   };
 
   const scrollToBottom = () => {
-    listRef.current.scrollToItem(10);
+    listRef.current.scrollToItem(chatData.length, "smart");
   };
 
   return (
