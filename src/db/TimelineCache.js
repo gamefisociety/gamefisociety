@@ -82,32 +82,30 @@ const TimelineCache = () => {
     return true;
   }
 
-  const hasGlobalNote = (key, evid, createAt) => {
+  const hasGlobalNote = (key, msg) => {
     let cache = TLCache.get(key);
     if (!cache) {
       return false;
     }
-    let uid = evid + '-' + createAt;
     for (let i = 0; i < cache.length; i++) {
-      if (cache[i].uid === uid) {
+      if (cache[i].uid === msg.id) {
         return true;
       }
     }
     return false;
   }
 
-  const pushGlobalNote = (key, evid, createAt, msg) => {
+  const pushGlobalNote = (key, msg) => {
     let cache = TLCache.get(key);
     if (!cache) {
       cache = create(key);
     }
-    if (hasGlobalNote(key, evid, createAt) === true) {
+    if (hasGlobalNote(key, msg) === true) {
       return false;
     }
     let info = {
-      uid: evid + '-' + createAt,
-      evid: evid,
-      create: createAt,
+      uid: msg.id,
+      create: msg.created_at,
       msg: msg,
     }
     cache.push(info);
