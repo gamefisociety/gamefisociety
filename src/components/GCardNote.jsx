@@ -19,9 +19,10 @@ const default_avatar =
   "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 
 const GCardNote = (props) => {
-  const navigate = useNavigate();
 
-  const { note, pubkey, info, content, time } = props;
+  const { note, info } = props;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     //
@@ -55,7 +56,7 @@ const GCardNote = (props) => {
                   color="text.primary"
                   align="left"
                 >
-                  {content}
+                  {note.content}
                 </Typography>
               );
             } else if (
@@ -135,7 +136,7 @@ const GCardNote = (props) => {
         }}
         onClick={() => {
           navigate("/profile", {
-            state: { info: { ...info }, pubkey: pubkey },
+            state: { info: { ...info }, pubkey: note.pubkey },
           });
         }}
       >
@@ -157,7 +158,7 @@ const GCardNote = (props) => {
           color={"#FFFFFF"}
           noWrap={true}
         >
-          {pubkey ? pubkey : "anonymous"}
+          {note.pubkey ? note.pubkey : "anonymous"}
         </Typography>
         <Typography
           sx={{
@@ -168,7 +169,7 @@ const GCardNote = (props) => {
           }}
           color="#666666"
         >
-          {xhelp.formateSinceTime(time * 1000)}
+          {xhelp.formateSinceTime(note.created_at * 1000)}
         </Typography>
       </CardActionArea>
       <Box
@@ -184,7 +185,7 @@ const GCardNote = (props) => {
         }}
       >
         {/* <CardContent>{content && renderContent(content)}</CardContent> */}
-        {renderContent(content)}
+        {renderContent(note.content)}
         <Box
           sx={{
             width: "100%",

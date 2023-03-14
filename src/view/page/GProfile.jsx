@@ -147,9 +147,6 @@ const GProfile = () => {
           <GCardNote
             key={"profile-note-index" + index}
             note={{ ...item }}
-            pubkey={item.pubkey}
-            content={item.content}
-            time={item.created_at}
             info={info}
           />
         ))}
