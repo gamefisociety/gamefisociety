@@ -84,7 +84,9 @@ const GFTGlobal = () => {
 
   //
   useEffect(() => {
-    getDataList();
+    // console.log('enter global note');
+    TLCache.clear(global_note_cache_flag);
+    getNoteList();
     return () => { };
   }, []);
 
@@ -93,11 +95,11 @@ const GFTGlobal = () => {
       window.innerHeight + document.documentElement.scrollTop >
       document.scrollingElement.scrollHeight - 50
     ) {
-      getDataList();
+      getNoteList();
     }
   };
 
-  const getDataList = () => {
+  const getNoteList = () => {
     const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
       filterTextNote.until = Date.now();
@@ -112,6 +114,8 @@ const GFTGlobal = () => {
         System.BroadcastClose(subTextNode, client, null);
         const noteCache = TLCache.get(global_note_cache_flag);
         setData(noteCache.concat());
+        //
+        setCurCreateAt();
         //
         const pubkeys = [];
         noteCache.map((item) => {

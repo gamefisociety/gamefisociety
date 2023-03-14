@@ -45,13 +45,14 @@ const GCardNote = (props) => {
             if (stritem === "") {
               return (
                 <Typography
+                  key={'card_note_txt_' + index}
                   sx={{
                     // margin: "12px",
                     wordWrap: "break-word",
                     whiteSpace: "pre-wrap",
                     fontSize: "14px",
                   }}
-                  color="#FFFFFF"
+                  color="text.primary"
                   align="left"
                 >
                   {content}
