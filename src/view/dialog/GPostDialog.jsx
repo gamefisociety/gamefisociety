@@ -18,7 +18,7 @@ import TextField from '@mui/material/TextField';
 import DoneIcon from '@mui/icons-material/Done';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-import './GFTPostDialog.scss';
+import './GPostDialog.scss';
 import { red } from '../../../node_modules/@ant-design/colors/es/index';
 
 const GPostDialog = () => {
