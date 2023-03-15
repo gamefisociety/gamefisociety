@@ -41,8 +41,6 @@ const GPostDialog = () => {
                 console.log('post tag', tag, msg);
             });
         }
-
-
     }
 
     return (
