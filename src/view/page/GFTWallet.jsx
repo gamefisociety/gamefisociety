@@ -15,7 +15,7 @@ import ic_avatar from "../../asset/image/logo/ic_avatar.png";
 
 function GFTWallet() {
 
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState("1");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -96,15 +96,15 @@ function GFTWallet() {
                 </Box>
             </Box>
             <Box sx={{ width: '100%', typography: 'body1' }}>
-                <TabContext 
-               
-                value={value}>
-                    <Box sx={{ marginTop:'56px', borderBottom: 1, borderColor: 'divider' }}>
+                <TabContext
+
+                    value={value}>
+                    <Box sx={{ marginTop: '56px', borderBottom: 1, borderColor: 'divider' }}>
                         <TabList
-                        textColor="inherit"
-                        indicatorColor="secondary"
-                        onChange={handleChange} aria-label="lab API tabs example">
-                            <Tab  label="Portfolio" value="1" />
+                            textColor="inherit"
+                            indicatorColor="secondary"
+                            onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="Portfolio" value="1" />
                             <Tab label="NFTs" value="2" />
                             <Tab label="History" value="3" />
                         </TabList>

@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
 
-import './GFTPostDialog.scss';
+import './GPostDialog.scss';
 
 const GPostDialog = () => {
 
