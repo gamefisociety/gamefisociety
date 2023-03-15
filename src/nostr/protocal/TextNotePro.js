@@ -5,7 +5,7 @@ import NostrFactory from 'nostr/NostrFactory';
 
 export const useTextNotePro = () => {
 
-  const privKey = useSelector(s => s.login.privateKey);
+  const { publicKey, privateKey } = useSelector(s => s.login);
 
   const nostrEvent = useNostrEvent();
 
@@ -15,23 +15,29 @@ export const useTextNotePro = () => {
       filter.kinds = [EventKind.TextNote];
       return filter;
     },
-    send: async (pubKey, obj, tmpPrivate) => {
-      if (pubKey) {
-        const ev = NostrFactory.createEvent(pubKey);
-        ev.Kind = EventKind.SetMetadata;
-        ev.Content = JSON.stringify(obj);
-        if (tmpPrivate) {
-          return await nostrEvent.Sign(tmpPrivate, ev);
-        }
-        return await nostrEvent.Sign(privKey, ev);
-      }
-    },
     getEvents: (eventIds) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.TextNote];
       // filter.ids = eventIds.concat();
       filter['#e'] = eventIds?.concat();
       return filter;
+    },
+    sendPost: async (cxt) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.TextNote;
+      ev.Content = cxt;
+      console.log('send post env', ev);
+      return await nostrEvent.Sign(privateKey, ev);
+
+    },
+    sendReplay: async (cxt, targetEvId, targetPubkey) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.TextNote;
+      ev.Content = cxt;
+      ev.Tags.push(['e', targetEvId]);
+      ev.Tags.push(['p', targetPubkey]);
+      return await nostrEvent.Sign(privateKey, ev);
+
     },
   }
 }

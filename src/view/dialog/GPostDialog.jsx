@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import { useSelector, useDispatch } from 'react-redux';
-import { useSnackbar } from "notistack";
 import { setPost } from 'module/store/features/dialogSlice';
-import { changeNetwork, ChainId } from '../../web3/GFTChainNet'
 
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+// import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-import DoneIcon from '@mui/icons-material/Done';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useTextNotePro } from 'nostr/protocal/TextNotePro';
+import { System } from 'nostr/NostrSystem';
 
 import './GFTPostDialog.scss';
-import { red } from '../../../node_modules/@ant-design/colors/es/index';
 
 const GPostDialog = () => {
 
@@ -27,11 +21,25 @@ const GPostDialog = () => {
     const { isPost } = useSelector(s => s.dialog);
 
     const dispatch = useDispatch();
+    const textNotrPro = useTextNotePro();
 
     useEffect(() => {
         return () => {
         }
     }, [])
+
+    // let nodeId = '971a46a084f0bca022a87834c2c35d771ef390b29fcf3c1af6615ebde84e620f';
+    // let targetPubkey = '91a45b098b434e14b07331350832c4a584592b14e971afb7e4c03cf4f85e772f';
+    const postContext = async () => {
+        let event = await textNotrPro.sendPost(text);
+        System.BroadcastEvent(event, (tag, client, msg) => {
+            console.log('post tag', tag, msg);
+        });
+        // let event = await textNotrPro.sendReplay(text, nodeId, targetPubkey);
+        // System.BroadcastEvent(event, (tag, client, msg) => {
+        //     console.log('post tag', tag, msg);
+        // });
+    }
 
     return (
         <Dialog
@@ -68,7 +76,8 @@ const GPostDialog = () => {
                 }}
                     variant={'contained'}
                     onClick={() => {
-
+                        dispatch(setPost(false));
+                        postContext();
                     }}>
                     {'Post'}
                 </Button>

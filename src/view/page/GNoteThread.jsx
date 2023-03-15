@@ -75,7 +75,7 @@ const GNoteThread = () => {
     useEffect(() => {
         // console.log('main note', note);
         TLCache.clear(thread_node_cache_flag);
-        TLCache.pushThreadNote(thread_node_cache_flag, note);
+        // TLCache.pushThreadNote(thread_node_cache_flag, note);
         //
         if (note.tags.length === 0) {
             main_note_id = note.id;
