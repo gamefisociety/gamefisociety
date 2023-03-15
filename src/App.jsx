@@ -11,6 +11,7 @@ import GFTWalletMenu from "view/menu/GFTWalletMenu";
 import GFTCheckInDialog from "view/dialog/GFTCheckInDialog";
 import GFTMintAvatarDialog from "view/dialog/GFTMintAvatarDialog";
 import GLoginDialog from "view/dialog/GLoginDialog";
+import GPostDialog from "view/dialog/GPostDialog";
 
 import './App.css';
 
@@ -25,7 +26,7 @@ System.initRelays();
 const App = () => {
 
   const dispatch = useDispatch();
-  const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin } = useSelector(s => s.dialog);
+  const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin, isPost } = useSelector(s => s.dialog);
   const { relays } = useSelector((s) => s.profile);
   useEffect(() => {
     if (relays) {
@@ -53,6 +54,7 @@ const App = () => {
       {isOpenCheckIn && <GFTCheckInDialog />}
       {isOpenMintAvatar && <GFTMintAvatarDialog />}
       {isOpenLogin && <GLoginDialog />}
+      {isPost && <GPostDialog />}
     </ThemeCustomization>
   );
 }

@@ -10,6 +10,7 @@ const initialState = {
   status: 'idle',
   isOpenMenuLeft: true,
   isDrawer: false,
+  isPost: false,
   placeDrawer: 'right',
   cardDrawer: 'follow'
 };
@@ -50,12 +51,15 @@ export const dialogSlice = createSlice({
     setOpenMenuLeft: (state, action) => {
       state.isOpenMenuLeft = action.payload;
     },
+    setPost: (state, action) => {
+      state.isPost = action.payload;
+    },
     setDrawer: (state, action) => {
       state.isDrawer = action.payload.isDrawer;
       state.placeDrawer = action.payload.placeDrawer;
       state.cardDrawer = action.payload.cardDrawer;
     }
-    
+
   },
 
   extraReducers: (builder) => {
@@ -79,6 +83,7 @@ export const {
   setOpenCheckIn,
   setOpenMintAvatar,
   setOpenMenuLeft,
+  setPost,
   setDrawer
 }
   = dialogSlice.actions;
