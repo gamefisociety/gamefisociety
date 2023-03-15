@@ -11,6 +11,7 @@ const initialState = {
   isOpenMenuLeft: true,
   isDrawer: false,
   isPost: false,
+  targetPost: null,
   placeDrawer: 'right',
   cardDrawer: 'follow'
 };
@@ -52,7 +53,8 @@ export const dialogSlice = createSlice({
       state.isOpenMenuLeft = action.payload;
     },
     setPost: (state, action) => {
-      state.isPost = action.payload;
+      state.isPost = action.payload.post;
+      state.targetPost = action.payload.target;
     },
     setDrawer: (state, action) => {
       state.isDrawer = action.payload.isDrawer;
