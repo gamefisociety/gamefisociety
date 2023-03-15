@@ -26,7 +26,7 @@ const Theme = (colors) => {
     return {
         primary: {
             lighter: blue[0],
-            100: blue[1],
+            100: contrastText,
             200: blue[2],
             light: blue[3],
             400: blue[4],

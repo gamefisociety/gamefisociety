@@ -6,13 +6,12 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
-import GCardFriends from "components/GCardFriends";
-import GCardRelays from "components/GCardRelays";
 import { setDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
-
+import GSociety from "view/page/GSociety";
+import GRelays from "view/page/GRelays";
 import { System } from "nostr/NostrSystem";
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from "module/store/features/profileSlice";
@@ -79,7 +78,7 @@ const MainLayout = () => {
         }}
       >
         {cardDrawer === "follow" && (
-          <GCardFriends
+          <GSociety
             callback={() => {
               dispatch(
                 setDrawer({
@@ -91,7 +90,7 @@ const MainLayout = () => {
             }}
           />
         )}
-        {cardDrawer === "relays" && <GCardRelays />}
+        {cardDrawer === "relays" && <GRelays />}
       </Drawer>
     </Box>
   );

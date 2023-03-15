@@ -16,9 +16,8 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 import TimelineCache from "db/TimelineCache";
 import useNostrEvent from "nostr/NostrEvent";
+import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
-const default_avatar =
-  "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 const ListRow = ({ data, index, setSize, chatPK }) => {
   //
   const rowRef = useRef();
@@ -236,7 +235,10 @@ const GFTChat = (props) => {
           sx={{ width: "40px", height: "40px" }}
           edge="end"
           alt="GameFi Society"
-          src={chatProfile.picture ? chatProfile.picture : default_avatar}
+          src={
+            chatProfile.picture && chatProfile.picture !== "default"
+              ? chatProfile.picture
+              : default_avatar}
         />
         <Typography
           sx={{

@@ -13,7 +13,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
 
-import "./GCardUser.scss";
+import "./GSociety.scss";
 
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -49,7 +49,7 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const GCardFriends = (props) => {
+const GSociety = (props) => {
   const { callback } = props;
 
   const navigate = useNavigate();
@@ -349,4 +349,4 @@ const GCardFriends = (props) => {
   );
 };
 
-export default React.memo(GCardFriends);
+export default GSociety;

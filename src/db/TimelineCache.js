@@ -113,7 +113,7 @@ const TimelineCache = () => {
     cache.push(info);
     //
     cache.sort((a, b) => {
-      return a.create - b.create;
+      return b.create - a.create;
     })
     return true;
   }

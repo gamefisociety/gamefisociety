@@ -9,7 +9,7 @@ const Palette = (mode) => {
     const colors = presetPalettes;
 
     const greyPrimary = [
-        '#191A1B',
+        '#ffffff',
         '#fafafa',
         '#f5f5f5',
         '#f0f0f0',
@@ -44,7 +44,7 @@ const Palette = (mode) => {
             action: {
                 disabled: paletteColor.grey[300]
             },
-            divider: mode === 'dark' ? paletteColor.grey[0] : paletteColor.grey[900],
+            divider: mode === 'dark' ? '#191A1B' : paletteColor.grey[900],
             background: {
                 paper: mode === 'dark' ? '#0F0F0F' : '#FFFFFF',
                 default: mode === 'dark' ? '#202122' : '#FFFFFF',

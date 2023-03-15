@@ -8,27 +8,20 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, Link } from "@mui/material";
 import copy from "copy-to-clipboard";
-import Skeleton from "@mui/material/Skeleton";
-import Snackbar from "@mui/material/Snackbar";
+import { default_banner, default_avatar } from "module/utils/xdef";
 import logo_chat from "../asset/image/social/logo_chat.png";
 import logo_lighting from "../asset/image/social/logo_lighting.png";
 import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
-import "./GCardUser.scss";
 
+import "./GCardUser.scss";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
 //
-const default_banner =
-  "https://gateway.pinata.cloud/ipfs/QmSif6VWuJ9X7phY8wPMwxR8xPQdDq3ABE93Yo7BUwj68C";
-const default_avatar =
-  "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
-
-
 const GCardUser = (props) => {
-  const { follows } = useSelector(s => s.profile);
+  const { follows } = useSelector((s) => s.profile);
   const { profile, pubkey, ownFollows, ownRelays } = props;
   const dispatch = useDispatch();
   //
@@ -44,7 +37,7 @@ const GCardUser = (props) => {
     let newFollows = follows.concat();
     newFollows.push(pubkey);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === 'OK' && msg.ret === true) {
+      if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
           follows: newFollows,
@@ -52,31 +45,31 @@ const GCardUser = (props) => {
         dispatch(setFollows(followsInfo));
       }
     });
-  }
+  };
 
   const removeFollow = async (pubkey) => {
     let event = await followPro.removeFollow(pubkey);
     let newFollows = follows.concat();
     newFollows.splice(follows.indexOf(pubkey), 1);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === 'OK' && msg.ret === true) {
+      if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
           follows: newFollows,
         };
         dispatch(setFollows(followsInfo));
       }
-    })
-  }
+    });
+  };
 
   const isFollow = (key) => {
     // console.log('isFollow', key, follows.includes(key), follows);
     return follows.includes(key);
-  }
+  };
 
   useEffect(() => {
-    // console.log("profile", profile);
-    return () => { };
+    console.log("profile", profile);
+    return () => {};
   }, [props]);
 
   //#1F1F1F
@@ -91,7 +84,11 @@ const GCardUser = (props) => {
           component="img"
           sx={{ height: "140px", borderRadius: "6px" }}
           src="localProfile.banner"
-          image={profile.banner ? profile.banner : default_banner}
+          image={
+            profile.banner && profile.banner !== "default"
+              ? profile.banner
+              : default_banner
+          }
           alt="no banner"
         />
         <Box
@@ -116,14 +113,18 @@ const GCardUser = (props) => {
               sx={{ width: "86px", height: "86px", mt: "-43px" }}
               edge="end"
               alt="GameFi Society"
-              src={profile.picture ? profile.picture : default_avatar}
+              src={
+                profile.picture && profile.picture !== "default"
+                  ? profile.picture
+                  : default_avatar
+              }
             />
             <Button
               sx={{
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => { }}
+              onClick={() => {}}
             >
               <img src={logo_lighting} width="40px" alt="lighting" />
             </Button>
@@ -145,7 +146,7 @@ const GCardUser = (props) => {
                 height: "36px",
                 backgroundColor: "#006CF9",
                 borderRadius: "18px",
-                color: "text.primary"
+                color: "text.primary",
               }}
               onClick={() => {
                 if (isFollow(pubkey) === true) {
@@ -155,7 +156,7 @@ const GCardUser = (props) => {
                 }
               }}
             >
-              {isFollow(pubkey) === true ? 'Unfollow' : 'Follow'}
+              {isFollow(pubkey) === true ? "Unfollow" : "Follow"}
             </Button>
           </Box>
           <Box
@@ -267,7 +268,7 @@ const GCardUser = (props) => {
               {profile.about}
             </Typography>
           ) : null}
-          {profile.website ? (
+          {profile.website && profile.website !== "default" ? (
             <Box
               sx={{
                 marginTop: "12px",
@@ -319,18 +320,18 @@ const GCardUser = (props) => {
                 sx={{
                   marginRight: "8px",
                 }}
-                variant={'body'}
+                variant={"body"}
                 color="text.primary"
                 align={"center"}
               >
                 {ownFollows.length}
               </Typography>
               <Typography
-                variant={'body'}
+                variant={"body"}
                 color="text.disabled"
                 align={"center"}
               >
-                {'Following'}
+                {"Following"}
               </Typography>
             </Box>
             <Box
@@ -346,18 +347,18 @@ const GCardUser = (props) => {
                 sx={{
                   marginRight: "8px",
                 }}
-                variant={'body'}
+                variant={"body"}
                 color="text.primary"
                 align={"center"}
               >
                 {11}
               </Typography>
               <Typography
-                variant={'body'}
+                variant={"body"}
                 color="text.disabled"
                 align={"center"}
               >
-                {'Followers'}
+                {"Followers"}
               </Typography>
             </Box>
             <Box
@@ -373,18 +374,18 @@ const GCardUser = (props) => {
                 sx={{
                   mr: "8px",
                 }}
-                variant={'body'}
+                variant={"body"}
                 color="text.primary"
                 align={"center"}
               >
                 {relayMap.size}
               </Typography>
               <Typography
-                variant={'body'}
+                variant={"body"}
                 color="text.disabled"
                 align={"center"}
               >
-                {'Relays'}
+                {"Relays"}
               </Typography>
             </Box>
           </Box>
