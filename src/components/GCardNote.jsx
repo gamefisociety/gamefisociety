@@ -27,7 +27,7 @@ const GCardNote = (props) => {
 
   useEffect(() => {
     //
-    return () => {};
+    return () => { };
   }, [props]);
 
   const renderContent = (str) => {
@@ -233,7 +233,10 @@ const GCardNote = (props) => {
             }}
             onClick={() => {
               //
-              dispatch(setPost(true));
+              dispatch(setPost({
+                post: true,
+                target: note,
+              }));
             }}
           >
             <img src={icon_comment} width="28px" alt="comment" />
@@ -244,7 +247,7 @@ const GCardNote = (props) => {
               width: "28px",
               height: "28px",
             }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={icon_praise} width="28px" alt="praise" />
           </Button>

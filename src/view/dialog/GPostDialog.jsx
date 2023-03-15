@@ -18,7 +18,7 @@ import './GPostDialog.scss';
 const GPostDialog = () => {
 
     const [text, setText] = useState('');
-    const { isPost } = useSelector(s => s.dialog);
+    const { isPost, targetPost } = useSelector(s => s.dialog);
 
     const dispatch = useDispatch();
     const textNotrPro = useTextNotePro();
@@ -28,17 +28,19 @@ const GPostDialog = () => {
         }
     }, [])
 
-    // let nodeId = '971a46a084f0bca022a87834c2c35d771ef390b29fcf3c1af6615ebde84e620f';
-    // let targetPubkey = '91a45b098b434e14b07331350832c4a584592b14e971afb7e4c03cf4f85e772f';
+    // console.log('GPostDialog', targetPost);
     const postContext = async () => {
-        let event = await textNotrPro.sendPost(text);
-        System.BroadcastEvent(event, (tag, client, msg) => {
-            console.log('post tag', tag, msg);
-        });
-        // let event = await textNotrPro.sendReplay(text, nodeId, targetPubkey);
-        // System.BroadcastEvent(event, (tag, client, msg) => {
-        //     console.log('post tag', tag, msg);
-        // });
+        if (targetPost === null) {
+            let event = await textNotrPro.sendPost(text);
+            System.BroadcastEvent(event, (tag, client, msg) => {
+                console.log('post tag', tag, msg);
+            });
+        } else {
+            let event = await textNotrPro.sendReplay(text, targetPost.id, targetPost.pubkey);
+            System.BroadcastEvent(event, (tag, client, msg) => {
+                console.log('post tag', tag, msg);
+            });
+        }
     }
 
     return (
@@ -66,7 +68,10 @@ const GPostDialog = () => {
                     color: 'text.primary'
                 }}
                     onClick={() => {
-                        dispatch(setPost(false));
+                        dispatch(setPost({
+                            post: false,
+                            target: null,
+                        }));
                     }}>
                     {'Cancel'}
                 </Button>
@@ -76,7 +81,10 @@ const GPostDialog = () => {
                 }}
                     variant={'contained'}
                     onClick={() => {
-                        dispatch(setPost(false));
+                        dispatch(setPost({
+                            post: false,
+                            target: null,
+                        }));
                         postContext();
                     }}>
                     {'Post'}

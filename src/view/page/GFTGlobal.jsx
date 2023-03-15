@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./GFTGlobal.scss";
 
+import { useSelector, useDispatch } from 'react-redux';
+
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -13,6 +15,8 @@ import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
+import { setPost } from 'module/store/features/dialogSlice';
+
 import TimelineCache from 'db/TimelineCache';
 
 import {
@@ -61,9 +65,9 @@ const labelS = [
 ];
 
 const GFTGlobal = () => {
+  const dispatch = useDispatch();
   //
   const [curLable, setCurLable] = useState("All");
-  //
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
   const [data, setData] = useState([]);
@@ -174,7 +178,10 @@ const GFTGlobal = () => {
           align={"center"}
           borderRadius={"4px"}
           onClick={() => {
-            // setCurLable(item);
+            dispatch(setPost({
+              post: true,
+              target: null,
+            }));
           }}
         >
           {"Post & Replay"}
