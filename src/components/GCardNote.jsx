@@ -10,7 +10,7 @@ import { Button, CardActionArea } from "@mui/material";
 import { setPost } from "module/store/features/dialogSlice";
 
 import xhelp from "module/utils/xhelp";
-import "./GCardUser.scss";
+import "./GCardNote.scss";
 import icon_comment from "../asset/image/social/icon_comment.png";
 import icon_praise from "../asset/image/social/icon_praise.png";
 import icon_share from "../asset/image/social/icon_share.png";
@@ -20,7 +20,6 @@ const default_avatar =
   "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 
 const GCardNote = (props) => {
-
   const { note, info } = props;
 
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ const GCardNote = (props) => {
 
   useEffect(() => {
     //
-    return () => { };
+    return () => {};
   }, [props]);
 
   const renderContent = (str) => {
@@ -48,7 +47,7 @@ const GCardNote = (props) => {
             if (stritem === "") {
               return (
                 <Typography
-                  key={'card_note_txt_' + index}
+                  key={"card_note_txt_" + index}
                   sx={{
                     // margin: "12px",
                     wordWrap: "break-word",
@@ -120,15 +119,18 @@ const GCardNote = (props) => {
   // }
 
   const displayname = () => {
-    if(info && info.display_name){
-        return info.display_name;
-    }else{
-        if(note.pubkey){
-            return "Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
-        }
+    if (info && info.display_name) {
+      return info.display_name;
+    } else {
+      if (note.pubkey) {
+        return (
+          "Nostr#" +
+          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
+        );
+      }
     }
     return "anonymous";
-  }
+  };
 
   return (
     <Card
@@ -138,7 +140,7 @@ const GCardNote = (props) => {
       }}
       elevation={0}
     >
-      <CardActionArea
+      <Box
         sx={{
           py: "12px",
           px: "24px",
@@ -147,21 +149,23 @@ const GCardNote = (props) => {
           alignItems: "center",
           justifyContent: "flex-start",
         }}
-        onClick={() => {
-          navigate("/profile", {
-            state: { info: { ...info }, pubkey: note.pubkey },
-          });
-        }}
       >
         <Avatar
+          className="avatar"
           sx={{ width: "36px", height: "36px" }}
           alt="Avatar"
           src={info && info.picture ? info.picture : default_avatar}
+          onClick={() => {
+            navigate("/profile", {
+              state: { info: { ...info }, pubkey: note.pubkey },
+            });
+          }}
         />
         <Typography
+          className="avatar"
           sx={{
             ml: "8px",
-            width: "120px",
+            // width: "120px",
             whiteSpace: "nowrap",
             overflow: "hidden",
             fontSize: "14px",
@@ -170,12 +174,17 @@ const GCardNote = (props) => {
           }}
           color={"#FFFFFF"}
           noWrap={true}
+          onClick={() => {
+            navigate("/profile", {
+              state: { info: { ...info }, pubkey: note.pubkey },
+            });
+          }}
         >
           {displayname()}
         </Typography>
         <Typography
           sx={{
-            ml: "8px",
+            ml: "20px",
             fontSize: "14px",
             fontFamily: "Saira",
             fontWeight: "500",
@@ -184,7 +193,7 @@ const GCardNote = (props) => {
         >
           {xhelp.formateSinceTime(note.created_at * 1000)}
         </Typography>
-      </CardActionArea>
+      </Box>
       <Box
         sx={{
           width: "100%",
@@ -195,7 +204,7 @@ const GCardNote = (props) => {
           navigate("/notethread", {
             state: {
               note: { ...note },
-              info: { ...info }
+              info: { ...info },
             },
           });
         }}
@@ -222,7 +231,7 @@ const GCardNote = (props) => {
               height: "28px",
               marginRight: "28px",
             }}
-            onClick={() => { 
+            onClick={() => {
               //
               dispatch(setPost(true));
             }}
@@ -235,7 +244,7 @@ const GCardNote = (props) => {
               width: "28px",
               height: "28px",
             }}
-            onClick={() => { }}
+            onClick={() => {}}
           >
             <img src={icon_praise} width="28px" alt="praise" />
           </Button>
