@@ -6,7 +6,9 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import { Button, CardActionArea } from "@mui/material";
+import { setPost } from "module/store/features/dialogSlice";
+
 import xhelp from "module/utils/xhelp";
 import "./GCardUser.scss";
 import icon_comment from "../asset/image/social/icon_comment.png";
@@ -22,6 +24,7 @@ const GCardNote = (props) => {
   const { note, info } = props;
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     //
@@ -219,7 +222,10 @@ const GCardNote = (props) => {
               height: "28px",
               marginRight: "28px",
             }}
-            onClick={() => { }}
+            onClick={() => { 
+              //
+              dispatch(setPost(true));
+            }}
           >
             <img src={icon_comment} width="28px" alt="comment" />
           </Button>
