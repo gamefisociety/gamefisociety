@@ -162,7 +162,7 @@ const GCardNote = (props) => {
           }}
         />
         <Typography
-          className="avatar"
+          className="name"
           sx={{
             ml: "8px",
             // width: "120px",
