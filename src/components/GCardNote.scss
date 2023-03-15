@@ -8,3 +8,17 @@
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+
+.avatar {
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.08);
+    }
+}
+
+.name {
+    cursor: pointer;
+    &:hover {
+        text-decoration:underline
+    }
+}
