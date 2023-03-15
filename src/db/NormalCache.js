@@ -1,6 +1,8 @@
 
 const NorCache = new Map();
 
+export const user_metadata_cache = 'user_metadata';
+
 const NormalCache = () => {
 
   const create = (key) => {

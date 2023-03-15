@@ -180,7 +180,10 @@ const GCardNote = (props) => {
         }}
         onClick={() => {
           navigate("/notethread", {
-            state: { note: { ...note } },
+            state: {
+              note: { ...note },
+              info: { ...info }
+            },
           });
         }}
       >

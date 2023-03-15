@@ -1,4 +1,6 @@
 
+export const thread_node_cache_flag = 'thread_node_cache';
+
 const TLCache = new Map();
 
 const TimelineCache = () => {
@@ -116,6 +118,52 @@ const TimelineCache = () => {
     return true;
   }
 
+  const hasThreadNote = (key, msg) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      return false;
+    }
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].uid === msg.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const getThreadNote = (key, eventId) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      return false;
+    }
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].uid === eventId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const pushThreadNote = (key, msg) => {
+    let cache = TLCache.get(key);
+    if (!cache) {
+      cache = create(key);
+    }
+    if (hasGlobalNote(key, msg) === true) {
+      return false;
+    }
+    let info = {
+      uid: msg.id,
+      create: msg.created_at,
+      msg: msg,
+    }
+    cache.push(info);
+    cache.sort((a, b) => {
+      return a.create - b.create;
+    })
+    return true;
+  }
+
   return {
     create: create,
     clear: clear,
@@ -125,6 +173,9 @@ const TimelineCache = () => {
     hasFollower: hasFollower,
     pushFollowers: pushFollowers,
     pushGlobalNote: pushGlobalNote,
+    hasThreadNote: hasThreadNote,
+    pushThreadNote: pushThreadNote,
+    getThreadNote: getThreadNote,
   }
 }
 
