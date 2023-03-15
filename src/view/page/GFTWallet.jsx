@@ -6,12 +6,15 @@ import Typography from "@mui/material/Typography";
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Grid from '@mui/material/Unstable_Grid2';
+import Paper from '@mui/material/Paper';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import './GFTWallet.scss';
-
 import ic_avatar from "../../asset/image/logo/ic_avatar.png";
+import ic_gift from "../../asset/image/wallet/ic_gift.png";
+import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png"
 
 function GFTWallet() {
 
@@ -27,12 +30,27 @@ function GFTWallet() {
         }
     }, [])
 
+    const portfolioView = () => {
+
+        return <Grid container spacing={2}>
+            <div className='grid_item'>
+                <img  className='img' src={ic_gfs_coin}></img>
+                <div className='txt_layout'>
+                    <span className='txt'>Assets on GFSP</span>
+                    <span className='txt'>734,565.63</span>
+                </div>
+            </div>
+           
+        </Grid>
+    }
+
     return (
-        <Box sx={{
+        <Box className="page_wallet_bg" sx={{
             display: "flex",
             flexDirection: "column",
             padding: '48px',
             width: "100%",
+            height: '100vh',
             backgroundColor: "background.paper",
         }}>
             <Box sx={{
@@ -74,7 +92,7 @@ function GFTWallet() {
                 }}>
                     <Box sx={{
                         display: "flex",
-                        flexDirection: "colum",
+                        flexDirection: "column",
                         width: "100%",
                         height: 'auto',
                     }}>
@@ -84,13 +102,35 @@ function GFTWallet() {
                                 with: '68px',
                                 height: '20px',
                                 fontSize: '14px',
-                                backgroundColor: "#1C1C1E",
                             }}
                             color="#ffffffff"
                             variant={'subtitle2'}
                             align={'center'}>
                             0x3e53cd6288decc43fc1ebd9f6b404eaddbb59a1e
                         </Typography>
+                        <Box
+                            sx={{
+                                marginLeft: '12px',
+                                marginTop: '10px',
+                                display: "flex",
+                                flexDirection: "row",
+                                width: "auto",
+                                height: "auto"
+
+                            }}
+                            align={'center'}
+                        >
+                            <img className='icon' src={ic_gift} ></img>
+                            <Typography
+                                sx={{
+                                    fontSize: '12px',
+                                }}
+                                color="#666666"
+                                variant={'subtitle2'}
+                                align={'left'}>
+                                Active since Sep 25, 2020
+                            </Typography>
+                        </Box>
 
                     </Box>
                 </Box>
@@ -109,7 +149,7 @@ function GFTWallet() {
                             <Tab label="History" value="3" />
                         </TabList>
                     </Box>
-                    <TabPanel value="1">Item One</TabPanel>
+                    <TabPanel value="1">{portfolioView()}</TabPanel>
                     <TabPanel value="2">Item Two</TabPanel>
                     <TabPanel value="3">Item Three</TabPanel>
                 </TabContext>
