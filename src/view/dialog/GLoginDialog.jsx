@@ -52,8 +52,8 @@ const GLoginDialog = () => {
         pub: ''
     });
     const [profile, setProfile] = useState({
-        nickname: '',
-        displayname: '',
+        name: '',
+        display_name: '',
         about: ''
     });
     const [copyState, setCopyState] = useState({
@@ -355,9 +355,9 @@ const GLoginDialog = () => {
                         }}
                         variant="outlined"
                         placeholder={'gamefi society username'}
-                        value={profile.nickname}
+                        value={profile.name}
                         onChange={(event) => {
-                            profile.nickname = event.target.value;
+                            profile.name = event.target.value;
                             setProfile({ ...profile });
                         }}
                     />
@@ -370,12 +370,12 @@ const GLoginDialog = () => {
                     className={'text_input'}
                     variant="outlined"
                     placeholder={'gamefi society displayname'}
-                    value={profile.displayname}
+                    value={profile.display_name}
                     InputProps={{
                         sx: { height: '42px' },
                     }}
                     onChange={(event) => {
-                        profile.displayname = event.target.value;
+                        profile.display_name = event.target.value;
                         setProfile({ ...profile });
                     }}
                 />
@@ -425,7 +425,7 @@ const GLoginDialog = () => {
                     setLoginState(2);
                 }}></div>
                 <DialogContentText color={'text.primary'} variant={'h5'} sx={{ mt: '32px' }}>
-                    {'Welcome, ' + profile.nickname + '!'}
+                    {'Welcome, ' + profile.name + '!'}
                 </DialogContentText>
                 <DialogContentText sx={{ mt: '12px' }} color={'text.primary'} variant={'subtitle2'}>
                     {'Before we start, you need to save your account information, keep your private key safe so you can log in at any time.'}

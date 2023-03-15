@@ -323,8 +323,8 @@ const GFTHead = () => {
               }}
               color={"text.primary"}
             >
-              {profile.displayname
-                ? profile.displayname
+              {profile.display_name
+                ? profile.display_name
                 : publicKey !== ""
                 ? "Nostr#" +
                   publicKey.substring(publicKey.length - 4, publicKey.length)
@@ -339,8 +339,8 @@ const GFTHead = () => {
               }}
               color={"text.secondary"}
             >
-              {profile.nickname
-                ? "@" + profile.nickname
+              {profile.name
+                ? "@" + profile.name
                 : publicKey !== ""
                 ? "@" +
                   publicKey.substring(publicKey.length - 4, publicKey.length)
@@ -773,7 +773,7 @@ const GFTHead = () => {
                       src={(profile.picture && profile.picture !== "default") ? profile.picture : default_avatar}
                     />
                     <Typography sx={{ ml: "6px" }} color={"text.primary"}>
-                      {profile.displayname}
+                      {profile.display_name}
                     </Typography>
                   </Stack>
                 </ProfileTooltip>

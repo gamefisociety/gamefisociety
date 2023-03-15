@@ -134,10 +134,10 @@ const GSetting = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            value={localProfile.displayname}
+            value={localProfile.display_name}
             variant="outlined"
             onChange={(event) => {
-              localProfile.displayname = event.target.value;
+              localProfile.display_name = event.target.value;
               setLocalProfile({ ...localProfile });
             }}
           />
@@ -174,10 +174,10 @@ const GSetting = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            value={localProfile.nickname}
+            value={localProfile.name}
             variant="outlined"
             onChange={(event) => {
-              localProfile.nickname = event.target.value;
+              localProfile.name = event.target.value;
               setLocalProfile({ ...localProfile });
             }}
           />

@@ -287,6 +287,7 @@ const GFTGlobal = () => {
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
           const info = inforData.get(item.msg.pubkey);
+          console.log("renderContent", info, item.msg);
           return (
             <GCardNote
               key={"global-note-" + index}

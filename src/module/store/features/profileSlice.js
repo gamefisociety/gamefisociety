@@ -15,8 +15,8 @@ export const InitState = {
   relays: {},
   latestRelays: 0,
   profile: {},
-  nickname: "Nostr",
-  displayname: "Nostr",
+  name: "Nostr",
+  display_name: "Nostr",
   about: "",
   picture: "",
   website: "",
@@ -68,9 +68,9 @@ const ProfileSlice = createSlice({
     },
     setProfile: (state, action) => {
       state.profile = { ...action.payload };
-      state.nickname = action.payload.nickname ? action.payload.nickname : "";
-      state.displayname = action.payload.displayname
-        ? action.payload.displayname
+      state.name = action.payload.name ? action.payload.name : "";
+      state.display_name = action.payload.display_name
+        ? action.payload.display_name
         : "";
       state.about = action.payload.about ? action.payload.about : "";
       state.picture = action.payload.picture

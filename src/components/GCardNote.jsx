@@ -7,7 +7,6 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
-import Skeleton from "@mui/material/Skeleton";
 import xhelp from "module/utils/xhelp";
 import "./GCardUser.scss";
 import icon_comment from "../asset/image/social/icon_comment.png";
@@ -117,6 +116,17 @@ const GCardNote = (props) => {
   //     )
   // }
 
+  const displayname = () => {
+    if(info && info.display_name){
+        return info.display_name;
+    }else{
+        if(note.pubkey){
+            return "Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
+        }
+    }
+    return "anonymous";
+  }
+
   return (
     <Card
       sx={{
@@ -143,7 +153,7 @@ const GCardNote = (props) => {
         <Avatar
           sx={{ width: "36px", height: "36px" }}
           alt="Avatar"
-          src={info ? info.picture : default_avatar}
+          src={info && info.picture ? info.picture : default_avatar}
         />
         <Typography
           sx={{
@@ -158,7 +168,7 @@ const GCardNote = (props) => {
           color={"#FFFFFF"}
           noWrap={true}
         >
-          {note.pubkey ? note.pubkey : "anonymous"}
+          {displayname()}
         </Typography>
         <Typography
           sx={{

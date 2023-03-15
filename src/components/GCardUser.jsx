@@ -181,11 +181,11 @@ const GCardUser = (props) => {
               color="#FFFFFF"
               align={"left"}
             >
-              {profile.displayname
-                ? profile.displayname
+              {profile.display_name
+                ? profile.display_name
                 : "Nostr#" + pubkey.substring(pubkey.length - 4, pubkey.length)}
             </Typography>
-            {profile.nickname ? (
+            {profile.name ? (
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -195,7 +195,7 @@ const GCardUser = (props) => {
                 color="#919191"
                 align={"left"}
               >
-                {"@" + profile.nickname}
+                {"@" + profile.name}
               </Typography>
             ) : null}
             <Box

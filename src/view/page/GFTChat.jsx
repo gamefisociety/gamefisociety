@@ -249,8 +249,8 @@ const GFTChat = (props) => {
             color: "#FFFFFF",
           }}
         >
-          {chatProfile.displayname
-            ? chatProfile.displayname
+          {chatProfile.display_name
+            ? chatProfile.display_name
             : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length)}
         </Typography>
       </Box>
