@@ -46,9 +46,7 @@ const GProfile = () => {
       filterTextNote,
       filterFollowPro,
     ]);
-    let dataCaches = [];
     let follow_create_at = 0;
-    // console.log('BroadcastSub textNote', textNote);
     System.BroadcastSub(
       textNote,
       (tag, client, msg) => {
