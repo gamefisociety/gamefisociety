@@ -1,5 +1,7 @@
 
 export const thread_node_cache_flag = 'thread_node_cache';
+export const target_node_cache_flag = 'target_node_cache';
+export const follow_cache_flag = 'follow_node_cache';
 
 const TLCache = new Map();
 
@@ -149,7 +151,7 @@ const TimelineCache = () => {
     if (!cache) {
       cache = create(key);
     }
-    if (hasGlobalNote(key, msg) === true) {
+    if (hasThreadNote(key, msg) === true) {
       return false;
     }
     let info = {
@@ -159,23 +161,76 @@ const TimelineCache = () => {
     }
     cache.push(info);
     cache.sort((a, b) => {
-      return a.create - b.create;
+      return b.create - a.create;
     })
     return true;
+  }
+
+  const pushTargetNote = (msg) => {
+    let cache = TLCache.get(target_node_cache_flag);
+    if (!cache) {
+      cache = create(target_node_cache_flag);
+    }
+    if (hasTargetNote(msg) === true) {
+      return false;
+    }
+    let info = {
+      uid: msg.id,
+      create: msg.created_at,
+      msg: msg,
+    }
+    cache.push(info);
+    cache.sort((a, b) => {
+      return b.create - a.create;
+    })
+    return true;
+  }
+
+  const hasTargetNote = (msg) => {
+    let cache = TLCache.get(target_node_cache_flag);
+    if (!cache) {
+      return false;
+    }
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].uid === msg.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const getTargetNote = (eventId) => {
+    let cache = TLCache.get(target_node_cache_flag);
+    if (!cache) {
+      return false;
+    }
+    for (let i = 0; i < cache.length; i++) {
+      if (cache[i].uid === eventId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   return {
     create: create,
     clear: clear,
     get: get,
+
     hasChat: hasChat,
     pushChat: pushChat,
+
     hasFollower: hasFollower,
     pushFollowers: pushFollowers,
     pushGlobalNote: pushGlobalNote,
+
     hasThreadNote: hasThreadNote,
     pushThreadNote: pushThreadNote,
     getThreadNote: getThreadNote,
+
+    pushTargetNote: pushTargetNote,
+    getTargetNote: getTargetNote,
+    hasTargetNote: hasTargetNote,
   }
 }
 

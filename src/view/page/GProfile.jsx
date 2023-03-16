@@ -9,6 +9,7 @@ import GCardNote from "components/GCardNote";
 import Typography from "@mui/material/Typography";
 import GFTChat from "./GFTChat";
 
+import TimelineCache, { target_node_cache_flag } from 'db/TimelineCache';
 import { EventKind } from "nostr/def";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
@@ -22,6 +23,7 @@ let lastPubKey = "";
 const GProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const TLCache = TimelineCache();
   console.log("GProfile enter", location);
   const { info, pubkey } = location.state;
   //
@@ -51,12 +53,15 @@ const GProfile = () => {
       textNote,
       (tag, client, msg) => {
         if (tag === "EOSE") {
-          setNotes(dataCaches.concat());
+          let target_note_cache = TLCache.get(target_node_cache_flag);
+          // console.log('target_note_cache', target_note_cache);
+          setNotes(target_note_cache.concat());
           System.BroadcastClose(textNote, client, null);
         } else if (tag === "EVENT") {
           if (msg.kind === EventKind.TextNote) {
             console.log("BroadcastSub textNote", msg);
-            dataCaches.push(msg);
+            TLCache.pushTargetNote(msg);
+            // dataCaches.push(msg);
           } else if (msg.kind === EventKind.ContactList) {
             console.log("profile_note_follow", client.addr, msg);
             if (msg.created_at < follow_create_at) {
@@ -147,7 +152,7 @@ const GProfile = () => {
         {notes.map((item, index) => (
           <GCardNote
             key={"profile-note-index" + index}
-            note={{ ...item }}
+            note={{ ...item.msg }}
             info={info}
           />
         ))}
