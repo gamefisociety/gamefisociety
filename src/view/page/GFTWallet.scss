@@ -1,3 +1,39 @@
-.page_wallet_bg{
-    
+.page_wallet_bg {
+    .icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .grid_item {
+        display: flex;
+        flex-direction: row;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 14px;
+        width: 222px;
+        height: auto;
+        background: #191A1B;
+        border-radius: 6px;
+        align-items: center;
+
+        .img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .txt_layout {
+            display: flex;
+            flex-direction: column;
+            margin-left: 11px;
+
+            .txt {
+                font-size: 12px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #FFFFFF;
+            }
+        }
+
+    }
+
 }
