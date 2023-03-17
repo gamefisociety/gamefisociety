@@ -89,7 +89,9 @@ const GFTGlobal = () => {
 
   //
   useEffect(() => {
-    getNoteList();
+    if (curCreateAt === 0) {
+      getNoteList();
+    }
     return () => { };
   }, [curCreateAt]);
 
@@ -98,6 +100,7 @@ const GFTGlobal = () => {
       window.innerHeight + document.documentElement.scrollTop >
       document.scrollingElement.scrollHeight - 50
     ) {
+      // console.log('loadMore', curCreateAt);
       getNoteList();
     }
   };
@@ -118,13 +121,18 @@ const GFTGlobal = () => {
         System.BroadcastClose(subTextNode, client, null);
         const noteCache = TLCache.get(global_note_cache_flag);
         setData(noteCache.concat());
-        //
-        setCurCreateAt();
-        //
+
+        let timeFlag = 100000000000000;
         const pubkeys = [];
         noteCache.map((item) => {
           pubkeys.push(item.msg.pubkey);
+          if (item.create < timeFlag) {
+            timeFlag = item.create;
+          }
         });
+        console.log('loadMore', timeFlag);
+        setCurCreateAt(timeFlag);
+        //
         const pubkyes_filter = new Set(pubkeys);
         getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
