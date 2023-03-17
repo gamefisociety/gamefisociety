@@ -41,11 +41,32 @@ const GPostReplay = () => {
   }, [data, isMore]);
 
   //
-  useEffect(() => {
-    if (curCreateAt === 0 || curCreateAt === 99999999999999) {
-      getNoteList();
+  const getSubNote = () => {
+    const filterTextNote = textNotePro.get();
+    if (curCreateAt === 0) {
+      TLCache.clear(global_note_cache_flag);
+      filterTextNote.until = Date.now();
+    } else {
+      setMore(true);
+      if (curCreateAt === 0 || curCreateAt === 99999999999999) {
+        filterTextNote.since = curCreateAt;
+      }
     }
-    return () => { };
+    filterTextNote.limit = 50;
+    filterTextNote.authors = follows.concat();
+    console.log('follows', filterTextNote);
+    let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+    return subTextNode;
+  }
+
+  //
+  useEffect(() => {
+    let textNote = getSubNote();
+    getNoteList(textNote);
+    return () => {
+      System.BroadcastClose(textNote, null, null);
+      // let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+    };
   }, [curCreateAt]);
 
   const loadMore = () => {
@@ -54,28 +75,16 @@ const GPostReplay = () => {
       document.scrollingElement.scrollHeight - 50
     ) {
       // console.log('loadMore', curCreateAt);
-      getNoteList();
+      let textNote = getSubNote();
+      getNoteList(textNote);
     }
   };
 
-  // console.log('follows', follows);
-  const getNoteList = () => {
-    const filterTextNote = textNotePro.get();
-    if (curCreateAt === 0) {
-      TLCache.clear(global_note_cache_flag);
-      filterTextNote.until = Date.now();
-    } else {
-      setMore(true);
-      filterTextNote.since = curCreateAt;
-    }
-    filterTextNote.limit = 50;
-    filterTextNote.authors = follows.concat();
-    console.log('follows', filterTextNote);
-    let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+  const getNoteList = (subTextNode) => {
 
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        System.BroadcastClose(subTextNode, client, null);
+        // System.BroadcastClose(subTextNode, client, null);
         const noteCache = TLCache.get(global_note_cache_flag);
         if (!noteCache) {
           return;
@@ -89,13 +98,13 @@ const GPostReplay = () => {
             timeFlag = item.create;
           }
         });
-        console.log('loadMore', timeFlag);
+        // console.log('loadMore', timeFlag);
         setCurCreateAt(timeFlag);
         //
         const pubkyes_filter = new Set(pubkeys);
         getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
-        // console.log('text note', msg);
+        console.log('text note', msg);
         TLCache.pushGlobalNote(global_note_cache_flag, msg)
       }
     },

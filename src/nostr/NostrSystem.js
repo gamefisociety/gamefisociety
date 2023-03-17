@@ -86,7 +86,7 @@ export class NostrSystem {
     if (!subid[1]) {
       return;
     }
-    if (client === null) {
+    if (client === null && !client) {
       for (const [, tmpRelay] of this.Clients) {
         Relay.SendClose(tmpRelay, subid[1], callback);
       }

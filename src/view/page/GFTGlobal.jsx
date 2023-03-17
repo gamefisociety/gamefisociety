@@ -133,7 +133,6 @@ const GFTGlobal = () => {
             timeFlag = item.create;
           }
         });
-        // console.log('loadMore', timeFlag);
         setCurCreateAt(timeFlag);
         //
         const pubkyes_filter = new Set(pubkeys);
