@@ -120,6 +120,9 @@ const GFTGlobal = () => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subTextNode, client, null);
         const noteCache = TLCache.get(global_note_cache_flag);
+        if (!noteCache) {
+          return;
+        }
         setData(noteCache.concat());
 
         let timeFlag = 100000000000000;
@@ -130,7 +133,7 @@ const GFTGlobal = () => {
             timeFlag = item.create;
           }
         });
-        console.log('loadMore', timeFlag);
+        // console.log('loadMore', timeFlag);
         setCurCreateAt(timeFlag);
         //
         const pubkyes_filter = new Set(pubkeys);

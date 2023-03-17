@@ -3,13 +3,12 @@ import "./GPostReplay.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import GCardNote from "components/GCardNote";
 import List from "@mui/material/List";
-
-import SearchIcon from "@mui/icons-material/Search";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -19,16 +18,10 @@ import { setPost } from 'module/store/features/dialogSlice';
 
 import TimelineCache from 'db/TimelineCache';
 
-import {
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "../../../node_modules/@mui/material/index";
-
 const GPostReplay = () => {
   const dispatch = useDispatch();
+  const { follows } = useSelector((s) => s.profile);
+
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
   const [data, setData] = useState([]);
@@ -49,7 +42,7 @@ const GPostReplay = () => {
 
   //
   useEffect(() => {
-    if (curCreateAt === 0) {
+    if (curCreateAt === 0 || curCreateAt === 99999999999999) {
       getNoteList();
     }
     return () => { };
@@ -65,6 +58,7 @@ const GPostReplay = () => {
     }
   };
 
+  // console.log('follows', follows);
   const getNoteList = () => {
     const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
@@ -75,13 +69,18 @@ const GPostReplay = () => {
       filterTextNote.since = curCreateAt;
     }
     filterTextNote.limit = 50;
-    let subTextNode = BuildSub('textnode', [filterTextNote]);
+    filterTextNote.authors = follows.concat();
+    console.log('follows', filterTextNote);
+    let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         System.BroadcastClose(subTextNode, client, null);
         const noteCache = TLCache.get(global_note_cache_flag);
+        if (!noteCache) {
+          return;
+        }
         setData(noteCache.concat());
-
         let timeFlag = 100000000000000;
         const pubkeys = [];
         noteCache.map((item) => {
@@ -157,8 +156,7 @@ const GPostReplay = () => {
           sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
           variant="contained"
           onClick={() => {
-            setCurCreateAt(0);
-            // setCurLable(item);
+            setCurCreateAt(99999999999999);
           }}
         >
           {"Refresh"}
