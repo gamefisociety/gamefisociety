@@ -11,17 +11,15 @@ const NostrRelay = () => {
     return key;
   }
 
-  const addListen = (key, client, once, callback) => {
+  const addListen = (key, client, callback) => {
     if (listenProcers.get(key)) {
       return false;
     }
     let procer = {
       key: key,
       client: client,
-      once: once,
       callback: callback
     };
-    // console.log('addListen', key, client, once, procer);
     listenProcers.set(key, procer);
   }
 
@@ -132,10 +130,10 @@ const NostrRelay = () => {
         flag = true;
       }
     } catch (e) {
-      console.warn("Could not load relay information", e);
+      // console.warn("Could not load relay information", e);
     } finally {
       if (flag === true) {
-        console.log('Find relay and try to connect!');
+        // console.log('Find relay and try to connect!');
         if (client.IsClosed) {
           _UpdateState(client);
         } else {
@@ -200,7 +198,7 @@ const NostrRelay = () => {
     }
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     let tmpkey = buildKey(client.addr, ev.Id);
-    addListen(tmpkey, client, 1, callback);
+    addListen(tmpkey, client, callback);
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendEvent direction', req);
       _SendReal(client, req);
@@ -217,7 +215,7 @@ const NostrRelay = () => {
       return;
     }
     let tmpkey = buildKey(client.addr, sub[1]);
-    addListen(tmpkey, client, 1, callback)
+    addListen(tmpkey, client, callback)
     //
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendSub direction', sub);
@@ -269,21 +267,6 @@ const NostrRelay = () => {
 
   const _UpdateState = (client) => {
     client.Stats.connected = client.Socket?.readyState === WebSocket.OPEN;
-  }
-
-  const _VerifySig = (rawEv) => {
-    const payload = [0, rawEv.pubkey, rawEv.created_at, rawEv.kind, rawEv.tags, rawEv.content];
-
-    const payloadData = new TextEncoder().encode(JSON.stringify(payload));
-    if (secp.utils.sha256Sync === undefined) {
-      throw "Cannot verify event, no sync sha256 method";
-    }
-    const data = secp.utils.sha256Sync(payloadData);
-    const hash = secp.utils.bytesToHex(data);
-    if (!secp.schnorr.verifySync(rawEv.sig, hash, rawEv.pubkey)) {
-      throw "Sig verify failed";
-    }
-    return rawEv;
   }
 
   return {

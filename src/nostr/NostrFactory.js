@@ -21,7 +21,6 @@ const NostrFactory = {
     relay.Stats = {};
     relay.IsClosed = false;
     relay.ReconnectTimer = null;
-    relay.EventsCallback = new Map();
     relay.AwaitingAuth = new Map();
     relay.Authed = false;
     relay.info = null;
@@ -42,25 +41,6 @@ const NostrFactory = {
     return ev;
   },
 
-  createSub: () => {
-    let sub = {};
-    sub.Id = uuid();
-    sub.Ids = undefined;
-    sub.Authors = undefined;
-    sub.Kinds = undefined;
-    sub.ETags = undefined;
-    sub.PTags = undefined;
-    sub.DTags = undefined;
-    sub.Search = undefined;
-    sub.Since = null;
-    sub.Until = null;
-    sub.Limit = null;
-    sub.childs = [];
-    sub.Started = new Map();
-    sub.Finished = new Map();
-    return sub;
-  },
-
   createFilter: () => {
     let filter = {};
     filter.ids = undefined;
@@ -76,7 +56,7 @@ const NostrFactory = {
 
 
   formateEvent: (ev) => {
-    console.log('formate event', ev);
+    // console.log('formate event', ev);
     return {
       id: ev.Id,
       pubkey: ev.PubKey,
@@ -143,25 +123,7 @@ const NostrFactory = {
     }
     return ret;
   },
-  buildReq: (sub) => {
-    //
-    const buildChild = (ret1, subchild) => {
-      if (subchild.childs && subchild.childs.length > 0) {
-        subchild.childs.map((item) => {
-          ret1.push(NostrFactory.formateSub(item));
-          buildChild(ret1, item);
-        });
-      }
-      return ret1;
-    }
-    //
-    let ret = ["REQ", sub.Id];
-    let subinfo = NostrFactory.formateSub(sub);
-    ret.push(subinfo);
-    ret = buildChild(ret, sub);
-    return ret;
-  }
-  //
+
 }
 
 export default NostrFactory;
