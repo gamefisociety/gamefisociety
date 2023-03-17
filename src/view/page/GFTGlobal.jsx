@@ -21,6 +21,7 @@ import TimelineCache from 'db/TimelineCache';
 
 import {
   Button,
+  Divider,
   IconButton,
   TextField,
   Typography,
@@ -88,11 +89,9 @@ const GFTGlobal = () => {
 
   //
   useEffect(() => {
-    // console.log('enter global note');
-    TLCache.clear(global_note_cache_flag);
     getNoteList();
     return () => { };
-  }, []);
+  }, [curCreateAt]);
 
   const loadMore = () => {
     if (
@@ -106,6 +105,7 @@ const GFTGlobal = () => {
   const getNoteList = () => {
     const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
+      TLCache.clear(global_note_cache_flag);
       filterTextNote.until = Date.now();
     } else {
       setMore(true);
@@ -161,22 +161,20 @@ const GFTGlobal = () => {
     return (
       <Box
         sx={{
+          // backgroundColor: 'red',
           padding: "24px",
           display: "flex",
           flexDirection: "row",
           alighItems: "center",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           backgroundColor: 'background.paper'
         }}
       >
-        <Typography
+        <Button
           className={'top_button'}
-          sx={{ px: "18px", py: "6px" }}
-          variant="subtitle2"
-          color="text.primary"
+          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
+          variant="contained"
           backgroundColor={"background.default"}
-          align={"center"}
-          borderRadius={"4px"}
           onClick={() => {
             dispatch(setPost({
               post: true,
@@ -184,50 +182,19 @@ const GFTGlobal = () => {
             }));
           }}
         >
-          {"Post & Replay"}
-        </Typography>
-        <Typography
+          {"Post"}
+        </Button>
+        <Button
           className={'top_button'}
-          sx={{ px: "18px", py: "6px" }}
-          variant="subtitle2"
-          color="text.primary"
-          backgroundColor={"background.default"}
-          align={"center"}
-          borderRadius={"4px"}
+          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
+          variant="contained"
           onClick={() => {
+            setCurCreateAt(0);
             // setCurLable(item);
           }}
         >
-          {"Global"}
-        </Typography>
-        <Typography
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px" }}
-          variant="subtitle2"
-          color="text.primary"
-          backgroundColor={"background.default"}
-          align={"center"}
-          borderRadius={"4px"}
-          onClick={() => {
-            // setCurLable(item);
-          }}
-        >
-          {"DMs"}
-        </Typography>
-        <Typography
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px" }}
-          variant="subtitle2"
-          color="text.primary"
-          backgroundColor={"background.default"}
-          align={"center"}
-          borderRadius={"4px"}
-          onClick={() => {
-            // setCurLable(item);
-          }}
-        >
-          {"Notificatons"}
-        </Typography>
+          {"Refresh"}
+        </Button>
       </Box>
     );
   };
@@ -294,7 +261,7 @@ const GFTGlobal = () => {
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
           const info = inforData.get(item.msg.pubkey);
-          console.log("renderContent", info, item.msg);
+          // console.log("renderContent", info, item.msg);
           return (
             <GCardNote
               key={"global-note-" + index}
@@ -310,6 +277,7 @@ const GFTGlobal = () => {
   return (
     <Paper className={'global_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
       {renderPartment()}
+      <Divider />
       {/* {renderLables()} */}
       {renderContent()}
     </Paper>
