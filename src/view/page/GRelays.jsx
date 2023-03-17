@@ -5,14 +5,41 @@ import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Switch from "@mui/material/Switch";
+import Avatar from "@mui/material/Avatar";
+import { alpha, styled } from "@mui/material/styles";
 import { Button, CardActions } from "@mui/material";
 import { setRelays, removeRelay } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
-import Chip from "@mui/material/Chip";
 import logo_delete from "asset/image/social/icon_delete.png";
+import icon_detail from "asset/image/social/icon_detail.png";
 import icon_save from "asset/image/social/icon_save.png";
+import icon_back_white from "../../asset/image/social/icon_back_white.png";
 import "./GRelays.scss";
 let deletingRealy = "";
+
+const RSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#4B8B1F",
+    "&:hover": {
+      backgroundColor: alpha("#4B8B1F", theme.palette.action.hoverOpacity),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "#565656",
+  },
+}));
+const WSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#F5A900",
+    "&:hover": {
+      backgroundColor: alpha("#F5A900", theme.palette.action.hoverOpacity),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "#565656",
+  },
+}));
 const GRelays = () => {
   const { relays } = useSelector((s) => s.profile);
   const { publicKey, loggedOut } = useSelector((s) => s.login);
@@ -20,6 +47,7 @@ const GRelays = () => {
   const relayPro = useRelayPro();
   const [newRelays, setNewRelays] = useState([]);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [module, setModule] = useState({ isDetail: false, curRelay: {} });
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -97,7 +125,6 @@ const GRelays = () => {
     }
     return null;
   };
-
   const renderCacheRelays = () => {
     return Object.entries(relays).map((item, index) => {
       console.log("relay", item);
@@ -107,46 +134,132 @@ const GRelays = () => {
           sx={{
             position: "relative",
             width: "100%",
-            height: "36px",
+            // height: "36px",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-start",
           }}
         >
-          <Typography
+          <Box
             sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              fontColor: "#FFFFFF",
+              position: "relative",
+              width: "100%",
+              height: "36px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
             }}
           >
-            {item[0]}
-          </Typography>
-          <Chip
-            sx={{ ml: "6px", width: "12px", height: "12px" }}
-            color={item[1].read ? "success" : "error"}
-          />
-          <Chip
-            sx={{ ml: "6px", width: "12px", height: "12px" }}
-            color={item[1].write ? "success" : "error"}
-          />
-          <Button
-            variant="contained"
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              {item[0]}
+            </Typography>
+            <Box
+              sx={{
+                ml: "10px",
+                width: "16px",
+                height: "16px",
+                borderRadius: "8px",
+                backgroundColor: item[1].read ? "#4B8B1F" : "#D9D9D9",
+              }}
+            />
+            <Box
+              sx={{
+                ml: "10px",
+                width: "16px",
+                height: "16px",
+                borderRadius: "8px",
+                backgroundColor: item[1].write ? "#F5A900" : "#D9D9D9",
+              }}
+            />
+            <Button
+              className="button"
+              variant="contained"
+              sx={{
+                position: "absolute",
+                right: "40px",
+                width: "36px",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => {
+                module.isDetail = true;
+                module.curRelay = item;
+                setModule({ ...module });
+              }}
+            >
+              <img src={icon_detail} width="36px" alt="icon_detail" />
+            </Button>
+            <Button
+              className="button"
+              variant="contained"
+              sx={{
+                position: "absolute",
+                right: "-30px",
+                width: "40px",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => {
+                deletingRealy = item[0];
+                handleClickDialogOpen();
+              }}
+            >
+              <img src={logo_delete} width="40px" alt="logo_delete" />
+            </Button>
+          </Box>
+          <Box
             sx={{
-              position: "absolute",
-              right: "-20px",
-              width: "40px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {
-              deletingRealy = item[0];
-              handleClickDialogOpen();
+              position: "relative",
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
             }}
           >
-            <img src={logo_delete} width="40px" alt="copy" />
-          </Button>
+            <Typography
+              sx={{
+                fontSize: "12px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#666666",
+              }}
+            >
+              {"R"}
+            </Typography>
+            <RSwitch
+              inputProps={{ "aria-label": "controlled" }}
+              checked={item[1].read}
+              onChange={() => {
+                // item[1].read = !item[1].read;
+              }}
+            />
+            <Typography
+              sx={{
+                marginLeft: "20px",
+                fontSize: "12px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#666666",
+              }}
+            >
+              {"W"}
+            </Typography>
+            <WSwitch
+              inputProps={{ "aria-label": "controlled" }}
+              checked={item[1].write}
+              onChange={() => {
+                // item[1].write = !item[1].write;
+              }}
+            />
+          </Box>
         </Box>
       );
     });
@@ -225,11 +338,467 @@ const GRelays = () => {
     });
   };
 
+  const renderRelays = () => {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          paddingBottom: "80px",
+        }}
+      >
+        <Typography
+          sx={{
+            marginTop: "88px",
+            width: "100%",
+            height: "50px",
+            fontSize: "18px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            align: "left",
+            borderBottom: 1,
+            borderColor: "#202122",
+          }}
+          align={"left"}
+        >
+          {"Your Relays " + Object.entries(relays).length}
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{
+            marginTop: "23px",
+            width: "100%",
+            height: "36px",
+            backgroundColor: "#454FBF",
+            borderRadius: "6px",
+            fontSize: "28px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "white",
+          }}
+          onClick={() => {
+            newRelays.push("");
+            setNewRelays(newRelays.concat());
+          }}
+        >
+          {"+"}
+        </Button>
+        <CardActions
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {/* {loggedOut === false && (
+      <Button
+        variant="text"
+        sx={{
+          width: "80px",
+          fontSize: "20px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+          fontColor: "#454FBF",
+        }}
+        onClick={fetchRelays}
+      >
+        {"Sync"}
+      </Button>
+    )} */}
+        </CardActions>
+        <Stack
+          sx={{
+            width: "100%",
+            marginTop: "20px",
+          }}
+        >
+          {renderNewRelays()}
+        </Stack>
+        <Stack
+          sx={{
+            width: "100%",
+            marginTop: "20px",
+          }}
+          spacing={3}
+        >
+          {renderCacheRelays()}
+        </Stack>
+      </Box>
+    );
+  };
+
+  const renderCurRelay = () => {
+    return (
+      <Box
+        sx={{
+          paddingBottom: "80px",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            marginTop: "88px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: 1,
+            borderColor: "#202122",
+          }}
+        >
+          <Box
+            className={"goback"}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+            onClick={() => {
+              module.isDetail = false;
+              setModule({ ...module });
+            }}
+          >
+            <img src={icon_back_white} width="38px" alt="icon_back_white" />
+            <Typography
+              sx={{
+                marginLeft: "5px",
+                fontSize: "18px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              {"Relays"}
+            </Typography>
+          </Box>
+          <Typography
+            sx={{
+              fontSize: "18px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+          >
+            {"Current Relay"}
+          </Typography>
+        </Box>
+        <Typography
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            fontSize: "14px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            textAlign: "left",
+            color: "#919191",
+          }}
+        >
+          {"Administrator"}
+        </Typography>
+        <Box
+          sx={{
+            marginTop: "12px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Avatar
+              sx={{ width: "48px", height: "48px" }}
+              edge="end"
+              alt="GameFi Society"
+              // src={}
+            />
+            <Typography
+              sx={{
+                marginLeft: "16px",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              {"Administrator Name"}
+            </Typography>
+          </Box>
+          <Button
+            className="button"
+            variant="contained"
+            sx={{
+              width: "36px",
+              backgroundColor: "transparent",
+            }}
+            onClick={() => {}}
+          >
+            <img src={icon_detail} width="36px" alt="icon_detail" />
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Repeater"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Repeater Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Describe"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Describe Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Contact Person"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Contact Person Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Software"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Software Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Version"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Version Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            marginTop: "34px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+              textAlign: "left",
+            }}
+          >
+            {"Supported NIPs"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={"Supported NIPs Content"}
+            variant="outlined"
+            onChange={(event) => {
+            }}
+          />
+        </Box>
+      </Box>
+    );
+  };
+
   return (
     <Box
       sx={{
         width: "400px",
-        minHeight: "100%",
+        // minHeight: "100%",
         backgroundColor: "#0F0F0F",
         display: "flex",
         flexDirection: "column",
@@ -238,85 +807,7 @@ const GRelays = () => {
         paddingRight: "32px",
       }}
     >
-      <Typography
-        sx={{
-          marginTop: "88px",
-          width: "100%",
-          height: "50px",
-          fontSize: "18px",
-          fontFamily: "Saira",
-          fontWeight: "500",
-          align: "left",
-          borderBottom: 1,
-          borderColor: "#202122",
-        }}
-        align={"left"}
-      >
-        {"Your Relays " + Object.entries(relays).length}
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{
-          marginTop: "23px",
-          width: "100%",
-          height: "36px",
-          backgroundColor: "#454FBF",
-          borderRadius: "6px",
-          fontSize: "28px",
-          fontFamily: "Saira",
-          fontWeight: "500",
-          color: "white",
-        }}
-        onClick={() => {
-          newRelays.push("");
-          setNewRelays(newRelays.concat());
-        }}
-      >
-        {"+"}
-      </Button>
-      <CardActions
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-        }}
-      >
-        {/* {loggedOut === false && (
-          <Button
-            variant="text"
-            sx={{
-              width: "80px",
-              fontSize: "20px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              fontColor: "#454FBF",
-            }}
-            onClick={fetchRelays}
-          >
-            {"Sync"}
-          </Button>
-        )} */}
-      </CardActions>
-      <Stack
-        sx={{
-          width: "100%",
-          marginTop: "20px",
-        }}
-      >
-        {renderNewRelays()}
-      </Stack>
-      <Stack
-        sx={{
-          width: "100%",
-          marginTop: "20px",
-        }}
-        spacing={3}
-      >
-        {renderCacheRelays()}
-      </Stack>
-
+      {module.isDetail ? renderCurRelay() : renderRelays()}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
