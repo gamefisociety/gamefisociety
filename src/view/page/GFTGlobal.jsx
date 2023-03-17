@@ -112,7 +112,7 @@ const GFTGlobal = () => {
       filterTextNote.until = Date.now();
     } else {
       setMore(true);
-      filterTextNote.since = curCreateAt;
+      filterTextNote.until = curCreateAt;
     }
     filterTextNote.limit = 50;
     let subTextNode = BuildSub('textnode', [filterTextNote]);
