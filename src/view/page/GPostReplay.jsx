@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./GFTGlobal.scss";
+import "./GPostReplay.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import GCardNote from "components/GCardNote";
 import List from "@mui/material/List";
-
-import SearchIcon from "@mui/icons-material/Search";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -19,56 +18,10 @@ import { setPost } from 'module/store/features/dialogSlice';
 
 import TimelineCache from 'db/TimelineCache';
 
-import {
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "../../../node_modules/@mui/material/index";
-
-const labelS = [
-  "All",
-  "ETH",
-  "BTC",
-  "DOT",
-  "GAME",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-  "SPORTS",
-];
-
-const GFTGlobal = () => {
+const GPostReplay = () => {
   const dispatch = useDispatch();
-  //
-  const [curLable, setCurLable] = useState("All");
+  const { follows } = useSelector((s) => s.profile);
+
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
   const [data, setData] = useState([]);
@@ -88,12 +41,35 @@ const GFTGlobal = () => {
   }, [data, isMore]);
 
   //
-  useEffect(() => {
+  const getSubNote = () => {
+    const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
-      getNoteList();
+      TLCache.clear(global_note_cache_flag);
+      filterTextNote.until = Date.now();
+    } else {
+      setMore(true);
+      if (curCreateAt === 0 || curCreateAt === 99999999999999) {
+        filterTextNote.since = curCreateAt;
+      }
     }
-    return () => { };
-  }, [curCreateAt]);
+    filterTextNote.limit = 50;
+    filterTextNote.authors = follows.concat();
+    console.log('follows', filterTextNote);
+    let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+    return subTextNode;
+  }
+
+  //
+  useEffect(() => {
+    let textNote = getSubNote();
+    getNoteList(textNote);
+    console.log('post and replay listen!', textNote);
+    return () => {
+      console.log('post and replay remove!', textNote);
+      System.BroadcastClose(textNote, null, null);
+      // let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+    };
+  }, [follows]);
 
   const loadMore = () => {
     if (
@@ -101,45 +77,33 @@ const GFTGlobal = () => {
       document.scrollingElement.scrollHeight - 50
     ) {
       // console.log('loadMore', curCreateAt);
-      getNoteList();
+      let textNote = getSubNote();
+      getNoteList(textNote);
     }
   };
 
-  const getNoteList = () => {
-    const filterTextNote = textNotePro.get();
-    if (curCreateAt === 0) {
-      TLCache.clear(global_note_cache_flag);
-      filterTextNote.until = Date.now();
-    } else {
-      setMore(true);
-      filterTextNote.since = curCreateAt;
-    }
-    filterTextNote.limit = 50;
-    let subTextNode = BuildSub('textnode', [filterTextNote]);
+  const getNoteList = (subTextNode) => {
+    //
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        System.BroadcastClose(subTextNode, client, null);
-        const noteCache = TLCache.get(global_note_cache_flag);
-        if (!noteCache) {
-          return;
-        }
-        setData(noteCache.concat());
-
-        let timeFlag = 100000000000000;
-        const pubkeys = [];
-        noteCache.map((item) => {
-          pubkeys.push(item.msg.pubkey);
-          if (item.create < timeFlag) {
-            timeFlag = item.create;
-          }
-        });
-        setCurCreateAt(timeFlag);
         //
-        const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
-        // console.log('text note', msg);
-        TLCache.pushGlobalNote(global_note_cache_flag, msg)
+        console.log('post and replay post and replay', msg);
+        let ret = TLCache.pushGlobalNote(global_note_cache_flag, msg);
+        if (ret) {
+          const noteCache = TLCache.get(global_note_cache_flag);
+          if (!noteCache) {
+            return;
+          }
+          setData(noteCache.concat());
+          //
+          const pubkeys = [];
+          noteCache.map((item) => {
+            pubkeys.push(item.msg.pubkey);
+          });
+          const pubkyes_filter = new Set(pubkeys);
+          getInfor(pubkyes_filter, null);
+        }
       }
     },
       null
@@ -149,14 +113,13 @@ const GFTGlobal = () => {
   const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    //
     const newInfo = new Map();
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setInforData(newInfo);
         System.BroadcastClose(subTextNode, client, null);
       } else if (tag === 'EVENT') {
-        console.log('info', msg);
+        // console.log('info', msg);
         let info = {};
         if (msg.content !== "") {
           info = JSON.parse(msg.content);
@@ -199,70 +162,12 @@ const GFTGlobal = () => {
           sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
           variant="contained"
           onClick={() => {
-            setCurCreateAt(0);
-            // setCurLable(item);
+            setCurCreateAt(99999999999999);
           }}
         >
           {"Refresh"}
         </Button>
       </Box>
-    );
-  };
-
-  const renderLables = () => {
-    return (
-      <Paper>
-        <Box
-          sx={{
-            width: "100%",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "row",
-            alighItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <IconButton>
-            <SearchIcon sx={{ height: "46px" }} />
-          </IconButton>
-          <TextField
-            sx={{ width: "360px", height: "46px" }}
-            label="Search"
-          ></TextField>
-        </Box>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            px: "24px",
-            maxHeight: "92px",
-            // backgroundColor: 'blue',
-            overflow: "hidden",
-          }}
-        // expanded={true}
-        >
-          {labelS.map((item, index) => (
-            <Grid item key={"label-index-" + index}>
-              {
-                <Typography
-                  sx={{ px: "18px", py: "2px" }}
-                  variant="body2"
-                  color="primary"
-                  backgroundColor={curLable === item ? "green" : "gray"}
-                  align={"center"}
-                  borderRadius={"4px"}
-                  onClick={() => {
-                    setCurLable(item);
-                  }}
-                >
-                  {item}
-                </Typography>
-              }
-            </Grid>
-          ))}
-        </Grid>
-        <Button>{"more"}</Button>
-      </Paper>
     );
   };
 
@@ -285,13 +190,12 @@ const GFTGlobal = () => {
   };
 
   return (
-    <Paper className={'global_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
+    <Paper className={'post_replay_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
       {renderPartment()}
       <Divider />
-      {/* {renderLables()} */}
       {renderContent()}
     </Paper>
   );
 };
 
-export default GFTGlobal;
+export default GPostReplay;
