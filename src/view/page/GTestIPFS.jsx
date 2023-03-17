@@ -1,4 +1,5 @@
 import { React, useEffect, useState, useRef } from "react";
+import { useWeb3React } from "@web3-react/core";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -8,18 +9,36 @@ import "./GTestIPFS.scss";
 import MDEditor from "@uiw/react-md-editor";
 import Input from "@mui/material/Input";
 import LoadingButton from "@mui/lab/LoadingButton";
+import GSTPostBase from "web3/GSTPost";
 import { catIPFSContent } from "../../api/requestData";
-
 function GTestIPFS() {
+  const { activate, account, chainId, active, library, deactivate } =
+    useWeb3React();
   const [cid, setCID] = useState("");
   const [fetching, setFetching] = useState(false);
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
   useEffect(() => {
+    fetchPosts();
     return () => {};
   }, []);
-
+  const fetchPosts = () => {
+    if (account) {
+      GSTPostBase.getPost(library, 0)
+        .then((res) => {
+          console.log("fetchPosts", res);
+          if (res > 0) {
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
+      return 0;
+    }
+  }
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -57,9 +76,7 @@ function GTestIPFS() {
     console.log(e.target.value);
   };
 
-  const publish = () => {
-
-  }
+  const publish = () => {};
   return (
     <Box
       sx={{
