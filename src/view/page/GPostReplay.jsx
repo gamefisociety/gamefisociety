@@ -63,11 +63,13 @@ const GPostReplay = () => {
   useEffect(() => {
     let textNote = getSubNote();
     getNoteList(textNote);
+    console.log('post and replay listen!', textNote);
     return () => {
+      console.log('post and replay remove!', textNote);
       System.BroadcastClose(textNote, null, null);
       // let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
     };
-  }, [curCreateAt]);
+  }, [follows]);
 
   const loadMore = () => {
     if (
@@ -81,31 +83,27 @@ const GPostReplay = () => {
   };
 
   const getNoteList = (subTextNode) => {
-
+    //
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        // System.BroadcastClose(subTextNode, client, null);
-        const noteCache = TLCache.get(global_note_cache_flag);
-        if (!noteCache) {
-          return;
-        }
-        setData(noteCache.concat());
-        let timeFlag = 100000000000000;
-        const pubkeys = [];
-        noteCache.map((item) => {
-          pubkeys.push(item.msg.pubkey);
-          if (item.create < timeFlag) {
-            timeFlag = item.create;
-          }
-        });
-        // console.log('loadMore', timeFlag);
-        setCurCreateAt(timeFlag);
         //
-        const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
-        console.log('text note', msg);
-        TLCache.pushGlobalNote(global_note_cache_flag, msg)
+        console.log('post and replay post and replay', msg);
+        let ret = TLCache.pushGlobalNote(global_note_cache_flag, msg);
+        if (ret) {
+          const noteCache = TLCache.get(global_note_cache_flag);
+          if (!noteCache) {
+            return;
+          }
+          setData(noteCache.concat());
+          //
+          const pubkeys = [];
+          noteCache.map((item) => {
+            pubkeys.push(item.msg.pubkey);
+          });
+          const pubkyes_filter = new Set(pubkeys);
+          getInfor(pubkyes_filter, null);
+        }
       }
     },
       null
@@ -115,14 +113,13 @@ const GPostReplay = () => {
   const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    //
     const newInfo = new Map();
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
         setInforData(newInfo);
         System.BroadcastClose(subTextNode, client, null);
       } else if (tag === 'EVENT') {
-        console.log('info', msg);
+        // console.log('info', msg);
         let info = {};
         if (msg.content !== "") {
           info = JSON.parse(msg.content);
