@@ -40,6 +40,11 @@ const mapData = [
         img: ic_chat
     },
     {
+        txt: 'POST & REPLAY',
+        img: ic_chat,
+        // out: true
+    },
+    {
         txt: 'INTRODUCE',
         img: ic_sub,
         out: true
@@ -125,6 +130,8 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'GLOBAL') {
             navigate('/global');
+        } else if (item.txt === 'POST & REPLAY') {
+            navigate('/post-replay');
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'CREATE') {
@@ -146,9 +153,9 @@ const GFTLeftMenu = () => {
             navigate('/ipfs');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
-        }else if(item.txt === 'GROUP CHAT'){
+        } else if (item.txt === 'GROUP CHAT') {
             navigate('/groupchat');
-        }else if(item.txt === 'WALLET'){
+        } else if (item.txt === 'WALLET') {
             navigate('/wallet');
         }
     }
@@ -163,7 +170,7 @@ const GFTLeftMenu = () => {
 
     const renderMenu = (item, index) => {
         if (item.txt === 'DIVIDER') {
-            return (<Divider  key={'main-menu-' + index} />);
+            return (<Divider key={'main-menu-' + index} />);
         }
         if (item.out) {
             let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={'/introduce'} target={itemTarget} />) };
