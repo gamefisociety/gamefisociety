@@ -102,7 +102,6 @@ const SocietySlice = createSlice({
       if (!Array.isArray(n)) {
         n = [n];
       }
-
       let didChange = false;
       for (const x of n) {
         if (!state.dms.some(a => a.id === x.id)) {
@@ -110,7 +109,6 @@ const SocietySlice = createSlice({
           didChange = true;
         }
       }
-
       if (didChange) {
         state.dms = [...state.dms];
       }

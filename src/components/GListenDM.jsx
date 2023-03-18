@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import { useChatPro } from "nostr/protocal/ChatPro";
 import { BuildSub } from "nostr/NostrUtils"
 import { System } from "nostr/NostrSystem";
-import { setRelays, setFollows } from "module/store/features/profileSlice";
+import { addDirectMessage } from 'module/store/features/societySlice';
 //
 const GListenDM = (props) => {
   const { logout, pubkey } = props;
+  const { dms } = useSelector((s) => s.society);
+  const dispatch = useDispatch();
   const chatPro = useChatPro();
 
   const createSub = () => {
@@ -16,9 +18,11 @@ const GListenDM = (props) => {
     return subListenDM;
   }
 
+  console.log('dm msg', dms);
+
   const listenSub = (sub) => {
     System.BroadcastSub(sub, (tag, client, msg) => {
-      console.log('dm msg', msg);
+      dispatch(addDirectMessage(msg));
     })
   }
 

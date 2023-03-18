@@ -52,8 +52,9 @@ const GUserHome = () => {
       (tag, client, msg) => {
         if (tag === "EOSE") {
           let target_note_cache = TLCache.get(target_node_cache_flag);
-          // console.log('target_note_cache', target_note_cache);
-          setNotes(target_note_cache.concat());
+          if (target_note_cache) {
+            setNotes(target_note_cache.concat());
+          }
           System.BroadcastClose(textNote, client, null);
         } else if (tag === "EVENT") {
           if (msg.kind === EventKind.TextNote) {
