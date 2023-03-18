@@ -223,6 +223,13 @@ const GFTHead = () => {
     handleMobileMenuClose();
   };
 
+  const openUserHome = () => {
+    navigate("/userhome", {
+      state: { info: { ...profile }, pubkey: publicKey },
+    });
+    handleMenuClose();
+  };
+
   const openProfile = () => {
     navigate("/profile", {
       state: { info: { ...profile }, pubkey: publicKey },
@@ -277,6 +284,9 @@ const GFTHead = () => {
             position: "relative",
             width: "100%",
             marginTop: "20px",
+          }}
+          onClick={() => {
+            openUserHome();
           }}
         >
           <Avatar
