@@ -198,7 +198,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/profile", {
+                    navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: pubkey },
                     });
                     if (callback) {
@@ -261,7 +261,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/profile", {
+                    navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: item.pubkey },
                     });
                     if (callback) {

@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
-import { System } from "nostr/NostrSystem";
-import { BuildSub } from "nostr/NostrUtils";
 //
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +15,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import CardMedia from "@mui/material/CardMedia";
@@ -25,7 +22,6 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import PublicIcon from "@mui/icons-material/Public";
@@ -33,6 +29,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import GFetchMetadata from "components/GFetchMetadata";
+import GListenDM from "components/GListenDM";
 import GSearch from 'components/GSearch';
 import {
   setIsOpen,
@@ -40,10 +37,8 @@ import {
   setOpenMenuLeft,
 } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
-import { setProfile } from "module/store/features/profileSlice";
 import { logout } from "module/store/features/loginSlice";
-import { setRelays, setFollows } from "module/store/features/profileSlice";
-import { parseId } from "nostr/Util";
+
 
 import "./GFTHead.scss";
 
@@ -603,6 +598,7 @@ const GFTHead = () => {
   return (
     <AppBar className="head_bg">
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
+      <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
         <Stack flexDirection="row">
           <IconButton

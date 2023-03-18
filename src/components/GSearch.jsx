@@ -100,7 +100,7 @@ const GSearch = () => {
   const searchMetadata = (msg) => {
     if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
       let tmpInfo = JSON.parse(msg.content);
-      navigate("/profile", {
+      navigate("/userhome", {
         state: { info: { ...tmpInfo }, pubkey: msg.pubkey },
       });
     }

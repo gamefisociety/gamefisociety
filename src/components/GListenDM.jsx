@@ -1,59 +1,37 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useFollowPro } from "nostr/protocal/FollowPro";
+import { useChatPro } from "nostr/protocal/ChatPro";
+import { BuildSub } from "nostr/NostrUtils"
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
 //
 const GListenDM = (props) => {
-  const { follows } = useSelector((s) => s.profile);
-  const { profile, pubkey, ownFollows, ownRelays } = props;
-  const dispatch = useDispatch();
-  //
-  const relayMap = new Map();
-  for (const [k, v] of Object.entries(ownRelays)) {
-    if (k.startsWith("wss://") || k.startsWith("ws://")) {
-      relayMap.set(k, v);
-    }
+  const { logout, pubkey } = props;
+  const chatPro = useChatPro();
+
+  const createSub = () => {
+
+    const filterDM = chatPro.get(pubkey);
+    let subListenDM = BuildSub("listen_chat_dm", [filterDM]);
+    return subListenDM;
   }
-  const followPro = useFollowPro();
-  const addFollow = async (pubkey) => {
-    let event = await followPro.addFollow(pubkey);
-    let newFollows = follows.concat();
-    newFollows.push(pubkey);
-    System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === "OK" && msg.ret === true) {
-        let followsInfo = {
-          create_at: event.CreatedAt,
-          follows: newFollows,
-        };
-        dispatch(setFollows(followsInfo));
-      }
-    });
-  };
 
-  const removeFollow = async (pubkey) => {
-    let event = await followPro.removeFollow(pubkey);
-    let newFollows = follows.concat();
-    newFollows.splice(follows.indexOf(pubkey), 1);
-    System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === "OK" && msg.ret === true) {
-        let followsInfo = {
-          create_at: event.CreatedAt,
-          follows: newFollows,
-        };
-        dispatch(setFollows(followsInfo));
-      }
-    });
-  };
-
-  const isFollow = (key) => {
-    // console.log('isFollow', key, follows.includes(key), follows);
-    return follows.includes(key);
-  };
+  const listenSub = (sub) => {
+    System.BroadcastSub(sub, (tag, client, msg) => {
+      console.log('dm msg', msg);
+    })
+  }
 
   useEffect(() => {
-    console.log("profile", profile);
-    return () => { };
+    let sub = createSub();
+    if (logout === false && pubkey) {
+      listenSub(sub);
+    }
+    return () => {
+      if (logout === false && pubkey) {
+        System.BroadcastClose(sub, null, null);
+      }
+    };
   }, [props]);
 
   //#1F1F1F
