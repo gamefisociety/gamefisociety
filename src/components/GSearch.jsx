@@ -128,12 +128,12 @@ const GSearch = () => {
 
   const searchNote = (msg) => {
     if (msg.kind === EventKind.TextNote) {
-      navigate("/notethread", {
-        state: {
-          note: { ...msg },
-          info: null,
-        },
-      });
+      // navigate("/notethread", {
+      //   state: {
+      //     note: { ...msg },
+      //     info: null,
+      //   },
+      // });
     }
   };
 

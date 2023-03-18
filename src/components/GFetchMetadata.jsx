@@ -55,11 +55,13 @@ const GFetchMetadata = (props) => {
   };
 
   const fetchMeta = (pubkey, callback) => {
+
     let filterMeta = MetaPro.get(pubkey);
     let filterFollow = followPro.getFollows(pubkey);
     let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
     let SetMetadata_create_at = 0;
     let ContactList_create_at = 0;
+    // console.log('header fetchmetadata sub', subMeta);
     System.BroadcastSub(subMeta, (tag, client, msg) => {
       if (!msg) return;
       if (tag === "EOSE") {
@@ -68,29 +70,21 @@ const GFetchMetadata = (props) => {
         if (msg.pubkey !== pubkey) {
           return;
         }
-        if (
-          msg.kind === EventKind.SetMetadata &&
-          msg.created_at > SetMetadata_create_at
-        ) {
+        console.log('header fetchmetadata msg', msg);
+        if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at && callback) {
           SetMetadata_create_at = msg.created_at;
-          if (callback) {
-            callback(msg);
-          }
-        } else if (
-          msg.kind === EventKind.ContactList &&
-          msg.created_at > ContactList_create_at
-        ) {
+          callback(msg);
+        } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at && callback) {
           ContactList_create_at = msg.created_at;
-          if (callback) {
-            callback(msg);
-          }
+          callback(msg);
         }
       }
     });
   };
 
   useEffect(() => {
-    if (logout && logout === false) {
+    // console.log('header fetchmetadata', pubkey, logout);
+    if (logout === false) {
       fetchMeta(pubkey, selfMetadata);
     }
     return () => { };
