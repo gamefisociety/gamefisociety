@@ -68,11 +68,14 @@ const ProfileTooltip = styled(({ className, ...props }) => (
 const GFTHead = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { account } = useWeb3React();
   const { loggedOut, publicKey } = useSelector((s) => s.login);
   const { profile, relays } = useSelector((s) => s.profile);
-  const { account } = useWeb3React();
+  const { dms } = useSelector((s) => s.society);
   const { isOpenMenuLeft } = useSelector((s) => s.dialog);
   const [profileOpen, setProfileOPen] = React.useState(false);
+  const [noticeNum, setNoticeNum] = React.useState(0);
+  const [dmNum, setDmNum] = React.useState(0);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const [searchProp, setSearchProp] = React.useState({
@@ -82,108 +85,12 @@ const GFTHead = () => {
     anchorEl: null,
   });
 
-  const MetaPro = useMetadataPro();
-  const followPro = useFollowPro();
-
-  // const selfMetadata = (msg) => {
-  //   if (msg.kind === EventKind.SetMetadata) {
-  //     let contentMeta = JSON.parse(msg.content);
-  //     contentMeta.created_at = msg.created_at;
-  //     dispatch(setProfile(contentMeta));
-  //   } else if (msg.kind === EventKind.ContactList) {
-  //     //relays
-  //     if (msg.content !== "") {
-  //       let content = JSON.parse(msg.content);
-  //       let tmpRelays = {
-  //         relays: {
-  //           ...content,
-  //           ...relays,
-  //         },
-  //         createdAt: 1,
-  //       };
-  //       dispatch(setRelays(tmpRelays));
-  //     }
-  //     //follows
-  //     if (msg.tags.length > 0) {
-  //       let follow_pubkes = [];
-  //       msg.tags.map((item) => {
-  //         if (item.length >= 2 && item[0] === "p") {
-  //           follow_pubkes.push(item[1]);
-  //         }
-  //       });
-  //       let followsInfo = {
-  //         create_at: msg.created_at,
-  //         follows: follow_pubkes.concat(),
-  //       };
-  //       dispatch(setFollows(followsInfo));
-  //     }
-  //   }
-  // };
-
-  // const fetchMeta = (pubkey, callback) => {
-  //   let filterMeta = MetaPro.get(pubkey);
-  //   let filterFollow = followPro.getFollows(pubkey);
-  //   let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
-  //   let SetMetadata_create_at = 0;
-  //   let ContactList_create_at = 0;
-  //   System.BroadcastSub(subMeta, (tag, client, msg) => {
-  //     if (!msg) return;
-  //     if (tag === "EOSE") {
-  //       System.BroadcastClose(subMeta, client, null);
-  //     } else if (tag === "EVENT") {
-  //       if (msg.pubkey !== pubkey) {
-  //         return;
-  //       }
-  //       if (
-  //         msg.kind === EventKind.SetMetadata &&
-  //         msg.created_at > SetMetadata_create_at
-  //       ) {
-  //         SetMetadata_create_at = msg.created_at;
-  //         if (callback) {
-  //           callback(msg);
-  //         }
-  //       } else if (
-  //         msg.kind === EventKind.ContactList &&
-  //         msg.created_at > ContactList_create_at
-  //       ) {
-  //         ContactList_create_at = msg.created_at;
-  //         if (callback) {
-  //           callback(msg);
-  //         }
-  //       }
-  //     }
-  //   });
-  // };
-
-  // const searchMetadata = (msg) => {
-  //   if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
-  //     let tmpInfo = JSON.parse(msg.content);
-  //     navigate("/profile", {
-  //       state: { info: { ...tmpInfo }, pubkey: msg.pubkey },
-  //     });
-  //   }
-  // };
-
   const handleTooltipClose = () => {
     setProfileOPen(false);
   };
 
   const handleTooltipOpen = () => {
     setProfileOPen(true);
-  };
-
-  const handleSearch = (e, value) => {
-    searchProp.value = value;
-    if (value.startsWith("npub") && value.length === 63) {
-      searchProp.nip19 = true;
-      searchProp.open = true;
-      searchProp.anchorEl = e.currentTarget;
-    } else if (value.length === 64) {
-      searchProp.nip19 = false;
-      searchProp.open = true;
-      searchProp.anchorEl = e.currentTarget;
-    }
-    setSearchProp({ ...searchProp });
   };
 
   const openDialog = () => {
@@ -261,6 +168,11 @@ const GFTHead = () => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  useEffect(() => {
+    setDmNum(dms.length);
+    // setNotifycationNum(dms.length);
+  }, [dms]);
 
   const renderUserMenu = (
     <React.Fragment>
@@ -561,7 +473,7 @@ const GFTHead = () => {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={dms.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -671,7 +583,7 @@ const GFTHead = () => {
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={dmNum} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
@@ -680,7 +592,7 @@ const GFTHead = () => {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={noticeNum} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
