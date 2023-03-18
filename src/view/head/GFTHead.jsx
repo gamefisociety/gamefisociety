@@ -26,16 +26,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import SearchIcon from "@mui/icons-material/Search";
-import InputBase from "@mui/material/InputBase";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
-import AdbIcon from "@mui/icons-material/Adb";
 import PublicIcon from "@mui/icons-material/Public";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import GFetchMetadata from "components/GFetchMetadata";
+import GSearch from 'components/GSearch';
 import {
   setIsOpen,
   setIsOpenWallet,
@@ -72,8 +70,6 @@ const ProfileTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-const top100Films = [];
-
 const GFTHead = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -94,84 +90,84 @@ const GFTHead = () => {
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
 
-  const selfMetadata = (msg) => {
-    if (msg.kind === EventKind.SetMetadata) {
-      let contentMeta = JSON.parse(msg.content);
-      contentMeta.created_at = msg.created_at;
-      dispatch(setProfile(contentMeta));
-    } else if (msg.kind === EventKind.ContactList) {
-      //relays
-      if (msg.content !== "") {
-        let content = JSON.parse(msg.content);
-        let tmpRelays = {
-          relays: {
-            ...content,
-            ...relays,
-          },
-          createdAt: 1,
-        };
-        dispatch(setRelays(tmpRelays));
-      }
-      //follows
-      if (msg.tags.length > 0) {
-        let follow_pubkes = [];
-        msg.tags.map((item) => {
-          if (item.length >= 2 && item[0] === "p") {
-            follow_pubkes.push(item[1]);
-          }
-        });
-        let followsInfo = {
-          create_at: msg.created_at,
-          follows: follow_pubkes.concat(),
-        };
-        dispatch(setFollows(followsInfo));
-      }
-    }
-  };
+  // const selfMetadata = (msg) => {
+  //   if (msg.kind === EventKind.SetMetadata) {
+  //     let contentMeta = JSON.parse(msg.content);
+  //     contentMeta.created_at = msg.created_at;
+  //     dispatch(setProfile(contentMeta));
+  //   } else if (msg.kind === EventKind.ContactList) {
+  //     //relays
+  //     if (msg.content !== "") {
+  //       let content = JSON.parse(msg.content);
+  //       let tmpRelays = {
+  //         relays: {
+  //           ...content,
+  //           ...relays,
+  //         },
+  //         createdAt: 1,
+  //       };
+  //       dispatch(setRelays(tmpRelays));
+  //     }
+  //     //follows
+  //     if (msg.tags.length > 0) {
+  //       let follow_pubkes = [];
+  //       msg.tags.map((item) => {
+  //         if (item.length >= 2 && item[0] === "p") {
+  //           follow_pubkes.push(item[1]);
+  //         }
+  //       });
+  //       let followsInfo = {
+  //         create_at: msg.created_at,
+  //         follows: follow_pubkes.concat(),
+  //       };
+  //       dispatch(setFollows(followsInfo));
+  //     }
+  //   }
+  // };
 
-  const searchMetadata = (msg) => {
-    if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
-      let tmpInfo = JSON.parse(msg.content);
-      navigate("/profile", {
-        state: { info: { ...tmpInfo }, pubkey: msg.pubkey },
-      });
-    }
-  };
+  // const fetchMeta = (pubkey, callback) => {
+  //   let filterMeta = MetaPro.get(pubkey);
+  //   let filterFollow = followPro.getFollows(pubkey);
+  //   let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
+  //   let SetMetadata_create_at = 0;
+  //   let ContactList_create_at = 0;
+  //   System.BroadcastSub(subMeta, (tag, client, msg) => {
+  //     if (!msg) return;
+  //     if (tag === "EOSE") {
+  //       System.BroadcastClose(subMeta, client, null);
+  //     } else if (tag === "EVENT") {
+  //       if (msg.pubkey !== pubkey) {
+  //         return;
+  //       }
+  //       if (
+  //         msg.kind === EventKind.SetMetadata &&
+  //         msg.created_at > SetMetadata_create_at
+  //       ) {
+  //         SetMetadata_create_at = msg.created_at;
+  //         if (callback) {
+  //           callback(msg);
+  //         }
+  //       } else if (
+  //         msg.kind === EventKind.ContactList &&
+  //         msg.created_at > ContactList_create_at
+  //       ) {
+  //         ContactList_create_at = msg.created_at;
+  //         if (callback) {
+  //           callback(msg);
+  //         }
+  //       }
+  //     }
+  //   });
+  // };
 
-  const fetchMeta = (pubkey, callback) => {
-    let filterMeta = MetaPro.get(pubkey);
-    let filterFollow = followPro.getFollows(pubkey);
-    let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
-    let SetMetadata_create_at = 0;
-    let ContactList_create_at = 0;
-    System.BroadcastSub(subMeta, (tag, client, msg) => {
-      if (!msg) return;
-      if (tag === "EOSE") {
-        System.BroadcastClose(subMeta, client, null);
-      } else if (tag === "EVENT") {
-        if (msg.pubkey !== pubkey) {
-          return;
-        }
-        if (
-          msg.kind === EventKind.SetMetadata &&
-          msg.created_at > SetMetadata_create_at
-        ) {
-          SetMetadata_create_at = msg.created_at;
-          if (callback) {
-            callback(msg);
-          }
-        } else if (
-          msg.kind === EventKind.ContactList &&
-          msg.created_at > ContactList_create_at
-        ) {
-          ContactList_create_at = msg.created_at;
-          if (callback) {
-            callback(msg);
-          }
-        }
-      }
-    });
-  };
+  // const searchMetadata = (msg) => {
+  //   if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
+  //     let tmpInfo = JSON.parse(msg.content);
+  //     navigate("/profile", {
+  //       state: { info: { ...tmpInfo }, pubkey: msg.pubkey },
+  //     });
+  //   }
+  // };
 
   const handleTooltipClose = () => {
     setProfileOPen(false);
@@ -217,7 +213,7 @@ const GFTHead = () => {
     navigate("/home");
   };
 
-  const handleProfileMenuOpen = (event) => {};
+  const handleProfileMenuOpen = (event) => { };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -226,15 +222,6 @@ const GFTHead = () => {
   const handleMenuClose = () => {
     handleMobileMenuClose();
   };
-
-  useEffect(() => {
-    if (loggedOut === false) {
-      fetchMeta(publicKey, selfMetadata);
-    }
-    return () => {
-      //
-    };
-  }, [loggedOut]);
 
   const openProfile = () => {
     navigate("/profile", {
@@ -326,9 +313,9 @@ const GFTHead = () => {
               {profile.display_name
                 ? profile.display_name
                 : publicKey !== ""
-                ? "Nostr#" +
+                  ? "Nostr#" +
                   publicKey.substring(publicKey.length - 4, publicKey.length)
-                : "gfs"}
+                  : "gfs"}
             </Typography>
             <Typography
               sx={{
@@ -342,9 +329,9 @@ const GFTHead = () => {
               {profile.name
                 ? "@" + profile.name
                 : publicKey !== ""
-                ? "@" +
+                  ? "@" +
                   publicKey.substring(publicKey.length - 4, publicKey.length)
-                : "gfs"}
+                  : "gfs"}
             </Typography>
           </Box>
         </Box>
@@ -602,8 +589,10 @@ const GFTHead = () => {
     </Menu>
   );
 
+  // loggedOut, publicKey 
   return (
     <AppBar className="head_bg">
+      <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
         <Stack flexDirection="row">
           <IconButton
@@ -627,62 +616,7 @@ const GFTHead = () => {
             onClick={clickLogo}
           />
         </Stack>
-        <TextField
-          sx={{
-            width: "450px",
-            // borderColor: 'white',
-          }}
-          placeholder="Search input"
-          value={searchProp.value}
-          onChange={(e) => {
-            if (e.target) {
-              handleSearch(e, e.target.value);
-            }
-          }}
-          InputProps={{
-            sx: { height: "42px", borderRadius: "24px" },
-            type: "search",
-          }}
-          SelectProps={{
-            sx: { borderColor: "red" },
-          }}
-        />
-        <Popover
-          open={searchProp.open}
-          anchorEl={searchProp.anchorEl}
-          onClose={() => {
-            searchProp.open = false;
-            searchProp.anchorEl = null;
-            setSearchProp({ ...searchProp });
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <Typography
-            sx={{
-              p: "18px",
-              cursor: "pointer",
-            }}
-            color={"primary"}
-            onClick={() => {
-              if (searchProp.nip19 === true) {
-                let pub = parseId(searchProp.value);
-                fetchMeta(pub, searchMetadata);
-              } else {
-                fetchMeta(searchProp.value, searchMetadata);
-              }
-              //
-              searchProp.value = "";
-              searchProp.open = false;
-              searchProp.anchorEl = null;
-              setSearchProp({ ...searchProp });
-            }}
-          >
-            {"Get Profile: " + searchProp.value}
-          </Typography>
-        </Popover>
+        <GSearch />
         {loggedOut === true ? (
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
@@ -726,24 +660,24 @@ const GFTHead = () => {
             >
               <PublicIcon />
             </IconButton>
-            {/* <IconButton
-                            size="large"
-                            aria-label="show 4 new mails"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
             <ClickAwayListener onClickAway={handleTooltipClose}>
               <Button>
                 <ProfileTooltip
