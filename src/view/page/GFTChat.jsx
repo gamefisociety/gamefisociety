@@ -209,6 +209,7 @@ const GFTChat = (props) => {
           DMs
         </Icon>
         <Button
+          className="button"
           sx={{
             width: "38px",
             height: "38px",
@@ -238,7 +239,8 @@ const GFTChat = (props) => {
           src={
             chatProfile.picture && chatProfile.picture !== "default"
               ? chatProfile.picture
-              : default_avatar}
+              : default_avatar
+          }
         />
         <Typography
           sx={{

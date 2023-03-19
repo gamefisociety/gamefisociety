@@ -69,7 +69,7 @@ const GCardUser = (props) => {
 
   useEffect(() => {
     console.log("profile", profile);
-    return () => { };
+    return () => {};
   }, [props]);
 
   //#1F1F1F
@@ -120,15 +120,17 @@ const GCardUser = (props) => {
               }
             />
             <Button
+              className="button"
               sx={{
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => { }}
+              onClick={() => {}}
             >
               <img src={logo_lighting} width="40px" alt="lighting" />
             </Button>
             <Button
+              className="button"
               sx={{
                 width: "40px",
                 height: "40px",

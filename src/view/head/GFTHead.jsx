@@ -349,6 +349,7 @@ const GFTHead = () => {
           </Box>
         </Box>
         <Button
+          className="button"
           sx={{
             marginTop: "20px",
             width: "100%",
@@ -381,6 +382,7 @@ const GFTHead = () => {
           </Typography>
         </Button>
         <Button
+          className="button"
           sx={{
             width: "100%",
             display: "flex",
@@ -412,6 +414,7 @@ const GFTHead = () => {
           </Typography>
         </Button>
         <Button
+          className="button"
           sx={{
             width: "100%",
             display: "flex",
@@ -443,6 +446,7 @@ const GFTHead = () => {
           </Typography>
         </Button>
         <Button
+          className="button"
           sx={{
             width: "100%",
             display: "flex",
@@ -502,6 +506,7 @@ const GFTHead = () => {
                     </Typography>
                 </Button> */}
         <Button
+          className="button"
           sx={{
             borderTop: 1,
             borderColor: "#202122",
@@ -745,7 +750,7 @@ const GFTHead = () => {
                             </Badge>
                         </IconButton> */}
             <ClickAwayListener onClickAway={handleTooltipClose}>
-              <Button>
+              <Button className="button">
                 <ProfileTooltip
                   PopperProps={{
                     disablePortal: true,
@@ -757,7 +762,7 @@ const GFTHead = () => {
                 >
                   <Stack
                     sx={{
-                      backgroundColor: "background.default",
+                    //   backgroundColor: "background.default",
                       px: "12px",
                       py: "6px",
                       borderRadius: "24px",
@@ -770,7 +775,11 @@ const GFTHead = () => {
                       sx={{ width: 32, height: 32 }}
                       edge="end"
                       alt="GameFi Society"
-                      src={(profile.picture && profile.picture !== "default") ? profile.picture : default_avatar}
+                      src={
+                        profile.picture && profile.picture !== "default"
+                          ? profile.picture
+                          : default_avatar
+                      }
                     />
                     <Typography sx={{ ml: "6px" }} color={"text.primary"}>
                       {profile.display_name}

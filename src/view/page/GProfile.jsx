@@ -156,6 +156,7 @@ const GProfile = () => {
         ))}
       </List>
       <Drawer
+      variant="permanent"
         anchor={"right"}
         open={chatDrawer}
         onClose={() => {
