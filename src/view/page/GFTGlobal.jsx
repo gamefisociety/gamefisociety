@@ -184,7 +184,7 @@ const GFTGlobal = () => {
           className={'top_button'}
           sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
           variant="contained"
-          backgroundColor={"background.default"}
+        //   backgroundColor={"background.default"}
           onClick={() => {
             dispatch(setPost({
               post: true,

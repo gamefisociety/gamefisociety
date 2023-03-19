@@ -13,7 +13,11 @@ const initialState = {
   isPost: false,
   targetPost: null,
   placeDrawer: 'right',
-  cardDrawer: 'follow'
+  cardDrawer: 'follow',
+  //
+  chatDrawer: false,
+  chatPubKey:"",
+  chatProfile:{}
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -60,6 +64,11 @@ export const dialogSlice = createSlice({
       state.isDrawer = action.payload.isDrawer;
       state.placeDrawer = action.payload.placeDrawer;
       state.cardDrawer = action.payload.cardDrawer;
+    },
+    setChatDrawer: (state, action) => {
+      state.chatDrawer = action.payload.chatDrawer;
+      state.chatPubKey = action.payload.chatPubKey;
+      state.chatProfile = action.payload.chatProfile;
     }
 
   },
@@ -86,7 +95,8 @@ export const {
   setOpenMintAvatar,
   setOpenMenuLeft,
   setPost,
-  setDrawer
+  setDrawer,
+  setChatDrawer
 }
   = dialogSlice.actions;
 
