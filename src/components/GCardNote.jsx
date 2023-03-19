@@ -156,7 +156,7 @@ const GCardNote = (props) => {
           alt="Avatar"
           src={info && info.picture ? info.picture : default_avatar}
           onClick={() => {
-            navigate("/profile", {
+            navigate("/userhome", {
               state: { info: { ...info }, pubkey: note.pubkey },
             });
           }}
@@ -175,7 +175,7 @@ const GCardNote = (props) => {
           color={"#FFFFFF"}
           noWrap={true}
           onClick={() => {
-            navigate("/profile", {
+            navigate("/userhome", {
               state: { info: { ...info }, pubkey: note.pubkey },
             });
           }}

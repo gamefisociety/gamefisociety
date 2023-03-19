@@ -1,177 +1,479 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import Drawer from "@mui/material/Drawer";
-import GCardUser from "components/GCardUser";
-import GCardNote from "components/GCardNote";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import GFTChat from "./GFTChat";
+import { Button, Box } from "@mui/material";
+import xhelp from "module/utils/xhelp";
+import { default_avatar, default_banner } from "module/utils/xdef";
+import "./GSetting.scss";
 
-import TimelineCache, { target_node_cache_flag } from 'db/TimelineCache';
-import { EventKind } from "nostr/def";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
-import { useFollowPro } from "nostr/protocal/FollowPro";
-import { BuildSub } from "nostr/NostrUtils";
+import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
-import icon_back from "../../asset/image/social/icon_back.png";
-import "./GProfile.scss";
-
-let lastPubKey = "";
+import { setProfile } from "module/store/features/profileSlice";
 
 const GProfile = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const TLCache = TimelineCache();
-  console.log("GProfile enter", location);
-  const { info, pubkey } = location.state;
-  //
-  const [chatDrawer, setChatDrawer] = useState(false);
-  const [notes, setNotes] = useState([]);
-  const [ownRelays, setOwnRelays] = useState({});
-  const [ownFollows, setOwnFollows] = useState([]);
-  //
-  const textNotePro = useTextNotePro();
-  const followPro = useFollowPro();
-  const fetchTextNote = (pub) => {
-    //
-    // const curRelay = "wss://nos.lol";
-    const filterTextNote = textNotePro.get();
-    filterTextNote.authors = [pub];
-    // filterTextNote['#p'] = [pub];
-    filterTextNote.limit = 50;
-    const filterFollowPro = followPro.getFollows(pub);
-    let textNote = BuildSub("profile_note_follow", [
-      filterTextNote,
-      filterFollowPro,
-    ]);
-    let follow_create_at = 0;
-    System.BroadcastSub(
-      textNote,
-      (tag, client, msg) => {
-        if (tag === "EOSE") {
-          let target_note_cache = TLCache.get(target_node_cache_flag);
-          // console.log('target_note_cache', target_note_cache);
-          setNotes(target_note_cache.concat());
-          System.BroadcastClose(textNote, client, null);
-        } else if (tag === "EVENT") {
-          if (msg.kind === EventKind.TextNote) {
-            console.log("BroadcastSub textNote", msg);
-            TLCache.pushTargetNote(msg);
-            // dataCaches.push(msg);
-          } else if (msg.kind === EventKind.ContactList) {
-            console.log("profile_note_follow", client.addr, msg);
-            if (msg.created_at < follow_create_at) {
-              return;
-            }
-            follow_create_at = msg.created_at;
-            if (msg.content && msg.content !== "") {
-              let relays = JSON.parse(msg.content);
-              setOwnRelays(relays);
-            }
-            if (msg.tags && msg.tags.length > 0) {
-              setOwnFollows(msg.tags.concat());
-            }
-          }
-        }
-      },
-      null
-    );
-  };
+  const profile = useSelector((s) => s.profile);
+  const { publicKey, privateKey } = useSelector((s) => s.login);
+
+  const [localProfile, setLocalProfile] = useState({});
+
+  const MetaPro = useMetadataPro();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("profile info", info);
-    console.log("profile user", lastPubKey, "pub", pubkey);
-    if (pubkey && lastPubKey !== pubkey) {
-      lastPubKey = pubkey;
-      fetchTextNote(pubkey);
-    }
-    return () => { };
-  }, [pubkey]);
+    setLocalProfile({ ...profile });
+    return () => {};
+  }, []);
+
+  const saveProfile = async () => {
+    let evMetadata = await MetaPro.modify(localProfile);
+    System.BroadcastEvent(evMetadata, (tags, client, msg) => {
+      if (tags === "OK" && msg.ret && msg.ret === true) {
+        localProfile.created_at = evMetadata.createAt;
+        dispatch(setProfile(localProfile));
+      }
+      // console.log('modify profile msg', tags, msg);
+    });
+  };
+
+  const updateProfile = async () => {
+    //
+  };
 
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: "960px",
+        paddingTop: "80px",
+        backgroundColor: "transparent",
+        width: "663px",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "flex-start",
         alignItems: "center",
-        justifyContent: "center",
-        my: "24px",
       }}
     >
+      <img
+        className="banner"
+        src={
+            localProfile.banner && localProfile.banner !== "default"
+              ? localProfile.banner
+              : default_banner
+          }
+        width="100%"
+        height="156px"
+        alt="banner"
+      />
       <Box
         sx={{
           width: "100%",
+          paddingLeft: "52px",
+          paddingRight: "52px",
           display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: "column",
           justifyContent: "flex-start",
+          alignItems: "flex-start",
         }}
       >
-        <Box
-          className={"goback"}
+        <Avatar
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
+            marginTop: "-43px",
+            width: "86px",
+            height: "86px",
           }}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          <img src={icon_back} width="38px" alt="icon_back" />
+          edge="end"
+          alt="GameFi Society"
+          src={
+            localProfile.picture && localProfile.picture !== "default"
+              ? localProfile.picture
+              : default_avatar
+          }
+        />
+        {localProfile.created ? (
           <Typography
             sx={{
-              marginLeft: "5px",
-              fontSize: "14px",
+              marginTop: "10px",
+              fontSize: "20px",
               fontFamily: "Saira",
               fontWeight: "500",
               color: "#FFFFFF",
             }}
           >
-            {"Global"}
+            {"Update: " + xhelp.formateDate(localProfile.created * 1000)}
           </Typography>
-        </Box>
-      </Box>
-      <GCardUser
-        profile={{ ...info }}
-        pubkey={pubkey}
-        ownFollows={ownFollows.concat()}
-        ownRelays={{ ...ownRelays }}
-        chatOnClick={(param) => {
-          setChatDrawer(true);
-        }}
-      />
-      <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
-        {notes.map((item, index) => (
-          <GCardNote
-            key={"profile-note-index" + index}
-            note={{ ...item.msg }}
-            info={info}
-          />
-        ))}
-      </List>
-      <Drawer
-      variant="permanent"
-        anchor={"right"}
-        open={chatDrawer}
-        onClose={() => {
-          setChatDrawer(false);
-        }}
-      >
-        <GFTChat
-          chatPK={pubkey}
-          chatProfile={{ ...info }}
-          closeHandle={() => {
-            setChatDrawer(false);
+        ) : null}
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
           }}
-        />
-      </Drawer>
-      {/* <Box sx={{ height: '12px' }}></Box> */}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"YOUR NAME"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.display_name}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.display_name = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"USER NAME"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.name}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.name = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"PROFILE AVATAR"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.picture}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.picture = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"BANNER PICTURE"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.banner}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.banner = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"WEBSITE"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.website}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.website = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"ABOUT ME"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.about}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.about = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"NIP-05"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.nip05}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.nip05 = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"PUBLIC KEY"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            disabled
+            value={publicKey}
+            variant="outlined"
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#919191",
+            }}
+          >
+            {"PRIVATE KEY"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            disabled
+            value={privateKey}
+            variant="outlined"
+          />
+        </Box>
+        <Button
+          variant="contained"
+          sx={{
+            marginTop: "35px",
+            width: "80%",
+            height: "48px",
+            backgroundColor: "#006CF9",
+            borderRadius: "5px",
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "#FFFFFF",
+          }}
+          onClick={saveProfile}
+        >
+          SAVE
+        </Button>
+      </Box>
     </Box>
   );
 };

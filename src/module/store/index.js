@@ -5,6 +5,7 @@ import counterReducer from './features/counter/counterSlice';
 import dialogReducer from './features/dialogSlice';
 import loginReducer from './features/loginSlice';
 import profileReducer from './features/profileSlice';
+import societyReducer from './features/societySlice';
 import { enableMapSet } from 'immer';
 
 enableMapSet();
@@ -14,6 +15,7 @@ export const store = configureStore({
     counter: counterReducer,
     dialog: dialogReducer,
     login: loginReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    society: societyReducer,
   },
 });

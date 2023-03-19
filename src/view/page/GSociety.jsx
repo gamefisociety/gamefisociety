@@ -60,6 +60,7 @@ const GSociety = (props) => {
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
   const { follows } = useSelector((s) => s.profile);
+  //
   const [tabIndex, setTabIndex] = useState(0);
   const [datas, setDatas] = useState([]);
   const [followers, setFollowers] = useState([]);
@@ -154,14 +155,14 @@ const GSociety = (props) => {
       });
       fetchAllMeta(pubkeys);
     }
-    return () => {};
+    return () => { };
   }, [tabIndex]);
 
   useEffect(() => {
     if (followers.length === 0) {
       fetchFollowers();
     }
-    return () => {};
+    return () => { };
   }, []);
 
   const renderFollowing = () => {
@@ -198,7 +199,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/profile", {
+                    navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: pubkey },
                     });
                     if (callback) {
@@ -261,7 +262,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/profile", {
+                    navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: item.pubkey },
                     });
                     if (callback) {

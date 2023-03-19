@@ -276,8 +276,8 @@ const GFTHomeView = () => {
                 width: '100%',
                 color: 'blue',
             }} /> */}
-            {renderVideos()}
-            {renderNews()}
+            {/* {renderVideos()} */}
+            {/* {renderNews()} */}
             {renderGames()}
             {renderNots()}
             <FsLightbox
