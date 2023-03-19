@@ -8,6 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, Link } from "@mui/material";
 import copy from "copy-to-clipboard";
+import { setChatDrawer } from "module/store/features/dialogSlice";
 import { default_banner, default_avatar } from "module/utils/xdef";
 import logo_chat from "../asset/image/social/logo_chat.png";
 import logo_lighting from "../asset/image/social/logo_lighting.png";
@@ -136,7 +137,13 @@ const GCardUser = (props) => {
                 height: "40px",
               }}
               onClick={() => {
-                props.chatOnClick(pubkey);
+                dispatch(
+                    setChatDrawer({
+                      chatDrawer: true,
+                      chatPubKey: pubkey,
+                      chatProfile: profile,
+                    })
+                  );
               }}
             >
               <img src={logo_chat} width="40px" alt="chat" />

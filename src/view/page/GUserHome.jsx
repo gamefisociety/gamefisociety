@@ -3,13 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
-import Drawer from "@mui/material/Drawer";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
 import Typography from "@mui/material/Typography";
-import GFTChat from "./GFTChat";
-
-import TimelineCache, { target_node_cache_flag } from 'db/TimelineCache';
+import TimelineCache, { target_node_cache_flag } from "db/TimelineCache";
 import { EventKind } from "nostr/def";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
@@ -23,11 +20,11 @@ let lastPubKey = "";
 const GUserHome = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const TLCache = TimelineCache();
   console.log("GProfile enter", location);
   const { info, pubkey } = location.state;
   //
-  const [chatDrawer, setChatDrawer] = useState(false);
   const [notes, setNotes] = useState([]);
   const [ownRelays, setOwnRelays] = useState({});
   const [ownFollows, setOwnFollows] = useState([]);
@@ -88,7 +85,7 @@ const GUserHome = () => {
       lastPubKey = pubkey;
       fetchTextNote(pubkey);
     }
-    return () => { };
+    return () => {};
   }, [pubkey]);
 
   return (
@@ -143,9 +140,6 @@ const GUserHome = () => {
         pubkey={pubkey}
         ownFollows={ownFollows.concat()}
         ownRelays={{ ...ownRelays }}
-        chatOnClick={(param) => {
-          setChatDrawer(true);
-        }}
       />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => (
@@ -156,22 +150,6 @@ const GUserHome = () => {
           />
         ))}
       </List>
-      <Drawer
-        anchor={"right"}
-        open={chatDrawer}
-        onClose={() => {
-          setChatDrawer(false);
-        }}
-      >
-        <GFTChat
-          chatPK={pubkey}
-          chatProfile={{ ...info }}
-          closeHandle={() => {
-            setChatDrawer(false);
-          }}
-        />
-      </Drawer>
-      {/* <Box sx={{ height: '12px' }}></Box> */}
     </Box>
   );
 };

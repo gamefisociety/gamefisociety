@@ -17,7 +17,6 @@ const GProfile = Loadable(lazy(() => import('view/page/GProfile')));
 const GSetting = Loadable(lazy(() => import('view/page/GSetting')));
 const GFTGlobal = Loadable(lazy(() => import('view/page/GFTGlobal')));
 const GPostReplay = Loadable(lazy(() => import('view/page/GPostReplay')));
-const GFTChat = Loadable(lazy(() => import('view/page/GFTChat')));
 const GTestIPFS = Loadable(lazy(() => import('view/page/GTestIPFS')));
 const GGroupChat = Loadable(lazy(() => import('view/page/GGroupChat')));
 const GNoteThread = Loadable(lazy(() => import('view/page/GNoteThread')));
@@ -71,10 +70,6 @@ const MainRoutes = {
         //     path: '/mint',
         //     element: <GFTMintNFT />,
         // },
-        {
-            path: '/chat',
-            element: <GFTChat />,
-        },
         {
             path: '/userhome',
             element: <GUserHome />,
