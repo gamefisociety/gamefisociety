@@ -179,6 +179,8 @@ const GFTHomeView = () => {
                 width: '100%',
                 minHeigth: '200px',
                 py: '24px',
+                backgroundColor: 'background.paper'
+                // backgroundColor: '0xFF00FF'
             }} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
                 <Box sx={{
                     width: '100%',
@@ -198,9 +200,12 @@ const GFTHomeView = () => {
                             return null;
                         }
                         return (
-                            <Card className={'game_card'} key={'homepage-gamecard-index' + index} onClick={() => {
-                                itemNFTClick(item);
-                            }}>
+                            <Card
+                                className={'game_card'}
+                                key={'homepage-gamecard-index' + index}
+                                onClick={() => {
+                                    itemNFTClick(item);
+                                }}>
                                 <Avatar sx={{
                                     width: '64px',
                                     height: '64px',
@@ -270,7 +275,10 @@ const GFTHomeView = () => {
     }
 
     return (
-        <Paper className='content_bg'>
+        <Paper className='content_bg' sx={{
+            // backgroundColor: '#0F0F0F'
+            // backgroundColor: 'background.paper'
+        }}>
             {renderBanner()}
             {/* <Divider light={true} sx={{
                 width: '100%',

@@ -4,7 +4,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #000000;
+    // opacity: 1;
+    // background-color: #000000;
 }
 
 .game_card_contain {
@@ -17,7 +18,7 @@
 }
 
 .game_card {
-    width: calc( 20% - 25.6px ) !important;
+    width: calc( 25% - 25.6px ) !important;
     height: 200px;
     border-radius: 12px;
     background-color: #15171c;
