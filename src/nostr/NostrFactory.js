@@ -16,15 +16,12 @@ const NostrFactory = {
       write: write,
     };
     relay.ConnectTimeout = DefaultConnectTimeout;
-    relay.StateHooks = new Map();
-    relay.HasStateChange = true;
     relay.Stats = {};
     relay.IsClosed = false;
     relay.ReconnectTimer = null;
-    relay.AwaitingAuth = new Map();
-    relay.Authed = false;
     relay.info = null;
-    relay.TmpData = {}
+    relay.canSub = true;
+    relay.canWrite = true;
     return relay;
   },
 
