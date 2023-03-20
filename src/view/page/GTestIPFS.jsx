@@ -5,13 +5,16 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import List from "@mui/material/List";
+import Avatar from "@mui/material/Avatar";
+import { default_avatar } from "module/utils/xdef";
+import xhelp from "module/utils/xhelp";
+import { useNavigate } from "react-router-dom";
 import "./GTestIPFS.scss";
-import MDEditor from "@uiw/react-md-editor";
-import Input from "@mui/material/Input";
-import LoadingButton from "@mui/lab/LoadingButton";
 import GSTPostBase from "web3/GSTPost";
 import { catIPFSContent } from "../../api/requestData";
 function GTestIPFS() {
+  const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
   const [cid, setCID] = useState("");
@@ -19,17 +22,22 @@ function GTestIPFS() {
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
+  const [postDatas, setPostDatas] = useState([]);
+  let postCache = [];
   useEffect(() => {
-    fetchPosts();
+    postCache.splice(0, postCache.length);
+    getPostCount();
     return () => {};
   }, []);
-  const fetchPosts = () => {
+  const getPostCount = () => {
     if (account) {
-      GSTPostBase.getPost(library, 0)
+      GSTPostBase.totalSupply(library)
         .then((res) => {
-          console.log("fetchPosts", res);
+          console.log("totalSupply", res);
           if (res > 0) {
-            
+            for (let index = 0; index < Number(res); index++) {
+              fetchPosts(index);
+            }
           }
         })
         .catch((err) => {
@@ -38,7 +46,24 @@ function GTestIPFS() {
     } else {
       return 0;
     }
-  }
+  };
+  const fetchPosts = (index) => {
+    if (account) {
+      GSTPostBase.getPost(library, index)
+        .then((res) => {
+          console.log("fetchPosts", res);
+          if (res) {
+            postCache.push(res);
+            setPostDatas(postCache);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
+      return 0;
+    }
+  };
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -80,7 +105,7 @@ function GTestIPFS() {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "663px",
         minHeight: "1000px",
         display: "flex",
         flexDirection: "column",
@@ -104,6 +129,117 @@ function GTestIPFS() {
       >
         {"发推"}
       </Button>
+      <List
+        sx={{
+          marginTop: "50px",
+          width: "100%",
+          height: "100%",
+          overflow: "auto",
+          backgroundColor: "transparent",
+        }}
+      >
+        {postDatas.map((item, index) => {
+          return (
+            <Box
+              sx={{
+                marginTop: "30px",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Avatar
+                  className="avatar"
+                  sx={{ width: "40px", height: "40px" }}
+                  alt="Avatar"
+                  src={default_avatar}
+                  onClick={() => {}}
+                />
+                <Typography
+                  sx={{
+                    marginLeft: "10px",
+                    fontSize: "18px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                    color: "#FFFFFF",
+                    textAlign: "left",
+                  }}
+                >
+                  {item.addr.substring(0, 5) +
+                    "....." +
+                    item.addr.substring(item.addr.length - 5, item.addr.length)}
+                </Typography>
+                <Typography
+                  sx={{
+                    ml: "30px",
+                    fontSize: "14px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                  }}
+                  color="#666666"
+                >
+                  {xhelp.formateSinceTime(item.timestamp * 1000)}
+                </Typography>
+              </Box>
+              <Box
+                className="boxClick"
+                sx={{
+                  marginTop: "10px",
+                  marginLeft: "48px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                }}
+                onClick={() => {
+                  navigate("/article", {
+                    state: {
+                      name: item.name,
+                      cid: item.cid,
+                      timestamp: item.timestamp,
+                    },
+                  });
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                    color: "#FFFFFF",
+                    textAlign: "left",
+                  }}
+                >
+                  {item.name}
+                </Typography>
+                <Typography
+                  sx={{
+                    marginTop: "5px",
+                    fontSize: "14px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                    color: "#919191",
+                    textAlign: "left",
+                  }}
+                >
+                  {"CID: " + item.cid}
+                </Typography>
+              </Box>
+            </Box>
+          );
+        })}
+      </List>
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{

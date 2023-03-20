@@ -8,7 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea } from "@mui/material";
 import { setPost } from "module/store/features/dialogSlice";
-
+import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GCardNote.scss";
 import icon_comment from "../asset/image/social/icon_comment.png";
@@ -16,8 +16,6 @@ import icon_praise from "../asset/image/social/icon_praise.png";
 import icon_share from "../asset/image/social/icon_share.png";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
-const default_avatar =
-  "https://gateway.pinata.cloud/ipfs/Qmd7rgbD9sLRQiMHZRYw1QD4j9WVgBZ3uzdtYehQuXHZq4";
 
 const GCardNote = (props) => {
   const { note, info } = props;

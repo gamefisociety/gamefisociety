@@ -18,16 +18,8 @@
         max-width: 960px;
         position: relative;
         justify-items: flex-start;
-        .cid_block{
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 40px;
-            position: relative;
-        }
-        .content_block{
+
+        .content_block {
             margin-top: 40px;
             width: 100%;
             min-height: 400px;
@@ -42,6 +34,6 @@
 
 }
 
-.boxClick{
+.boxClick {
     cursor: pointer;
 }
