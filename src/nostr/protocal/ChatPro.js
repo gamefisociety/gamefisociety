@@ -10,14 +10,14 @@ export const useChatPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    get: (targetPubkey) => {
+    getDM: (targetPubkey) => {
       const filter = NostrFactory.createFilter();
       filter['kinds'] = [EventKind.DirectMessage];
       filter['#p'] = [publicKey, targetPubkey];
       // filter['authors'] = [publicKey, targetPubkey];
       return filter;
     },
-    send: async (targetPubkey, content) => {
+    sendDM: async (targetPubkey, content) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.DirectMessage;
       ev.PubKey = publicKey;
