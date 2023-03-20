@@ -1,7 +1,5 @@
 import { React, useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
-
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,6 +16,7 @@ import TimelineCache from "db/TimelineCache";
 import useNostrEvent from "nostr/NostrEvent";
 import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
+
 const ListRow = ({ data, index, setSize, chatPK }) => {
   //
   const rowRef = useRef();
@@ -80,7 +79,7 @@ const GFTChat = (props) => {
   const getSize = (index) => sizeMap.current[index] || 50;
   //
   const listenDM = (targetPubkey) => {
-    const filterDM = chatPro.get(targetPubkey);
+    const filterDM = chatPro.getDM(targetPubkey);
     let subDM = BuildSub("chat_with", [filterDM]);
     TLCache.create(subChat[1]);
     //
@@ -140,7 +139,7 @@ const GFTChat = (props) => {
     if (inValue.length === 0) {
       return;
     }
-    const chatEv = await chatPro.send(chatPK, inValue);
+    const chatEv = await chatPro.sendDM(chatPK, inValue);
     System.BroadcastEvent(chatEv, (tag, client, msg) => {
       if (tag === "OK" && msg.ret && msg.ret === true) {
         let flag = TLCache.pushChat(

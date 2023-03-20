@@ -13,7 +13,7 @@ const GListenDM = (props) => {
 
   const createSub = () => {
 
-    const filterDM = chatPro.get(pubkey);
+    const filterDM = chatPro.getDM(pubkey);
     let subListenDM = BuildSub("listen_chat_dm", [filterDM]);
     return subListenDM;
   }

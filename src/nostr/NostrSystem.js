@@ -17,12 +17,12 @@ export class NostrSystem {
     }
   }
 
-  relayState(addr) {
+  getRelay(addr) {
     const relay = this.Clients.get(addr);
     if (relay) {
       //
     }
-    return -1;
+    return null;
   }
 
   ConnectRelay(address, read, write) {
@@ -55,12 +55,14 @@ export class NostrSystem {
 
   //broadcast event
   BroadcastEvent(ev, callback) {
-    console.log('BroadcastEvent', ev);
+    // console.log('BroadcastEvent', ev);
     if (!ev) {
       return;
     }
     for (const [, tmpRelay] of this.Clients) {
-      Relay.SendEvent(tmpRelay, ev, callback);
+      if (tmpRelay.canWrite) {
+        Relay.SendEvent(tmpRelay, ev, callback);
+      }
     }
   }
 
@@ -72,11 +74,13 @@ export class NostrSystem {
     // console.log('clients', this.Clients);
     for (const [addr, tmpRelay] of this.Clients) {
       if (relay) {
-        if (relay === addr) {
+        if (relay === addr && relay.canSub) {
           Relay.SendSub(tmpRelay, sub, callback);
         }
       } else {
-        Relay.SendSub(tmpRelay, sub, callback);
+        if (tmpRelay.canSub) {
+          Relay.SendSub(tmpRelay, sub, callback);
+        }
       }
     }
   }
