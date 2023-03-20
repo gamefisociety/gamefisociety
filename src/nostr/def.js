@@ -33,6 +33,11 @@ export var EventKind = {
   Deletion: 5, // NIP-09
   Repost: 6, // NIP-18
   Reaction: 7, // NIP-25
+  ChannelCreate: 40, //NIP-28
+  ChannelSet: 41, //NIP-28
+  ChannelMessage: 42, //NIP-28
+  ChannelHideMessage: 43, //NIP-28
+  ChannelMuteUser: 44, //NIP-28
   Relays: 10002, // NIP-65
   Auth: 22242, // NIP-42
   PubkeyLists: 30000, // NIP-51a

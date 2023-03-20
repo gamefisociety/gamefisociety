@@ -26,5 +26,14 @@ export const useChatPro = () => {
       await nostrEvent.EncryptDm(ev, targetPubkey, privateKey);
       return await nostrEvent.Sign(privateKey, ev);
     },
+    createChannel: async (content) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.DirectMessage;
+      ev.PubKey = publicKey;
+      // ev.Tags.push(['p', targetPubkey]);
+      ev.Content = content;
+      // await nostrEvent.EncryptDm(ev, targetPubkey, privateKey);
+      return await nostrEvent.Sign(privateKey, ev);
+    },
   }
 }
