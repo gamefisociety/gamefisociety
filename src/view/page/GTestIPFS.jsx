@@ -7,11 +7,13 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import Avatar from "@mui/material/Avatar";
+import Link from "@mui/material/Link";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
 import "./GTestIPFS.scss";
 import GSTPostBase from "web3/GSTPost";
+import closeImg from "./../../asset/image/social/close.png";
 function GTestIPFS() {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
@@ -59,7 +61,7 @@ function GTestIPFS() {
             postCache.push(res);
             postCache.sort((a, b) => {
               return b.timestamp - a.timestamp;
-            })
+            });
             setPostDatas(postCache);
           }
         })
@@ -75,7 +77,7 @@ function GTestIPFS() {
     if (cidInfo.name.length === 0 || cidInfo.cid.length === 0) {
       return;
     }
-    if(publishState === 1){
+    if (publishState === 1) {
       return;
     }
     setPublishState(1);
@@ -85,7 +87,7 @@ function GTestIPFS() {
           console.log("creatArticle", res);
           if (res) {
             setPublishState(2);
-          }else{
+          } else {
             setPublishState(3);
           }
         })
@@ -104,7 +106,7 @@ function GTestIPFS() {
       return "Publishing...";
     } else if (publishState === 2) {
       return "Published";
-    }else if (publishState === 3) {
+    } else if (publishState === 3) {
       return "Error!";
     }
   };
@@ -114,7 +116,7 @@ function GTestIPFS() {
   };
 
   const handleDialogClose = () => {
-    if(publishState === 1){
+    if (publishState === 1) {
       return;
     }
     setDialogOpen(false);
@@ -126,30 +128,41 @@ function GTestIPFS() {
   return (
     <Box
       sx={{
-        width: "663px",
+        width: "960px",
         minHeight: "1000px",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "flex-start",
       }}
     >
-      <Button
-        variant="contained"
+      <Box
         sx={{
           marginTop: "60px",
-          width: "160px",
-          height: "35px",
-          borderRadius: "20px",
-          backgroundColor: "#006CF9",
-          fontSize: "14px",
-          fontFamily: "Saira",
-          fontWeight: "500",
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
         }}
-        onClick={handleClickDialogOpen}
       >
-        {"发推"}
-      </Button>
+        <Button
+          variant="contained"
+          sx={{
+            marginRight: "50px",
+            width: "160px",
+            height: "35px",
+            borderRadius: "20px",
+            backgroundColor: "#006CF9",
+            fontSize: "14px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+          }}
+          onClick={handleClickDialogOpen}
+        >
+          {"发推"}
+        </Button>
+      </Box>
       <List
         sx={{
           marginTop: "50px",
@@ -274,8 +287,24 @@ function GTestIPFS() {
             paddingBottom: "35px",
             paddingLeft: "24px",
             paddingRight: "24px",
+            position: "relative"
           }}
         >
+          <Button
+            className="button"
+            sx={{
+              position: "absolute",
+              top: "5px",
+              right: "5px",
+              width: "38px",
+              height: "38px",
+            }}
+            onClick={() => {
+              handleDialogClose();
+            }}
+          >
+            <img src={closeImg} width="38px" alt="close" />
+          </Button>
           <Box
             sx={{
               width: "100%",
@@ -373,6 +402,15 @@ function GTestIPFS() {
           >
             {publishMsg()}
           </Button>
+          <Link
+            sx={{
+              marginTop: "5px",
+            }}
+            target="_blank"
+            href="https://ipfstexteditor.eth.limo"
+          >
+            Input On IPFS TextEditor
+          </Link>
         </Box>
       </Dialog>
     </Box>
