@@ -112,7 +112,7 @@ const GMintNFT = () => {
     } else if (checkState === 1) {
       return "Minted!";
     } else if (checkState === 2) {
-      return "Wrong!";
+      return "Error!";
     }
   };
 

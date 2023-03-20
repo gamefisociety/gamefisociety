@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "./GArticle.scss";
 import MDEditor from "@uiw/react-md-editor";
+import xhelp from "module/utils/xhelp";
 import icon_back from "../../asset/image/social/icon_back.png";
 import { catIPFSContent } from "../../api/requestData";
 function GArticle() {
@@ -46,8 +47,8 @@ function GArticle() {
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: "960px",
+        width: "960px",
+        height: "1000px",
         minHeight: "1000px",
         display: "flex",
         flexDirection: "column",
@@ -87,23 +88,38 @@ function GArticle() {
               color: "#FFFFFF",
             }}
           >
-            {"Global"}
+            {"Articles"}
           </Typography>
         </Box>
       </Box>
-
-      <MDEditor.Markdown source={content} style={{marginTop: "30px", whiteSpace: "pre-wrap" }} />
+      <Typography
+        sx={{
+          fontSize: "18px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+          color: "#FFFFFF",
+          textAlign: "left",
+        }}
+      >
+        {name}
+      </Typography>
+      <Typography
+        sx={{
+          width: "100%",
+          textAlign: "right",
+          fontSize: "14px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+        }}
+        color="#666666"
+      >
+        {xhelp.formateSinceTime(timestamp * 1000)}
+      </Typography>
+      <MDEditor.Markdown
+        source={content}
+        style={{ marginTop: "10px", whiteSpace: "pre-wrap", width: "100%", height: "100%", padding: "20px" }}
+      />
     </Box>
-    // <div className="container">
-    //   <div className="layout">
-    //     <div className="content_block">
-    //       <MDEditor.Markdown
-    //         source={content}
-    //         style={{ whiteSpace: "pre-wrap" }}
-    //       />
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 

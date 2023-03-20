@@ -12,22 +12,24 @@ import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
 import "./GTestIPFS.scss";
 import GSTPostBase from "web3/GSTPost";
-import { catIPFSContent } from "../../api/requestData";
 function GTestIPFS() {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
-  const [cid, setCID] = useState("");
-  const [fetching, setFetching] = useState(false);
-  const [content, setContent] = useState("");
+  const [publishState, setPublishState] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
   const [postDatas, setPostDatas] = useState([]);
   let postCache = [];
   useEffect(() => {
-    postCache.splice(0, postCache.length);
+    setPublishState(0);
+    setPostDatas([]);
     getPostCount();
-    return () => {};
+    return () => {
+      postCache.splice(0, postCache.length);
+      setPublishState(0);
+      setPostDatas([]);
+    };
   }, []);
   const getPostCount = () => {
     if (account) {
@@ -35,6 +37,7 @@ function GTestIPFS() {
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
+            postCache.splice(0, postCache.length);
             for (let index = 0; index < Number(res); index++) {
               fetchPosts(index);
             }
@@ -54,6 +57,9 @@ function GTestIPFS() {
           console.log("fetchPosts", res);
           if (res) {
             postCache.push(res);
+            postCache.sort((a, b) => {
+              return b.timestamp - a.timestamp;
+            })
             setPostDatas(postCache);
           }
         })
@@ -64,44 +70,59 @@ function GTestIPFS() {
       return 0;
     }
   };
+
+  const createPost = () => {
+    if (cidInfo.name.length === 0 || cidInfo.cid.length === 0) {
+      return;
+    }
+    if(publishState === 1){
+      return;
+    }
+    setPublishState(1);
+    if (account) {
+      GSTPostBase.creatArticle(library, account, cidInfo.name, cidInfo.cid)
+        .then((res) => {
+          console.log("creatArticle", res);
+          if (res) {
+            setPublishState(2);
+          }else{
+            setPublishState(3);
+          }
+        })
+        .catch((err) => {
+          setPublishState(3);
+          console.log(err, "err");
+        });
+    } else {
+    }
+  };
+
+  const publishMsg = () => {
+    if (publishState === 0) {
+      return "Publish";
+    } else if (publishState === 1) {
+      return "Publishing...";
+    } else if (publishState === 2) {
+      return "Published";
+    }else if (publishState === 3) {
+      return "Error!";
+    }
+  };
+
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
 
   const handleDialogClose = () => {
+    if(publishState === 1){
+      return;
+    }
     setDialogOpen(false);
   };
 
-  const catContent = () => {
-    if (cid.length === 0) {
-      alert("CID is empty!");
-      return;
-    }
-    if (fetching === true) {
-      return;
-    }
-    setFetching(true);
-    catIPFSContent(cid)
-      .then((res) => {
-        setFetching(false);
-        if (typeof res === "string") {
-          setContent(res);
-        } else if (typeof res === "object") {
-          setContent(res.content);
-        }
-        console.log(res);
-      })
-      .catch((err) => {
-        setFetching(false);
-        console.log(err);
-      });
+  const publish = () => {
+    createPost();
   };
-  const handleInputChange = (e) => {
-    setCID(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const publish = () => {};
   return (
     <Box
       sx={{
@@ -335,6 +356,7 @@ function GTestIPFS() {
             />
           </Box>
           <Button
+            disabled={publishState === 1 || publishState === 2}
             variant="contained"
             sx={{
               marginTop: "50px",
@@ -349,39 +371,11 @@ function GTestIPFS() {
             }}
             onClick={publish}
           >
-            PUBLISH
+            {publishMsg()}
           </Button>
         </Box>
       </Dialog>
     </Box>
-    // <div className="container">
-    //   <div className="layout">
-    //     <div className="cid_block">
-    //       <Input
-    //         placeholder="CID"
-    //         value={cid}
-    //         onChange={handleInputChange}
-    //         inputProps={ariaLabel}
-    //       />
-    //       <LoadingButton
-    //         color="secondary"
-    //         loading={fetching}
-    //         variant="outlined"
-    //         onClick={() => {
-    //           catContent();
-    //         }}
-    //       >
-    //         FETCH
-    //       </LoadingButton>
-    //     </div>
-    //     <div className="content_block">
-    //       <MDEditor.Markdown
-    //         source={content}
-    //         style={{ whiteSpace: "pre-wrap" }}
-    //       />
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 
