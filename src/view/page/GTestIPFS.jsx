@@ -12,7 +12,7 @@ import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
 import "./GTestIPFS.scss";
-import GSTPostBase from "web3/GSTPost";
+import GSTArticlesBase from "web3/GSTArticles";
 import closeImg from "./../../asset/image/social/close.png";
 function GTestIPFS() {
   const navigate = useNavigate();
@@ -22,27 +22,22 @@ function GTestIPFS() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
   const [postDatas, setPostDatas] = useState([]);
-  let postCache = [];
   useEffect(() => {
     setPublishState(0);
     setPostDatas([]);
     getPostCount();
     return () => {
-      postCache.splice(0, postCache.length);
       setPublishState(0);
       setPostDatas([]);
     };
   }, []);
   const getPostCount = () => {
     if (account) {
-      GSTPostBase.totalSupply(library)
+      GSTArticlesBase.totalSupply(library)
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
-            postCache.splice(0, postCache.length);
-            for (let index = 0; index < Number(res); index++) {
-              fetchPosts(index);
-            }
+            fetchArticles(0, Number(res));
           }
         })
         .catch((err) => {
@@ -52,16 +47,14 @@ function GTestIPFS() {
       return 0;
     }
   };
-  const fetchPosts = (index) => {
+  const fetchArticles = (index, count) => {
     if (account) {
-      GSTPostBase.getPost(library, index)
+      let postCache = postDatas.concat();
+      GSTArticlesBase.getArticles(library, index, count)
         .then((res) => {
           console.log("fetchPosts", res);
-          if (res) {
-            postCache.push(res);
-            postCache.sort((a, b) => {
-              return b.timestamp - a.timestamp;
-            });
+          if (res && res.length > 0) {
+            postCache = postCache.concat(res);
             setPostDatas(postCache);
           }
         })
@@ -73,7 +66,7 @@ function GTestIPFS() {
     }
   };
 
-  const createPost = () => {
+  const createArticle = () => {
     if (cidInfo.name.length === 0 || cidInfo.cid.length === 0) {
       return;
     }
@@ -82,7 +75,7 @@ function GTestIPFS() {
     }
     setPublishState(1);
     if (account) {
-      GSTPostBase.creatArticle(library, account, cidInfo.name, cidInfo.cid)
+      GSTArticlesBase.creatArticle(library, account, cidInfo.name, cidInfo.cid)
         .then((res) => {
           console.log("creatArticle", res);
           if (res) {
@@ -123,7 +116,7 @@ function GTestIPFS() {
   };
 
   const publish = () => {
-    createPost();
+    createArticle();
   };
   return (
     <Box

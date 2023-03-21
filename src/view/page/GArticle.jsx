@@ -15,8 +15,11 @@ function GArticle() {
   const [fetching, setFetching] = useState(false);
   const [content, setContent] = useState("");
   useEffect(() => {
+    setFetching(false);
     catContent();
-    return () => {};
+    return () => {
+      setFetching(false);
+    };
   }, []);
 
   const catContent = () => {
@@ -27,9 +30,11 @@ function GArticle() {
     if (fetching === true) {
       return;
     }
+    
     setFetching(true);
     catIPFSContent(cid)
       .then((res) => {
+        console.log("catContent", res);
         setFetching(false);
         if (typeof res === "string") {
           setContent(res);
@@ -117,7 +122,13 @@ function GArticle() {
       </Typography>
       <MDEditor.Markdown
         source={content}
-        style={{ marginTop: "10px", whiteSpace: "pre-wrap", width: "100%", height: "100%", padding: "20px" }}
+        style={{
+          marginTop: "10px",
+          whiteSpace: "pre-wrap",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+        }}
       />
     </Box>
   );

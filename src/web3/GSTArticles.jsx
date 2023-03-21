@@ -1,17 +1,17 @@
 
-import GSTPost from '../asset/abi/GSTPost.json'
+import GSTArticles from '../asset/abi/GSTArticles.json'
 
-class GSTPostBase {
+class GSTArticlesBase {
 
     static creatArticle(library, account, name, cid) {
         return new Promise((resolve, reject) => {
             const _web3 = library;
             let contract = new _web3.eth.Contract(
-                GSTPost.abi,
-                "0x3B8052522e5a7d6d98e26fb800e76408774F80b7"
+                GSTArticles.abi,
+                "0xd90a519c27A09d7d91a7107f3D7bA099d2EDA899"
             );
             try {
-                contract.methods.createPost(name, cid).send({
+                contract.methods.createArticle(name, cid).send({
                     from: account
                 }).then(res => {
                     
@@ -25,15 +25,15 @@ class GSTPostBase {
         })
     }
 
-    static getPost(library, index) {
+    static getArticles(library, index, count) {
         return new Promise((resolve, reject) => {
             const _web3 = library;
             let contract = new _web3.eth.Contract(
-                GSTPost.abi,
-                "0x3B8052522e5a7d6d98e26fb800e76408774F80b7"
+                GSTArticles.abi,
+                "0xd90a519c27A09d7d91a7107f3D7bA099d2EDA899"
             );
             try {
-                contract.methods._posts(index).call().then(res => {
+                contract.methods.getArticles(index, count).call().then(res => {
                     
                     resolve(res);
                 }).catch(error => {
@@ -49,8 +49,8 @@ class GSTPostBase {
         return new Promise((resolve, reject) => {
             const _web3 = library;
             let contract = new _web3.eth.Contract(
-                GSTPost.abi,
-                "0x3B8052522e5a7d6d98e26fb800e76408774F80b7"
+                GSTArticles.abi,
+                "0xd90a519c27A09d7d91a7107f3D7bA099d2EDA899"
             );
             try {
                 contract.methods.totalSupply().call().then(res => {
@@ -67,4 +67,4 @@ class GSTPostBase {
 
 }
 
-export default GSTPostBase;
+export default GSTArticlesBase;
