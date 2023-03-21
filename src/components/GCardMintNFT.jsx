@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import GSTAvatarNFTBase from "../web3/GSTAvatarNFT";
+import {def_ipfs_public_gateway} from "../module/utils/xdef"
 import { catIPFSContent } from "api/requestData";
 import "./GCardMintNFT.scss";
 
@@ -39,7 +40,7 @@ const GCardMintNFT = (props) => {
               .then((res) => {
                 console.log(res, "nftBaseURLData");
                 let t_img_url =
-                  "https://cloudflare-ipfs.com/ipfs/" +
+                  def_ipfs_public_gateway + "/ipfs/" +
                   res.image.replace("ipfs://", "");
                 nftInfo.description = res.description;
                 nftInfo.image = t_img_url;

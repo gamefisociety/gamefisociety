@@ -1,5 +1,5 @@
 import Requset from "./httpMgr";
-
+import {def_ipfs_public_gateway} from "../module/utils/xdef"
 export function getListData() {
   return Requset({
     method: "get",
@@ -37,6 +37,6 @@ export function catIPFSContent(cid) {
   return Requset({
     method: "get",
     
-    url: "https://cloudflare-ipfs.com/ipfs/" + cid,
+    url: def_ipfs_public_gateway + "/ipfs/" + cid,
   });
 }

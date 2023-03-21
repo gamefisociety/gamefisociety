@@ -285,7 +285,7 @@ const GFTGlobal = () => {
   };
 
   return (
-    <Paper className={'global_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
+    <Paper className={'global_bg'} sx={{minHeight: "1000px", backgroundColor: 'background.paper' }} elevation={0}>
       {renderPartment()}
       <Divider />
       {/* {renderLables()} */}
