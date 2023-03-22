@@ -281,7 +281,7 @@ const GFTHomeMeta = () => {
     }
 
     return (
-        <div>
+        <div className='meta_bg'>
             <Engine antialias adaptToDeviceRatio canvasId="babylonJS">
                 <Scene>
                     <arcRotateCamera
