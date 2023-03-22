@@ -36,6 +36,10 @@ const mapData = [
         img: ic_home
     },
     {
+        txt: 'META',
+        img: ic_home
+    },
+    {
         txt: 'GLOBAL',
         img: ic_chat
     },
@@ -122,6 +126,8 @@ const GFTLeftMenu = () => {
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
+        } if (item.txt === 'META') {
+            navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));

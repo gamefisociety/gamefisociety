@@ -26,13 +26,58 @@ export const useChatPro = () => {
       await nostrEvent.EncryptDm(ev, targetPubkey, privateKey);
       return await nostrEvent.Sign(privateKey, ev);
     },
+    getChannel: () => {
+      const filter = NostrFactory.createFilter();
+      filter['kinds'] = [EventKind.ChannelCreate];
+      filter['authors'] = [publicKey];
+      return filter;
+    },
+    getChannelMessage: (chanIds) => {
+      const filter = NostrFactory.createFilter();
+      filter['kinds'] = [EventKind.ChannelMessage];
+      filter['#e'] = chanIds.concat();
+      return filter;
+    },
     createChannel: async (content) => {
       const ev = NostrFactory.createEvent(publicKey);
-      ev.Kind = EventKind.DirectMessage;
+      ev.Kind = EventKind.ChannelCreate;
       ev.PubKey = publicKey;
-      // ev.Tags.push(['p', targetPubkey]);
       ev.Content = content;
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    setChannelMetadata: async (content, rootEv) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ChannelCreate;
+      ev.PubKey = publicKey;
+      ev.Tags.push(['e', rootEv.id, '']);
+      ev.Content = content;
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    setChannelMessge: async (content, rootEv) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ChannelMessage;
+      ev.PubKey = publicKey;
+      ev.Content = content;
+      ev.Tags.push(['e', rootEv.id, '', 'root']);
+      ev.Tags.push(['e', ev.Id, '', 'replay']);
+      ev.Tags.push(['p', publicKey]);
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    hideChannelMessge: async (reason, evId) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ChannelHideMessage;
+      ev.PubKey = publicKey;
+      ev.Tags.push(['e', evId]);
+      ev.Content = JSON.stringify({ 'reason': reason });;
       // await nostrEvent.EncryptDm(ev, targetPubkey, privateKey);
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    muteChannelUser: async (reason, targetPubkey) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ChannelMuteUser;
+      ev.PubKey = publicKey;
+      ev.Tags.push(['p', targetPubkey]);
+      ev.Content = JSON.stringify({ 'reason': reason });
       return await nostrEvent.Sign(privateKey, ev);
     },
   }
