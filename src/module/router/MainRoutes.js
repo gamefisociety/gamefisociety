@@ -20,7 +20,7 @@ const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
 const GPostReplay = Loadable(lazy(() => import("view/page/GPostReplay")));
-const GTestIPFS = Loadable(lazy(() => import("view/page/GTestIPFS")));
+const GArticleList = Loadable(lazy(() => import("view/page/GArticleList")));
 const GGroupChat = Loadable(lazy(() => import("view/page/GGroupChat")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
 const GFTWallet = Loadable(lazy(() => import("view/page/GFTWallet")));
@@ -91,8 +91,8 @@ const MainRoutes = {
       element: <GSetting />,
     },
     {
-      path: "/ipfs",
-      element: <GTestIPFS />,
+      path: "/articles",
+      element: <GArticleList />,
     },
     {
       path: "/article",
