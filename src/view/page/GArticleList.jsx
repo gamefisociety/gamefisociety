@@ -1,5 +1,9 @@
 import { React, useEffect, useState, useRef } from "react";
 import { useWeb3React } from "@web3-react/core";
+import { useDispatch } from "react-redux";
+import {
+  setIsOpen,
+} from "module/store/features/dialogSlice";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,10 +15,10 @@ import Link from "@mui/material/Link";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
-import "./GTestIPFS.scss";
+import "./GArticleList.scss";
 import GSTArticlesBase from "web3/GSTArticles";
 import closeImg from "./../../asset/image/social/close.png";
-function GTestIPFS() {
+function GArticleList() {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
@@ -22,15 +26,21 @@ function GTestIPFS() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
   const [postDatas, setPostDatas] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
-    setPublishState(0);
-    setPostDatas([]);
-    getPostCount();
+    if (account) {
+      setPublishState(0);
+      setPostDatas([]);
+      getPostCount();
+    } else {
+      dispatch(setIsOpen(true));
+    }
+
     return () => {
       setPublishState(0);
       setPostDatas([]);
     };
-  }, []);
+  }, [account]);
   const getPostCount = () => {
     if (account) {
       GSTArticlesBase.totalSupply(library)
@@ -280,7 +290,7 @@ function GTestIPFS() {
             paddingBottom: "35px",
             paddingLeft: "24px",
             paddingRight: "24px",
-            position: "relative"
+            position: "relative",
           }}
         >
           <Button
@@ -410,4 +420,4 @@ function GTestIPFS() {
   );
 }
 
-export default GTestIPFS;
+export default GArticleList;

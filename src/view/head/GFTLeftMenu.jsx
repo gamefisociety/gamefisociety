@@ -50,6 +50,10 @@ const mapData = [
         out: true
     },
     {
+        txt: 'ARTICLES',
+        img: ic_create
+    },
+    {
         txt: 'DIVIDER',
         img: ''
     },
@@ -95,10 +99,6 @@ const mapData = [
     },
     {
         txt: 'FOLLOW',
-        img: ic_create
-    },
-    {
-        txt: 'IPFS',
         img: ic_create
     },
     {
@@ -149,8 +149,8 @@ const GFTLeftMenu = () => {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
             navigate('/newspage');
-        } else if (item.txt === 'IPFS') {
-            navigate('/ipfs');
+        } else if (item.txt === 'ARTICLES') {
+            navigate('/articles');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
         } else if (item.txt === 'GROUP CHAT') {
