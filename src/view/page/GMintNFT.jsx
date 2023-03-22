@@ -10,6 +10,7 @@ import {
   setOpenMintAvatar,
 } from "module/store/features/dialogSlice";
 import GSTAvatarNFTBase from "web3/GSTAvatarNFT";
+import { def_ipfs_public_gateway } from "module/utils/xdef";
 import "./GMintNFT.scss";
 
 import Box from "@mui/material/Box";
@@ -22,6 +23,7 @@ import logo_twitter from "../../asset/image/introduce/logo_twitter.png";
 import logo_discord from "../../asset/image/introduce/logo_discord.png";
 import logo_tele from "../../asset/image/introduce/logo_tele.png";
 import footer_logo from "../../asset/image/logo/footer_logo.png";
+
 const contract = "0xBD2e21a8b6F5B98ae8514259eC9f663cC1E617f8";
 const GMintNFT = () => {
   const { activate, account, chainId, active, library, deactivate } =
@@ -50,8 +52,7 @@ const GMintNFT = () => {
       .then((res) => {
         console.log(res, "nftBaseURLData");
         let t_img_url =
-          "https://cloudflare-ipfs.com/ipfs/" +
-          res.image.replace("ipfs://", "");
+          def_ipfs_public_gateway + "/ipfs/" + res.image.replace("ipfs://", "");
         // nftInfo.description = res.description;
         nftInfo.image = t_img_url;
         nftInfo.name = res.description;
@@ -112,7 +113,7 @@ const GMintNFT = () => {
     } else if (checkState === 1) {
       return "Minted!";
     } else if (checkState === 2) {
-      return "Wrong!";
+      return "Error!";
     }
   };
 
