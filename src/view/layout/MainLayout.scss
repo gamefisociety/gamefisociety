@@ -1,13 +1,28 @@
 .main_bg {
     width: 100%;
     // background-color: #000000;
-}
+    // display: flex;
+    // align-items: center;
 
-.main_content {
-    width: 100%;
+    .main_content {
+        width: 100%;
+    
+        .scroll_content {
+            // width: calc( 100vw - 280px);
+            overflow: hidden;
+        }
+    }
 
-    .scroll_content {
-        // width: calc( 100vw - 280px);
-        overflow: hidden;
+    .main_right_drawer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main_bottom_drawer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }
+

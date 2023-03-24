@@ -8,6 +8,8 @@ import {
     isCheckIn,
     setOpenCheckIn,
     setIsOpen,
+    setBottomDrawer,
+    setRightDrawer,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GBottomMenu.scss';
@@ -46,7 +48,14 @@ const mapData = [
     {
         txt: 'POST & REPLAY',
         img: ic_chat,
-        // out: true
+    },
+    {
+        txt: 'NFT',
+        img: ic_sub,
+    },
+    {
+        txt: 'DAO',
+        img: ic_sub,
     },
     {
         txt: 'INTRODUCE',
@@ -57,14 +66,14 @@ const mapData = [
         txt: 'ARTICLES',
         img: ic_create
     },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'CHECK IN',
-        img: ic_check_in
-    },
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'CHECK IN',
+    //     img: ic_check_in
+    // },
     // {
     //     txt: 'MINT AVATAR',
     //     img: ic_free_nft
@@ -73,40 +82,40 @@ const mapData = [
     //     txt: 'SWAP IN',
     //     img: ic_swap
     // },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'WALLET',
-        img: ic_menu_wallet
-    },
-    {
-        txt: 'GAMES',
-        img: ic_polgon
-    },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'CREATE',
-        img: ic_create
-    },
-    {
-        txt: 'FOLLOW',
-        img: ic_create
-    },
-    {
-        txt: 'GROUP CHAT',
-        img: ic_create
-    }
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'WALLET',
+    //     img: ic_menu_wallet
+    // },
+    // {
+    //     txt: 'GAMES',
+    //     img: ic_polgon
+    // },
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'CREATE',
+    //     img: ic_create
+    // },
+    // {
+    //     txt: 'FOLLOW',
+    //     img: ic_create
+    // },
+    // {
+    //     txt: 'GROUP CHAT',
+    //     img: ic_create
+    // }
 ];
 
 const GBottomMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft } = useSelector(s => s.dialog);
+    const { isRightDrawer } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -127,7 +136,11 @@ const GBottomMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
-            navigate('/global');
+            dispatch(setRightDrawer({
+                rightDrawer: !isRightDrawer,
+                page: item.txt
+            }));
+            // navigate('/global');
         } else if (item.txt === 'POST & REPLAY') {
             navigate('/post-replay');
         } else if (item.txt === 'FOLLOW') {

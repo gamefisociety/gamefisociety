@@ -6,10 +6,11 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
-import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
+import { setDrawer, setChatDrawer, setRightDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
 import GBottomMenu from "view/head/GBottomMenu";
+import GFTHomeMeta from 'view/home/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
 import GFTChat from "view/page/GFTChat";
@@ -23,22 +24,23 @@ import "./MainLayout.scss";
 
 const MainLayout = () => {
   const dispatch = useDispatch();
-  const { isDrawer, placeDrawer, cardDrawer } = useSelector((s) => s.dialog);
-  const { chatDrawer, chatPubKey, chatProfile } = useSelector((s) => s.dialog);
+  const {
+    isDrawer,
+    placeDrawer,
+    cardDrawer,
+    chatDrawer,
+    chatPubKey,
+    chatProfile,
+    isBottomDrawer,
+    bottomPage,
+    isRightDrawer,
+    rightPage,
+  } = useSelector((s) => s.dialog);
+
   return (
     <Box className="main_bg">
       <GFTHead />
       <GBottomMenu />
-            {/* <Box
-        sx={{
-          width: "280px",
-          position: "fixed",
-          top: "60px",
-          zIndex: "999",
-        }}
-      >
-        <GFTLeftMenu />
-      </Box> */}
       <Grid sx={{ flexGrow: 1 }} container>
         <Stack
           sx={{
@@ -55,7 +57,7 @@ const MainLayout = () => {
             alignItems={"center"}
             justifyContent={"flex-start"}
           >
-            <Outlet />
+            <GFTHomeMeta></GFTHomeMeta>
           </Stack>
         </Stack>
       </Grid>
@@ -93,7 +95,7 @@ const MainLayout = () => {
         )}
         {cardDrawer === "relays" && <GRelays />}
       </Drawer>
-      <Drawer
+      {/* <Drawer
         PaperProps={{
           sx: {
             marginTop: "70px",
@@ -104,7 +106,7 @@ const MainLayout = () => {
           },
         }}
         variant="persistent"
-        anchor={"right"}
+        anchor={"bottom"}
         open={chatDrawer}
         onClose={() => {
           dispatch(
@@ -129,6 +131,73 @@ const MainLayout = () => {
             );
           }}
         />
+      </Drawer> */}
+      <Drawer
+        className='main_right_drawer'
+        // swipeAreaWidth='80%'
+        PaperProps={{
+          // className: 'main_bottom_drawer_inner',
+          sx: {
+            height: '80vh',
+            maxWidth: '940px',
+            mt: '10vh',
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            borderWidth: 0,
+          },
+        }}
+        // variant="temporary"
+        variant="persistent"
+        ModalProps={{
+          keepMounted: true,
+        }}
+        anchor={"right"}
+        open={isRightDrawer}
+        onClose={() => {
+          dispatch(
+            setRightDrawer({
+              rightDrawer: false,
+              rightPage: null,
+            })
+          );
+        }}
+      >
+        <Outlet />
+      </Drawer>
+      <Drawer
+        className='main_bottom_drawer'
+        // swipeAreaWidth='80%'
+        // PaperProps={{
+        //   className: 'main_bottom_drawer_inner',
+        //   sx: {
+
+        //     height: '80vh',
+        //     maxWidth: '940px',
+        //     mb: "50px",
+        //     backgroundColor: 'rgba(0,0,0,0.2)',
+        //     borderWidth: 0,
+        //   },
+        // }}
+        // variant="temporary"
+        variant="persistent"
+        ModalProps={{
+          keepMounted: true,
+        }}
+        anchor={"bottom"}
+        open={isBottomDrawer}
+        onClose={() => {
+          // dispatch(
+          //   setChatDrawer({
+          //     chatDrawer: false,
+          //     chatPubKey: chatPubKey,
+          //     chatProfile: chatProfile,
+          //   })
+          // );
+        }}
+      >
+        <Box sx={{
+          height: '500px',
+          width: '80%',
+        }}></Box>
       </Drawer>
     </Box>
   );

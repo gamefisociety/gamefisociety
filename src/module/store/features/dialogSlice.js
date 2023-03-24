@@ -9,6 +9,10 @@ const initialState = {
   isOpenLogin: false,
   status: 'idle',
   isOpenMenuLeft: true,
+  isBottomDrawer: false,
+  bottomPage: null,
+  isRightDrawer: false,
+  rightPage: null,
   isDrawer: false,
   isPost: false,
   targetPost: null,
@@ -16,8 +20,8 @@ const initialState = {
   cardDrawer: 'follow',
   //
   chatDrawer: false,
-  chatPubKey:"",
-  chatProfile:{}
+  chatPubKey: "",
+  chatProfile: {}
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -69,7 +73,17 @@ export const dialogSlice = createSlice({
       state.chatDrawer = action.payload.chatDrawer;
       state.chatPubKey = action.payload.chatPubKey;
       state.chatProfile = action.payload.chatProfile;
+    },
+    setBottomDrawer: (state, action) => {
+      state.isBottomDrawer = action.payload.bottomDrawer;
+      state.bottomPage = action.payload.page;
+    },
+    setRightDrawer: (state, action) => {
+      state.isRightDrawer = action.payload.rightDrawer;
+      state.rightPage = action.payload.page;
     }
+
+
 
   },
 
@@ -96,7 +110,9 @@ export const {
   setOpenMenuLeft,
   setPost,
   setDrawer,
-  setChatDrawer
+  setChatDrawer,
+  setBottomDrawer,
+  setRightDrawer
 }
   = dialogSlice.actions;
 

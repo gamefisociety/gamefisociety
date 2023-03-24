@@ -32,7 +32,7 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <GFTHomeMeta />,
+      element: <GFTGlobal />,
     },
     {
       path: "/home",
@@ -112,17 +112,5 @@ const MainRoutes = {
     },
   ],
 };
-
-// MainRoutes.children = MainRoutes.children
-//     .concat(ABasicFunctionRoutes)
-//     .concat(AFarmRoutes)
-//     .concat(AWalletRoutes)
-//     .concat(ASysRoutes)
-//     .concat(AUserRoutes)
-//     .concat(AConfigRoutes)
-//     .concat(ARuleRoutes)
-//     .concat(ANewsRoutes);
-// //
-// MainRoutes.children = MainRoutes.children.concat(OhGameRoutes).concat(OhWalletRoutes).concat(OhTaskRoutes);
 
 export default MainRoutes;
