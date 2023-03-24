@@ -115,7 +115,7 @@ const mapData = [
 const GBottomMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isRightDrawer } = useSelector(s => s.dialog);
+    const { isRightDrawer, rightPage } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -136,11 +136,20 @@ const GBottomMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
-            dispatch(setRightDrawer({
-                rightDrawer: !isRightDrawer,
-                page: item.txt
-            }));
-            // navigate('/global');
+            //
+            navigate('/global');
+            //
+            if (rightPage === item.txt) {
+                dispatch(setRightDrawer({
+                    rightDrawer: !isRightDrawer,
+                    page: item.txt
+                }));
+            } else {
+                dispatch(setRightDrawer({
+                    rightDrawer: isRightDrawer,
+                    page: item.txt
+                }));
+            }
         } else if (item.txt === 'POST & REPLAY') {
             navigate('/post-replay');
         } else if (item.txt === 'FOLLOW') {
