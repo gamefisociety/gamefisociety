@@ -136,7 +136,7 @@ const MainLayout = () => {
           // className: 'main_bottom_drawer_inner',
           sx: {
             height: '82vh',
-            maxWidth: '940px',
+            maxWidth: '36.5vw',
             mt: '66px',
             mb: '66px',
             // right: '12px',
