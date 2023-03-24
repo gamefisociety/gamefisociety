@@ -43,58 +43,51 @@ const GGamePage = () => {
         }
     }, [])
 
-    const renderGames = () => {
+    const renderGamesTop = () => {
         return (
-            <Stack sx={{
+            <Box sx={{
                 width: '100%',
-                minHeigth: '200px',
-                py: '24px',
-            }} direction="column" alignItems={'center'} justifyContent={'flex-start'}>
-                <Box sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                }}>
-                    <Typography sx={{
-                        ml: '24px',
-                    }} color={'white'} variant={'h6'} align={'left'} >
-                        {'Projects'}
-                    </Typography>
-                </Box>
-                <Box className={'game_card_contain'}>
-                    {chainList.map((item, index) => {
-                        return (
-                            <Card className={'game_card'} key={'gamepage-card-index' + index}>
-                                <Avatar sx={{
-                                    width: '64px',
-                                    height: '64px',
-                                }}
-                                    alt="Remy Sharp"
-                                    src={item.icon} />
-                                <Typography sx={{
-                                    mt: '12px'
-                                }} color={'white'} variant={'body1'} >
-                                    {item.name}
-                                </Typography>
-                                <Box sx={{ flexGrow: 1 }} ></Box>
-                                <Button variant="contained" onClick={() => {
-                                    console.log(item);
-                                    navigate('/detail?name=' + item.name);
-                                }}>{'DETAIL'}</Button>
-                            </Card>
-                        );
-                    })}
-                </Box>
-            </Stack>
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+            }}>
+                <Typography sx={{
+                    py: '12px',
+                    pl: '24px',
+                }} color={'white'} variant={'h6'} align={'left'} >
+                    {'Game Projects'}
+                </Typography>
+            </Box>
         )
     }
 
     return (
-        <Paper sx={{
-            backgroundColor: '#000000'
-        }}>
-            {renderGames()}
+        <Paper className={'main_game_bg'}>
+            {renderGamesTop()}
+            <Box className={'game_card_contain'}>
+                {chainList.map((item, index) => {
+                    return (
+                        <Card className={'game_card'} key={'gamepage-card-index' + index}>
+                            <Avatar sx={{
+                                width: '64px',
+                                height: '64px',
+                            }}
+                                alt="Remy Sharp"
+                                src={item.icon} />
+                            <Typography sx={{
+                                mt: '12px'
+                            }} color={'white'} variant={'body1'} >
+                                {item.name}
+                            </Typography>
+                            <Box sx={{ flexGrow: 1 }} ></Box>
+                            <Button variant="contained" onClick={() => {
+                                console.log(item);
+                                navigate('/detail?name=' + item.name);
+                            }}>{'DETAIL'}</Button>
+                        </Card>
+                    );
+                })}
+            </Box>
         </Paper>
     );
 

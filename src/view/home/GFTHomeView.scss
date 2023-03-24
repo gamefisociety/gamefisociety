@@ -7,30 +7,3 @@
     // opacity: 1;
     // background-color: #000000;
 }
-
-.game_card_contain {
-    padding-top: 24px;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 32px;
-    gap: 32px;
-}
-
-.game_card {
-    width: calc( 25% - 25.6px ) !important;
-    height: 200px;
-    border-radius: 12px;
-    background-color: #15171c;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 24px;
-    padding-bottom: 24px;
-    cursor: pointer;
-    transition: all .3s cubic-bezier(.17,.67,.83,.67);
-    overflow: hidden;
-    &:hover{
-        transform: scale(1.1);
-    }
-}

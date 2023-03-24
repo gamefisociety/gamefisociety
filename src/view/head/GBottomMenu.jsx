@@ -90,10 +90,10 @@ const mapData = [
     //     txt: 'WALLET',
     //     img: ic_menu_wallet
     // },
-    // {
-    //     txt: 'GAMES',
-    //     img: ic_polgon
-    // },
+    {
+        txt: 'GAMES',
+        img: ic_polgon
+    },
     // {
     //     txt: 'DIVIDER',
     //     img: ''
@@ -128,7 +128,22 @@ const GBottomMenu = () => {
         if (item.txt === 'HOME') {
             navigate('/home');
         } if (item.txt === 'META') {
-            navigate('/meta');
+            dispatch(setRightDrawer({
+                rightDrawer: !isRightDrawer,
+                page: null
+            }));
+            // navigate('/meta');
+            // if (rightPage === item.txt) {
+            //     dispatch(setRightDrawer({
+            //         rightDrawer: !isRightDrawer,
+            //         page: item.txt
+            //     }));
+            // } else {
+            //     dispatch(setRightDrawer({
+            //         rightDrawer: isRightDrawer,
+            //         page: item.txt
+            //     }));
+            // }
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));
@@ -136,20 +151,7 @@ const GBottomMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
-            //
             navigate('/global');
-            //
-            if (rightPage === item.txt) {
-                dispatch(setRightDrawer({
-                    rightDrawer: !isRightDrawer,
-                    page: item.txt
-                }));
-            } else {
-                dispatch(setRightDrawer({
-                    rightDrawer: isRightDrawer,
-                    page: item.txt
-                }));
-            }
         } else if (item.txt === 'POST & REPLAY') {
             navigate('/post-replay');
         } else if (item.txt === 'FOLLOW') {
