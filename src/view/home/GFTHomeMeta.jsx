@@ -62,7 +62,8 @@ const GFTHomeMeta = () => {
 
     const navigate = useNavigate();
 
-    const sceneRef = useRef(null)
+    const sceneRef = useRef(null);
+    console.log('sceneRef', sceneRef);
 
     useEffect(() => {
         return () => {
@@ -70,6 +71,7 @@ const GFTHomeMeta = () => {
     }, [])
 
     useBeforeRender((scene) => {
+        console.log('sceneRef render', scene);
         // if (boxRef.current) {
         //     // Delta time smoothes the animation.
         //     var deltaTimeInMillis = scene.getEngine().getDeltaTime()
@@ -84,7 +86,7 @@ const GFTHomeMeta = () => {
             <Engine antialias adaptToDeviceRatio canvasId="babylonJS">
                 <Scene ref={sceneRef}>
                     <GMetaCamera></GMetaCamera>
-                    <GMetaGround></GMetaGround>
+                    <GMetaGround sc={sceneRef} ></GMetaGround>
                     {/* <arcRotateCamera
                         name="camera1"
                         target={Vector3.Zero()}

@@ -32,7 +32,7 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <GFTHomeView />,
+      element: <GFTHomeMeta />,
     },
     {
       path: "/home",

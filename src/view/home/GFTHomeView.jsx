@@ -36,7 +36,6 @@ import './GFTHomeView.scss';
 
 
 const GFTHomeView = () => {
-    //
     const [videoList, setVideoList] = useState([]);
     const [chainList, setChainList] = useState([]);
     const [fsLightList, setFsLightList] = useState([]);

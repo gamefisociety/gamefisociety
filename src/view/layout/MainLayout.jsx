@@ -9,7 +9,7 @@ import Drawer from "@mui/material/Drawer";
 import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
-import GFTLeftMenu from "view/head/GFTLeftMenu";
+import GBottomMenu from "view/head/GBottomMenu";
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
 import GFTChat from "view/page/GFTChat";
@@ -28,7 +28,8 @@ const MainLayout = () => {
   return (
     <Box className="main_bg">
       <GFTHead />
-      <Box
+      <GBottomMenu />
+            {/* <Box
         sx={{
           width: "280px",
           position: "fixed",
@@ -37,7 +38,7 @@ const MainLayout = () => {
         }}
       >
         <GFTLeftMenu />
-      </Box>
+      </Box> */}
       <Grid sx={{ flexGrow: 1 }} container>
         <Stack
           sx={{
@@ -48,7 +49,6 @@ const MainLayout = () => {
           alignItems={"flex-start"}
           justifyContent={"flex-start"}
         >
-          <Box sx={{ width: "280px" }} />
           <Stack
             className={"scroll_content"}
             direction="column"

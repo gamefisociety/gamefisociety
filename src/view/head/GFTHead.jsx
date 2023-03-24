@@ -518,7 +518,7 @@ const GFTHead = () => {
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
         <Stack flexDirection="row">
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -530,7 +530,7 @@ const GFTHead = () => {
             }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <CardMedia
             component="img"
             sx={{ width: 160, cursor: "pointer" }}

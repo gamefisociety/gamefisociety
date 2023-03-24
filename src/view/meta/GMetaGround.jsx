@@ -5,13 +5,15 @@ import {
 } from 'react-babylonjs'
 import { Vector3, Color3 } from '@babylonjs/core'
 
-const GMetaGround = () => {
+const GMetaGround = (props) => {
     //
+    const { sc } = props;
 
     useEffect(() => {
+        console.log('enter ground', sc);
         return () => {
         }
-    }, [])
+    }, [props])
 
     return <ground
         name={'ground'}
@@ -28,4 +30,4 @@ const GMetaGround = () => {
     </ground>;
 }
 
-export default GMetaGround;
+export default React.memo(GMetaGround);
