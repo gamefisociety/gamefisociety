@@ -29,19 +29,19 @@ const SpinningBox = (props) => {
     // This will rotate the box on every Babylon frame.
     const rpm = 5
     useBeforeRender((scene) => {
-        if (boxRef.current) {
-            // Delta time smoothes the animation.
-            var deltaTimeInMillis = scene.getEngine().getDeltaTime()
-            boxRef.current.rotation.y +=
-                (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000)
-        }
+        // if (boxRef.current) {
+        //     // Delta time smoothes the animation.
+        //     var deltaTimeInMillis = scene.getEngine().getDeltaTime()
+        //     boxRef.current.rotation.y +=
+        //         (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000)
+        // }
     })
 
     return (
-        <box
+        <sphere
             name={props.name}
             ref={boxRef}
-            size={2}
+            diameter={5}
             position={props.position}
             scaling={clicked ? BiggerScale : DefaultScale}
         >
@@ -50,7 +50,7 @@ const SpinningBox = (props) => {
                 diffuseColor={hovered ? props.hoveredColor : props.color}
                 specularColor={Color3.Black()}
             />
-        </box>
+        </sphere>
     )
 }
 
@@ -58,9 +58,9 @@ const followsPos = [];
 
 const genFollowsPos = () => {
     for (let i = 0; i < 10000; i++) {
-        let x = Math.sin(Math.PI) * 100;
-        let y = Math.sin(Math.PI) * 100;
-        let z = Math.sin(Math.PI) * 100;
+        let x = 200 * (Math.random() - 0.5);
+        let y = 2.5;
+        let z = 200 * (Math.random() - 0.5);
         followsPos.push(new Vector3(x, y, z));
     }
 }
@@ -68,7 +68,7 @@ const genFollowsPos = () => {
 const GMetaFriend = (props) => {
 
     const { follows } = props;
-    
+
     useEffect(() => {
         genFollowsPos();
         return () => {
@@ -87,14 +87,14 @@ const GMetaFriend = (props) => {
     return (
         <TransformNode>
             <SpinningBox
-                name="right"
-                position={new Vector3(2, 0, 0)}
+                name="self"
+                position={new Vector3(0, 2.5, 0)}
                 color={Color3.FromHexString('#C8F4F9')}
                 hoveredColor={Color3.FromHexString('#3CACAE')}
             />
             {follows && follows.map((item, index) => (
                 <SpinningBox
-                    name="left"
+                    name="others"
                     position={getPosByIndex(index)}
                     color={Color3.FromHexString('#EEB5EB')}
                     hoveredColor={Color3.FromHexString('#C26DBC')}

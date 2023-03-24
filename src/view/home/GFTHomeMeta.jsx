@@ -84,7 +84,7 @@ const GFTHomeMeta = () => {
     return (
         <div className='meta_bg'>
             <Engine antialias adaptToDeviceRatio canvasId="babylonJS">
-                <Scene ref={sceneRef}>
+                <Scene ref={sceneRef} clearColor={Color3.FromHexString('#000000') }>
                     <GMetaCamera></GMetaCamera>
                     <GMetaGround sc={sceneRef} ></GMetaGround>
                     {/* <arcRotateCamera
