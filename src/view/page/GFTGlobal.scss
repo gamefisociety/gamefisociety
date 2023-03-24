@@ -1,21 +1,23 @@
 .global_bg {
     // background-color: "red" !important;
     min-height: 800px;
-    max-width: 960px;
+    max-width: 760px;
     width: 100%;
-    // justify-content: space-evenly;
-    // background-color: 'red' ;
+    background-color: rgba(0,0,0,0.25) ;
+
+    .op {
+        width: 100%;
+        padding: 24px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+        // background-color: rgba(0,0,0,1) ;
+    }
 
     .top_button {
         cursor: pointer;
     }
-    // padding-left: 5%;
-    // padding-right: 5%;
-    // padding-bottom: 100px;
-    // width: 100%;
-    // height: auto;
-    // display: flex;
-    // flex-direction: column;
-    // overflow-y: scroll;
-
 }
+

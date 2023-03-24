@@ -138,10 +138,10 @@ const MainLayout = () => {
         PaperProps={{
           // className: 'main_bottom_drawer_inner',
           sx: {
-            height: '80vh',
+            height: '88vh',
             maxWidth: '940px',
-            mt: '10vh',
-            backgroundColor: 'rgba(0,0,0,0.2)',
+            mt: '6vh',
+            backgroundColor: 'rgba(0,0,0,0.85)',
             borderWidth: 0,
           },
         }}

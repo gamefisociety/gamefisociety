@@ -1,24 +1,28 @@
-.content {
-    // margin-top: 10px;
-    width: 100%;
-    height: auto;
-    text-align: left;
-    color: rgb(113, 118, 123);
-    font-size: 15px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-.avatar {
-    cursor: pointer;
-    &:hover{
-        transform: scale(1.08);
+.card_note_bg {
+    background-color: red;
+    .content {
+        // margin-top: 10px;
+        width: 100%;
+        height: auto;
+        text-align: left;
+        color: rgb(113, 118, 123);
+        font-size: 15px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    
+    .avatar {
+        cursor: pointer;
+        &:hover{
+            transform: scale(1.08);
+        }
+    }
+    
+    .name {
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
     }
 }
 
-.name {
-    cursor: pointer;
-    &:hover {
-        text-decoration:underline
-    }
-}

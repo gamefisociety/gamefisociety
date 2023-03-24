@@ -132,9 +132,10 @@ const GCardNote = (props) => {
 
   return (
     <Card
+      // className={'card_note_bg'}
       sx={{
         width: "100%",
-        backgroundColor: "background.paper",
+        backgroundColor: "transparent",
       }}
       elevation={0}
     >

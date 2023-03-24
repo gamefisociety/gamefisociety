@@ -169,17 +169,7 @@ const GFTGlobal = () => {
 
   const renderPartment = () => {
     return (
-      <Box
-        sx={{
-          // backgroundColor: 'red',
-          padding: "24px",
-          display: "flex",
-          flexDirection: "row",
-          alighItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: 'background.paper'
-        }}
-      >
+      <Box class={'op'}>
         <Button
           className={'top_button'}
           sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
@@ -288,7 +278,6 @@ const GFTGlobal = () => {
     <Paper className={'global_bg'} sx={{minHeight: "1000px", backgroundColor: 'background.paper' }} elevation={0}>
       {renderPartment()}
       <Divider />
-      {/* {renderLables()} */}
       {renderContent()}
     </Paper>
   );
