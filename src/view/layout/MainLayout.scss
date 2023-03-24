@@ -1,16 +1,22 @@
 .main_bg {
     width: 100%;
-    // background-color: #000000;
-    // display: flex;
-    // align-items: center;
+
+    .main_search {
+        position: fixed;
+        top: 12px;
+        left: calc( 50% - 225px ) ;
+        // margin: auto 0;
+        z-index: 2200;
+    }
 
     .main_content {
         width: 100%;
+        overflow: hidden;
     
-        .scroll_content {
-            // width: calc( 100vw - 280px);
-            overflow: hidden;
-        }
+        // .scroll_content {
+        //     // width: calc( 100vw - 280px);
+        //     overflow: hidden;
+        // }
     }
 
     .main_right_drawer {

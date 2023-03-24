@@ -30,7 +30,6 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import GFetchMetadata from "components/GFetchMetadata";
 import GListenDM from "components/GListenDM";
-import GSearch from 'components/GSearch';
 import {
   setIsOpen,
   setIsOpenWallet,
@@ -513,24 +512,11 @@ const GFTHead = () => {
 
   // loggedOut, publicKey 
   return (
-    <AppBar className="head_bg">
+    <Box className="head_bg">
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
         <Stack flexDirection="row">
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-            onClick={() => {
-              console.log("click menu");
-              dispatch(setOpenMenuLeft(!isOpenMenuLeft));
-            }}
-          >
-            <MenuIcon />
-          </IconButton> */}
           <CardMedia
             component="img"
             sx={{ width: 160, cursor: "pointer" }}
@@ -539,19 +525,18 @@ const GFTHead = () => {
             onClick={clickLogo}
           />
         </Stack>
-        <GSearch />
         {loggedOut === true ? (
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="relay icon"
               color="inherit"
               onClick={openRelays}
             >
               <PublicIcon />
-            </IconButton>
+            </IconButton> */}
             <Button
               className={"btLogin"}
               endIcon={<AccountCircle />}
@@ -614,7 +599,7 @@ const GFTHead = () => {
                 >
                   <Stack
                     sx={{
-                    //   backgroundColor: "background.default",
+                      //   backgroundColor: "background.default",
                       px: "12px",
                       py: "6px",
                       borderRadius: "24px",
@@ -654,9 +639,11 @@ const GFTHead = () => {
             <MoreIcon />
           </IconButton>
         </Box>
+        {/* <Box sx={{ ml: '12px' }}>
+        </Box> */}
       </Toolbar>
       {renderMobileMenu}
-    </AppBar>
+    </Box>
   );
 };
 

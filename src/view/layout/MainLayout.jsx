@@ -9,6 +9,7 @@ import Drawer from "@mui/material/Drawer";
 import { setDrawer, setChatDrawer, setRightDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
+import GSearch from 'components/GSearch';
 import GBottomMenu from "view/head/GBottomMenu";
 import GFTHomeMeta from 'view/home/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
@@ -40,6 +41,9 @@ const MainLayout = () => {
   return (
     <Box className="main_bg">
       <GFTHead />
+      <Box className="main_search">
+        <GSearch />
+      </Box>
       <GBottomMenu />
       <Grid sx={{ flexGrow: 1 }} container>
         <Stack
@@ -51,14 +55,7 @@ const MainLayout = () => {
           alignItems={"flex-start"}
           justifyContent={"flex-start"}
         >
-          <Stack
-            className={"scroll_content"}
-            direction="column"
-            alignItems={"center"}
-            justifyContent={"flex-start"}
-          >
-            <GFTHomeMeta></GFTHomeMeta>
-          </Stack>
+          <GFTHomeMeta></GFTHomeMeta>
         </Stack>
       </Grid>
       <Drawer
@@ -138,10 +135,10 @@ const MainLayout = () => {
         PaperProps={{
           // className: 'main_bottom_drawer_inner',
           sx: {
-            height: '90vh',
+            height: '82vh',
             maxWidth: '940px',
-            mt: '2vh',
-            mb: '6vh',
+            mt: '66px',
+            mb: '66px',
             // right: '12px',
             backgroundColor: 'rgba(0,0,0,0.85)',
             borderWidth: 0,

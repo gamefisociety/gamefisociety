@@ -175,7 +175,11 @@ const GSearch = () => {
           }
         }}
         InputProps={{
-          sx: { height: "42px", borderRadius: "24px" },
+          sx: {
+            height: "42px",
+            borderRadius: "24px",
+            backgroundColor: 'rgba(0,0,0,0.65)'
+          },
           type: "search",
         }}
         SelectProps={{
