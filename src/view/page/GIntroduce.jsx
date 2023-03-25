@@ -134,7 +134,7 @@ const GIntroduce = () => {
                   marginRight: "15px",
                 }}
                 onClick={() => {
-                  navigate("/home");
+                  navigate("/");
                   //   navigate("/mint");
                 }}
               >
