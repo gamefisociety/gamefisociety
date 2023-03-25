@@ -140,7 +140,7 @@ const GFTLeftMenu = () => {
         if (item.txt === 'HOME') {
             navigate('/home');
         } if (item.txt === 'META Beta') {
-            dispatch(setMainContent(!isMainContent));
+            dispatch(setMainContent(false));
             // navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
