@@ -9,6 +9,7 @@ import { useFollowPro } from "nostr/protocal/FollowPro";
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AppBar from "@mui/material/AppBar";
+import GSearch from 'components/GSearch';
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -516,27 +517,18 @@ const GFTHead = () => {
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
-        <Stack flexDirection="row">
-          <CardMedia
-            component="img"
-            sx={{ width: 160, cursor: "pointer" }}
-            image={ic_logo}
-            alt="Paella dish"
-            onClick={clickLogo}
-          />
-        </Stack>
+        <CardMedia
+          component="img"
+          sx={{ width: 160, cursor: "pointer" }}
+          image={ic_logo}
+          alt="Paella dish"
+          onClick={clickLogo}
+        />
+        <GSearch />
         {loggedOut === true ? (
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
-            {/* <IconButton
-              size="large"
-              aria-label="relay icon"
-              color="inherit"
-              onClick={openRelays}
-            >
-              <PublicIcon />
-            </IconButton> */}
             <Button
               className={"btLogin"}
               endIcon={<AccountCircle />}
@@ -544,7 +536,7 @@ const GFTHead = () => {
                 dispatch(setOpenLogin(true));
               }}
             >
-              Login
+              {'Login'}
             </Button>
           </Box>
         ) : (
@@ -639,8 +631,6 @@ const GFTHead = () => {
             <MoreIcon />
           </IconButton>
         </Box>
-        {/* <Box sx={{ ml: '12px' }}>
-        </Box> */}
       </Toolbar>
       {renderMobileMenu}
     </Box>

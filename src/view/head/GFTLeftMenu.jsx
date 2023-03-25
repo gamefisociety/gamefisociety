@@ -31,10 +31,10 @@ import ic_sub from 'asset/image/logo/ic_sub.png';
 import ic_menu_wallet from 'asset/image/home/ic_menu_wallet.png';
 
 const mapData = [
-    {
-        txt: 'HOME',
-        img: ic_home
-    },
+    // {
+    //     txt: 'HOME',
+    //     img: ic_home
+    // },
     {
         txt: 'META',
         img: ic_home
@@ -52,6 +52,14 @@ const mapData = [
         txt: 'INTRODUCE',
         img: ic_sub,
         out: true
+    },
+    {
+        txt: 'NFT',
+        img: ic_sub,
+    },
+    {
+        txt: 'DAO',
+        img: ic_sub,
     },
     {
         txt: 'ARTICLES',
@@ -73,42 +81,42 @@ const mapData = [
     //     txt: 'SWAP IN',
     //     img: ic_swap
     // },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'WALLET',
-        img: ic_menu_wallet
-    },
-    {
-        txt: 'NEWS',
-        img: ic_eth
-    },
-    {
-        txt: 'VIDEOS',
-        img: ic_bnb
-    },
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'WALLET',
+    //     img: ic_menu_wallet
+    // },
+    // {
+    //     txt: 'NEWS',
+    //     img: ic_eth
+    // },
+    // {
+    //     txt: 'VIDEOS',
+    //     img: ic_bnb
+    // },
     {
         txt: 'GAMES',
         img: ic_polgon
     },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'CREATE',
-        img: ic_create
-    },
-    {
-        txt: 'FOLLOW',
-        img: ic_create
-    },
-    {
-        txt: 'GROUP CHAT',
-        img: ic_create
-    }
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'CREATE',
+    //     img: ic_create
+    // },
+    // {
+    //     txt: 'FOLLOW',
+    //     img: ic_create
+    // },
+    // {
+    //     txt: 'GROUP CHAT',
+    //     img: ic_create
+    // }
 ];
 
 const GFTLeftMenu = () => {

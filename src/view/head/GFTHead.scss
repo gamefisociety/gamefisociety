@@ -1,19 +1,19 @@
 .head_bg {
-    // width: auto;
+    width: 100vw;
     height: 64px;
     background: #191a1b9f;
     z-index: 1000;
     position: fixed;
-    left: 0px;
+    // left: 0px;
     top: 0px;
-    padding-right: 46px;
+    // padding-right: 46px;
     border-radius: 12px;
 
     .toolbar_bg {
-        // flex-shrink: 0;
+        flex-shrink: 0;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
         height: 100%;
     }
 

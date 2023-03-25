@@ -9,8 +9,8 @@ import Drawer from "@mui/material/Drawer";
 import { setDrawer, setChatDrawer, setRightDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
-import GSearch from 'components/GSearch';
-import GBottomMenu from "view/head/GBottomMenu";
+// import GBottomMenu from "view/head/GBottomMenu";
+import GFTLeftMenu from "view/head/GFTLeftMenu";
 import GFTHomeMeta from 'view/home/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
@@ -41,10 +41,7 @@ const MainLayout = () => {
   return (
     <Box className="main_bg">
       <GFTHead />
-      <Box className="main_search">
-        <GSearch />
-      </Box>
-      <GBottomMenu />
+      <GFTLeftMenu />
       <Grid sx={{ flexGrow: 1 }} container>
         <Stack
           sx={{
