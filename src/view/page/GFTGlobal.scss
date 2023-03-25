@@ -1,9 +1,9 @@
 .global_bg {
     // background-color: "red" !important;
-    min-height: 800px;
+    min-height: calc( 100vh - 64px ) ;
     max-width: 760px;
     width: 100%;
-    background-color: rgba(0,0,0,0.25) ;
+    background-color: rgba(0, 0, 0, 0.708) ;
 
     .op {
         width: 100%;
@@ -13,7 +13,6 @@
         align-items: center;
         justify-content: space-between;
         padding: 12px;
-        // background-color: rgba(0,0,0,1) ;
     }
 
     .top_button {

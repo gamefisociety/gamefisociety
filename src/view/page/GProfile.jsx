@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Button, Box } from "@mui/material";
 import xhelp from "module/utils/xhelp";
 import { default_avatar, default_banner } from "module/utils/xdef";
-import "./GSetting.scss";
+import "./GProfile.scss";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
@@ -23,7 +23,7 @@ const GProfile = () => {
 
   useEffect(() => {
     setLocalProfile({ ...profile });
-    return () => {};
+    return () => { };
   }, []);
 
   const saveProfile = async () => {
@@ -42,39 +42,17 @@ const GProfile = () => {
   };
 
   return (
-    <Box
-      sx={{
-        paddingTop: "80px",
-        backgroundColor: "transparent",
-        width: "663px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
-    >
+    <Box className={'profile_bg'}>
       <img
         className="banner"
         src={
-            localProfile.banner && localProfile.banner !== "default"
-              ? localProfile.banner
-              : default_banner
-          }
-        width="100%"
-        height="156px"
+          localProfile.banner && localProfile.banner !== "default"
+            ? localProfile.banner
+            : default_banner
+        }
         alt="banner"
       />
-      <Box
-        sx={{
-          width: "100%",
-          paddingLeft: "52px",
-          paddingRight: "52px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-        }}
-      >
+      <Box className='profile_content'>
         <Avatar
           sx={{
             marginTop: "-43px",
@@ -460,7 +438,7 @@ const GProfile = () => {
           variant="contained"
           sx={{
             marginTop: "35px",
-            width: "80%",
+            width: "20%",
             height: "48px",
             backgroundColor: "#006CF9",
             borderRadius: "5px",

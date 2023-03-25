@@ -41,14 +41,12 @@ const MainLayout = () => {
     <Box className="main_bg">
       <GFTHead />
       <GFTLeftMenu />
-      <Box className="main_meta">
-        <GFTHomeMeta></GFTHomeMeta>
-      </Box>
+      <GFTHomeMeta />
       {
-        isMainContent && <Box className="main_content">
-          <Outlet />
-        </Box>
-      }
+          isMainContent && <Box className="main_content">
+            <Outlet />
+          </Box>
+        }
       <Drawer
         PaperProps={{
           style: {

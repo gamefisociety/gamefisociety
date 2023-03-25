@@ -1,11 +1,11 @@
 .meta_bg {
     width: 100vw;
     height: 100vh;
-    // height: calc( 100vh - 66px );
-    // max-width: 940px;
+    position: fixed;
+    top: 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
     // opacity: 1;
-    background-color: #000000;
+    // background-color: #000000;
 }

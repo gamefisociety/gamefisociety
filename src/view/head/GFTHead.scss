@@ -3,10 +3,8 @@
     height: 64px;
     background: #191a1b9f;
     z-index: 1000;
-    position: fixed;
-    // left: 0px;
+    position: sticky;
     top: 0px;
-    // padding-right: 46px;
     border-radius: 12px;
 
     .toolbar_bg {
