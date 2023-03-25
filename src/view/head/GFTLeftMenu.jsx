@@ -123,7 +123,7 @@ const mapData = [
 const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft,isMainContent } = useSelector(s => s.dialog);
+    const { isOpenMenuLeft, isMainContent } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -131,6 +131,10 @@ const GFTLeftMenu = () => {
         }
 
     }, [])
+
+    const openMainContent = () => {
+        dispatch(setMainContent(true));
+    }
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
@@ -146,8 +150,10 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'GLOBAL') {
             navigate('/global');
+            openMainContent();
         } else if (item.txt === 'POST & REPLAY') {
             navigate('/post-replay');
+            openMainContent();
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'CREATE') {
@@ -161,6 +167,7 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'GAMES') {
             navigate('/gamepage');
+            openMainContent();
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
