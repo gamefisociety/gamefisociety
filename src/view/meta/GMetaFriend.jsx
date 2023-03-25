@@ -154,7 +154,7 @@ const GMetaFriend = (props) => {
                     if (info && info.content) {
                         baseInfo = JSON.parse(info.content);
                     }
-                    console.log('follows data', item, info);
+                    console.log('follows data', item, baseInfo);
                     return (
                         <rectangle
                             key={'friend-ui-' + index}
@@ -162,9 +162,12 @@ const GMetaFriend = (props) => {
                             background="black"
                             height="30px"
                             alpha={0.5}
-                            width="100px"
-                            cornerRadius={20}
-                            thickness={1}
+                            // width="100px"
+                            adaptWidthToChildren={true}
+                            paddingLeft={12}
+                            paddingRight={12}
+                            cornerRadius={6}
+                            thickness={0}
                             linkOffsetY={30}
                             ref={getFriendUIRefList}
                             verticalAlignment={Control.VERTICAL_ALIGNMENT_TOP}
@@ -173,7 +176,9 @@ const GMetaFriend = (props) => {
                                 name={'sphere-text'}
                                 text={baseInfo ? baseInfo.name : 'gfs user'}
                                 color="White"
+                                resizeToFit={true}
                             />
+                            <babylon-image name='abc' url={baseInfo ? baseInfo.picture : 'null'} />
                         </rectangle>
                     )
                 })}
