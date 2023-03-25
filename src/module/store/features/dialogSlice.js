@@ -11,7 +11,7 @@ const initialState = {
   isOpenMenuLeft: true,
   isBottomDrawer: false,
   bottomPage: null,
-  isRightDrawer: false,
+  isRightDrawer: true,
   rightPage: null,
   isDrawer: false,
   isPost: false,
@@ -82,8 +82,6 @@ export const dialogSlice = createSlice({
       state.isRightDrawer = action.payload.rightDrawer;
       state.rightPage = action.payload.page;
     }
-
-
 
   },
 
