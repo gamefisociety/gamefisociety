@@ -11,7 +11,7 @@ import { setDrawer, setChatDrawer, setRightDrawer } from "module/store/features/
 import GFTHead from "view/head/GFTHead";
 // import GBottomMenu from "view/head/GBottomMenu";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
-import GFTHomeMeta from 'view/home/GFTHomeMeta';
+import GFTHomeMeta from 'view/meta/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
 import GFTChat from "view/page/GFTChat";

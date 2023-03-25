@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-
+import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
 import {
     Engine,
     Scene,
@@ -9,43 +9,13 @@ import {
     useHover,
 } from 'react-babylonjs'
 import { Vector3, Color3 } from '@babylonjs/core'
-import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
-import {
-    getListData,
-    getListChainData
-} from 'api/requestData'
-import { getALLAssetsForAccount } from '../../api/nftscan'
-import FsLightbox from 'fslightbox-react';
 
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import CardActions from '@mui/material/CardActions';
-
-import GFTNewsView from './GFTNewsView'
-import GBanner from 'view/head/GBanner';
-//
 import GMetaCamera from 'view/meta/GMetaCamera';
 import GMetaFriend from 'view/meta/GMetaFriend';
 import GMetaGround from 'view/meta/GMetaGround';
 
-import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
-
 import './GFTHomeMeta.scss';
-
 
 const GFTHomeMeta = () => {
 
