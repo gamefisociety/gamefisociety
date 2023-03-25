@@ -89,17 +89,7 @@ const GUserHome = () => {
   }, [pubkey]);
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "960px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        my: "24px",
-      }}
-    >
+    <Box className='userhome-bg'>
       <Box
         sx={{
           width: "100%",

@@ -75,7 +75,7 @@ const GCardUser = (props) => {
 
   //#1F1F1F
   return (
-    <Card sx={{ width: "100%", backgroundColor: "transparent" }}>
+    <Card class='carduser-bg'>
       <CardContent
         sx={{
           padding: "12px",

@@ -189,7 +189,7 @@ const GPostReplay = () => {
   };
 
   return (
-    <Paper className={'post_replay_bg'} sx={{ backgroundColor: 'background.paper' }} elevation={0}>
+    <Paper className={'post_replay_bg'} elevation={0}>
       {renderPartment()}
       <Divider />
       {renderContent()}
