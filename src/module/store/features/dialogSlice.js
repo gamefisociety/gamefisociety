@@ -15,6 +15,7 @@ const initialState = {
   rightPage: null,
   isDrawer: false,
   isPost: false,
+  isMainContent: false,
   targetPost: null,
   placeDrawer: 'right',
   cardDrawer: 'follow',
@@ -81,6 +82,9 @@ export const dialogSlice = createSlice({
     setRightDrawer: (state, action) => {
       state.isRightDrawer = action.payload.rightDrawer;
       state.rightPage = action.payload.page;
+    },
+    setMainContent: (state, action) => {
+      state.isMainContent = action.payload;
     }
 
   },
@@ -110,7 +114,8 @@ export const {
   setDrawer,
   setChatDrawer,
   setBottomDrawer,
-  setRightDrawer
+  setRightDrawer,
+  setMainContent
 }
   = dialogSlice.actions;
 

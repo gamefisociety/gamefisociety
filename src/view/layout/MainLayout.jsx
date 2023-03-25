@@ -21,8 +21,6 @@ import { initRelays } from "module/store/features/profileSlice";
 
 import "./MainLayout.scss";
 
-// const win_h = window.client
-
 const MainLayout = () => {
   const dispatch = useDispatch();
   const {
@@ -33,6 +31,7 @@ const MainLayout = () => {
     chatPubKey,
     chatProfile,
     isBottomDrawer,
+    isMainContent,
     bottomPage,
     isRightDrawer,
     rightPage,
@@ -42,19 +41,14 @@ const MainLayout = () => {
     <Box className="main_bg">
       <GFTHead />
       <GFTLeftMenu />
-      <Grid sx={{ flexGrow: 1 }} container>
-        <Stack
-          sx={{
-            backgroundColor: "background.paper",
-          }}
-          className="main_content"
-          direction="row"
-          alignItems={"flex-start"}
-          justifyContent={"flex-start"}
-        >
-          <GFTHomeMeta></GFTHomeMeta>
-        </Stack>
-      </Grid>
+      <Box className="main_meta">
+        <GFTHomeMeta></GFTHomeMeta>
+      </Box>
+      {
+        isMainContent && <Box className="main_content">
+          <Outlet />
+        </Box>
+      }
       <Drawer
         PaperProps={{
           style: {
@@ -158,7 +152,7 @@ const MainLayout = () => {
           );
         }}
       >
-        <Outlet />
+
       </Drawer>
       <Drawer
         className='main_bottom_drawer'
@@ -191,10 +185,6 @@ const MainLayout = () => {
           // );
         }}
       >
-        <Box sx={{
-          height: '500px',
-          width: '80%',
-        }}></Box>
       </Drawer>
     </Box>
   );

@@ -8,6 +8,7 @@ import {
     isCheckIn,
     setOpenCheckIn,
     setIsOpen,
+    setMainContent,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
@@ -36,7 +37,7 @@ const mapData = [
     //     img: ic_home
     // },
     {
-        txt: 'META',
+        txt: 'META Beta',
         img: ic_home
     },
     {
@@ -81,14 +82,14 @@ const mapData = [
     //     txt: 'SWAP IN',
     //     img: ic_swap
     // },
-    // {
-    //     txt: 'DIVIDER',
-    //     img: ''
-    // },
-    // {
-    //     txt: 'WALLET',
-    //     img: ic_menu_wallet
-    // },
+    {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
+        txt: 'WALLET',
+        img: ic_menu_wallet
+    },
     // {
     //     txt: 'NEWS',
     //     img: ic_eth
@@ -122,7 +123,7 @@ const mapData = [
 const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft } = useSelector(s => s.dialog);
+    const { isOpenMenuLeft,isMainContent } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -134,8 +135,9 @@ const GFTLeftMenu = () => {
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
-        } if (item.txt === 'META') {
-            navigate('/meta');
+        } if (item.txt === 'META Beta') {
+            dispatch(setMainContent(!isMainContent));
+            // navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));

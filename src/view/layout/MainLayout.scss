@@ -9,14 +9,30 @@
         z-index: 2200;
     }
 
+    .main_meta {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0px;
+        z-index: 0;
+    }
+
     .main_content {
         width: 100%;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: aqua;
+        z-index: 5000;
+        // overflow: hidden;
     
-        // .scroll_content {
-        //     // width: calc( 100vw - 280px);
-        //     overflow: hidden;
-        // }
+        .scroll_content {
+            // width: calc( 100vh - 280px);
+            position: fixed;
+            height: calc( 100vh - 64px);
+            bottom: 0px;
+            // overflow: hidden;
+        }
     }
 
     .main_right_drawer {
