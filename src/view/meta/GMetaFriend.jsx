@@ -1,8 +1,5 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, forwardRef } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-
-import { Rectangle, TextBlock } from '@babylonjs/gui/2D/controls';
-
 import {
     useClick,
     useHover,
@@ -10,113 +7,13 @@ import {
     TransformNode
 } from 'react-babylonjs';
 
+import NormalCache from "db/NormalCache";
 import { Vector3, Color3 } from '@babylonjs/core'
-// import { Rectangle } from '@babylonjs/gui/2D/controls/rectangle'
 import { Control } from '@babylonjs/gui/2D/controls/control'
 import { Line } from '@babylonjs/gui/2D/controls/line'
 
 const DefaultScale = new Vector3(1, 1, 1)
 const BiggerScale = new Vector3(1.25, 1.25, 1.25)
-
-const FriendBox = (props) => {
-    const { ent } = props;
-    // access Babylon scene objects with same React hook as regular DOM elements
-    const friendRef = useRef(null);
-    const uiRef = useRef(null)
-
-    const [clicked, setClicked] = useState(false)
-    useClick(() => setClicked((clicked) => !clicked), friendRef)
-
-    const [hovered, setHovered] = useState(false)
-    useHover(
-        () => setHovered(true),
-        () => setHovered(false),
-        friendRef
-    )
-
-    // This will rotate the box on every Babylon frame.
-    const rpm = 5
-    useBeforeRender((scene) => {
-        // console.log('FriendBox useBeforeRender', scene);
-        // if (boxRef.current) {
-        //     // Delta time smoothes the animation.
-        //     var deltaTimeInMillis = scene.getEngine().getDeltaTime()
-        //     boxRef.current.rotation.y +=
-        //         (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000)
-        // }
-    });
-
-    // const onFullScreenRef = useCallback(() => {
-    //     // const line = uiRef!
-    //     console.log('friend callback!', uiRef);
-    //     try {
-    //         // if (uiRef.current && friendRef.current) {
-    //         //     // uiRef.linkWithMesh(friendRef.current)
-    //         //     // line.connectedControl = label7Ref.current!
-    //         //     //     ;[1, 2, 3, 4, 5, 6].forEach((i) => {
-    //         //     //         const lookup = refLookup[i]
-    //         //     //         lookup.label.current!.linkWithMesh(lookup.sphere.current)
-    //         //     //     })
-    //         // }
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // }, [])
-
-    return (
-        <sphere
-            name={props.name}
-            ref={friendRef}
-            diameter={5}
-            position={props.position}
-            scaling={clicked ? BiggerScale : DefaultScale}
-            onCreated={(target) => {
-                var label = new Rectangle("label for " + target.name);
-                console.log('sphere oncreate', target, label, ent);
-                label.background = "black"
-                label.height = "30px";
-                label.alpha = 0.5;
-                label.width = "100px";
-                label.cornerRadius = 20;
-                label.thickness = 1;
-                label.linkOffsetY = 30;
-                // advancedTexture.addControl(label); 
-                label.linkWithMesh(target);
-
-                var text1 = new TextBlock();
-                text1.text = target.name;
-                text1.color = "white";
-                label.addControl(text1);
-            }}
-        >
-            <standardMaterial
-                name={`${props.name}-mat`}
-                diffuseColor={hovered ? props.hoveredColor : props.color}
-                specularColor={Color3.Black()}
-            />
-            {/* <rectangle
-                    key={`labela`}
-                    name={`label for Spherea`}
-                    background="black"
-                    height="30px"
-                    alpha={0.5}
-                    width="100px"
-                    cornerRadius={20}
-                    thickness={1}
-                    linkOffsetY={30}
-                    ref={uiRef}
-                    verticalAlignment={Control.VERTICAL_ALIGNMENT_TOP}
-                >
-                    <textBlock
-                        name={`sphere-text`}
-                        text={`Sphere`}
-                        color="White"
-                    />
-                </rectangle> */}
-        </sphere>
-    )
-}
-
 const followsPos = [];
 
 const genFollowsPos = () => {
@@ -129,13 +26,33 @@ const genFollowsPos = () => {
 }
 
 const GMetaFriend = (props) => {
-
     const { follows } = props;
+    const getFriendUIRefList = target => {
+        console.log('meta1 getFriendUIRefList', target);
+        if (!target) {
+            return;
+        }
+        let entName = target.name.replace('friend-ui', 'friend-ent');
+        for (let i = 0; i < friendEntRef.current.length; i++) {
+            if (entName === friendEntRef.current[i].name) {
+                target.linkWithMesh(friendEntRef.current[i]);
+            }
+        }
+    };
+
+    const friendEntRef = useRef([]);
+    const getFriendEntRefList = dom => {
+        console.log('meta1 getFriendEntRefList', friendEntRef.current.length);
+        friendEntRef.current.push(dom);
+    };
 
     useEffect(() => {
+        console.log('meta1 friend enter');
         genFollowsPos();
         return () => {
-            //
+            if (friendEntRef.current) {
+                friendEntRef.current.clear();
+            }
         }
     }, []);
 
@@ -147,6 +64,70 @@ const GMetaFriend = (props) => {
         return ret;
     }
 
+    const onFullScreenRef = useCallback((aa) => {
+        // const line = uiRef!
+        console.log('meta1 onFullScreenRef!', aa);
+        try {
+            // friendUIRef.current?.forEach((i) => {
+            //     const friend_ui = friendUIRef[i]
+            //     console.log('meta1 friend ui callback!', friend_ui);
+            // })
+        } catch (e) {
+            console.error(e)
+        }
+    }, []);
+
+    const FriendBox = forwardRef((props, ref) => {
+        const { ent } = props;
+        console.log('FriendBox ref', ref);
+        // access Babylon scene objects with same React hook as regular DOM elements
+        const friendRef = useRef(null);
+        const [clicked, setClicked] = useState(false)
+        useClick(() => setClicked((clicked) => !clicked), friendRef)
+        const [hovered, setHovered] = useState(false)
+        useHover(
+            () => setHovered(true),
+            () => setHovered(false),
+            friendRef
+        )
+        // This will rotate the box on every Babylon frame.
+        // const rpm = 5
+        useBeforeRender((scene) => {
+            // console.log('FriendBox useBeforeRender', scene);
+            // if (boxRef.current) {
+            //     // Delta time smoothes the animation.
+            //     var deltaTimeInMillis = scene.getEngine().getDeltaTime()
+            //     boxRef.current.rotation.y +=
+            //         (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000)
+            // }
+        });
+
+        return (
+            <sphere
+                name={props.name}
+                ref={friendRef}
+                diameter={5}
+                position={props.position}
+                scaling={clicked ? BiggerScale : DefaultScale}
+                onCreated={(target) => {
+                    if (ref && target) {
+                        ref(target);
+                    }
+                }}
+            >
+                <standardMaterial
+                    name={`${props.name}-mat`}
+                    diffuseColor={hovered ? props.hoveredColor : props.color}
+                    specularColor={Color3.Black()}
+                />
+            </sphere>
+        )
+    });
+
+
+    let metadata_cache_flag = "metadata_cache";
+    const NorCache = NormalCache();
+
     return (
         <TransformNode>
             <FriendBox
@@ -157,13 +138,46 @@ const GMetaFriend = (props) => {
             />
             {follows && follows.map((item, index) => (
                 <FriendBox
+                    ref={getFriendEntRefList}
+                    key={'friend-ent-' + index}
+                    name={'friend-ent-' + index}
                     ent={item}
-                    name="others"
                     position={getPosByIndex(index)}
                     color={Color3.FromHexString('#EEB5EB')}
                     hoveredColor={Color3.FromHexString('#C26DBC')}
                 />
             ))}
+            <adtFullscreenUi name={'ui-friend'} ref={onFullScreenRef}>
+                {follows && follows.map((item, index) => {
+                    const { info } = NorCache.getMetadata(metadata_cache_flag, item);
+                    let baseInfo = null;
+                    if (info && info.content) {
+                        baseInfo = JSON.parse(info.content);
+                    }
+                    console.log('follows data', item, info);
+                    return (
+                        <rectangle
+                            key={'friend-ui-' + index}
+                            name={'friend-ui-' + index}
+                            background="black"
+                            height="30px"
+                            alpha={0.5}
+                            width="100px"
+                            cornerRadius={20}
+                            thickness={1}
+                            linkOffsetY={30}
+                            ref={getFriendUIRefList}
+                            verticalAlignment={Control.VERTICAL_ALIGNMENT_TOP}
+                        >
+                            <textBlock
+                                name={'sphere-text'}
+                                text={baseInfo ? baseInfo.name : 'gfs user'}
+                                color="White"
+                            />
+                        </rectangle>
+                    )
+                })}
+            </adtFullscreenUi>
         </TransformNode>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
 import {
@@ -50,26 +50,36 @@ const GFTHomeMeta = () => {
         // }
     })
 
+    const onFullScreenRef = useCallback(() => {
+        try {
+            console.log('meta ui callback');
+            //   line.linkWithMesh(sphere7Ref.current)
+            //   line.connectedControl = label7Ref.current!
+            //   ;[1, 2, 3, 4, 5, 6].forEach((i) => {
+            //     const lookup = refLookup[i]
+            //     lookup.label.current!.linkWithMesh(lookup.sphere.current)
+            //   })
+        } catch (e) {
+            console.error(e)
+        }
+    }, [])
+
 
     return (
         <div className='meta_bg'>
             <Engine antialias adaptToDeviceRatio canvasId="babylonJS">
-                <Scene ref={sceneRef} clearColor={Color3.FromHexString('#000000') }>
+                <Scene ref={sceneRef} clearColor={Color3.FromHexString('#000000')} onSceneMount={()=>{
+                    console.log('meta onSceneMount')
+                }}>
                     <GMetaCamera></GMetaCamera>
                     <GMetaGround sc={sceneRef} ></GMetaGround>
-                    {/* <arcRotateCamera
-                        name="camera1"
-                        target={Vector3.Zero()}
-                        alpha={Math.PI / 2}
-                        beta={Math.PI / 4}
-                        radius={8}
-                    /> */}
                     <hemisphericLight
                         name="light1"
                         intensity={0.7}
                         direction={Vector3.Up()}
                     />
                     <GMetaFriend follows={follows}></GMetaFriend>
+                    {/* <adtFullscreenUi name="ui1" ref={onFullScreenRef}></adtFullscreenUi> */}
                 </Scene>
             </Engine>
         </div>)
