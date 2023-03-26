@@ -1,4 +1,3 @@
-import * as secp from "@noble/secp256k1";
 import { DefaultConnectTimeout } from "nostr/Const";
 import NostrFactory from 'nostr/NostrFactory';
 
