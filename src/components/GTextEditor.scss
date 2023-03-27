@@ -1,0 +1,158 @@
+$fontname1: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+$fontname2: Verdana, Geneva, Tahoma, sans-serif;
+
+.bg {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+
+    .warpper {
+        display: block;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        max-width: 1000px;
+        width: 50%;
+        height: 100%;
+        margin: 0;
+        padding: 50px;
+
+        .header {
+            height: 100px;
+            font-size: 60px;
+            font-family: $fontname1;
+        }
+
+        .notice {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            color: #212121;
+            font-size: 14px;
+            font-family: "Work Sans", "Roboto", "Nunito Sans", Helvetica, Arial, sans-serif;
+            font-weight: normal;
+            line-height: 1.61;
+            letter-spacing: 0px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            background-color: #f0f0f0;
+        }
+
+        .checkboxs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            .label {
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 22px;
+                font-family: $fontname2;
+            }
+
+            .checkbox {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .keyblock {
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+
+            .project {
+                width: 320px;
+                height: 30px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 12px;
+                padding-right: 12px;
+
+                .name {
+                    font-size: 18px;
+                    font-family: $fontname2;
+                }
+            }
+
+            .keybox {
+                position: relative;
+                padding: 12px;
+                background-color: gainsboro;
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+
+                .pid {
+                    width: 340px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+
+                    .name {
+                        font-size: 12px;
+                        font-family: $fontname2;
+                    }
+                }
+            }
+        }
+
+        .buttonbox {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 40px;
+            .textcid {
+                font-size: 14px;
+                font-family: $fontname2;
+            }
+
+            .buttonpublish {
+                position: absolute;
+                right: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                // height: 35px;
+                font-family: $fontname1;
+                // background-color: gray;
+                // border: none;
+                // color: white;
+                // text-align: center;
+                // text-decoration: none;
+                // display: inline-block;
+                // font-size: 16px;
+                // padding-left: 15px;
+                // padding-right: 15px;
+            }
+        }
+
+
+    }
+}
