@@ -12,6 +12,9 @@ import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import Avatar from "@mui/material/Avatar";
 import Link from "@mui/material/Link";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
@@ -23,25 +26,30 @@ function GArticleList() {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
   const [publishState, setPublishState] = useState(0);
+  const [step, setStep] = useState(0);
+  const [stepMsgs, setStepMsgs] = useState(["PUBLISH ON IPFS", "PUBLISH ON CONTRACT"]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
   const [postDatas, setPostDatas] = useState([]);
   const dispatch = useDispatch();
+  const textEditor = useRef();
   useEffect(() => {
     if (account) {
       setPublishState(0);
+      setStep(0);
       setPostDatas([]);
-      getPostCount();
+      getArticleCount();
     } else {
       dispatch(setIsOpen(true));
     }
 
     return () => {
       setPublishState(0);
+      setStep(0);
       setPostDatas([]);
     };
   }, [account]);
-  const getPostCount = () => {
+  const getArticleCount = () => {
     if (account) {
       GSTArticlesBase.totalSupply(library)
         .then((res) => {
@@ -76,27 +84,27 @@ function GArticleList() {
     }
   };
 
-  const createArticle = () => {
+  const publishToContract = () => {
     if (cidInfo.name.length === 0 || cidInfo.cid.length === 0) {
       return;
     }
-    if (publishState === 1) {
+    if (publishState === 3) {
       return;
     }
-    setPublishState(1);
+    setPublishState(3);
     if (account) {
       GSTArticlesBase.creatArticle(library, account, cidInfo.name, cidInfo.cid)
         .then((res) => {
           console.log("creatArticle", res);
           if (res) {
-            setPublishState(2);
-          } else {
-            setPublishState(3);
+            setPublishState(4);
+            setStep(2);
+            stepMsgs[1] = "PUBLISH ON CONTRACT SUCCEED"; 
           }
         })
         .catch((err) => {
-          setPublishState(3);
           console.log(err, "err");
+          stepMsgs[1] = "PUBLISH ON CONTRACT FAILED"; 
         });
     } else {
     }
@@ -104,13 +112,15 @@ function GArticleList() {
 
   const publishMsg = () => {
     if (publishState === 0) {
-      return "Publish";
+      return "publish on ipfs";
     } else if (publishState === 1) {
-      return "Publishing...";
+      return "publishing...";
     } else if (publishState === 2) {
-      return "Published";
+      return "publish on contract";
     } else if (publishState === 3) {
-      return "Error!";
+      return "publishing...";
+    }else if (publishState === 4) {
+      return "published";
     }
   };
 
@@ -125,9 +135,6 @@ function GArticleList() {
     setDialogOpen(false);
   };
 
-  const publish = () => {
-    createArticle();
-  };
   return (
     <Box
       sx={{
@@ -137,6 +144,8 @@ function GArticleList() {
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
+        pointerEvents: "all",
+        // backgroundColor: "red",
       }}
     >
       <Box
@@ -163,7 +172,7 @@ function GArticleList() {
           }}
           onClick={handleClickDialogOpen}
         >
-          {"发推"}
+          {"Create Article"}
         </Button>
       </Box>
       <List
@@ -281,7 +290,7 @@ function GArticleList() {
         <Box
           sx={{
             position: "relative",
-            width:"100%",
+            width: "100%",
             minHeight: "1000px",
             display: "flex",
             flexDirection: "column",
@@ -307,7 +316,58 @@ function GArticleList() {
           >
             <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <GTextEditor />
+          <GTextEditor
+            ref={textEditor}
+            publishHandle={(param, msg) => {
+              if (param === "BEGIN") {
+                setPublishState(1);
+              } else if (param === "SUCCESS") {
+                setPublishState(2);
+                setStep(1);
+                stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + msg; 
+                cidInfo.name = "Just Test";
+                cidInfo.cid = msg;
+                setCidInfo({...cidInfo});
+              } else if (param === "FAILED") {
+                setPublishState(0);
+                setStep(0);
+                stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + msg; 
+              }
+            }}
+          />
+          <Box sx={{ width: "100%", marginTop: "20px" }}>
+            <Stepper activeStep={step} alternativeLabel>
+              {stepMsgs.map((label) => (
+                <Step key={label}>
+                  <StepLabel sx={{
+                    whiteSpace: "pre-line"
+                  }}>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Box>
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "20px",
+              width: "180px",
+              height: "35px",
+              borderRadius: "20px",
+              backgroundColor: "#006CF9",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+            }}
+            onClick={() => {
+              if(publishState === 0){
+                textEditor.current.publishToIPFS();
+              }else if(publishState === 2){
+                publishToContract();
+              }
+            }}
+          >
+            {publishMsg()}
+          </Button>
           {/* <Box
             sx={{
               width: "400px",
