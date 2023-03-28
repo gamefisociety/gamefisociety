@@ -33,10 +33,8 @@ const GUserHome = () => {
   const followPro = useFollowPro();
   const fetchTextNote = (pub) => {
     //
-    // const curRelay = "wss://nos.lol";
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
-    // filterTextNote['#p'] = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
     let textNote = BuildSub("profile_note_follow", [
@@ -79,8 +77,8 @@ const GUserHome = () => {
   };
 
   useEffect(() => {
-    console.log("profile info", info);
-    console.log("profile user", lastPubKey, "pub", pubkey);
+    // console.log("profile info", info);
+    // console.log("profile user", lastPubKey, "pub", pubkey);
     if (pubkey && lastPubKey !== pubkey) {
       lastPubKey = pubkey;
       fetchTextNote(pubkey);

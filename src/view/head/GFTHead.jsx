@@ -458,6 +458,7 @@ const GFTHead = () => {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
+      sx={{ zIndex: '1000' }}
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",

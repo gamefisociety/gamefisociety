@@ -81,18 +81,16 @@ const MainLayout = () => {
         )}
         {cardDrawer === "relays" && <GRelays />}
       </Drawer>
-      {/* <Drawer
+      <Drawer
         PaperProps={{
           sx: {
-            marginTop: "70px",
-            // height: "80%",
-            // marginBottom: "50px",
+            marginTop: "64px",
             backgroundColor: "transparent",
             borderWidth: 0,
           },
         }}
         variant="persistent"
-        anchor={"bottom"}
+        anchor={"right"}
         open={chatDrawer}
         onClose={() => {
           dispatch(
@@ -117,8 +115,8 @@ const MainLayout = () => {
             );
           }}
         />
-      </Drawer> */}
-      <Drawer
+      </Drawer>
+      {/* <Drawer
         className='main_right_drawer'
         // swipeAreaWidth='80%'
         PaperProps={{
@@ -150,8 +148,7 @@ const MainLayout = () => {
           );
         }}
       >
-
-      </Drawer>
+      </Drawer> */}
       <Drawer
         className='main_bottom_drawer'
         // swipeAreaWidth='80%'

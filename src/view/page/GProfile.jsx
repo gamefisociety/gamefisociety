@@ -37,10 +37,6 @@ const GProfile = () => {
     });
   };
 
-  const updateProfile = async () => {
-    //
-  };
-
   return (
     <Box className={'profile_bg'}>
       <img

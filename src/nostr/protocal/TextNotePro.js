@@ -15,10 +15,15 @@ export const useTextNotePro = () => {
       filter.kinds = [EventKind.TextNote];
       return filter;
     },
+    getTarget: (pubkey) => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.TextNote];
+      filter.authors = [pubkey]
+      return filter;
+    },
     getEvents: (eventIds) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.TextNote];
-      // filter.ids = eventIds.concat();
       filter['#e'] = eventIds?.concat();
       return filter;
     },

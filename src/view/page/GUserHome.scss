@@ -7,8 +7,9 @@
     background-color: rgba(19, 19, 19, 0.75);
     padding-top: 24px;
     padding-bottom: 66px;
+
+    .goback{
+        cursor: pointer;
+    }
 }
 
-.goback{
-    cursor: pointer;
-}
