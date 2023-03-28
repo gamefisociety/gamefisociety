@@ -1,11 +1,12 @@
 .card_note_bg {
-    // background-color: red;
+    background-color: transparent;
+    
     .content {
         // margin-top: 10px;
         width: 100%;
         height: auto;
         text-align: left;
-        color: rgb(113, 118, 123);
+        // color: rgba(69, 69, 69, 0.613);
         font-size: 15px;
         white-space: pre-wrap;
         word-wrap: break-word;

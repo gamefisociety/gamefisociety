@@ -35,6 +35,7 @@ import {
   setIsOpen,
   setIsOpenWallet,
   setOpenMenuLeft,
+  setMainContent,
 } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
@@ -125,7 +126,12 @@ const GFTHead = () => {
     handleMobileMenuClose();
   };
 
+  const openMainContent = () => {
+    dispatch(setMainContent(true));
+  }
+
   const openUserHome = () => {
+    openMainContent();
     navigate("/userhome", {
       state: { info: { ...profile }, pubkey: publicKey },
     });
@@ -133,6 +139,7 @@ const GFTHead = () => {
   };
 
   const openProfile = () => {
+    openMainContent();
     navigate("/profile", {
       state: { info: { ...profile }, pubkey: publicKey },
     });
@@ -161,8 +168,9 @@ const GFTHead = () => {
   };
 
   const openSetting = () => {
-    navigate("/setting");
     handleMenuClose();
+    openMainContent();
+    navigate("/setting");
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -450,6 +458,7 @@ const GFTHead = () => {
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
+      sx={{ zIndex: '1000' }}
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",

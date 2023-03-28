@@ -18,12 +18,13 @@ import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
-  //
   const rowRef = useRef();
   const item = data[index];
+  
   useEffect(() => {
     setSize(index, rowRef.current.getBoundingClientRect().height);
   }, [setSize, index]);
+
   return (
     <Box
       ref={rowRef}
@@ -33,14 +34,16 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        padding: "10px",
+        pt: "8px",
+        px: '16px',
+        // backgroundColor: '#FF0000',
         justifyContent: item.pubkey === chatPK ? "flex-start" : "flex-end",
       }}
     >
       <Typography
         sx={{
           width: "70%",
-          padding: "10px",
+          padding: "12px",
           backgroundColor: item.pubkey === chatPK ? "#191A1B" : "#454FBF",
           borderRadius: "6px",
           fontFamily: "Saira",
@@ -132,7 +135,7 @@ const GFTChat = (props) => {
     if (chatData.length > 0) {
       scrollToBottom();
     }
-    return () => {};
+    return () => { };
   }, [chatData]);
 
   const sendDM = async () => {
@@ -164,111 +167,80 @@ const GFTChat = (props) => {
     listRef.current.scrollToItem(chatData.length, "smart");
   };
 
-  return (
-    <Box
-      sx={{
-        width: "392px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        backgroundColor: "transparent",
-      }}
-    >
-      <Box
-        sx={{
-          paddingLeft: "30px",
-          paddingRight: "30px",
-          paddingTop: "50px",
-          paddingBottom: "70px",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          backgroundColor: "#272727",
-          borderTopLeftRadius: "15px",
-          borderBottomLeftRadius: "15px",
-        }}
-      >
-        <Box
+  const renderHeader = () => {
+    return (
+      <Box className={'dm_header'}>
+        <Icon
+          className="goback"
           sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Icon
-            className="goback"
-            sx={{
-              width: "100px",
-              height: "38px",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              color: "#FFFFFF",
-              fontSize: "18px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-            }}
-            onClick={() => {
-              props.closeHandle();
-            }}
-          >
-            <img src={dmLeftImg} width="38px" alt="dmleft" />
-            DMs
-          </Icon>
-          <Button
-            className="button"
-            sx={{
-              width: "38px",
-              height: "38px",
-            }}
-            onClick={() => {
-              props.closeHandle();
-            }}
-          >
-            <img src={closeImg} width="38px" alt="close" />
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            marginBottom: "30px",
-            width: "100%",
+            width: "100px",
+            height: "38px",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "flex-start",
+            color: "#FFFFFF",
+            fontSize: "18px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+          }}
+          onClick={() => {
+            props.closeHandle();
           }}
         >
-          <Avatar
-            sx={{ width: "40px", height: "40px" }}
-            edge="end"
-            alt="GameFi Society"
-            src={
-              chatProfile.picture && chatProfile.picture !== "default"
-                ? chatProfile.picture
-                : default_avatar
-            }
-          />
-          <Typography
-            sx={{
-              marginLeft: "8px",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-          >
-            {chatProfile.display_name
-              ? chatProfile.display_name
-              : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length)}
-          </Typography>
-        </Box>
+          <img src={dmLeftImg} width="38px" alt="dmleft" />
+          {'DMs'}
+        </Icon>
+        <Box sx={{ flexGrow: 1 }}></Box>
+        {/* <Button
+        className="button"
+        sx={{
+          width: "38px",
+          height: "38px",
+        }}
+        onClick={() => {
+          props.closeHandle();
+        }}
+      >
+        <img src={closeImg} width="38px" alt="close" />
+      </Button> */}
+      </Box>
+    );
+  }
+
+  const renderMeta = () => {
+    return (
+      <Box className='dm_meta'>
+        <Avatar
+          sx={{ width: "40px", height: "40px" }}
+          edge="end"
+          alt="GameFi Society"
+          src={
+            chatProfile.picture && chatProfile.picture !== "default"
+              ? chatProfile.picture
+              : default_avatar
+          }
+        />
+        <Typography
+          sx={{
+            marginLeft: "8px",
+            fontSize: "14px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "#FFFFFF",
+          }}
+        >
+          {chatProfile.display_name
+            ? chatProfile.display_name
+            : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length)}
+        </Typography>
+      </Box>
+    );
+  }
+
+  const renderContent = () => {
+    return (
+      <Box className={'dm_content'}>
         <List
           ref={listRef}
           height={500}
@@ -288,50 +260,50 @@ const GFTChat = (props) => {
             </div>
           )}
         </List>
-        <Box
-          sx={{
-            marginTop: "30px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-          }}
-        >
-          <TextField
-            vlabel="Multiline"
-            multiline
-            maxRows={4}
-            value={inValue}
-            sx={{
-              "& .MuiInputBase-root": {
-                color: "white",
-                width: "250px",
-                // height: "40px",
-                fontSize: "18px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-              },
-            }}
-            onChange={(e) => {
-              setInValue(e.target.value);
-            }}
-          />
-          <Button
-            variant="contained"
-            sx={{
-              width: "80px",
-              height: "60px",
-              backgroundColor: "#454FBF",
-            }}
-            onClick={() => {
-              sendDM();
-            }}
-          >
-            send
-          </Button>
-        </Box>
       </Box>
+    );
+  }
+
+  const renderInput = () => {
+    return <Box className={'dm_input'}>
+      <TextField
+        vlabel="Multiline"
+        multiline
+        maxRows={4}
+        value={inValue}
+        sx={{
+          ml: '12px',
+          "& .MuiInputBase-root": {
+            color: "white",
+            width: "250px",
+            // height: "40px",
+            fontSize: "18px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+          },
+        }}
+        onChange={(e) => {
+          setInValue(e.target.value);
+        }}
+      />
+      <Button
+        variant="contained"
+        className={'dm_send_bt'}
+        onClick={() => {
+          sendDM();
+        }}
+      >
+        send
+      </Button>
+    </Box>;
+  }
+
+  return (
+    <Box className={'chat_dm_bg'}>
+      {renderHeader()}
+      {renderMeta()}
+      {renderContent()}
+      {renderInput()}
     </Box>
   );
 };

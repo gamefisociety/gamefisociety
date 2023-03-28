@@ -14,7 +14,7 @@ export const useRelayPro = () => {
     get: (pubkey) => {
       if (pubkey) {
         const filter = NostrFactory.createFilter();
-        filter['kinds'] = [EventKind.ContactList];
+        filter['kinds'] = [EventKind.ContactList, EventKind.Relays];
         filter['#p'] = [pubkey];
         filter['authors'] = [pubkey];
         return filter;

@@ -1,20 +1,12 @@
 .node_thread_bg {
-    // padding-left: 5%;
-    // padding-right: 5%;
-    // padding-bottom: 100px;
-    width: 100%;
-    max-width: 960px;
-    min-height: 800px;
-    // position: relative;
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // overflow-y: scroll;
-    // box-sizing: border-box;
+    min-height: calc( 100vh - 64px );
+    width: 760px;
+    background-color: rgba(0, 0, 0, 0.708);
+    z-index: 0;
 
     .back {
         cursor: pointer;
-        position: absolute;
+        position: relative;
         width: 38px;
         height: 38px;
         left: 24px;

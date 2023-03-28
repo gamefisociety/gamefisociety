@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './GNoteThread.scss';
 
 import { parseTextNote, BuildSub } from 'nostr/NostrUtils';
@@ -11,14 +11,14 @@ import NormalCache from 'db/NormalCache';
 import TimelineCache, { thread_node_cache_flag } from 'db/TimelineCache';
 
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from "@mui/material/Typography";
 
 import GCardNote from "components/GCardNote";
 
 const GNoteThread = () => {
     let location = useLocation();
+    const navigate = useNavigate();
+
     const { note } = location.state;
     const [notes, setNotes] = useState([]);
     //
@@ -101,15 +101,10 @@ const GNoteThread = () => {
 
     const renderRootNote = () => {
         let info = NorCache.getMetadata('user_metadata', note.pubkey);
-        // let main_note = TLCache.getThreadNote(thread_node_cache_flag, main_note_id);
-        return <Stack sx={{
-            width: '100%'
-        }} direction={'column'}>
-            <GCardNote
-                note={{ ...note }}
-                info={info}
-            />
-        </Stack>
+        return <GCardNote
+            note={{ ...note }}
+            info={info}
+        />
     }
 
     const renderNotes = () => {
@@ -122,9 +117,9 @@ const GNoteThread = () => {
         })
     }
     return (
-        <Paper className='node_thread_bg' color={'background.default'} elevation={1}>
+        <Paper className='node_thread_bg' elevation={1}>
             <div className='back' onClick={() => {
-                // setLoginState(0);
+                navigate(-1);
             }}></div>
             <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'THREAD'}</Typography>
             {renderRootNote()}

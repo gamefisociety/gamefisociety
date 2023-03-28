@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
+import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils"
 
@@ -18,6 +19,7 @@ const GFetchMetadata = (props) => {
 
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
+  const textNotePro = useTextNotePro();
 
   const selfMetadata = (msg) => {
     if (msg.kind === EventKind.SetMetadata) {
@@ -58,7 +60,8 @@ const GFetchMetadata = (props) => {
 
     let filterMeta = MetaPro.get(pubkey);
     let filterFollow = followPro.getFollows(pubkey);
-    let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
+    let fillterTextNote = textNotePro.getTarget(pubkey);
+    let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow, fillterTextNote]);
     let SetMetadata_create_at = 0;
     let ContactList_create_at = 0;
     // console.log('header fetchmetadata sub', subMeta);
@@ -70,12 +73,18 @@ const GFetchMetadata = (props) => {
         if (msg.pubkey !== pubkey) {
           return;
         }
-        console.log('header fetchmetadata msg', msg);
+        console.log('fetchmetadata msg', msg);
         if (msg.kind === EventKind.SetMetadata && msg.created_at > SetMetadata_create_at && callback) {
           SetMetadata_create_at = msg.created_at;
           callback(msg);
         } else if (msg.kind === EventKind.ContactList && msg.created_at > ContactList_create_at && callback) {
           ContactList_create_at = msg.created_at;
+          callback(msg);
+        } else if (msg.kind === EventKind.Relays && callback) {
+          // ContactList_create_at = msg.created_at;
+          callback(msg);
+        } else if (msg.kind === EventKind.TextNote && callback) {
+          // ContactList_create_at = msg.created_at;
           callback(msg);
         }
       }
@@ -90,7 +99,6 @@ const GFetchMetadata = (props) => {
     return () => { };
   }, [props]);
 
-  //#1F1F1F
   return null;
 };
 

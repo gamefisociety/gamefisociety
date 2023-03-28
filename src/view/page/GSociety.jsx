@@ -21,6 +21,9 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
+import {
+  setMainContent,
+} from 'module/store/features/dialogSlice';
 
 import NormalCache from "db/NormalCache";
 
@@ -95,7 +98,9 @@ const GSociety = (props) => {
       if (tag === "EOSE") {
         System.BroadcastClose(subFollowing, client, null);
         let cache = NorCache.get(followers_cache_flag);
-        setFollowers(cache.concat());
+        if (cache) {
+          setFollowers(cache.concat());
+        }
       } else if (tag === "EVENT") {
         NorCache.pushFollowers(followers_cache_flag, msg.pubkey, msg);
       }
@@ -199,6 +204,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
+                    dispatch(setMainContent(true));
                     navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: pubkey },
                     });
@@ -262,6 +268,7 @@ const GSociety = (props) => {
               <ListItemButton>
                 <ListItemAvatar
                   onClick={() => {
+                    dispatch(setMainContent(true));
                     navigate("/userhome", {
                       state: { info: { ...cxt }, pubkey: item.pubkey },
                     });

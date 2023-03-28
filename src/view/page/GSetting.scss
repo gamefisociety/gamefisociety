@@ -1,3 +1,102 @@
-.banner{
-    object-fit: cover;
+.user_setting_bg{
+    min-height: calc( 100vh - 64px );
+    width: 663px;
+    background-color: rgba(0, 0, 0, 0.708);
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .setting_title {
+        margin-left: 26px;
+        color: #FFFFFF;
+        font-size: 0.8rem;
+    }
+
+    .setting_context {
+        margin-left: 26px;
+        color: #919191;
+        width: 70%;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        font-size: 0.8rem;
+    }
+
+    .icon_copy {
+        cursor: pointer;
+        margin-right: 26px;
+        width: 36px;
+        height: 36px;
+        background-image: url(../../asset/image/logo/ic_copy.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            background-color: #545a65;
+        }
+    }
+
+    .icon_show {
+        cursor: pointer;
+        margin-right: 8px;
+        width: 36px;
+        height: 36px;
+        background-image: url(../../asset/image/logo/icon_show.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            background-color: #545a65;
+        }
+    }
+
+    .icon_hide {
+        cursor: pointer;
+        margin-right: 8px;
+        width: 34px;
+        height: 34px;
+        background-image: url(../../asset/image/logo/icon_hide.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            background-color: #545a65;
+        }
+
+        // &:hover {
+        //     background-image: url(asset/image/logo/ic_medium_en.png);
+        // }
+    }
+
+    .bt_out {
+        width: 116px;
+        height: 36px;
+        margin-right: 26px;
+        background-color: #32353B;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #545a65;
+        }
+    }
+
+    .bt_del {
+        width: 116px;
+        height: 36px;
+        margin-right: 26px;
+        background-color: #f90000;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #f66c6c;
+        }
+    }
+
 }
+

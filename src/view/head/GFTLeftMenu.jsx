@@ -139,9 +139,9 @@ const GFTLeftMenu = () => {
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
-        } if (item.txt === 'META Beta') {
+        } else if (item.txt === 'META Beta') {
             dispatch(setMainContent(false));
-            // navigate('/meta');
+            navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
                 dispatch(setOpenCheckIn(true));
