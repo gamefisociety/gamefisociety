@@ -261,7 +261,6 @@ const GFTGlobal = () => {
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
           const info = inforData.get(item.msg.pubkey);
-          // console.log("renderContent", info, item.msg);
           return (
             <GCardNote
               key={"global-note-" + index}
@@ -276,8 +275,8 @@ const GFTGlobal = () => {
 
   return (
     <Paper className={'global_bg'} elevation={0}>
-      {renderPartment()}
-      <Divider />
+      {/* {renderPartment()}
+      <Divider /> */}
       {renderContent()}
     </Paper>
   );

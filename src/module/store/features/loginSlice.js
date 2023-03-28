@@ -23,9 +23,7 @@ const LoginSlice = createSlice({
   initialState: InitState,
   reducers: {
     init: (state, action) => {
-      // console.log('init login slice', state, action);
       state.useDb = action.payload;
-      //process privatekey
       state.privateKey = window.localStorage.getItem(PrivateKeyItem) ?? undefined;
       if (state.privateKey) {
         window.localStorage.removeItem(PublicKeyItem);

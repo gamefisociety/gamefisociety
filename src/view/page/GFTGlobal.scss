@@ -1,18 +1,15 @@
 .global_bg {
-    // background-color: "red" !important;
-    min-height: calc( 100vh - 64px ) ;
     width: 760px;
-    // width: 100%;
+    min-height: calc( 100vh - 64px ) ;
     background-color: rgba(0, 0, 0, 0.708) ;
+    pointer-events: all;
 
     .op {
         width: 100%;
-        padding: 24px;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 12px;
     }
 
     .top_button {

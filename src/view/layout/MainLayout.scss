@@ -1,5 +1,5 @@
 .main_bg {
-    width: 100%;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,6 @@
         position: fixed;
         top: 12px;
         left: calc( 50% - 225px ) ;
-        // margin: auto 0;
         z-index: 2200;
     }
 
@@ -21,16 +20,17 @@
     }
 
     .main_content {
-        width: auto;
-        max-width: 960px;
+        width: calc( 100vw - 200px);
+        min-height: calc( 100vh - 64px );
         position: relative;
-        margin: auto 0;
+        margin-left: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
         z-index: 1;
-        background-color: rgba(0, 0, 0, 0);
-        overflow: auto;
+        background-color: rgba(36, 36, 36, 0.585);
+        // overflow: auto;
+        pointer-events: none;
     }
 
     .main_right_drawer {
