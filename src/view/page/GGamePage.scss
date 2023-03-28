@@ -1,13 +1,14 @@
 .main_game_bg {
-    min-height: 800px;
     width: 760px;
-    background-color: rgba(0,0,0,0.75) ;
+    min-height: calc( 100vh - 64px ) ;
+    background-color: rgba(0, 0, 0, 0.708) ;
+    pointer-events: all;
 
     .game_card_contain {
         padding-top: 24px;
         padding-left: 24px;
         padding-right: 24px;
-        width: 100%;
+        // width: calc( 100% - 48px);
         display: flex;
         flex-wrap: wrap;
         grid-gap: 32px;

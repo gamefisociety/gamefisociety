@@ -27,7 +27,7 @@ export const InitState = {
   loaded: 0, //时间戳
   created: 0, //时间戳
   followsData: 0,
-  follows: [], //save key
+  follows: [],
   followsUpdate: 0,
 };
 
@@ -49,7 +49,6 @@ const ProfileSlice = createSlice({
       if (state.latestRelays > createdAt) {
         return;
       }
-      // filter out non-websocket urls
       const filtered = new Map();
       for (const [k, v] of Object.entries(relays)) {
         if (k.startsWith("wss://") || k.startsWith("ws://")) {
@@ -59,7 +58,6 @@ const ProfileSlice = createSlice({
       state.relays = Object.fromEntries(filtered.entries());
       state.latestRelays = createdAt;
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
-      // console.log('reduce relays', state.relays);
     },
     removeRelay: (state, action) => {
       delete state.relays[action.payload];
@@ -68,28 +66,6 @@ const ProfileSlice = createSlice({
     },
     setProfile: (state, action) => {
       state.profile = { ...action.payload };
-      state.name = action.payload.name ? action.payload.name : "";
-      state.display_name = action.payload.display_name
-        ? action.payload.display_name
-        : "";
-      state.about = action.payload.about ? action.payload.about : "";
-      state.picture = action.payload.picture
-        ? action.payload.picture
-        : "";
-      state.website = action.payload.website
-        ? action.payload.website
-        : "";
-      state.banner = action.payload.banner ? action.payload.banner : "";
-      state.nip05 = action.payload.nip05 ? action.payload.nip05 : "";
-      state.lud06 = action.payload.lud06 ? action.payload.lud06 : "";
-      state.lud16 = action.payload.lud16 ? action.payload.lud16 : "";
-      state.loaded = 0; //时间戳
-      state.created = action.payload.created_at
-        ? Number(action.payload.created_at)
-        : 0;
-    },
-    setUsersFlag: (state, action) => {
-      state.followsData = 1;
     },
     setFollows: (state, action) => {
       state.followsUpdate = action.payload.create_at;
@@ -103,7 +79,6 @@ export const {
   setRelays,
   removeRelay,
   setProfile,
-  setUsersFlag,
   setFollows,
 } = ProfileSlice.actions;
 

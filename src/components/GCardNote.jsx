@@ -131,14 +131,7 @@ const GCardNote = (props) => {
   };
 
   return (
-    <Card
-      // className={'card_note_bg'}
-      sx={{
-        width: "100%",
-        backgroundColor: "transparent",
-      }}
-      elevation={0}
-    >
+    <Card className={'card_note_bg'} elevation={0}>
       <Box
         sx={{
           py: "12px",

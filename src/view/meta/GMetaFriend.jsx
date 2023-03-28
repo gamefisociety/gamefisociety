@@ -50,6 +50,7 @@ const GMetaFriend = (props) => {
         console.log('meta1 friend enter');
         genFollowsPos();
         return () => {
+            console.log('meta1 friend exit', friendEntRef);
             if (friendEntRef.current) {
                 friendEntRef.current.clear();
             }
@@ -124,7 +125,6 @@ const GMetaFriend = (props) => {
         )
     });
 
-
     let metadata_cache_flag = "metadata_cache";
     const NorCache = NormalCache();
 
@@ -154,11 +154,12 @@ const GMetaFriend = (props) => {
                     if (info && info.content) {
                         baseInfo = JSON.parse(info.content);
                     }
-                    console.log('follows data', item, baseInfo);
+                    // console.log('follows data', item, baseInfo);
                     return (
                         <rectangle
                             key={'friend-ui-' + index}
                             name={'friend-ui-' + index}
+                            ref={getFriendUIRefList}
                             background="black"
                             height="30px"
                             alpha={0.5}
@@ -169,7 +170,6 @@ const GMetaFriend = (props) => {
                             cornerRadius={6}
                             thickness={0}
                             linkOffsetY={30}
-                            ref={getFriendUIRefList}
                             verticalAlignment={Control.VERTICAL_ALIGNMENT_TOP}
                         >
                             <textBlock
