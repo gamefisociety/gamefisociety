@@ -1,0 +1,135 @@
+$fontname1: Saira;
+$fontname2: Saira;
+
+.bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    // background-color: aqua;
+    .warpper {
+        display: block;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        max-width: 1600px;
+        width: 60%;
+        height: 100%;
+        margin-top: 20px;
+        // padding: 50px;
+
+        .checkboxs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+
+            .label {
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 22px;
+                font-family: $fontname2;
+            }
+
+            .checkbox {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .keyblock {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+
+            .project {
+                width: 320px;
+                height: 30px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 12px;
+                padding-right: 12px;
+
+                .name {
+                    font-size: 18px;
+                    font-family: $fontname2;
+                }
+            }
+
+            .keybox {
+                position: relative;
+                padding: 12px;
+                background-color: #202122;
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+                border-width: 1px;
+                border-color: #323232;
+                margin-bottom: 30px;
+
+                .pid {
+                    width: 340px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+
+                    .name {
+                        font-size: 12px;
+                        font-family: $fontname2;
+                    }
+                }
+            }
+        }
+
+        .buttonbox {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 40px;
+
+            .textcid {
+                font-size: 14px;
+                font-family: $fontname2;
+            }
+
+            .buttonpublish {
+                position: absolute;
+                right: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                // height: 35px;
+                font-family: $fontname1;
+                // background-color: gray;
+                // border: none;
+                // color: white;
+                // text-align: center;
+                // text-decoration: none;
+                // display: inline-block;
+                // font-size: 16px;
+                // padding-left: 15px;
+                // padding-right: 15px;
+            }
+        }
+
+
+    }
+}

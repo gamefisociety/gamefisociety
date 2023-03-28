@@ -1,12 +1,12 @@
 import { React, useEffect, useState, useRef } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
-import {
-  setIsOpen,
-} from "module/store/features/dialogSlice";
+import { setIsOpen } from "module/store/features/dialogSlice";
+import GTextEditor from "components/GTextEditor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
@@ -277,145 +277,176 @@ function GArticleList() {
           );
         })}
       </List>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+      <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
-            width: "400px",
+            position: "relative",
+            width:"100%",
+            minHeight: "1000px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "flex-start",
+            // justifyContent: "center",
             backgroundColor: "#0F0F0F",
-            paddingTop: "35px",
-            paddingBottom: "35px",
-            paddingLeft: "24px",
-            paddingRight: "24px",
-            position: "relative",
+            // backgroundColor: "red"
           }}
         >
           <Button
             className="button"
             sx={{
               position: "absolute",
-              top: "5px",
-              right: "5px",
-              width: "38px",
-              height: "38px",
+              top: "0px",
+              right: "20px",
+              width: "60px",
+              height: "60px",
+              zIndex: 10,
             }}
             onClick={() => {
               handleDialogClose();
             }}
           >
-            <img src={closeImg} width="38px" alt="close" />
+            <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <Box
+          <GTextEditor />
+          {/* <Box
             sx={{
-              width: "100%",
+              width: "400px",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "flex-start",
               alignItems: "center",
+              justifyContent: "flex-start",
+              backgroundColor: "#0F0F0F",
+              paddingTop: "35px",
+              paddingBottom: "35px",
+              paddingLeft: "24px",
+              paddingRight: "24px",
+              position: "relative",
             }}
           >
-            <Typography
+            <Button
+              className="button"
               sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#919191",
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                width: "38px",
+                height: "38px",
+              }}
+              onClick={() => {
+                handleDialogClose();
               }}
             >
-              {"ARTICLE NAME"}
-            </Typography>
-            <TextField
+              <img src={closeImg} width="38px" alt="close" />
+            </Button>
+            <Box
               sx={{
-                marginTop: "12px",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  color: "#919191",
+                }}
+              >
+                {"ARTICLE NAME"}
+              </Typography>
+              <TextField
+                sx={{
+                  marginTop: "12px",
+                  width: "80%",
+                  borderRadius: "5px",
+                  borderColor: "#323232",
+                  backgroundColor: "#202122",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  color: "#FFFFFF",
+                }}
+                value={cidInfo.name}
+                variant="outlined"
+                onChange={(event) => {
+                  cidInfo.name = event.target.value;
+                  setCidInfo({ ...cidInfo });
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                marginTop: "35px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  color: "#919191",
+                }}
+              >
+                {"ARTICLE CID"}
+              </Typography>
+              <TextField
+                sx={{
+                  marginTop: "12px",
+                  width: "80%",
+                  borderRadius: "5px",
+                  borderColor: "#323232",
+                  backgroundColor: "#202122",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  color: "#FFFFFF",
+                }}
+                value={cidInfo.cid}
+                variant="outlined"
+                onChange={(event) => {
+                  cidInfo.cid = event.target.value;
+                  setCidInfo({ ...cidInfo });
+                }}
+              />
+            </Box>
+            <Button
+              disabled={publishState === 1 || publishState === 2}
+              variant="contained"
+              sx={{
+                marginTop: "50px",
                 width: "80%",
+                height: "48px",
+                backgroundColor: "#006CF9",
                 borderRadius: "5px",
-                borderColor: "#323232",
-                backgroundColor: "#202122",
-                fontSize: "14px",
+                fontSize: "16px",
                 fontFamily: "Saira",
                 fontWeight: "500",
                 color: "#FFFFFF",
               }}
-              value={cidInfo.name}
-              variant="outlined"
-              onChange={(event) => {
-                cidInfo.name = event.target.value;
-                setCidInfo({ ...cidInfo });
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              width: "100%",
-              marginTop: "35px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#919191",
-              }}
+              onClick={publish}
             >
-              {"ARTICLE CID"}
-            </Typography>
-            <TextField
+              {publishMsg()}
+            </Button>
+            <Link
               sx={{
-                marginTop: "12px",
-                width: "80%",
-                borderRadius: "5px",
-                borderColor: "#323232",
-                backgroundColor: "#202122",
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
+                marginTop: "5px",
               }}
-              value={cidInfo.cid}
-              variant="outlined"
-              onChange={(event) => {
-                cidInfo.cid = event.target.value;
-                setCidInfo({ ...cidInfo });
-              }}
-            />
-          </Box>
-          <Button
-            disabled={publishState === 1 || publishState === 2}
-            variant="contained"
-            sx={{
-              marginTop: "50px",
-              width: "80%",
-              height: "48px",
-              backgroundColor: "#006CF9",
-              borderRadius: "5px",
-              fontSize: "16px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            onClick={publish}
-          >
-            {publishMsg()}
-          </Button>
-          <Link
-            sx={{
-              marginTop: "5px",
-            }}
-            target="_blank"
-            href="https://ipfstexteditor.eth.limo"
-          >
-            Input On IPFS TextEditor
-          </Link>
+              target="_blank"
+              href="https://ipfstexteditor.eth.limo"
+            >
+              Input On IPFS TextEditor
+            </Link>
+          </Box> */}
         </Box>
-      </Dialog>
+      </Drawer>
     </Box>
   );
 }
