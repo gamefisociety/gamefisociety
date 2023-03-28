@@ -15,6 +15,8 @@ import './GFTWallet.scss';
 import ic_avatar from "../../asset/image/logo/ic_avatar.png";
 import ic_gift from "../../asset/image/wallet/ic_gift.png";
 import ic_gfs_coin from "../../asset/image/logo/ic_gfs_coin.png"
+import banner_r from "../../asset/image/home/banner_r.png"
+
 
 function GFTWallet() {
 
@@ -38,6 +40,20 @@ function GFTWallet() {
                 <div className='txt_layout'>
                     <span className='txt'>Assets on GFSP</span>
                     <span className='txt'>734,565.63</span>
+                </div>
+            </div>
+           
+        </Grid>
+    }
+
+    const NFTView = () => {
+
+        return <Grid container spacing={2}>
+            <div className='grid_nft_item'>
+                <img  className='img' src={banner_r}></img>
+                <div className='txt_layout'>
+                    <span className='txt'>Darling goshawk</span>
+                    <span className='txt'>Alpaca City</span>
                 </div>
             </div>
            
@@ -150,7 +166,7 @@ function GFTWallet() {
                         </TabList>
                     </Box>
                     <TabPanel value="1">{portfolioView()}</TabPanel>
-                    <TabPanel value="2">Item Two</TabPanel>
+                    <TabPanel value="2">{NFTView()}</TabPanel>
                     <TabPanel value="3">Item Three</TabPanel>
                 </TabContext>
             </Box>
