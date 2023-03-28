@@ -18,12 +18,13 @@ import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
-  //
   const rowRef = useRef();
   const item = data[index];
+  
   useEffect(() => {
     setSize(index, rowRef.current.getBoundingClientRect().height);
   }, [setSize, index]);
+
   return (
     <Box
       ref={rowRef}
@@ -33,14 +34,16 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        padding: "10px",
+        pt: "8px",
+        px: '16px',
+        // backgroundColor: '#FF0000',
         justifyContent: item.pubkey === chatPK ? "flex-start" : "flex-end",
       }}
     >
       <Typography
         sx={{
           width: "70%",
-          padding: "10px",
+          padding: "12px",
           backgroundColor: item.pubkey === chatPK ? "#191A1B" : "#454FBF",
           borderRadius: "6px",
           fontFamily: "Saira",
