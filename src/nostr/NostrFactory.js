@@ -114,7 +114,7 @@ const NostrFactory = {
       kind: ev.Kind,
       tags: ev.Tags.sort((a, b) => a.Index - b.Index)
         .map(a => a.ToObject())
-        .filter(a => a !== null), //<string[][] >
+        .filter(a => a !== null),
       content: ev.Content,
       sig: ev.Signature,
     }

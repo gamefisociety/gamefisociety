@@ -195,9 +195,10 @@ const NostrRelay = () => {
     if (!client.Settings.write) {
       return;
     }
-    const req = ["EVENT", NostrFactory.formateEvent(ev)];
     let tmpkey = buildKey(client.addr, ev.Id);
     addListen(tmpkey, client, callback);
+    //
+    const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendEvent direction', req);
       _SendReal(client, req);
@@ -214,7 +215,7 @@ const NostrRelay = () => {
       return;
     }
     let tmpkey = buildKey(client.addr, sub[1]);
-    addListen(tmpkey, client, callback)
+    addListen(tmpkey, client, callback);
     //
     if (client.Socket?.readyState === WebSocket.OPEN) {
       // console.log('SendSub direction', sub);
@@ -233,6 +234,8 @@ const NostrRelay = () => {
     } else {
       client.PendingList.push(req);
     }
+    // let tmpkey = buildKey(client.addr, subId);
+    // addListen(tmpkey, client, callback);
   }
 
 
@@ -249,16 +252,6 @@ const NostrRelay = () => {
       client.PendingList.push(req);
     }
   }
-  // if (!this.Authed && this.AwaitingAuth.size > 0) {
-  //   this.Pending.push(sub.ToObject());
-  //   return;
-  // }
-  // let req = ["REQ", sub.Id, sub.ToObject()];
-  // if (sub.OrSubs.length > 0) {
-  //   req = [...req, ...sub.OrSubs.map(o => o.ToObject())];
-  // }
-  // sub.Started.set(this.Address, new Date().getTime());
-  // this._SendJson(req);
 
   const SupportsNip = (client, n) => {
     return client.info?.supported_nips?.some(nipId => nipId === n) ?? false;

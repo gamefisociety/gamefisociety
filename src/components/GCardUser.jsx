@@ -69,7 +69,7 @@ const GCardUser = (props) => {
   };
 
   useEffect(() => {
-    console.log("profile", profile);
+    // console.log("profile", profile);
     return () => {};
   }, [props]);
 
