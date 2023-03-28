@@ -1,5 +1,6 @@
 import Requset from "./httpMgr";
-import {def_ipfs_public_gateway} from "../module/utils/xdef"
+import { Buffer } from "buffer";
+import { def_ipfs_public_gateway } from "../module/utils/xdef";
 export function getListData() {
   return Requset({
     method: "get",
@@ -8,12 +9,10 @@ export function getListData() {
 }
 
 export function getIPFS() {
-    return Requset(
-        {
-            method: "get",
-            url: "https://ipfs.io/ipfs/QmYR5uWGq6GSz3NXfsRgeMaeDSpa173pUTDb1Cw96Dh7iF",
-        }
-    );
+  return Requset({
+    method: "get",
+    url: "https://ipfs.io/ipfs/QmYR5uWGq6GSz3NXfsRgeMaeDSpa173pUTDb1Cw96Dh7iF",
+  });
 }
 
 export function getListChainData() {
@@ -36,22 +35,39 @@ export function getDetailData(name) {
 export function catIPFSContent(cid) {
   return Requset({
     method: "get",
-    
+
     url: def_ipfs_public_gateway + "/ipfs/" + cid,
   });
 }
 
-export function pinJSONToIPFS(key, secret, content) {
+export function pinataPinJSONToIPFS(key, secret, content) {
   return Requset({
     method: "post",
     url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-    headers: { 
-      'Content-Type': 'application/json', 
-      'pinata_api_key': key,
-      'pinata_secret_api_key': secret
+    headers: {
+      "Content-Type": "application/json",
+      pinata_api_key: key,
+      pinata_secret_api_key: secret,
     },
-    data : {
-      content: content
-    }
+    data: {
+      content: content,
+    },
+  });
+}
+
+export function infuraAdd(key, secret, content) {
+  let authorization =
+    "Basic " + Buffer.from(key + ":" + secret).toString("base64");
+  // let authorization = key + ":" + secret;
+  return Requset({
+    method: "post",
+    url: "https://ipfs.infura.io:5001/api/v0/add?stream-channels=true&progress=false",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization,
+    },
+    data: {
+      file: content,
+    },
   });
 }

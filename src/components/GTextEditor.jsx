@@ -33,8 +33,8 @@ function GTextEditor() {
       infuraPublish();
     } else if (curplat === "fleek") {
       fleekPublish();
-    }else if(curplat === 'pinata'){
-        pinataPublish();
+    } else if (curplat === "pinata") {
+      pinataPublish();
     }
   };
 
@@ -176,7 +176,7 @@ function GTextEditor() {
             </div>
           </div>
         </div>
-        {/* <div className="buttonbox">
+        <div className="buttonbox">
           {msg.length !== 0 ? <p className="textcid">{msg}</p> : undefined}
           <button
             className="buttonpublish"
@@ -185,7 +185,7 @@ function GTextEditor() {
           >
             {publishing === true ? "PUBLISHING..." : "PUBLISH TO IPFS"}
           </button>
-        </div> */}
+        </div>
         <MDEditor value={content} height={600} onChange={setContent} />
       </Box>
     </Box>
