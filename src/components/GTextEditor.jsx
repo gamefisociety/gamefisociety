@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, forwardRef, useImperativeHandle } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,36 +7,34 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import ipfspublish from "api/ipfspublish";
 import "./GTextEditor.scss";
-function GTextEditor() {
+const GTextEditor = forwardRef((props, ref) => {
   const [content, setContent] = useState("**IPFS TextEditor**");
   const [platools, setPlatools] = useState(["infura", "fleek", "pinata"]);
   const [curplat, setCurplat] = useState("infura");
   const [key, setKey] = useState("");
   const [secret, setSecret] = useState("");
-  const [msg, setMsg] = useState("");
   const [publishing, setPublishing] = useState(false);
-  const onPublish = () => {
-    console.log("publish to ipfs", content);
-    if (key.length === 0 || secret.length === 0) {
-      alert("Please enter PROJECT KEY and PROJECT SECRET");
-      return;
-    }
-    publishToIPFS();
-  };
-  const publishToIPFS = () => {
-    if (publishing) {
-      return;
-    }
-    setPublishing(true);
-    setMsg("publishing...");
-    if (curplat === "infura") {
-      infuraPublish();
-    } else if (curplat === "fleek") {
-      fleekPublish();
-    } else if (curplat === "pinata") {
-      pinataPublish();
-    }
-  };
+  useImperativeHandle(ref, () => ({
+    publishToIPFS() {
+      console.log("publish to ipfs", content);
+      if (key.length === 0 || secret.length === 0) {
+        alert("Please enter PROJECT KEY and PROJECT SECRET");
+        return;
+      }
+      if (publishing) {
+        return;
+      }
+      props.publishHandle("BEGIN");
+      setPublishing(true);
+      if (curplat === "infura") {
+        infuraPublish();
+      } else if (curplat === "fleek") {
+        fleekPublish();
+      } else if (curplat === "pinata") {
+        pinataPublish();
+      }
+    },
+  }));
 
   const infuraPublish = () => {
     ipfspublish.infuraPublish(
@@ -45,12 +43,12 @@ function GTextEditor() {
       content,
       (response) => {
         const cid = response.cid.toString();
-        setMsg("Success! CID: " + cid);
         setPublishing(false);
+        props.publishHandle("SUCCESS", cid);
       },
       (err) => {
-        setMsg(String(err));
         setPublishing(false);
+        props.publishHandle("FAILED", String(err));
       }
     );
   };
@@ -62,12 +60,12 @@ function GTextEditor() {
       content,
       (response) => {
         const cid = response.hashV0;
-        setMsg("Success! CID: " + cid);
         setPublishing(false);
+        props.publishHandle("SUCCESS", cid);
       },
       (err) => {
-        setMsg(String(err));
         setPublishing(false);
+        props.publishHandle("FAILED", String(err));
       }
     );
   };
@@ -79,12 +77,12 @@ function GTextEditor() {
       content,
       (response) => {
         const cid = response.IpfsHash;
-        setMsg("Success! CID: " + cid);
         setPublishing(false);
+        props.publishHandle("SUCCESS", cid);
       },
       (err) => {
-        setMsg(String(err));
         setPublishing(false);
+        props.publishHandle("FAILED", String(err));
       }
     );
   };
@@ -176,20 +174,10 @@ function GTextEditor() {
             </div>
           </div>
         </div>
-        <div className="buttonbox">
-          {msg.length !== 0 ? <p className="textcid">{msg}</p> : undefined}
-          <button
-            className="buttonpublish"
-            disabled={publishing}
-            onClick={onPublish}
-          >
-            {publishing === true ? "PUBLISHING..." : "PUBLISH TO IPFS"}
-          </button>
-        </div>
         <MDEditor value={content} height={600} onChange={setContent} />
       </Box>
     </Box>
   );
-}
+});
 
 export default GTextEditor;
