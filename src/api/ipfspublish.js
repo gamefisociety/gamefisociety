@@ -1,12 +1,12 @@
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
-import { pinJSONToIPFS } from "../api/requestData";
+import { infuraAdd, pinataPinJSONToIPFS } from "./requestData";
 //infura
 const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
   let authorization =
     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
-  let ipfs = create({
+  let ipfs =  create({
     host: "ipfs.infura.io",
     port: "5001",
     protocol: "https",
@@ -17,14 +17,26 @@ const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
   ipfs
     .add(content)
     .then((response) => {
-      console.log(response);
+      console.log("infura publish success", response);
       onsucess(response);
     })
     .catch((err) => {
-      console.log(String(err));
+      console.log("infura publish error", String(err));
       onerror(err);
     });
 };
+// const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
+//   infuraAdd(key, secret, content)
+//     .then((response) => {
+//       console.log("infura publish success", response);
+//       onsucess(response);
+//     })
+//     .catch((err) => {
+//       console.log("infura publish error", String(err));
+//       onerror(err);
+//     });
+// };
+
 //   const testCat = async () => {
 //     let cid = "QmYR5uWGq6GSz3NXfsRgeMaeDSpa173pUTDb1Cw96Dh7iF";
 //     const chunks = [];
@@ -56,14 +68,15 @@ const fleekPublishInner = (key, secret, content, onsucess, onerror) => {
 
 //pinata
 const pinataPublishInner = (key, secret, content, onsucess, onerror) => {
-  pinJSONToIPFS(key, secret, content).then((response) => {
-        console.log(response);
-        onsucess(response);
-      })
-      .catch((err) => {
-        console.log(String(err));
-        onerror(err);
-      });
+  pinataPinJSONToIPFS(key, secret, content)
+    .then((response) => {
+      console.log(response);
+      onsucess(response);
+    })
+    .catch((err) => {
+      console.log(String(err));
+      onerror(err);
+    });
 };
 
 const ipfspublish = {
