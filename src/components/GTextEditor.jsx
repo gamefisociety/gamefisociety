@@ -1,19 +1,24 @@
 import { React, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
-// import tpublish from "../module/tpublish";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import ipfspublish from "api/ipfspublish";
 import "./GTextEditor.scss";
 function GTextEditor() {
-  const [content, setContent] = useState('**IPFS TextEditor**');
-  const [platools, setPlatools] = useState(['infura', 'fleek', 'pinata']);
-  const [curplat, setCurplat] = useState('infura');
-  const [key, setKey] = useState('');
-  const [secret, setSecret] = useState('');
-  const [msg, setMsg] = useState('');
+  const [content, setContent] = useState("**IPFS TextEditor**");
+  const [platools, setPlatools] = useState(["infura", "fleek", "pinata"]);
+  const [curplat, setCurplat] = useState("infura");
+  const [key, setKey] = useState("");
+  const [secret, setSecret] = useState("");
+  const [msg, setMsg] = useState("");
   const [publishing, setPublishing] = useState(false);
   const onPublish = () => {
     console.log("publish to ipfs", content);
     if (key.length === 0 || secret.length === 0) {
-      alert('Please enter PROJECT KEY and PROJECT SECRET');
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
       return;
     }
     publishToIPFS();
@@ -24,85 +29,93 @@ function GTextEditor() {
     }
     setPublishing(true);
     setMsg("publishing...");
-    // if (curplat === "infura") {
-    //   infuraPublish();
-    // } else if (curplat === "fleek") {
-    //   fleekPublish();
-    // }else if(curplat === 'pinata'){
-    //     pinataPublish();
-    // }
+    if (curplat === "infura") {
+      infuraPublish();
+    } else if (curplat === "fleek") {
+      fleekPublish();
+    }else if(curplat === 'pinata'){
+        pinataPublish();
+    }
   };
 
-  // const infuraPublish = () => {
-  //   tpublish.infuraPublish(
-  //     key,
-  //     secret,
-  //     content,
-  //     (response) => {
-  //       const cid = response.cid.toString();
-  //       setMsg("Success! CID: " + cid);
-  //       setPublishing(false);
-  //     },
-  //     (err) => {
-  //       setMsg(String(err));
-  //       setPublishing(false);
-  //     }
-  //   );
-  // };
+  const infuraPublish = () => {
+    ipfspublish.infuraPublish(
+      key,
+      secret,
+      content,
+      (response) => {
+        const cid = response.cid.toString();
+        setMsg("Success! CID: " + cid);
+        setPublishing(false);
+      },
+      (err) => {
+        setMsg(String(err));
+        setPublishing(false);
+      }
+    );
+  };
 
-  // const fleekPublish = () => {
-  //   tpublish.fleekPublish(
-  //     key,
-  //     secret,
-  //     content,
-  //     (response) => {
-  //       const cid = response.hashV0;
-  //       setMsg("Success! CID: " + cid);
-  //       setPublishing(false);
-  //     },
-  //     (err) => {
-  //       setMsg(String(err));
-  //       setPublishing(false);
-  //     }
-  //   );
-  // };
+  const fleekPublish = () => {
+    ipfspublish.fleekPublish(
+      key,
+      secret,
+      content,
+      (response) => {
+        const cid = response.hashV0;
+        setMsg("Success! CID: " + cid);
+        setPublishing(false);
+      },
+      (err) => {
+        setMsg(String(err));
+        setPublishing(false);
+      }
+    );
+  };
 
-  // const pinataPublish = () => {
-  //   tpublish.pinataPublish(
-  //     key,
-  //     secret,
-  //     content,
-  //     (response) => {
-  //       const cid = response.IpfsHash;
-  //       setMsg("Success! CID: " + cid);
-  //       setPublishing(false);
-  //     },
-  //     (err) => {
-  //       setMsg(String(err));
-  //       setPublishing(false);
-  //     }
-  //   );
-  // };
+  const pinataPublish = () => {
+    ipfspublish.pinataPublish(
+      key,
+      secret,
+      content,
+      (response) => {
+        const cid = response.IpfsHash;
+        setMsg("Success! CID: " + cid);
+        setPublishing(false);
+      },
+      (err) => {
+        setMsg(String(err));
+        setPublishing(false);
+      }
+    );
+  };
 
   const platHref = () => {
-    if(curplat === 'infura'){
-        return 'https://app.infura.io/dashboard';
-    }else if(curplat === 'fleek'){
-        return 'https://app.fleek.co/'
-    }else if(curplat === 'pinata'){
-        return 'https://app.pinata.cloud/developers/api-keys';
+    if (curplat === "infura") {
+      return "https://app.infura.io/dashboard";
+    } else if (curplat === "fleek") {
+      return "https://app.fleek.co/";
+    } else if (curplat === "pinata") {
+      return "https://app.pinata.cloud/developers/api-keys";
     }
-  }
+  };
 
   return (
-    <div className="bg">
-      <div className="warpper">
-        <header className="header">IPFS TextEditor</header>
-        <p className="notice">
-          ⚠️ Notice ⚠️ - &nbsp;Please rest assured that we do not save or upload
-          your project key or project secret, we only use them to obtain
-          platform upload permissions.
-        </p>
+    <Box className="bg">
+      <Typography
+        sx={{
+          fontSize: "15px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+          color: "#FFFFFF",
+          textAlign: "left",
+          lineHeight: "18px",
+        }}
+      >
+        ⚠️ Notice ⚠️ - &nbsp;Please rest assured that we do not save or upload
+        your project key or project secret, we only use them to obtain platform
+        upload permissions.
+      </Typography>
+      <Box className="warpper">
         <div className="checkboxs">
           {platools.map((platool) => (
             <label className="label" key={platool}>
@@ -111,8 +124,8 @@ function GTextEditor() {
                 checked={curplat === platool}
                 onChange={() => {
                   setCurplat(platool);
-                  setKey('');
-                  setSecret('');
+                  setKey("");
+                  setSecret("");
                 }}
                 type="checkbox"
               />
@@ -123,13 +136,15 @@ function GTextEditor() {
         <div className="keyblock">
           <div className="project">
             <p className="name">{"[" + curplat.toUpperCase() + "]"}</p>
-            <a
-              rel="noreferrer"
-              href={platHref()}
+            <Link
+              sx={{
+                marginTop: "5px",
+              }}
               target="_blank"
+              href={platHref()}
             >
               {"No project key, go " + curplat + " get it"}
-            </a>
+            </Link>
           </div>
 
           <div className="keybox">
@@ -161,20 +176,19 @@ function GTextEditor() {
             </div>
           </div>
         </div>
-        <div className="buttonbox">
+        {/* <div className="buttonbox">
           {msg.length !== 0 ? <p className="textcid">{msg}</p> : undefined}
           <button
             className="buttonpublish"
             disabled={publishing}
             onClick={onPublish}
           >
-            {publishing === true ? 'PUBLISHING...' : 'PUBLISH TO IPFS'}
+            {publishing === true ? "PUBLISHING..." : "PUBLISH TO IPFS"}
           </button>
-        </div>
-        <MDEditor value={content} height={400} onChange={setContent} />
-        {/* <MDEditor.Markdown source={value} style={{ whiteSpace: "pre-wrap" }} /> */}
-      </div>
-    </div>
+        </div> */}
+        <MDEditor value={content} height={600} onChange={setContent} />
+      </Box>
+    </Box>
   );
 }
 

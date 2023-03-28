@@ -280,13 +280,33 @@ function GArticleList() {
       <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
-            minHeight: "960px",
+            position: "relative",
+            width:"100%",
+            minHeight: "1000px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "flex-start",
+            // justifyContent: "center",
+            backgroundColor: "#0F0F0F",
+            // backgroundColor: "red"
           }}
         >
+          <Button
+            className="button"
+            sx={{
+              position: "absolute",
+              top: "0px",
+              right: "20px",
+              width: "60px",
+              height: "60px",
+              zIndex: 10,
+            }}
+            onClick={() => {
+              handleDialogClose();
+            }}
+          >
+            <img src={closeImg} width="60px" alt="close" />
+          </Button>
           <GTextEditor />
           {/* <Box
             sx={{

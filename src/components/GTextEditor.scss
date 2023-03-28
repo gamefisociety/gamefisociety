@@ -1,53 +1,26 @@
-$fontname1: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-$fontname2: Verdana, Geneva, Tahoma, sans-serif;
+$fontname1: Saira;
+$fontname2: Saira;
 
 .bg {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     overflow: hidden;
 
+    // background-color: aqua;
     .warpper {
         display: block;
         flex-direction: column;
         justify-content: flex-start;
         position: relative;
-        max-width: 1000px;
-        width: 50%;
+        max-width: 1600px;
+        width: 60%;
         height: 100%;
-        margin: 0;
-        padding: 50px;
-
-        .header {
-            height: 100px;
-            font-size: 60px;
-            font-family: $fontname1;
-        }
-
-        .notice {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            color: #212121;
-            font-size: 14px;
-            font-family: "Work Sans", "Roboto", "Nunito Sans", Helvetica, Arial, sans-serif;
-            font-weight: normal;
-            line-height: 1.61;
-            letter-spacing: 0px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            background-color: #f0f0f0;
-        }
+        margin-top: 20px;
+        // padding: 50px;
 
         .checkboxs {
             display: flex;
@@ -55,6 +28,7 @@ $fontname2: Verdana, Geneva, Tahoma, sans-serif;
             justify-content: center;
             align-items: center;
             position: relative;
+
             .label {
                 padding-left: 20px;
                 padding-right: 20px;
@@ -69,7 +43,6 @@ $fontname2: Verdana, Geneva, Tahoma, sans-serif;
         }
 
         .keyblock {
-            padding-top: 10px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -95,12 +68,15 @@ $fontname2: Verdana, Geneva, Tahoma, sans-serif;
             .keybox {
                 position: relative;
                 padding: 12px;
-                background-color: gainsboro;
+                background-color: #202122;
                 border-radius: 6px;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-evenly;
                 align-items: center;
+                border-width: 1px;
+                border-color: #323232;
+                margin-bottom: 30px;
 
                 .pid {
                     width: 340px;
@@ -119,7 +95,7 @@ $fontname2: Verdana, Geneva, Tahoma, sans-serif;
         }
 
         .buttonbox {
-            margin-top: 30px;
+            margin-top: 20px;
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -127,6 +103,7 @@ $fontname2: Verdana, Geneva, Tahoma, sans-serif;
             position: relative;
             width: 100%;
             height: 40px;
+
             .textcid {
                 font-size: 14px;
                 font-family: $fontname2;
