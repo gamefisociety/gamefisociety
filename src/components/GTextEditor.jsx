@@ -16,6 +16,7 @@ const GTextEditor = forwardRef((props, ref) => {
   const [secret, setSecret] = useState("");
   const [publishing, setPublishing] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
   useImperativeHandle(ref, () => ({
     publishOnIPFS() {
       console.log("publish on ipfs", content);
@@ -26,23 +27,34 @@ const GTextEditor = forwardRef((props, ref) => {
       if (publishing) {
         return;
       }
+      //
+      let tar = "![image](" + def_ipfs_public_gateway + "/ipfs/";
+      let new_content = content.replaceAll(
+        tar,
+        "![image](gamefisociety/temp/image/"
+      );
+      //
+      if(new_content.length === 0){
+        return;
+      }
       props.publishHandle("BEGIN");
       setPublishing(true);
+
       if (curplat === "infura") {
-        infuraPublish();
+        infuraPublish(new_content);
       } else if (curplat === "fleek") {
-        fleekPublish();
+        fleekPublish(new_content);
       } else if (curplat === "pinata") {
-        pinataUploadString();
+        pinataUploadString(new_content);
       }
     },
   }));
 
-  const infuraPublish = () => {
+  const infuraPublish = (data) => {
     ipfspublish.infuraPublish(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.cid.toString();
         setPublishing(false);
@@ -55,11 +67,11 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
-  const fleekPublish = () => {
+  const fleekPublish = (data) => {
     ipfspublish.fleekPublish(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.hashV0;
         setPublishing(false);
@@ -72,11 +84,11 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
-  const pinataUploadString = () => {
+  const pinataUploadString = (data) => {
     ipfspublish.pinataUpload(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.IpfsHash;
         setPublishing(false);
@@ -90,9 +102,17 @@ const GTextEditor = forwardRef((props, ref) => {
   };
 
   const uploadImageOnIPFS = (event) => {
+    if (key.length === 0 || secret.length === 0) {
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
+      return;
+    }
+    if (uploadingImage === true) {
+      return;
+    }
     if (event.target.files && event.target.files[0]) {
       let data = event.target.files[0];
-      console.log("uploadImage", data);
+      setUploadingImage(true);
+      console.log("uploadImageOnIPFS", data);
       if (curplat === "infura") {
       } else if (curplat === "fleek") {
       } else if (curplat === "pinata") {
@@ -120,8 +140,11 @@ const GTextEditor = forwardRef((props, ref) => {
       (response) => {
         cache.push(response);
         setUploadedImages(cache);
+        setUploadingImage(false);
       },
-      (err) => {}
+      (err) => {
+        setUploadingImage(false);
+      }
     );
   };
 
@@ -156,7 +179,7 @@ const GTextEditor = forwardRef((props, ref) => {
           />
           <Typography
             sx={{
-              width:"80%",
+              width: "80%",
               fontSize: "12px",
               fontFamily: "Saira",
               fontWeight: "500",
