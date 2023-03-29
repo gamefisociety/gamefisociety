@@ -5,7 +5,7 @@ import {
 
 export const createCamera = (scene) => {
 
-    var camera = new ArcRotateCamera("camera-main", Math.PI/3, Math.PI/3, 500, Vector3.Zero(), scene);;
+    var camera = new ArcRotateCamera("camera-main", Math.PI/3, Math.PI/3, 100, Vector3.Zero(), scene);;
     camera.setTarget(Vector3.Zero());
     //
     const canvas = scene.getEngine().getRenderingCanvas();

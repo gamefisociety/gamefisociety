@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import {
-    useClick,
-    useHover,
-} from 'react-babylonjs'
 
 import {
-    Engine,
-    FreeCamera,
-    HemisphericLight,
     MeshBuilder,
-    Scene,
-    Vector3,
-} from '@babylonjs/core'
+} from '@babylonjs/core';
+
+import { GridMaterial } from '@babylonjs/materials/grid';
 
 export const createGround = (scene) => {
-    MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
+    const ground = MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
+    ground.material = new GridMaterial("groundMat");
+    ground.material.backFaceCulling = false;
+    ground.material.gridRatio = 10;
 };
