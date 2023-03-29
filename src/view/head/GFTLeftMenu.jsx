@@ -12,8 +12,11 @@ import {
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
+
+import Box from '@mui/material/Box';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
+import GFTFooter from 'view/footer/GFTFooter';
 import Paper from '@mui/material/Paper';
 import { Divider } from '@mui/material/index';
 import CardMedia from '@mui/material/CardMedia';
@@ -241,6 +244,8 @@ const GFTLeftMenu = () => {
                     return renderMenu(item, index)
                 })}
             </MenuList>
+            <Box sx={{ flexGrow: 1 }}></Box>
+            <GFTFooter />
         </Paper>
     );
 }
