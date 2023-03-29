@@ -40,7 +40,7 @@ export function catIPFSContent(cid) {
   });
 }
 
-export function pinataPinJSONToIPFS(key, secret, content) {
+export function pinataPinJSON(key, secret, content) {
   return Requset({
     method: "post",
     url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
@@ -52,6 +52,19 @@ export function pinataPinJSONToIPFS(key, secret, content) {
     data: {
       content: content,
     },
+  });
+}
+
+export function pinataPinFile(key, secret, data) {
+  return Requset({
+    method: "post",
+    url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+    headers: {
+      'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+      pinata_api_key: key,
+      pinata_secret_api_key: secret,
+    },
+    data:data
   });
 }
 

@@ -360,7 +360,7 @@ function GArticleList() {
             }}
             onClick={() => {
               if(publishState === 0){
-                textEditor.current.publishToIPFS();
+                textEditor.current.publishOnIPFS();
               }else if(publishState === 2){
                 publishToContract();
               }

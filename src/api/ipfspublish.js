@@ -1,7 +1,7 @@
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
-import { infuraAdd, pinataPinJSONToIPFS } from "./requestData";
+import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
 //infura
 const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
   let authorization =
@@ -67,8 +67,9 @@ const fleekPublishInner = (key, secret, content, onsucess, onerror) => {
 };
 
 //pinata
-const pinataPublishInner = (key, secret, content, onsucess, onerror) => {
-  pinataPinJSONToIPFS(key, secret, content)
+const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
+  if(typeof data === "string"){
+    pinataPinJSON(key, secret, data)
     .then((response) => {
       console.log(response);
       onsucess(response);
@@ -77,12 +78,25 @@ const pinataPublishInner = (key, secret, content, onsucess, onerror) => {
       console.log(String(err));
       onerror(err);
     });
+  }else {
+    console.log("pinataPinFile", data);
+    pinataPinFile(key, secret, data)
+    .then((response) => {
+      console.log(response);
+      onsucess(response);
+    })
+    .catch((err) => {
+      console.log(String(err));
+      onerror(err);
+    });
+  }
+  
 };
 
 const ipfspublish = {
   infuraPublish: infuraPublishInner,
   fleekPublish: fleekPublishInner,
-  pinataPublish: pinataPublishInner,
+  pinataUpload: pinataUploadInner,
 };
 
 export default ipfspublish;
