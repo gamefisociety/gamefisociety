@@ -36,4 +36,40 @@
 
     }
 
+     .grid_nft_item {
+        display: flex;
+        flex-direction: column;
+        width: 176px;
+        height: auto;
+        background: #191A1B;
+        border-radius: 16px;
+        padding-bottom: 14px;
+
+        .img {
+            width: 176px;
+            height: 176px;
+            object-fit:cover;
+            border-radius: 16px;
+            
+        }
+
+        .txt_layout {
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+
+            .txt {
+                padding-left: 12px;
+                padding-right: 12px;
+                padding-top: 14px;
+                font-size: 12px;
+                font-family: Saira;
+                font-weight: 500;
+                color: #FFFFFF;
+            }
+        }
+
+    }
+
+
 }

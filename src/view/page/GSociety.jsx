@@ -186,12 +186,12 @@ const GSociety = (props) => {
           let cxt = JSON.parse(info.content);
           return (
             <ListItem
-              sx={{ my: "2px", backgroundColor: "#202020" }}
+              sx={{ my: "2px" }}
               key={"following-list-" + index}
               secondaryAction={
                 <Button
-                  variant="outlined"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px" }}
+                  variant="contained"
+                  sx={{ width: "80px", height: "24px", fontSize: "12px",backgroundColor: "#202122" }}
                   onClick={() => {
                     removeFollow(pubkey);
                   }}
@@ -219,6 +219,7 @@ const GSociety = (props) => {
                   />
                 </ListItemAvatar>
                 <ListItemText primary={cxt.name} color="text.secondary" />
+               
               </ListItemButton>
             </ListItem>
           );
