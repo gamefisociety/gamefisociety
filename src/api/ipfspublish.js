@@ -6,7 +6,7 @@ import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
 const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
   let authorization =
     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
-  let ipfs =  create({
+  let ipfs = create({
     host: "ipfs.infura.io",
     port: "5001",
     protocol: "https",
@@ -47,55 +47,78 @@ const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
 //   };
 
 //fleek
-const fleekPublishInner = (key, secret, content, onsucess, onerror) => {
-  fleekStorage
-    .upload({
-      apiKey: key,
-      apiSecret: secret,
-      key: Buffer.from(content).toString("base64"),
-      ContentType: "text/plain",
-      data: content,
-    })
-    .then((response) => {
-      console.log(response);
-      onsucess(response);
-    })
-    .catch((err) => {
-      console.log(String(err));
-      onerror(err);
-    });
+const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
+  const curTime = (Date.now()).toString();
+  if (typeof data === "string") {
+    let subData = data.substring(0, 20);
+    let name = subData + "_" + curTime;
+    fleekStorage
+      .upload({
+        apiKey: key,
+        apiSecret: secret,
+        key: Buffer.from(name).toString("base64"),
+        ContentType: "text/plain",
+        data: data,
+      })
+      .then((response) => {
+        console.log(response);
+        onsucess(response);
+      })
+      .catch((err) => {
+        console.log(String(err));
+        onerror(err);
+      });
+  } else {
+    let name = data.name + "_" + curTime;
+    console.log("fleek data name", name);
+    fleekStorage
+      .upload({
+        apiKey: key,
+        apiSecret: secret,
+        key: Buffer.from(name).toString("base64"),
+        ContentType: data.type,
+        data: data,
+      })
+      .then((response) => {
+        console.log(response);
+        onsucess(response);
+      })
+      .catch((err) => {
+        console.log(String(err));
+        onerror(err);
+      });
+  }
 };
 
 //pinata
 const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
-  if(typeof data === "string"){
+  if (typeof data === "string") {
     pinataPinJSON(key, secret, data)
-    .then((response) => {
-      console.log(response);
-      onsucess(response);
-    })
-    .catch((err) => {
-      console.log(String(err));
-      onerror(err);
-    });
-  }else {
+      .then((response) => {
+        console.log(response);
+        onsucess(response);
+      })
+      .catch((err) => {
+        console.log(String(err));
+        onerror(err);
+      });
+  } else {
     console.log("pinataPinFile", data);
     pinataPinFile(key, secret, data)
-    .then((response) => {
-      console.log(response);
-      onsucess(response);
-    })
-    .catch((err) => {
-      console.log(String(err));
-      onerror(err);
-    });
+      .then((response) => {
+        console.log(response);
+        onsucess(response);
+      })
+      .catch((err) => {
+        console.log(String(err));
+        onerror(err);
+      });
   }
-  
 };
 
 const ipfspublish = {
   infuraPublish: infuraPublishInner,
-  fleekPublish: fleekPublishInner,
+  fleekUpload: fleekUploadInner,
   pinataUpload: pinataUploadInner,
 };
 

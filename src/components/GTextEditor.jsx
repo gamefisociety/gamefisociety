@@ -2,11 +2,14 @@ import { React, useState, forwardRef, useImperativeHandle } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import ipfspublish from "api/ipfspublish";
 import { def_ipfs_public_gateway } from "../module/utils/xdef";
+import xhelp from "module/utils/xhelp";
+import { Buffer } from "buffer";
 import "./GTextEditor.scss";
 const GTextEditor = forwardRef((props, ref) => {
   const [content, setContent] = useState("**IPFS TextEditor**");
@@ -28,28 +31,23 @@ const GTextEditor = forwardRef((props, ref) => {
         return;
       }
       //
-      let tar = "![image](" + def_ipfs_public_gateway + "/ipfs/";
-      let new_content = content.replaceAll(
-        tar,
-        "![image](gamefisociety/temp/image/"
-      );
-      //
+      let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
       if(new_content.length === 0){
         return;
       }
-      props.publishHandle("BEGIN");
+      //
       setPublishing(true);
-
+      props.publishHandle("BEGIN");
       if (curplat === "infura") {
         infuraPublish(new_content);
       } else if (curplat === "fleek") {
-        fleekPublish(new_content);
+        fleekUploadString(new_content);
       } else if (curplat === "pinata") {
         pinataUploadString(new_content);
       }
     },
   }));
-
+///
   const infuraPublish = (data) => {
     ipfspublish.infuraPublish(
       key,
@@ -67,8 +65,8 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
-  const fleekPublish = (data) => {
-    ipfspublish.fleekPublish(
+  const fleekUploadString = (data) => {
+    ipfspublish.fleekUpload(
       key,
       secret,
       data,
@@ -100,7 +98,7 @@ const GTextEditor = forwardRef((props, ref) => {
       }
     );
   };
-
+///
   const uploadImageOnIPFS = (event) => {
     if (key.length === 0 || secret.length === 0) {
       alert("Please enter PROJECT KEY and PROJECT SECRET");
@@ -115,6 +113,7 @@ const GTextEditor = forwardRef((props, ref) => {
       console.log("uploadImageOnIPFS", data);
       if (curplat === "infura") {
       } else if (curplat === "fleek") {
+        fleekUploadImage(data);
       } else if (curplat === "pinata") {
         pinataUploadImage(data);
       }
@@ -138,7 +137,8 @@ const GTextEditor = forwardRef((props, ref) => {
       secret,
       formData,
       (response) => {
-        cache.push(response);
+        const cid = response.IpfsHash;
+        cache.push({"CID": cid});
         setUploadedImages(cache);
         setUploadingImage(false);
       },
@@ -148,6 +148,25 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
+  const fleekUploadImage = (data) => {
+    let cache = uploadedImages.concat();
+    ipfspublish.fleekUpload(
+      key,
+      secret,
+      data,
+      (response) => {
+        const cid = response.hashV0;
+        cache.push({"CID": cid});
+        setUploadedImages(cache);
+        setUploadingImage(false);
+      },
+      (err) => {
+        setUploadingImage(false);
+      }
+    );
+  };
+
+  ///
   const platHref = () => {
     if (curplat === "infura") {
       return "https://app.infura.io/dashboard";
@@ -158,6 +177,7 @@ const GTextEditor = forwardRef((props, ref) => {
     }
   };
 
+  ///
   const renderUploadedImages = () => {
     return uploadedImages.map((item, index) => {
       return (
@@ -173,7 +193,7 @@ const GTextEditor = forwardRef((props, ref) => {
           key={"uploaded_image_" + index}
         >
           <img
-            src={def_ipfs_public_gateway + "/ipfs/" + item.IpfsHash}
+            src={def_ipfs_public_gateway + "/ipfs/" + item.CID}
             width="80%"
             alt="uploadedImage"
           />
@@ -187,7 +207,7 @@ const GTextEditor = forwardRef((props, ref) => {
               textAlign: "left",
             }}
           >
-            {def_ipfs_public_gateway + "/ipfs/" + item.IpfsHash}
+            {def_ipfs_public_gateway + "/ipfs/" + item.CID}
           </Typography>
         </Box>
       );
@@ -299,16 +319,16 @@ const GTextEditor = forwardRef((props, ref) => {
               height: "600px",
             }}
           >
-            <Button variant="contained" component="label">
+            <LoadingButton variant="contained" component="label" loading={uploadingImage}>
               Upload Image To IPFS
               <input
                 hidden
-                onChange={(e) => uploadImageOnIPFS(e)}
+                onChange={uploadImageOnIPFS}
                 accept="image/*"
                 multiple
                 type="file"
               />
-            </Button>
+            </LoadingButton>
             {renderUploadedImages()}
           </Box>
         </Box>

@@ -43,12 +43,9 @@ function GArticle() {
         } else if (typeof res === "object") {
           t_res = res.content;
         }
-        let tar = "![image](gamefisociety/temp/image/";
-        t_res = t_res.replaceAll(
-          tar,
-          "![image](" + def_ipfs_public_gateway + "/ipfs/"
-        );
-        setContent(t_res);
+        //
+        let new_content = xhelp.convertImageUrlFromGFSToIPFS(t_res);
+        setContent(new_content);
         console.log(res);
       })
       .catch((err) => {
