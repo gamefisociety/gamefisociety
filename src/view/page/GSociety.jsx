@@ -218,8 +218,10 @@ const GSociety = (props) => {
                     src={cxt.picture ? cxt.picture : ""}
                   />
                 </ListItemAvatar>
-                <ListItemText primary={cxt.name} color="text.secondary" />
-               
+                <div className="gsociety_text_item">
+                  <span className="txt">{cxt.name} </span>
+                  <span className="txt_about">{cxt.about} </span>
+                </div>
               </ListItemButton>
             </ListItem>
           );
@@ -246,12 +248,12 @@ const GSociety = (props) => {
           let cxt = JSON.parse(info.content);
           return (
             <ListItem
-              sx={{ my: "2px", backgroundColor: "#202020" }}
+              sx={{ my: "2px" }}
               key={"following-list-" + index}
               secondaryAction={
                 <Button
-                  variant="outlined"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px" }}
+                  variant="contained"
+                  sx={{ width: "80px", height: "24px", fontSize: "12px",backgroundColor: "#202122"  }}
                   onClick={() => {
                     if (isFollowYou(item.pubkey) === true) {
                       removeFollow(item.pubkey);
@@ -283,7 +285,11 @@ const GSociety = (props) => {
                     src={cxt.picture ? cxt.picture : ""}
                   />
                 </ListItemAvatar>
-                <ListItemText primary={cxt.name} color="text.secondary" />
+                <div className="gsociety_text_item">
+                  <span className="txt">{cxt.name} </span>
+                  <span className="txt_about">{cxt.about} </span>
+                </div>
+                
               </ListItemButton>
             </ListItem>
           );
