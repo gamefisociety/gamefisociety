@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
 //infura
-const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
+const infuraUploadInner = (key, secret, data, onsucess, onerror) => {
   let authorization =
     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
   let ipfs = create({
@@ -15,13 +15,13 @@ const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
     },
   });
   ipfs
-    .add(content)
+    .add(data)
     .then((response) => {
-      console.log("infura publish success", response);
+      console.log("infura publish success ", response);
       onsucess(response);
     })
     .catch((err) => {
-      console.log("infura publish error", String(err));
+      console.log("infura publish error ", String(err));
       onerror(err);
     });
 };
@@ -117,7 +117,7 @@ const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
 };
 
 const ipfspublish = {
-  infuraPublish: infuraPublishInner,
+  infuraUpload: infuraUploadInner,
   fleekUpload: fleekUploadInner,
   pinataUpload: pinataUploadInner,
 };

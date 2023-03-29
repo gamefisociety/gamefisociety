@@ -6,10 +6,9 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
-import ipfspublish from "api/ipfspublish";
+import ipfsupload from "api/ipfsupload";
 import { def_ipfs_public_gateway } from "../module/utils/xdef";
 import xhelp from "module/utils/xhelp";
-import { Buffer } from "buffer";
 import "./GTextEditor.scss";
 const GTextEditor = forwardRef((props, ref) => {
   const [content, setContent] = useState("**IPFS TextEditor**");
@@ -39,7 +38,7 @@ const GTextEditor = forwardRef((props, ref) => {
       setPublishing(true);
       props.publishHandle("BEGIN");
       if (curplat === "infura") {
-        infuraPublish(new_content);
+        infuraUploadString(new_content);
       } else if (curplat === "fleek") {
         fleekUploadString(new_content);
       } else if (curplat === "pinata") {
@@ -48,8 +47,8 @@ const GTextEditor = forwardRef((props, ref) => {
     },
   }));
 ///
-  const infuraPublish = (data) => {
-    ipfspublish.infuraPublish(
+  const infuraUploadString = (data) => {
+    ipfsupload.infuraUpload(
       key,
       secret,
       data,
@@ -66,7 +65,7 @@ const GTextEditor = forwardRef((props, ref) => {
   };
 
   const fleekUploadString = (data) => {
-    ipfspublish.fleekUpload(
+    ipfsupload.fleekUpload(
       key,
       secret,
       data,
@@ -83,7 +82,7 @@ const GTextEditor = forwardRef((props, ref) => {
   };
 
   const pinataUploadString = (data) => {
-    ipfspublish.pinataUpload(
+    ipfsupload.pinataUpload(
       key,
       secret,
       data,
@@ -112,6 +111,7 @@ const GTextEditor = forwardRef((props, ref) => {
       setUploadingImage(true);
       console.log("uploadImageOnIPFS", data);
       if (curplat === "infura") {
+        infuraUploadImage(data);
       } else if (curplat === "fleek") {
         fleekUploadImage(data);
       } else if (curplat === "pinata") {
@@ -132,7 +132,7 @@ const GTextEditor = forwardRef((props, ref) => {
     });
     formData.append("pinataOptions", options);
     let cache = uploadedImages.concat();
-    ipfspublish.pinataUpload(
+    ipfsupload.pinataUpload(
       key,
       secret,
       formData,
@@ -150,12 +150,30 @@ const GTextEditor = forwardRef((props, ref) => {
 
   const fleekUploadImage = (data) => {
     let cache = uploadedImages.concat();
-    ipfspublish.fleekUpload(
+    ipfsupload.fleekUpload(
       key,
       secret,
       data,
       (response) => {
         const cid = response.hashV0;
+        cache.push({"CID": cid});
+        setUploadedImages(cache);
+        setUploadingImage(false);
+      },
+      (err) => {
+        setUploadingImage(false);
+      }
+    );
+  };
+
+  const infuraUploadImage = (data) => {
+    let cache = uploadedImages.concat();
+    ipfsupload.infuraUpload(
+      key,
+      secret,
+      data,
+      (response) => {
+        const cid = response.cid.toString();
         cache.push({"CID": cid});
         setUploadedImages(cache);
         setUploadingImage(false);
