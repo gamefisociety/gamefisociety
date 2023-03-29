@@ -50,4 +50,4 @@ const GFTHomeMeta = () => {
     />);
 }
 
-export default GFTHomeMeta;
+export default  React.memo(GFTHomeMeta);

@@ -68,5 +68,5 @@ const GMetaBase = (props) => {
   return <canvas className='meta_bg' id={canvasId} ref={reactCanvas} {...rest} />
 }
 
-export default GMetaBase;
+export default React.memo(GMetaBase);
 
