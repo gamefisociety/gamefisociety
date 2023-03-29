@@ -32,25 +32,12 @@ const GFTFooter = () => {
     }
 
     return (
-        <Paper sx={{
-            pt: '24px',
-            px: '42px',
-            backgroundColor: '#0F0F0F'
-        }}>
-            <Divider />
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-            }}>
-                <CardMedia
-                    component="img"
-                    sx={{ width: '160px' }}
-                    src={footer_logo}
-                    // image={footer_logo}
-                    alt="no banner"
-                />
-                <Box sx={{ flexGrow: 1 }}></Box>
+        <Paper className='footer_bg'>
+            <Typography className='text_line'>{'About Us'}</Typography>
+            <Typography className='text_line'>{'FAQ'}</Typography>
+            <Typography className='text_line'>{'Blog'}</Typography>
+            <Typography className='text_line'>{'Disclaimer'}</Typography>
+            <Box className='logo_layout'>
                 <CardMedia
                     component="img"
                     sx={{ width: '34px', height: '34px', mx: '2px' }}
@@ -101,83 +88,13 @@ const GFTFooter = () => {
                     alt="no logo"
                 />
             </Box>
-            <Divider />
-            {/* <Grid container spacing={2}>
-                <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box sx={{ backgroundColor: 'transparent', height: '100px' }}></Box>
-                </Grid>
-            </Grid>
-            <Divider /> */}
-            <Box sx={{
-                py: '16px',
-                display: 'flex',
-                flexDirection: 'row'
-            }}>
-                <Typography sx={{}} color={'gray'} variant={'body2'} >
-                    {'© 2022 GameFi Society'}
-                </Typography>
-                <Box sx={{ flexGrow: 1 }}></Box>
-                {/* <div className='lang'>
-                    <span className='txt'>English</span>
-                    <img className='img' src={icon_menu_down}></img>
-                </div> */}
-            </Box>
-            {/* <div className='line'></div> */}
-            {/* <div className='logo_layout'>
+            {/* <div className='lang'>
+                <span className='txt'>English</span>
+                <img className='img' src={icon_menu_down}></img>
             </div> */}
-            {/* <div className='line'></div> */}
-            {/* <div className='infor_layout'>
-                <div className='txt_layout'>
-                    <span className='txt'>Products</span>
-                    <span className='txt_tap'>Products</span>
-                    <span className='txt_tap'>Token swap</span>
-                    <span className='txt_tap'>Airdrops</span>
-                </div>
-                <div className='txt_layout'>
-                    <span className='txt'>Conmpany</span>
-                    <span className='txt_tap'>About us</span>
-                    <span className='txt_tap'>Press</span>
-                    <span className='txt_tap'>Disclaimer</span>
-                </div>
-                <div className='txt_layout'>
-                    <span className='txt'>Resources</span>
-                    <span className='txt_tap'>Blog</span>
-                    <span className='txt_tap'>FAQ</span>
-                </div>
-                <div className='txt_layout'>
-                    <span className='txt'>Developers</span>
-                    <span className='txt_tap'>Submit a project</span>
-                    <span className='txt_tap'>Advertising</span>
-                </div>
-                <div className='txt_layout'>
-                    <span className='txt'>Recommendations</span>
-                    <span className='txt_tap'>MetaMask</span>
-                    <span className='txt_tap'>Huobi Wallet</span>
-                    <span className='txt_tap'>Coinbase</span>
-                </div>
-            </div> */}
-            {/* <div className='service_layout'>
-                <span className='txt'>List of services that we’re using to calculate data:</span>
-                <img className='img' src={icon_crypto}></img>
-                <img className='img' src={icon_coingecko}></img>
-            </div>
-            <div className='line'></div>
-            <div className='layout_setting'>
-                <span className='txt'>© 2022 GameFi Society</span>
-                <div className='lang'>
-                    <span className='txt'>English</span>
-                    <img className='img' src={icon_menu_down}></img>
-                </div>
-            </div> */}
+            <Typography className='footer_end' >
+                {'© 2022 GameFi Society'}
+            </Typography>
         </Paper>
     );
 }

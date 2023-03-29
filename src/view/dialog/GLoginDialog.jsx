@@ -43,7 +43,7 @@ const license_4 = '## Changes to EULA\n\nWe reserve the right to update ro modif
 const license_5 = '## Contact infomation\n\nIf you have any questions about this EULA, please contact us at apple.sve@gmail.com';
 
 const GLoginDialog = () => {
-    const { isOpenLogin } = useSelector(s => s.dialog);
+    const { loggedOut } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
     const [loginState, setLoginState] = useState(0);
     const [isNip19, setNip19] = useState(true);
@@ -489,10 +489,11 @@ const GLoginDialog = () => {
         return null;
     }
 
+    // console.log('loggedOut', loggedOut)
     return (
         <Dialog
             className={'dialog_login'}
-            open={isOpenLogin}
+            open={loggedOut ? loggedOut : true}
             fullWidth={true}
             PaperProps={{
                 style: {
