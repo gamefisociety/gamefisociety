@@ -2,10 +2,14 @@ import { React, useState, forwardRef, useImperativeHandle } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import ipfspublish from "api/ipfspublish";
+import { def_ipfs_public_gateway } from "../module/utils/xdef";
+import xhelp from "module/utils/xhelp";
+import { Buffer } from "buffer";
 import "./GTextEditor.scss";
 const GTextEditor = forwardRef((props, ref) => {
   const [content, setContent] = useState("**IPFS TextEditor**");
@@ -14,9 +18,11 @@ const GTextEditor = forwardRef((props, ref) => {
   const [key, setKey] = useState("");
   const [secret, setSecret] = useState("");
   const [publishing, setPublishing] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
   useImperativeHandle(ref, () => ({
-    publishToIPFS() {
-      console.log("publish to ipfs", content);
+    publishOnIPFS() {
+      console.log("publish on ipfs", content);
       if (key.length === 0 || secret.length === 0) {
         alert("Please enter PROJECT KEY and PROJECT SECRET");
         return;
@@ -24,23 +30,29 @@ const GTextEditor = forwardRef((props, ref) => {
       if (publishing) {
         return;
       }
-      props.publishHandle("BEGIN");
+      //
+      let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
+      if(new_content.length === 0){
+        return;
+      }
+      //
       setPublishing(true);
+      props.publishHandle("BEGIN");
       if (curplat === "infura") {
-        infuraPublish();
+        infuraPublish(new_content);
       } else if (curplat === "fleek") {
-        fleekPublish();
+        fleekUploadString(new_content);
       } else if (curplat === "pinata") {
-        pinataPublish();
+        pinataUploadString(new_content);
       }
     },
   }));
-
-  const infuraPublish = () => {
+///
+  const infuraPublish = (data) => {
     ipfspublish.infuraPublish(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.cid.toString();
         setPublishing(false);
@@ -53,11 +65,11 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
-  const fleekPublish = () => {
-    ipfspublish.fleekPublish(
+  const fleekUploadString = (data) => {
+    ipfspublish.fleekUpload(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.hashV0;
         setPublishing(false);
@@ -70,11 +82,11 @@ const GTextEditor = forwardRef((props, ref) => {
     );
   };
 
-  const pinataPublish = () => {
-    ipfspublish.pinataPublish(
+  const pinataUploadString = (data) => {
+    ipfspublish.pinataUpload(
       key,
       secret,
-      content,
+      data,
       (response) => {
         const cid = response.IpfsHash;
         setPublishing(false);
@@ -86,7 +98,75 @@ const GTextEditor = forwardRef((props, ref) => {
       }
     );
   };
+///
+  const uploadImageOnIPFS = (event) => {
+    if (key.length === 0 || secret.length === 0) {
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
+      return;
+    }
+    if (uploadingImage === true) {
+      return;
+    }
+    if (event.target.files && event.target.files[0]) {
+      let data = event.target.files[0];
+      setUploadingImage(true);
+      console.log("uploadImageOnIPFS", data);
+      if (curplat === "infura") {
+      } else if (curplat === "fleek") {
+        fleekUploadImage(data);
+      } else if (curplat === "pinata") {
+        pinataUploadImage(data);
+      }
+    }
+  };
 
+  const pinataUploadImage = (data) => {
+    const formData = new FormData();
+    formData.append("file", data);
+    const metadata = JSON.stringify({
+      name: data.name,
+    });
+    formData.append("pinataMetadata", metadata);
+    const options = JSON.stringify({
+      cidVersion: 0,
+    });
+    formData.append("pinataOptions", options);
+    let cache = uploadedImages.concat();
+    ipfspublish.pinataUpload(
+      key,
+      secret,
+      formData,
+      (response) => {
+        const cid = response.IpfsHash;
+        cache.push({"CID": cid});
+        setUploadedImages(cache);
+        setUploadingImage(false);
+      },
+      (err) => {
+        setUploadingImage(false);
+      }
+    );
+  };
+
+  const fleekUploadImage = (data) => {
+    let cache = uploadedImages.concat();
+    ipfspublish.fleekUpload(
+      key,
+      secret,
+      data,
+      (response) => {
+        const cid = response.hashV0;
+        cache.push({"CID": cid});
+        setUploadedImages(cache);
+        setUploadingImage(false);
+      },
+      (err) => {
+        setUploadingImage(false);
+      }
+    );
+  };
+
+  ///
   const platHref = () => {
     if (curplat === "infura") {
       return "https://app.infura.io/dashboard";
@@ -95,6 +175,43 @@ const GTextEditor = forwardRef((props, ref) => {
     } else if (curplat === "pinata") {
       return "https://app.pinata.cloud/developers/api-keys";
     }
+  };
+
+  ///
+  const renderUploadedImages = () => {
+    return uploadedImages.map((item, index) => {
+      return (
+        <Box
+          sx={{
+            marginTop: "30px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+          key={"uploaded_image_" + index}
+        >
+          <img
+            src={def_ipfs_public_gateway + "/ipfs/" + item.CID}
+            width="80%"
+            alt="uploadedImage"
+          />
+          <Typography
+            sx={{
+              width: "80%",
+              fontSize: "12px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+              textAlign: "left",
+            }}
+          >
+            {def_ipfs_public_gateway + "/ipfs/" + item.CID}
+          </Typography>
+        </Box>
+      );
+    });
   };
 
   return (
@@ -174,7 +291,47 @@ const GTextEditor = forwardRef((props, ref) => {
             </div>
           </div>
         </div>
-        <MDEditor value={content} height={600} onChange={setContent} />
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              width: "72%",
+            }}
+          >
+            <MDEditor
+              value={content}
+              width={500}
+              height={600}
+              onChange={setContent}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              width: "22%",
+              height: "600px",
+            }}
+          >
+            <LoadingButton variant="contained" component="label" loading={uploadingImage}>
+              Upload Image To IPFS
+              <input
+                hidden
+                onChange={uploadImageOnIPFS}
+                accept="image/*"
+                multiple
+                type="file"
+              />
+            </LoadingButton>
+            {renderUploadedImages()}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

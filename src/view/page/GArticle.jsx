@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import "./GArticle.scss";
 import MDEditor from "@uiw/react-md-editor";
 import xhelp from "module/utils/xhelp";
+import { def_ipfs_public_gateway } from "module/utils/xdef";
 import icon_back from "../../asset/image/social/icon_back.png";
 import { catIPFSContent } from "../../api/requestData";
 function GArticle() {
@@ -30,17 +31,21 @@ function GArticle() {
     if (fetching === true) {
       return;
     }
-    
+
     setFetching(true);
     catIPFSContent(cid)
       .then((res) => {
         console.log("catContent", res);
         setFetching(false);
+        let t_res = "";
         if (typeof res === "string") {
-          setContent(res);
+          t_res = res;
         } else if (typeof res === "object") {
-          setContent(res.content);
+          t_res = res.content;
         }
+        //
+        let new_content = xhelp.convertImageUrlFromGFSToIPFS(t_res);
+        setContent(new_content);
         console.log(res);
       })
       .catch((err) => {

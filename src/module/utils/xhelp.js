@@ -1,4 +1,5 @@
 import moment from "moment";
+import { def_ipfs_public_gateway } from "./xdef";
 const formateDateInner = (datenum) => {
   if (datenum === undefined) {
     return "";
@@ -32,9 +33,25 @@ const formateSinceTimeInner = (timesince) => {
   }
 };
 
+const convertImageUrlFromIPFSToGFSInner = (str) => {
+  let tar = "![image](" + def_ipfs_public_gateway + "/ipfs/";
+  let new_str = str.replaceAll(tar, "![image](gamefisociety/temp/image/");
+  return new_str;
+};
+
+const convertImageUrlFromGFSToIPFSInner = (str) => {
+  let tar = "![image](gamefisociety/temp/image/";
+  let new_str = str.replaceAll(
+    tar,
+    "![image](" + def_ipfs_public_gateway + "/ipfs/"
+  );
+  return new_str;
+};
 const xhelp = {
   formateDate: formateDateInner,
   formateSinceTime: formateSinceTimeInner,
+  convertImageUrlFromIPFSToGFS: convertImageUrlFromIPFSToGFSInner,
+  convertImageUrlFromGFSToIPFS: convertImageUrlFromGFSToIPFSInner
 };
 
 export default xhelp;
