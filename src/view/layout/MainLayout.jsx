@@ -15,6 +15,10 @@ import GFTHomeMeta from 'view/meta/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
 import GFTChat from "view/page/GFTChat";
+
+//
+import GLoginDialog from "view/dialog/GLoginDialog";
+
 import { System } from "nostr/NostrSystem";
 import { init } from "module/store/features/loginSlice";
 import { initRelays } from "module/store/features/profileSlice";
@@ -23,6 +27,7 @@ import "./MainLayout.scss";
 
 const MainLayout = () => {
   const dispatch = useDispatch();
+  const { loggedOut } = useSelector((s) => s.login);
   const {
     isDrawer,
     placeDrawer,
@@ -40,13 +45,13 @@ const MainLayout = () => {
   return (
     <Box className="main_bg">
       <GFTHead />
-      <GFTLeftMenu />
+      {loggedOut === false && <GFTLeftMenu />}
       <GFTHomeMeta />
       {
-          isMainContent && <Box className="main_content">
-            <Outlet />
-          </Box>
-        }
+        isMainContent && <Box className="main_content">
+          <Outlet />
+        </Box>
+      }
       <Drawer
         PaperProps={{
           style: {
@@ -181,6 +186,7 @@ const MainLayout = () => {
         }}
       >
       </Drawer>
+      {loggedOut === true && <GLoginDialog />}
     </Box>
   );
 };
