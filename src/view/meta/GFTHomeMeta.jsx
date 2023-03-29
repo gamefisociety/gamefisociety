@@ -36,7 +36,9 @@ const GFTHomeMeta = () => {
     console.log('sceneRef', sceneRef);
 
     useEffect(() => {
+        console.log('enter GFTHomeMeta');
         return () => {
+            console.log('exit GFTHomeMeta');
         }
     }, [])
 
