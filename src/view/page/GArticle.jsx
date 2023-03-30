@@ -38,7 +38,7 @@ function GArticle() {
         console.log("catContent", res);
         setFetching(false);
         let t_res = "";
-        if (typeof res === "string") {
+        if (typeof res === "string" || res instanceof String) {
           t_res = res;
         } else if (typeof res === "object") {
           t_res = res.content;

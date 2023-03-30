@@ -47,11 +47,21 @@ const convertImageUrlFromGFSToIPFSInner = (str) => {
   );
   return new_str;
 };
+
+const isJsonInner = (str) => {
+  try {
+      JSON.parse(str);
+  } catch (e) {
+      return false;
+  }
+  return true;
+}
 const xhelp = {
   formateDate: formateDateInner,
   formateSinceTime: formateSinceTimeInner,
   convertImageUrlFromIPFSToGFS: convertImageUrlFromIPFSToGFSInner,
-  convertImageUrlFromGFSToIPFS: convertImageUrlFromGFSToIPFSInner
+  convertImageUrlFromGFSToIPFS: convertImageUrlFromGFSToIPFSInner,
+  isJson: isJsonInner
 };
 
 export default xhelp;
