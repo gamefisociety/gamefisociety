@@ -17,6 +17,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import DMCache from "db/DMCache";
 import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
+import { Divider } from "../../../node_modules/@mui/material/index";
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
   const rowRef = useRef();
@@ -88,6 +89,7 @@ const GFTChat = (props) => {
     let subDM = BuildSub("chat_with", [filterDM]);
     System.BroadcastSub(subDM, (tag, client, msg) => {
       if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
+        console.log('direct message', msg)
         try {
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
@@ -297,7 +299,9 @@ const GFTChat = (props) => {
     <Box className={'chat_dm_bg'}>
       {renderHeader()}
       {renderMeta()}
+      <Divider sx={{ width: '100%', py: '4px' }} />
       {renderContent()}
+      <Divider sx={{ width: '100%', py: '4px' }} />
       {renderInput()}
     </Box>
   );

@@ -14,7 +14,6 @@ export const useChatPro = () => {
       const filter = NostrFactory.createFilter();
       filter['kinds'] = [EventKind.DirectMessage];
       filter['#p'] = [publicKey, targetPubkey];
-      // filter['authors'] = [publicKey, targetPubkey];
       return filter;
     },
     sendDM: async (targetPubkey, content) => {
