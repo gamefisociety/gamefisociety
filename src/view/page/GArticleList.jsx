@@ -70,9 +70,9 @@ function GArticleList() {
       let postCache = postDatas.concat();
       GSTArticlesBase.getArticles(library, index, count)
         .then((res) => {
-          console.log("fetchPosts", res);
           if (res && res.length > 0) {
             postCache = postCache.concat(res);
+            postCache.reverse();
             setPostDatas(postCache);
           }
         })
