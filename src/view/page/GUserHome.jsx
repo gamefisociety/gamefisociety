@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
 import Typography from "@mui/material/Typography";
-import TimelineCache, { target_node_cache_flag } from "db/TimelineCache";
+import UserNoteCache from "db/UserNoteCache";
 import { EventKind } from "nostr/def";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
@@ -19,20 +19,19 @@ let lastPubKey = "";
 
 const GUserHome = () => {
   const location = useLocation();
+  const { info, pubkey } = location.state;
+  console.log("GProfile enter", location);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const TLCache = TimelineCache();
-  console.log("GProfile enter", location);
-  const { info, pubkey } = location.state;
-  //
+  const user_note_cache = UserNoteCache();
   const [notes, setNotes] = useState([]);
   const [ownRelays, setOwnRelays] = useState({});
   const [ownFollows, setOwnFollows] = useState([]);
-  //
   const textNotePro = useTextNotePro();
   const followPro = useFollowPro();
+  let follow_create_at = 0;
+  //
   const fetchTextNote = (pub) => {
-    //
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
@@ -41,23 +40,22 @@ const GUserHome = () => {
       filterTextNote,
       filterFollowPro,
     ]);
-    let follow_create_at = 0;
     System.BroadcastSub(
       textNote,
       (tag, client, msg) => {
         if (tag === "EOSE") {
-          let target_note_cache = TLCache.get(target_node_cache_flag);
+          let target_note_cache = user_note_cache.get(pubkey);
           if (target_note_cache) {
+            console.log("target_note_cache", target_note_cache);
             setNotes(target_note_cache.concat());
           }
           System.BroadcastClose(textNote, client, null);
         } else if (tag === "EVENT") {
           if (msg.kind === EventKind.TextNote) {
-            console.log("BroadcastSub textNote", msg);
-            TLCache.pushTargetNote(msg);
-            // dataCaches.push(msg);
+            // console.log("BroadcastSub textNote", msg);
+            user_note_cache.pushNote(pubkey, msg);
           } else if (msg.kind === EventKind.ContactList) {
-            console.log("profile_note_follow", client.addr, msg);
+            // console.log("profile_note_follow", client.addr, msg);
             if (msg.created_at < follow_create_at) {
               return;
             }
@@ -77,13 +75,14 @@ const GUserHome = () => {
   };
 
   useEffect(() => {
-    // console.log("profile info", info);
-    // console.log("profile user", lastPubKey, "pub", pubkey);
     if (pubkey && lastPubKey !== pubkey) {
+      setNotes([]);
       lastPubKey = pubkey;
       fetchTextNote(pubkey);
     }
-    return () => {};
+    return () => {
+      //
+    };
   }, [pubkey]);
 
   return (
@@ -133,7 +132,7 @@ const GUserHome = () => {
         {notes.map((item, index) => (
           <GCardNote
             key={"profile-note-index" + index}
-            note={{ ...item.msg }}
+            note={{ ...item }}
             info={info}
           />
         ))}
