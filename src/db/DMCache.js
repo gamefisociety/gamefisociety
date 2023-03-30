@@ -30,7 +30,7 @@ const DMCache = () => {
     return false;
   }
 
-  const pushChat = (pubkey, msgid, createAt, content) => {
+  const pushChat = (pubkey, msgid, owner, createAt, content) => {
     let cache = dm_cache.get(pubkey);
     if (!cache) {
       cache = create(pubkey);
@@ -40,6 +40,7 @@ const DMCache = () => {
     }
     let info = {
       msgid: msgid,
+      owner: owner,
       create: createAt,
       content: content,
     }

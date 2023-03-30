@@ -38,14 +38,14 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
         pt: "8px",
         px: '16px',
         // backgroundColor: '#FF0000',
-        justifyContent: item.pubkey === chatPK ? "flex-start" : "flex-end",
+        justifyContent: item.owner === chatPK ? "flex-start" : "flex-end",
       }}
     >
       <Typography
         sx={{
           width: "70%",
           padding: "12px",
-          backgroundColor: item.pubkey === chatPK ? "#191A1B" : "#454FBF",
+          backgroundColor: item.owner === chatPK ? "#191A1B" : "#454FBF",
           borderRadius: "6px",
           fontFamily: "Saira",
           fontWeight: "500",
@@ -88,13 +88,12 @@ const GFTChat = (props) => {
     let subDM = BuildSub("chat_with", [filterDM]);
     System.BroadcastSub(subDM, (tag, client, msg) => {
       if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
-        console.log('dm msg', msg);
         try {
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
             .then((dmsg) => {
               if (dmsg) {
-                let flag = dm_cache.pushChat(msg.pubkey, msg.id, msg.created_at, dmsg);
+                let flag = dm_cache.pushChat(targetPubkey, msg.id, msg.pubkey, msg.created_at, dmsg);
                 if (flag === false) {
                   return;
                 }
@@ -125,8 +124,7 @@ const GFTChat = (props) => {
     const chatEv = await chatPro.sendDM(chatPK, inValue);
     System.BroadcastEvent(chatEv, (tag, client, msg) => {
       if (tag === "OK" && msg.ret && msg.ret === true) {
-        let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.CreatedAt, inValue);
-        // console.log('chat with ', flag, chatEv, msg);
+        let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.PubKey, chatEv.CreatedAt, inValue);
         if (flag === false) {
           return;
         }
