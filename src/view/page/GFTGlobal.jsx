@@ -70,8 +70,10 @@ const labelS = [
 
 const GFTGlobal = () => {
   const dispatch = useDispatch();
+  const { relays } = useSelector((s) => s.profile);
   //
   const [curLable, setCurLable] = useState("All");
+  const [curRelay, setCurRelay] = useState('');
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
   const [data, setData] = useState([]);
@@ -234,22 +236,30 @@ const GFTGlobal = () => {
         <Typography className={'tip0'}>
           {'Global reads from'}
         </Typography>
-        <FormControl className={'select0'}>
+        <FormControl >
           {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
           <Select
-            // labelId="demo-simple-select-standard-label"
-            // id="demo-simple-select-standard"
-            value={'abc'}
-            onChange={() => {
-              //
+            className={'select0'}
+            value={curRelay}
+            onChange={({ target }) => {
+              // console.log('global relays item', target);
+              if (target && target.value) {
+                setCurRelay(target.value);
+              }
             }}
           >
-            <MenuItem value="">
+            {
+              Object.entries(relays).map((item, index) => {
+                // console.log('global relays item', item);
+                return (<MenuItem key={'relay-index-' + index} value={index} >{item[0]}</MenuItem>);
+              })
+            }
+            {/* <MenuItem value="">
               <em>None</em>
             </MenuItem>
             <MenuItem value={10}>Ten</MenuItem>
             <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
         </FormControl>
       </Box>
