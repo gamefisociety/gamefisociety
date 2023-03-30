@@ -2,6 +2,7 @@ import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
+import xhelp from "module/utils/xhelp";
 //infura
 const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
   let authorization =
@@ -14,7 +15,7 @@ const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
       authorization,
     },
   });
-   ipfs
+  ipfs
     .add(data)
     .then((response) => {
       console.log("infura publish success ", response);
@@ -53,16 +54,15 @@ const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
 //   };
 
 //fleek
-const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
+const fleekUploadInner = (key, secret, data, name, onsucess, onerror) => {
   const curTime = Date.now().toString();
   if (typeof data === "string" || data instanceof String) {
-    let subData = data.substring(0, 20);
-    let name = subData + "_" + curTime;
+    let uniKey = name + "_" + curTime;
     fleekStorage
       .upload({
         apiKey: key,
         apiSecret: secret,
-        key: Buffer.from(name).toString("base64"),
+        key: Buffer.from(uniKey).toString("base64"),
         ContentType: "text/plain",
         data: data,
       })
@@ -75,13 +75,13 @@ const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
         onerror(err);
       });
   } else {
-    let name = data.name + "_" + curTime;
-    console.log("fleek data name", name);
+    let uniKey = name + "_" + curTime;
+    console.log("fleek data uniKey", uniKey);
     fleekStorage
       .upload({
         apiKey: key,
         apiSecret: secret,
-        key: Buffer.from(name).toString("base64"),
+        key: Buffer.from(uniKey).toString("base64"),
         ContentType: data.type,
         data: data,
       })
@@ -97,9 +97,20 @@ const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
 };
 
 //pinata
-const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
+const pinataUploadInner = (key, secret, data, name, onsucess, onerror) => {
   if (typeof data === "string" || data instanceof String) {
-    pinataPinJSON(key, secret, data)
+    var newData = {
+      pinataOptions: {
+        cidVersion: 0
+      },
+      pinataMetadata: {
+        name: name,
+      },
+      pinataContent: {
+        content: data
+      }
+    };
+    pinataPinJSON(key, secret, newData)
       .then((response) => {
         console.log(response);
         onsucess(response);
@@ -109,8 +120,18 @@ const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
         onerror(err);
       });
   } else {
-    console.log("pinataPinFile", data);
-    pinataPinFile(key, secret, data)
+    const newData = new FormData();
+    newData.append("file", data);
+    const metadata = JSON.stringify({
+      name: data.name,
+    });
+    newData.append("pinataMetadata", metadata);
+    const options = JSON.stringify({
+      cidVersion: 0,
+    });
+    newData.append("pinataOptions", options);
+    console.log("pinataPinFile", newData);
+    pinataPinFile(key, secret, newData)
       .then((response) => {
         console.log(response);
         onsucess(response);

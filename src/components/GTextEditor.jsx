@@ -11,7 +11,7 @@ import { def_ipfs_public_gateway } from "../module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GTextEditor.scss";
 const GTextEditor = forwardRef((props, ref) => {
-  const [content, setContent] = useState("**IPFS TextEditor**");
+  const [content, setContent] = useState("**Hello GameFi Society**");
   const [platools, setPlatools] = useState(["infura", "fleek", "pinata"]);
   const [curplat, setCurplat] = useState("infura");
   const [key, setKey] = useState("");
@@ -19,6 +19,7 @@ const GTextEditor = forwardRef((props, ref) => {
   const [publishing, setPublishing] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
+  var header = "Hello GameFi Society";
   useImperativeHandle(ref, () => ({
     publishOnIPFS() {
       console.log("publish on ipfs", content);
@@ -31,8 +32,19 @@ const GTextEditor = forwardRef((props, ref) => {
       }
       //
       let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
-      if(new_content.length === 0){
+      if (new_content.length === 0) {
         return;
+      }
+      //extract header
+      const regXHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g;
+      const headers = Array.from(new_content.matchAll(regXHeader)).map(
+        ({ groups: { flag, content } }) => ({
+          header: `h${flag.length}`,
+          content,
+        })
+      );
+      if(headers.length > 0){
+        header = headers[0].content;
       }
       //
       setPublishing(true);
@@ -46,7 +58,7 @@ const GTextEditor = forwardRef((props, ref) => {
       }
     },
   }));
-///
+  ///
   const infuraUploadString = (data) => {
     ipfsupload.infuraUpload(
       key,
@@ -55,7 +67,7 @@ const GTextEditor = forwardRef((props, ref) => {
       (response) => {
         const cid = response.cid.toString();
         setPublishing(false);
-        props.publishHandle("SUCCESS", cid);
+        props.publishHandle("SUCCESS", cid, header);
       },
       (err) => {
         setPublishing(false);
@@ -69,10 +81,11 @@ const GTextEditor = forwardRef((props, ref) => {
       key,
       secret,
       data,
+      header,
       (response) => {
         const cid = response.hashV0;
         setPublishing(false);
-        props.publishHandle("SUCCESS", cid);
+        props.publishHandle("SUCCESS", cid, header);
       },
       (err) => {
         setPublishing(false);
@@ -86,10 +99,11 @@ const GTextEditor = forwardRef((props, ref) => {
       key,
       secret,
       data,
+      header,
       (response) => {
         const cid = response.IpfsHash;
         setPublishing(false);
-        props.publishHandle("SUCCESS", cid);
+        props.publishHandle("SUCCESS", cid, header);
       },
       (err) => {
         setPublishing(false);
@@ -97,7 +111,7 @@ const GTextEditor = forwardRef((props, ref) => {
       }
     );
   };
-///
+  ///
   const uploadImageOnIPFS = (event) => {
     if (key.length === 0 || secret.length === 0) {
       alert("Please enter PROJECT KEY and PROJECT SECRET");
@@ -121,24 +135,15 @@ const GTextEditor = forwardRef((props, ref) => {
   };
 
   const pinataUploadImage = (data) => {
-    const formData = new FormData();
-    formData.append("file", data);
-    const metadata = JSON.stringify({
-      name: data.name,
-    });
-    formData.append("pinataMetadata", metadata);
-    const options = JSON.stringify({
-      cidVersion: 0,
-    });
-    formData.append("pinataOptions", options);
     let cache = uploadedImages.concat();
     ipfsupload.pinataUpload(
       key,
       secret,
-      formData,
+      data,
+      header,
       (response) => {
         const cid = response.IpfsHash;
-        cache.push({"CID": cid});
+        cache.push({ CID: cid });
         setUploadedImages(cache);
         setUploadingImage(false);
       },
@@ -156,7 +161,7 @@ const GTextEditor = forwardRef((props, ref) => {
       data,
       (response) => {
         const cid = response.hashV0;
-        cache.push({"CID": cid});
+        cache.push({ CID: cid });
         setUploadedImages(cache);
         setUploadingImage(false);
       },
@@ -174,7 +179,7 @@ const GTextEditor = forwardRef((props, ref) => {
       data,
       (response) => {
         const cid = response.cid.toString();
-        cache.push({"CID": cid});
+        cache.push({ CID: cid });
         setUploadedImages(cache);
         setUploadingImage(false);
       },
@@ -337,7 +342,11 @@ const GTextEditor = forwardRef((props, ref) => {
               height: "600px",
             }}
           >
-            <LoadingButton variant="contained" component="label" loading={uploadingImage}>
+            <LoadingButton
+              variant="contained"
+              component="label"
+              loading={uploadingImage}
+            >
               Upload Image To IPFS
               <input
                 hidden

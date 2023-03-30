@@ -318,14 +318,14 @@ function GArticleList() {
           </Button>
           <GTextEditor
             ref={textEditor}
-            publishHandle={(param, msg) => {
+            publishHandle={(param, msg, header) => {
               if (param === "BEGIN") {
                 setPublishState(1);
               } else if (param === "SUCCESS") {
                 setPublishState(2);
                 setStep(1);
                 stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + msg; 
-                cidInfo.name = "Just Test";
+                cidInfo.name = header;
                 cidInfo.cid = msg;
                 setCidInfo({...cidInfo});
               } else if (param === "FAILED") {
