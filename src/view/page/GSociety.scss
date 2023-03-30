@@ -1,0 +1,14 @@
+.gsociety_text_item{
+    display: flex;
+    width: 200px;
+    flex-direction: column;
+    .txt{
+        font-size: 14px;
+        font-family: Saira;
+    }
+    .txt_about{
+        font-size: 12px;
+        font-family: Saira;
+        color: #4e4b4b;
+    }
+}
