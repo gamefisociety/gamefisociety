@@ -8,7 +8,10 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import GCardNote from "components/GCardNote";
 import List from "@mui/material/List";
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import SearchIcon from "@mui/icons-material/Search";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
@@ -174,7 +177,7 @@ const GFTGlobal = () => {
           className={'top_button'}
           sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
           variant="contained"
-        //   backgroundColor={"background.default"}
+          //   backgroundColor={"background.default"}
           onClick={() => {
             dispatch(setPost({
               post: true,
@@ -201,60 +204,58 @@ const GFTGlobal = () => {
 
   const renderLables = () => {
     return (
-      <Paper>
-        <Box
-          sx={{
-            width: "100%",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "row",
-            alighItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <IconButton>
-            <SearchIcon sx={{ height: "46px" }} />
-          </IconButton>
-          <TextField
-            sx={{ width: "360px", height: "46px" }}
-            label="Search"
-          ></TextField>
-        </Box>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            px: "24px",
-            maxHeight: "92px",
-            // backgroundColor: 'blue',
-            overflow: "hidden",
-          }}
-        // expanded={true}
-        >
-          {labelS.map((item, index) => (
-            <Grid item key={"label-index-" + index}>
-              {
-                <Typography
-                  sx={{ px: "18px", py: "2px" }}
-                  variant="body2"
-                  color="primary"
-                  backgroundColor={curLable === item ? "green" : "gray"}
-                  align={"center"}
-                  borderRadius={"4px"}
-                  onClick={() => {
-                    setCurLable(item);
-                  }}
-                >
-                  {item}
-                </Typography>
-              }
-            </Grid>
-          ))}
-        </Grid>
-        <Button>{"more"}</Button>
-      </Paper>
+      <Box className={'global_lables'}>
+        {labelS.map((item, index) => (
+          <Box className={'lable_bg'} key={"label-index-" + index}>
+            {
+              <Typography className={'lable_text'}
+                // sx={{ px: "18px", py: "2px" }}
+                // // variant="body2"
+                // // color="primary"
+                // backgroundColor={curLable === item ? "green" : "gray"}
+                // align={"center"}
+                // borderRadius={"4px"}
+                onClick={() => {
+                  setCurLable(item);
+                }}
+              >
+                {item}
+              </Typography>
+            }
+          </Box>
+        ))}
+      </Box>
     );
   };
+
+  const renderGlobalHead = () => {
+    return (
+      <Box className={'global_head'}>
+        <Typography className={'tip0'}>
+          {'Global reads from'}
+        </Typography>
+        <FormControl className={'select0'}>
+          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+          <Select
+            // labelId="demo-simple-select-standard-label"
+            // id="demo-simple-select-standard"
+            value={'abc'}
+            onChange={() => {
+              //
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+    );
+  }
 
   const renderContent = () => {
     return (
@@ -275,6 +276,8 @@ const GFTGlobal = () => {
 
   return (
     <Paper className={'global_bg'} elevation={0}>
+      {renderGlobalHead()}
+      {renderLables()}
       {/* {renderPartment()}
       <Divider /> */}
       {renderContent()}

@@ -75,7 +75,7 @@ const GCardUser = (props) => {
 
   //#1F1F1F
   return (
-    <Card class='carduser-bg'>
+    <Card className='carduser-bg'>
       <CardContent
         sx={{
           padding: "12px",

@@ -4,6 +4,52 @@
     background-color: rgba(27, 27, 27, 0.75);
     pointer-events: all;
 
+    .global_head {
+        position: sticky;
+        top: 64px;
+        right: 0px;
+        background-color: black;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        z-index: 1000;
+
+        .tip0 {
+            color: rgb(255, 255, 255);
+            margin-right: 12px;
+        }
+
+        .select0 {
+            min-width: 240px;
+            margin-right: 24px;
+            height: 16px;
+        }
+    }
+
+    .global_lables {
+        position: fixed;
+        top: 64px;
+        left: calc( 50vw - 400px );
+        width: 120px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        background-color: rgba(36, 36, 36, 0.75);  
+
+        .lable_bg {
+             margin-left: 12px;
+        }
+
+        .lable_text {
+            padding-bottom: 6px;
+        }
+    }
+
     .op {
         width: 100%;
         display: flex;

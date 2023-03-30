@@ -131,7 +131,7 @@ const GUserHome = () => {
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => (
           <GCardNote
-            key={"profile-note-index" + index}
+            key={"profile-note-index" + index + '-' + pubkey}
             note={{ ...item }}
             info={info}
           />
