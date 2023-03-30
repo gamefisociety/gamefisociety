@@ -25,9 +25,14 @@ System.initRelays();
 const App = () => {
 
   const dispatch = useDispatch();
-  const { loggedOut } = useSelector((s) => s.login);
-  const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isOpenLogin, isPost } = useSelector(s => s.dialog);
+  const { isOpenConnect, isOpenMenu, isOpenCheckIn, isOpenMintAvatar, isPost } = useSelector(s => s.dialog);
   const { relays } = useSelector((s) => s.profile);
+
+  useEffect(() => {
+    dispatch(init('redux'));
+    dispatch(initRelays())
+  }, []);
+
   useEffect(() => {
     if (relays) {
       for (const [addr, v] of Object.entries(relays)) {
@@ -35,12 +40,6 @@ const App = () => {
       }
     }
   }, [relays]);
-  //init param form db or others
-  useEffect(() => {
-    // console.log('use db from reduce');
-    dispatch(init('redux'));
-    dispatch(initRelays())
-  }, []);
 
   return (
     <ThemeCustomization>

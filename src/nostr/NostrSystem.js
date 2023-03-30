@@ -55,7 +55,6 @@ export class NostrSystem {
 
   //broadcast event
   BroadcastEvent(ev, callback) {
-    // console.log('BroadcastEvent', ev);
     if (!ev) {
       return;
     }
@@ -71,9 +70,6 @@ export class NostrSystem {
     if (!sub) {
       return;
     }
-    //
-    
-    // console.log('clients', this.Clients);
     for (const [addr, tmpRelay] of this.Clients) {
       if (relay) {
         if (relay === addr && relay.canSub) {

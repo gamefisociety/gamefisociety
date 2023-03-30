@@ -12,15 +12,16 @@ import dmLeftImg from "./../../asset/image/social/dm_left.png";
 import { useChatPro } from "nostr/protocal/ChatPro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
-import TimelineCache from "db/TimelineCache";
+import { EventKind } from "nostr/def";
 import useNostrEvent from "nostr/NostrEvent";
+import DMCache from "db/DMCache";
 import { default_avatar } from "module/utils/xdef";
 import "./GFTChat.scss";
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
   const rowRef = useRef();
   const item = data[index];
-  
+
   useEffect(() => {
     setSize(index, rowRef.current.getBoundingClientRect().height);
   }, [setSize, index]);
@@ -60,6 +61,8 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
   );
 };
 
+let subDM = null;
+
 const GFTChat = (props) => {
   const listRef = useRef();
   const { chatPK, chatProfile } = props;
@@ -67,11 +70,10 @@ const GFTChat = (props) => {
   const chatPro = useChatPro();
   const [chatData, setChatData] = useState([]);
   const [inValue, setInValue] = useState("");
-  const [subChat, setSubChat] = useState([]);
 
   const nostrEvent = useNostrEvent();
 
-  const TLCache = TimelineCache();
+  const dm_cache = DMCache();
 
   const sizeMap = useRef({});
 
@@ -84,30 +86,22 @@ const GFTChat = (props) => {
   const listenDM = (targetPubkey) => {
     const filterDM = chatPro.getDM(targetPubkey);
     let subDM = BuildSub("chat_with", [filterDM]);
-    TLCache.create(subChat[1]);
-    //
-    setSubChat(subDM.concat());
     System.BroadcastSub(subDM, (tag, client, msg) => {
-      if (tag === "EVENT") {
+      if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
+        console.log('dm msg', msg);
         try {
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
             .then((dmsg) => {
               if (dmsg) {
-                let flag = TLCache.pushChat(
-                  subChat[1],
-                  msg.pubkey,
-                  msg.created_at,
-                  dmsg
-                );
+                let flag = dm_cache.pushChat(msg.pubkey, msg.id, msg.created_at, dmsg);
                 if (flag === false) {
                   return;
                 }
-                let chat_datas = TLCache.get(subChat[1]);
+                let chat_datas = dm_cache.get(targetPubkey);
                 if (chat_datas) {
                   setChatData(chat_datas.concat());
                 }
-                // console.log('dm targetPubkey', chat_datas);
               }
             });
         } catch (e) {
@@ -115,28 +109,14 @@ const GFTChat = (props) => {
         }
       }
     });
+    return subDM;
   };
 
-  const unlistenDM = (chatPK) => {
-    console.log("unlistenDM", unlistenDM);
-    TLCache.clear(subChat[1]);
-    System.BroadcastClose(subChat, null, null);
+  const unlistenDM = (subDM) => {
+    // console.log("unlistenDM", unlistenDM);
+    dm_cache.clear(subDM[1]);
+    System.BroadcastClose(subDM, null, null);
   };
-  //
-  useEffect(() => {
-    listenDM(chatPK);
-    console.log("chatPK", chatPK, chatProfile);
-    return () => {
-      unlistenDM();
-    };
-  }, [chatPK]);
-
-  useEffect(() => {
-    if (chatData.length > 0) {
-      scrollToBottom();
-    }
-    return () => { };
-  }, [chatData]);
 
   const sendDM = async () => {
     if (inValue.length === 0) {
@@ -145,16 +125,12 @@ const GFTChat = (props) => {
     const chatEv = await chatPro.sendDM(chatPK, inValue);
     System.BroadcastEvent(chatEv, (tag, client, msg) => {
       if (tag === "OK" && msg.ret && msg.ret === true) {
-        let flag = TLCache.pushChat(
-          subChat[1],
-          publicKey,
-          chatEv.CreatedAt,
-          inValue
-        );
+        let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.CreatedAt, inValue);
+        // console.log('chat with ', flag, chatEv, msg);
         if (flag === false) {
           return;
         }
-        let chat_datas = TLCache.get(subChat[1]);
+        let chat_datas = dm_cache.get(chatPK);
         if (chat_datas) {
           setChatData(chat_datas.concat());
           setInValue("");
@@ -166,6 +142,27 @@ const GFTChat = (props) => {
   const scrollToBottom = () => {
     listRef.current.scrollToItem(chatData.length, "smart");
   };
+
+  useEffect(() => {
+    let chat_datas = dm_cache.get(chatPK);
+    if (chat_datas) {
+      setChatData(chat_datas.concat());
+    } else {
+      setChatData([]);
+    }
+    subDM = listenDM(chatPK);
+    return () => {
+      unlistenDM(subDM);
+    };
+  }, [chatPK]);
+
+  //
+  useEffect(() => {
+    if (chatData.length > 0) {
+      scrollToBottom();
+    }
+    return () => { };
+  }, [chatData]);
 
   const renderHeader = () => {
     return (
