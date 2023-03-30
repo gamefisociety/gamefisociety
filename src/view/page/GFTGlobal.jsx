@@ -211,12 +211,6 @@ const GFTGlobal = () => {
           <Box className={'lable_bg'} key={"label-index-" + index}>
             {
               <Typography className={'lable_text'}
-                // sx={{ px: "18px", py: "2px" }}
-                // // variant="body2"
-                // // color="primary"
-                // backgroundColor={curLable === item ? "green" : "gray"}
-                // align={"center"}
-                // borderRadius={"4px"}
                 onClick={() => {
                   setCurLable(item);
                 }}
@@ -237,12 +231,10 @@ const GFTGlobal = () => {
           {'Global reads from'}
         </Typography>
         <FormControl >
-          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
           <Select
             className={'select0'}
             value={curRelay}
             onChange={({ target }) => {
-              // console.log('global relays item', target);
               if (target && target.value) {
                 setCurRelay(target.value);
               }
