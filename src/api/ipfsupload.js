@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
 //infura
-const infuraUploadInner = (key, secret, data, onsucess, onerror) => {
+const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
   let authorization =
     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
   let ipfs = create({
@@ -14,7 +14,7 @@ const infuraUploadInner = (key, secret, data, onsucess, onerror) => {
       authorization,
     },
   });
-  ipfs
+   ipfs
     .add(data)
     .then((response) => {
       console.log("infura publish success ", response);
@@ -24,6 +24,12 @@ const infuraUploadInner = (key, secret, data, onsucess, onerror) => {
       console.log("infura publish error ", String(err));
       onerror(err);
     });
+  // try {
+  //   const { cid } = await ipfs.add("Hello world!");
+  // } catch (err) {
+  //       console.log("infura publish error ", String(err));
+  //   onerror(err);
+  // }
 };
 // const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
 //   infuraAdd(key, secret, content)
@@ -48,8 +54,8 @@ const infuraUploadInner = (key, secret, data, onsucess, onerror) => {
 
 //fleek
 const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
-  const curTime = (Date.now()).toString();
-  if (typeof data === "string") {
+  const curTime = Date.now().toString();
+  if (typeof data === "string" || data instanceof String) {
     let subData = data.substring(0, 20);
     let name = subData + "_" + curTime;
     fleekStorage
@@ -92,7 +98,7 @@ const fleekUploadInner = (key, secret, data, onsucess, onerror) => {
 
 //pinata
 const pinataUploadInner = (key, secret, data, onsucess, onerror) => {
-  if (typeof data === "string") {
+  if (typeof data === "string" || data instanceof String) {
     pinataPinJSON(key, secret, data)
       .then((response) => {
         console.log(response);
