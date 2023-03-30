@@ -1,20 +1,15 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import GTextEditor from "components/GTextEditor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import Avatar from "@mui/material/Avatar";
-import Link from "@mui/material/Link";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
@@ -25,28 +20,19 @@ function GArticleList() {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
-  const [publishState, setPublishState] = useState(0);
-  const [step, setStep] = useState(0);
-  const [stepMsgs, setStepMsgs] = useState(["PUBLISH ON IPFS", "PUBLISH ON CONTRACT"]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [cidInfo, setCidInfo] = useState({ name: "", cid: "" });
-  const [postDatas, setPostDatas] = useState([]);
+  const [articleDatas, setArticleDatas] = useState([]);
   const dispatch = useDispatch();
-  const textEditor = useRef();
   useEffect(() => {
     if (account) {
-      setPublishState(0);
-      setStep(0);
-      setPostDatas([]);
+      setArticleDatas([]);
       getArticleCount();
     } else {
       dispatch(setIsOpen(true));
     }
 
     return () => {
-      setPublishState(0);
-      setStep(0);
-      setPostDatas([]);
+      setArticleDatas([]);
     };
   }, [account]);
   const getArticleCount = () => {
@@ -67,13 +53,13 @@ function GArticleList() {
   };
   const fetchArticles = (index, count) => {
     if (account) {
-      let postCache = postDatas.concat();
+      let articleCache = articleDatas.concat();
       GSTArticlesBase.getArticles(library, index, count)
         .then((res) => {
           if (res && res.length > 0) {
-            postCache = postCache.concat(res);
-            postCache.reverse();
-            setPostDatas(postCache);
+            articleCache = articleCache.concat(res);
+            articleCache.reverse();
+            setArticleDatas(articleCache);
           }
         })
         .catch((err) => {
@@ -84,54 +70,11 @@ function GArticleList() {
     }
   };
 
-  const publishToContract = () => {
-    if (cidInfo.name.length === 0 || cidInfo.cid.length === 0) {
-      return;
-    }
-    if (publishState === 3) {
-      return;
-    }
-    setPublishState(3);
-    if (account) {
-      GSTArticlesBase.creatArticle(library, account, cidInfo.name, cidInfo.cid)
-        .then((res) => {
-          console.log("creatArticle", res);
-          if (res) {
-            setPublishState(4);
-            setStep(2);
-            stepMsgs[1] = "PUBLISH ON CONTRACT SUCCEED"; 
-          }
-        })
-        .catch((err) => {
-          console.log(err, "err");
-          stepMsgs[1] = "PUBLISH ON CONTRACT FAILED"; 
-        });
-    } else {
-    }
-  };
-
-  const publishMsg = () => {
-    if (publishState === 0) {
-      return "publish on ipfs";
-    } else if (publishState === 1) {
-      return "publishing...";
-    } else if (publishState === 2) {
-      return "publish on contract";
-    } else if (publishState === 3) {
-      return "publishing...";
-    }else if (publishState === 4) {
-      return "published";
-    }
-  };
-
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
 
   const handleDialogClose = () => {
-    if (publishState === 1) {
-      return;
-    }
     setDialogOpen(false);
   };
 
@@ -184,7 +127,7 @@ function GArticleList() {
           backgroundColor: "transparent",
         }}
       >
-        {postDatas.map((item, index) => {
+        {articleDatas.map((item, index) => {
           return (
             <Box
               sx={{
@@ -295,9 +238,9 @@ function GArticleList() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            // justifyContent: "center",
+            justifyContent: "flex-start",
             backgroundColor: "#0F0F0F",
-            // backgroundColor: "red"
+            // backgroundColor: "red",
           }}
         >
           <Button
@@ -317,194 +260,7 @@ function GArticleList() {
             <img src={closeImg} width="60px" alt="close" />
           </Button>
           <GTextEditor
-            ref={textEditor}
-            publishHandle={(param, msg, header) => {
-              if (param === "BEGIN") {
-                setPublishState(1);
-              } else if (param === "SUCCESS") {
-                setPublishState(2);
-                setStep(1);
-                stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + msg; 
-                cidInfo.name = header;
-                cidInfo.cid = msg;
-                setCidInfo({...cidInfo});
-              } else if (param === "FAILED") {
-                setPublishState(0);
-                setStep(0);
-                stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + msg; 
-              }
-            }}
           />
-          <Box sx={{ width: "100%", marginTop: "20px" }}>
-            <Stepper activeStep={step} alternativeLabel>
-              {stepMsgs.map((label) => (
-                <Step key={label}>
-                  <StepLabel sx={{
-                    whiteSpace: "pre-line"
-                  }}>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </Box>
-          <Button
-            variant="contained"
-            sx={{
-              marginTop: "20px",
-              width: "180px",
-              height: "35px",
-              borderRadius: "20px",
-              backgroundColor: "#006CF9",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-            }}
-            onClick={() => {
-              if(publishState === 0){
-                textEditor.current.publishOnIPFS();
-              }else if(publishState === 2){
-                publishToContract();
-              }
-            }}
-          >
-            {publishMsg()}
-          </Button>
-          {/* <Box
-            sx={{
-              width: "400px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              backgroundColor: "#0F0F0F",
-              paddingTop: "35px",
-              paddingBottom: "35px",
-              paddingLeft: "24px",
-              paddingRight: "24px",
-              position: "relative",
-            }}
-          >
-            <Button
-              className="button"
-              sx={{
-                position: "absolute",
-                top: "5px",
-                right: "5px",
-                width: "38px",
-                height: "38px",
-              }}
-              onClick={() => {
-                handleDialogClose();
-              }}
-            >
-              <img src={closeImg} width="38px" alt="close" />
-            </Button>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                  color: "#919191",
-                }}
-              >
-                {"ARTICLE NAME"}
-              </Typography>
-              <TextField
-                sx={{
-                  marginTop: "12px",
-                  width: "80%",
-                  borderRadius: "5px",
-                  borderColor: "#323232",
-                  backgroundColor: "#202122",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                  color: "#FFFFFF",
-                }}
-                value={cidInfo.name}
-                variant="outlined"
-                onChange={(event) => {
-                  cidInfo.name = event.target.value;
-                  setCidInfo({ ...cidInfo });
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                marginTop: "35px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                  color: "#919191",
-                }}
-              >
-                {"ARTICLE CID"}
-              </Typography>
-              <TextField
-                sx={{
-                  marginTop: "12px",
-                  width: "80%",
-                  borderRadius: "5px",
-                  borderColor: "#323232",
-                  backgroundColor: "#202122",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                  color: "#FFFFFF",
-                }}
-                value={cidInfo.cid}
-                variant="outlined"
-                onChange={(event) => {
-                  cidInfo.cid = event.target.value;
-                  setCidInfo({ ...cidInfo });
-                }}
-              />
-            </Box>
-            <Button
-              disabled={publishState === 1 || publishState === 2}
-              variant="contained"
-              sx={{
-                marginTop: "50px",
-                width: "80%",
-                height: "48px",
-                backgroundColor: "#006CF9",
-                borderRadius: "5px",
-                fontSize: "16px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-              onClick={publish}
-            >
-              {publishMsg()}
-            </Button>
-            <Link
-              sx={{
-                marginTop: "5px",
-              }}
-              target="_blank"
-              href="https://ipfstexteditor.eth.limo"
-            >
-              Input On IPFS TextEditor
-            </Link>
-          </Box> */}
         </Box>
       </Drawer>
     </Box>

@@ -1,64 +1,85 @@
-import { React, useState, forwardRef, useImperativeHandle } from "react";
+import { React, useState, useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import { useWeb3React } from "@web3-react/core";
+import GSTArticlesBase from "web3/GSTArticles";
 import ipfsupload from "api/ipfsupload";
 import { def_ipfs_public_gateway } from "../module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GTextEditor.scss";
-const GTextEditor = forwardRef((props, ref) => {
+
+function GTextEditor() {
+  const { activate, account, chainId, active, library, deactivate } =
+    useWeb3React();
+  var header = "Hello GameFi Society";
   const [content, setContent] = useState("**Hello GameFi Society**");
   const [platools, setPlatools] = useState(["infura", "fleek", "pinata"]);
   const [curplat, setCurplat] = useState("infura");
   const [key, setKey] = useState("");
   const [secret, setSecret] = useState("");
-  const [publishing, setPublishing] = useState(false);
+  const [publishState, setPublishState] = useState(0);
+  const [step, setStep] = useState(0);
+  const [stepMsgs, setStepMsgs] = useState([
+    "PUBLISH ON IPFS",
+    "PUBLISH ON CONTRACT",
+  ]);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
-  var header = "Hello GameFi Society";
-  useImperativeHandle(ref, () => ({
-    publishOnIPFS() {
-      console.log("publish on ipfs", content);
-      if (key.length === 0 || secret.length === 0) {
-        alert("Please enter PROJECT KEY and PROJECT SECRET");
-        return;
-      }
-      if (publishing) {
-        return;
-      }
-      //
-      let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
-      if (new_content.length === 0) {
-        return;
-      }
-      //extract header
-      const regXHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g;
-      const headers = Array.from(new_content.matchAll(regXHeader)).map(
-        ({ groups: { flag, content } }) => ({
-          header: `h${flag.length}`,
-          content,
-        })
-      );
-      if(headers.length > 0){
-        header = headers[0].content;
-      }
-      //
-      setPublishing(true);
-      props.publishHandle("BEGIN");
-      if (curplat === "infura") {
-        infuraUploadString(new_content);
-      } else if (curplat === "fleek") {
-        fleekUploadString(new_content);
-      } else if (curplat === "pinata") {
-        pinataUploadString(new_content);
-      }
-    },
-  }));
-  ///
+
+  const [articleInfo, setArticleInfo] = useState({ name: "", cid: "" });
+
+  useEffect(() => {
+    setPublishState(0);
+    setStep(0);
+    return () => {
+      setPublishState(0);
+      setStep(0);
+    };
+  }, []);
+
+  //
+  const publishOnIPFS = () => {
+    console.log("publish on ipfs", content);
+    if (key.length === 0 || secret.length === 0) {
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
+      return;
+    }
+    if (publishState === 1) {
+      return;
+    }
+    //
+    let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
+    if (new_content.length === 0) {
+      return;
+    }
+    //extract header
+    const regXHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g;
+    const headers = Array.from(new_content.matchAll(regXHeader)).map(
+      ({ groups: { flag, content } }) => ({
+        header: `h${flag.length}`,
+        content,
+      })
+    );
+    if (headers.length > 0) {
+      header = headers[0].content;
+    }
+    //
+    setPublishState(1);
+    if (curplat === "infura") {
+      infuraUploadString(new_content);
+    } else if (curplat === "fleek") {
+      fleekUploadString(new_content);
+    } else if (curplat === "pinata") {
+      pinataUploadString(new_content);
+    }
+  };
   const infuraUploadString = (data) => {
     ipfsupload.infuraUpload(
       key,
@@ -66,12 +87,17 @@ const GTextEditor = forwardRef((props, ref) => {
       data,
       (response) => {
         const cid = response.cid.toString();
-        setPublishing(false);
-        props.publishHandle("SUCCESS", cid, header);
+        setPublishState(2);
+        setStep(1);
+        stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
+        articleInfo.name = header;
+        articleInfo.cid = cid;
+        setArticleInfo({ ...articleInfo });
       },
       (err) => {
-        setPublishing(false);
-        props.publishHandle("FAILED", String(err));
+        setPublishState(0);
+        setStep(0);
+        stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
       }
     );
   };
@@ -84,12 +110,17 @@ const GTextEditor = forwardRef((props, ref) => {
       header,
       (response) => {
         const cid = response.hashV0;
-        setPublishing(false);
-        props.publishHandle("SUCCESS", cid, header);
+        setPublishState(2);
+        setStep(1);
+        stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
+        articleInfo.name = header;
+        articleInfo.cid = cid;
+        setArticleInfo({ ...articleInfo });
       },
       (err) => {
-        setPublishing(false);
-        props.publishHandle("FAILED", String(err));
+        setPublishState(0);
+        setStep(0);
+        stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
       }
     );
   };
@@ -102,12 +133,17 @@ const GTextEditor = forwardRef((props, ref) => {
       header,
       (response) => {
         const cid = response.IpfsHash;
-        setPublishing(false);
-        props.publishHandle("SUCCESS", cid, header);
+        setPublishState(2);
+        setStep(1);
+        stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
+        articleInfo.name = header;
+        articleInfo.cid = cid;
+        setArticleInfo({ ...articleInfo });
       },
       (err) => {
-        setPublishing(false);
-        props.publishHandle("FAILED", String(err));
+        setPublishState(0);
+        setStep(0);
+        stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
       }
     );
   };
@@ -197,6 +233,46 @@ const GTextEditor = forwardRef((props, ref) => {
       return "https://app.fleek.co/";
     } else if (curplat === "pinata") {
       return "https://app.pinata.cloud/developers/api-keys";
+    }
+  };
+
+  //
+  const publishiOnBlockchain = () => {
+    if (articleInfo.name.length === 0 || articleInfo.cid.length === 0) {
+      return;
+    }
+    if (publishState === 3) {
+      return;
+    }
+    setPublishState(3);
+    if (account) {
+      GSTArticlesBase.creatArticle(library, account, articleInfo.name, articleInfo.cid)
+        .then((res) => {
+          console.log("creatArticle", res);
+          if (res) {
+            setPublishState(4);
+            setStep(2);
+            stepMsgs[1] = "PUBLISH ON BLOCKCHAIN SUCCEED";
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+          stepMsgs[1] = "PUBLISH ON BLOCKCHAIN FAILED";
+        });
+    } else {
+    }
+  };
+  const publishMsg = () => {
+    if (publishState === 0) {
+      return "publish on ipfs";
+    } else if (publishState === 1) {
+      return "publishing on ipfs...";
+    } else if (publishState === 2) {
+      return "publish on blockchain";
+    } else if (publishState === 3) {
+      return "publishing on blockchain...";
+    } else if (publishState === 4) {
+      return "published";
     }
   };
 
@@ -360,8 +436,46 @@ const GTextEditor = forwardRef((props, ref) => {
           </Box>
         </Box>
       </Box>
+      <Box sx={{ width: "100%", marginTop: "20px" }}>
+        <Stepper activeStep={step} alternativeLabel>
+          {stepMsgs.map((label) => (
+            <Step key={label}>
+              <StepLabel
+                sx={{
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {label}
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+      <Button
+        variant="contained"
+        sx={{
+          position: "relative",
+          marginTop: "20px",
+          width: "180px",
+          height: "35px",
+          borderRadius: "20px",
+          fontSize: "14px",
+          fontFamily: "Saira",
+          fontWeight: "500",
+          backgroundColor: "#006CF9",
+        }}
+        onClick={() => {
+          if (publishState === 0) {
+            publishOnIPFS();
+          } else if (publishState === 2) {
+            publishiOnBlockchain();
+          }
+        }}
+      >
+        {publishMsg()}
+      </Button>
     </Box>
   );
-});
+}
 
 export default GTextEditor;
