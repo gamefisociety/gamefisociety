@@ -112,7 +112,19 @@ const GLoginDialog = () => {
             }
             console.log('tmpKey.startsWith', flag);
         } else {
-            dispatch(setOpenLogin(false));
+            let flag = keys.pri.startsWith('nsec');
+            if (flag === false) {
+                let prikey = keys.pri;
+                let pubkey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(prikey));
+                dispatch(setKeyPairs({
+                    prikey: prikey,
+                    pubkey: pubkey,
+                }));
+                dispatch(setOpenLogin(false));
+            } else {
+                //warning
+                setErrorKey(true)
+            }
         }
     }
 

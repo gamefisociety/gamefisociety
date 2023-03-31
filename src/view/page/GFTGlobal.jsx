@@ -3,16 +3,20 @@ import "./GFTGlobal.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import GCardNote from "components/GCardNote";
 import List from "@mui/material/List";
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import SearchIcon from "@mui/icons-material/Search";
+import {
+  Button,
+  Divider,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material/index";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -22,16 +26,8 @@ import { setPost } from 'module/store/features/dialogSlice';
 
 import TimelineCache from 'db/TimelineCache';
 
-import {
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material/index";
-
-const labelS = [
-  "All",
+const labels = [
+  "ALL",
   "#ETH",
   "#BTC",
   "#DOT",
@@ -44,7 +40,7 @@ const GFTGlobal = () => {
   const dispatch = useDispatch();
   const { relays } = useSelector((s) => s.profile);
   //
-  const [curLable, setCurLable] = useState("All");
+  const [curLable, setCurLable] = useState("ALL");
   const [curRelay, setCurRelay] = useState('');
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
@@ -179,7 +175,7 @@ const GFTGlobal = () => {
   const renderLables = () => {
     return (
       <Box className={'global_lables'}>
-        {labelS.map((item, index) => (
+        {labels.map((item, index) => (
           <Box className={'lable_bg'} key={"label-index-" + index}>
             {
               <Typography className={'lable_text'}
