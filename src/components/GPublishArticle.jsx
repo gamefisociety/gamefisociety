@@ -15,12 +15,12 @@ import GIPFSLogin from "./GIPFSLogin";
 import ipfsupload from "api/ipfsupload";
 import { def_ipfs_public_gateway } from "../module/utils/xdef";
 import xhelp from "module/utils/xhelp";
-import "./GTextEditor.scss";
+import "./GPublishArticle.scss";
 
-function GTextEditor() {
+function GPublishArticle() {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
-    const { serviceProviders, currentService, apiKey, apiSecret } = useSelector(
+    const { currentService, apiKey, apiSecret } = useSelector(
       (s) => s.ipfs
     );
   var header = "Hello GameFi Society";
@@ -394,4 +394,4 @@ function GTextEditor() {
   );
 }
 
-export default GTextEditor;
+export default GPublishArticle;
