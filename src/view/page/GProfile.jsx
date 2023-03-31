@@ -13,9 +13,7 @@ import { System } from "nostr/NostrSystem";
 import { setProfile } from "module/store/features/profileSlice";
 
 const GProfile = () => {
-  const profile = useSelector((s) => s.profile);
-  const { publicKey, privateKey } = useSelector((s) => s.login);
-
+  const { profile } = useSelector((s) => s.profile);
   const [localProfile, setLocalProfile] = useState({});
 
   const MetaPro = useMetadataPro();
@@ -24,7 +22,7 @@ const GProfile = () => {
   useEffect(() => {
     setLocalProfile({ ...profile });
     return () => { };
-  }, []);
+  }, [profile]);
 
   const saveProfile = async () => {
     let evMetadata = await MetaPro.modify(localProfile);
@@ -67,7 +65,7 @@ const GProfile = () => {
           <Typography
             sx={{
               marginTop: "10px",
-              fontSize: "20px",
+              fontSize: "12px",
               fontFamily: "Saira",
               fontWeight: "500",
               color: "#FFFFFF",
