@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
-import GTextEditor from "components/GTextEditor";
+import GPublishArticle from "components/GPublishArticle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
@@ -259,7 +259,7 @@ function GArticles() {
           >
             <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <GTextEditor
+          <GPublishArticle
           />
         </Box>
       </Drawer>

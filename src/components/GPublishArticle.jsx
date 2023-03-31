@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,20 +11,20 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { useWeb3React } from "@web3-react/core";
 import GSTArticlesBase from "web3/GSTArticles";
+import GIPFSLogin from "./GIPFSLogin";
 import ipfsupload from "api/ipfsupload";
 import { def_ipfs_public_gateway } from "../module/utils/xdef";
 import xhelp from "module/utils/xhelp";
-import "./GTextEditor.scss";
+import "./GPublishArticle.scss";
 
-function GTextEditor() {
+function GPublishArticle() {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
+    const { currentService, apiKey, apiSecret } = useSelector(
+      (s) => s.ipfs
+    );
   var header = "Hello GameFi Society";
   const [content, setContent] = useState("**Hello GameFi Society**");
-  const [platools, setPlatools] = useState(["infura", "fleek", "pinata"]);
-  const [curplat, setCurplat] = useState("infura");
-  const [key, setKey] = useState("");
-  const [secret, setSecret] = useState("");
   const [publishState, setPublishState] = useState(0);
   const [step, setStep] = useState(0);
   const [stepMsgs, setStepMsgs] = useState([
@@ -47,7 +48,7 @@ function GTextEditor() {
   //
   const publishOnIPFS = () => {
     console.log("publish on ipfs", content);
-    if (key.length === 0 || secret.length === 0) {
+    if (apiKey.length === 0 || apiSecret.length === 0) {
       alert("Please enter PROJECT KEY and PROJECT SECRET");
       return;
     }
@@ -72,18 +73,18 @@ function GTextEditor() {
     }
     //
     setPublishState(1);
-    if (curplat === "infura") {
+    if (currentService === "infura") {
       infuraUploadString(new_content);
-    } else if (curplat === "fleek") {
+    } else if (currentService === "fleek") {
       fleekUploadString(new_content);
-    } else if (curplat === "pinata") {
+    } else if (currentService === "pinata") {
       pinataUploadString(new_content);
     }
   };
   const infuraUploadString = (data) => {
     ipfsupload.infuraUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       (response) => {
         const cid = response.cid.toString();
@@ -104,8 +105,8 @@ function GTextEditor() {
 
   const fleekUploadString = (data) => {
     ipfsupload.fleekUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       header,
       (response) => {
@@ -127,8 +128,8 @@ function GTextEditor() {
 
   const pinataUploadString = (data) => {
     ipfsupload.pinataUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       header,
       (response) => {
@@ -149,7 +150,7 @@ function GTextEditor() {
   };
   ///
   const uploadImageOnIPFS = (event) => {
-    if (key.length === 0 || secret.length === 0) {
+    if (apiKey.length === 0 || apiSecret.length === 0) {
       alert("Please enter PROJECT KEY and PROJECT SECRET");
       return;
     }
@@ -160,11 +161,11 @@ function GTextEditor() {
       let data = event.target.files[0];
       setUploadingImage(true);
       console.log("uploadImageOnIPFS", data);
-      if (curplat === "infura") {
+      if (currentService === "infura") {
         infuraUploadImage(data);
-      } else if (curplat === "fleek") {
+      } else if (currentService === "fleek") {
         fleekUploadImage(data);
-      } else if (curplat === "pinata") {
+      } else if (currentService === "pinata") {
         pinataUploadImage(data);
       }
     }
@@ -173,8 +174,8 @@ function GTextEditor() {
   const pinataUploadImage = (data) => {
     let cache = uploadedImages.concat();
     ipfsupload.pinataUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       header,
       (response) => {
@@ -192,8 +193,8 @@ function GTextEditor() {
   const fleekUploadImage = (data) => {
     let cache = uploadedImages.concat();
     ipfsupload.fleekUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       (response) => {
         const cid = response.hashV0;
@@ -210,8 +211,8 @@ function GTextEditor() {
   const infuraUploadImage = (data) => {
     let cache = uploadedImages.concat();
     ipfsupload.infuraUpload(
-      key,
-      secret,
+      apiKey,
+      apiSecret,
       data,
       (response) => {
         const cid = response.cid.toString();
@@ -224,18 +225,6 @@ function GTextEditor() {
       }
     );
   };
-
-  ///
-  const platHref = () => {
-    if (curplat === "infura") {
-      return "https://app.infura.io/dashboard";
-    } else if (curplat === "fleek") {
-      return "https://app.fleek.co/";
-    } else if (curplat === "pinata") {
-      return "https://app.pinata.cloud/developers/api-keys";
-    }
-  };
-
   //
   const publishiOnBlockchain = () => {
     if (articleInfo.name.length === 0 || articleInfo.cid.length === 0) {
@@ -315,81 +304,8 @@ function GTextEditor() {
 
   return (
     <Box className="bg">
-      <Typography
-        sx={{
-          fontSize: "15px",
-          fontFamily: "Saira",
-          fontWeight: "500",
-          color: "#FFFFFF",
-          textAlign: "left",
-          lineHeight: "18px",
-        }}
-      >
-        ⚠️ Notice ⚠️ - &nbsp;Please rest assured that we do not save or upload
-        your project key or project secret, we only use them to obtain platform
-        upload permissions.
-      </Typography>
       <Box className="warpper">
-        <div className="checkboxs">
-          {platools.map((platool) => (
-            <label className="label" key={platool}>
-              <input
-                className="checkbox"
-                checked={curplat === platool}
-                onChange={() => {
-                  setCurplat(platool);
-                  setKey("");
-                  setSecret("");
-                }}
-                type="checkbox"
-              />
-              {platool}
-            </label>
-          ))}
-        </div>
-        <div className="keyblock">
-          <div className="project">
-            <p className="name">{"[" + curplat.toUpperCase() + "]"}</p>
-            <Link
-              sx={{
-                marginTop: "5px",
-              }}
-              target="_blank"
-              href={platHref()}
-            >
-              {"No project key, go " + curplat + " get it"}
-            </Link>
-          </div>
-
-          <div className="keybox">
-            <div className="pid">
-              <p className="name">PROJECT KEY</p>
-              <input
-                type="text"
-                className="name"
-                value={key}
-                onChange={(e) => {
-                  console.log(e);
-                  setKey(e.target.value);
-                }}
-                size="30"
-              ></input>
-            </div>
-            <div className="pid">
-              <p className="name">PROJECT SECRET</p>
-              <input
-                type="password"
-                className="name"
-                value={secret}
-                onChange={(e) => {
-                  console.log(e);
-                  setSecret(e.target.value);
-                }}
-                size="30"
-              ></input>
-            </div>
-          </div>
-        </div>
+        <GIPFSLogin />
         <Box
           sx={{
             width: "100%",
@@ -478,4 +394,4 @@ function GTextEditor() {
   );
 }
 
-export default GTextEditor;
+export default GPublishArticle;

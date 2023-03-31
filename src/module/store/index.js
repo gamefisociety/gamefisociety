@@ -6,6 +6,7 @@ import dialogReducer from './features/dialogSlice';
 import loginReducer from './features/loginSlice';
 import profileReducer from './features/profileSlice';
 import societyReducer from './features/societySlice';
+import ipfsReducer from './features/ipfsSlice';
 import { enableMapSet } from 'immer';
 
 enableMapSet();
@@ -17,5 +18,6 @@ export const store = configureStore({
     login: loginReducer,
     profile: profileReducer,
     society: societyReducer,
+    ipfs: ipfsReducer
   },
 });
