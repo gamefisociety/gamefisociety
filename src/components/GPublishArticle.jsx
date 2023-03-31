@@ -20,9 +20,7 @@ import "./GPublishArticle.scss";
 function GPublishArticle() {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
-    const { currentService, apiKey, apiSecret } = useSelector(
-      (s) => s.ipfs
-    );
+  const { currentService, apiKey, apiSecret } = useSelector((s) => s.ipfs);
   var header = "Hello GameFi Society";
   const [content, setContent] = useState("**Hello GameFi Society**");
   const [publishState, setPublishState] = useState(0);
@@ -235,7 +233,12 @@ function GPublishArticle() {
     }
     setPublishState(3);
     if (account) {
-      GSTArticlesBase.creatArticle(library, account, articleInfo.name, articleInfo.cid)
+      GSTArticlesBase.creatArticle(
+        library,
+        account,
+        articleInfo.name,
+        articleInfo.cid
+      )
         .then((res) => {
           console.log("creatArticle", res);
           if (res) {
@@ -303,8 +306,27 @@ function GPublishArticle() {
   };
 
   return (
-    <Box className="bg">
-      <Box className="warpper">
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          position: "relative",
+          maxWidth: "1600px",
+          width: "60%",
+          height: "100%",
+          marginTop: "20px",
+        }}
+      >
         <GIPFSLogin />
         <Box
           sx={{
@@ -327,7 +349,6 @@ function GPublishArticle() {
               onChange={setContent}
             />
           </Box>
-
           <Box
             sx={{
               width: "22%",

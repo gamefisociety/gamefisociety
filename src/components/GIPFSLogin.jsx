@@ -3,7 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import { setCurrentService, setApiKey, setApiSecret } from "module/store/features/ipfsSlice";
+import {
+  setCurrentService,
+  setApiKey,
+  setApiSecret,
+} from "module/store/features/ipfsSlice";
 import "./GIPFSLogin.scss";
 //
 const GIPFSLogin = (props) => {
@@ -49,7 +53,16 @@ const GIPFSLogin = (props) => {
         your project key or project secret, we only use them to obtain platform
         upload permissions.
       </Typography>
-      <div className="checkboxs">
+      <Box
+        sx={{
+          width: "60%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
+        }}
+      >
         {serviceProviders.map((service) => (
           <label className="label" key={service}>
             <input
@@ -65,24 +78,87 @@ const GIPFSLogin = (props) => {
             {service}
           </label>
         ))}
-      </div>
-      <div className="keyblock">
-        <div className="project">
-          <p className="name">{"[" + currentService.toUpperCase() + "]"}</p>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            width: "320px",
+            height: "30px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingLeft: "12px",
+            paddingRight: "12px",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "18px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+              textAlign: "center",
+            }}
+          >
+            {"[" + currentService.toUpperCase() + "]"}
+          </Typography>
           <Link
             sx={{
-              marginTop: "5px",
+              fontSize: "16px",
+              fontFamily: "Saira",
+              fontWeight: "500",
             }}
             target="_blank"
             href={serviceHref()}
           >
             {"No project key, go " + currentService + " get it"}
           </Link>
-        </div>
+        </Box>
 
-        <div className="keybox">
-          <div className="pid">
-            <p className="name">PROJECT KEY</p>
+        <Box
+          sx={{
+            position: "relative",
+            padding: "12px",
+            backgroundColor: "#202122",
+            borderRadius: "6px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            borderWidth: "1px",
+            borderColor: "#323232",
+            marginBottom: "30px",
+          }}
+        >
+          <Box
+            sx={{
+              width: "340px",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              PROJECT KEY
+            </Typography>
             <input
               type="text"
               className="name"
@@ -93,9 +169,28 @@ const GIPFSLogin = (props) => {
               }}
               size="30"
             ></input>
-          </div>
-          <div className="pid">
-            <p className="name">PROJECT SECRET</p>
+          </Box>
+          <Box
+            sx={{
+              width: "340px",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              position: "relative",
+              marginTop: "20px"
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              PROJECT SECRET
+            </Typography>
             <input
               type="password"
               className="name"
@@ -106,9 +201,9 @@ const GIPFSLogin = (props) => {
               }}
               size="30"
             ></input>
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };
