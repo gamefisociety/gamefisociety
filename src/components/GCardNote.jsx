@@ -6,15 +6,10 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea } from "@mui/material";
 import { setPost } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GCardNote.scss";
-import icon_comment from "../asset/image/social/icon_comment.png";
-import icon_praise from "../asset/image/social/icon_praise.png";
-import icon_share from "../asset/image/social/icon_share.png";
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
 
 const GCardNote = (props) => {
@@ -31,24 +26,21 @@ const GCardNote = (props) => {
   const renderContent = (str) => {
     const strArray = str.split("\n");
     return (
-      <Box className={'content'}>
+      <Box
+        className={'content'}
+        onClick={() => {
+          navigate("/notethread", {
+            state: {
+              note: { ...note },
+              info: { ...info },
+            },
+          });
+        }}
+      >
         {strArray.map((stritem, index) => {
           try {
             if (stritem === "") {
-              return (
-                <Typography
-                  key={"card_note_txt_" + index}
-                  sx={{
-                    wordWrap: "break-word",
-                    whiteSpace: "pre-wrap",
-                    fontSize: "14px",
-                  }}
-                  color="text.primary"
-                  align="left"
-                >
-                  {note.content}
-                </Typography>
-              );
+              return null;
             } else if (
               (stritem.startsWith("http://") ||
                 stritem.startsWith("https://")) &&
@@ -62,9 +54,9 @@ const GCardNote = (props) => {
                 <CardMedia
                   component="img"
                   key={"cxt-" + index + "-" + stritem}
-                  sx={{ height: "240px", objectFit: "contain" }}
+                  className={'inner_img'}
                   src={stritem}
-                ></CardMedia>
+                />
               );
             } else if (
               (stritem.startsWith("http://") ||
@@ -78,7 +70,7 @@ const GCardNote = (props) => {
                 <Typography
                   sx={{
                     width: "100%",
-                    // margin: "12px",
+                    // backgroundColor: 'red',
                     wordWrap: "break-word",
                     whiteSpace: "pre-wrap",
                     fontSize: "14px",

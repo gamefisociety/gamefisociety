@@ -18,7 +18,6 @@
                 transform: scale(1.08);
             }
         }
-        
     }
     
     .content {
@@ -30,6 +29,13 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
+
+        .inner_img {
+            height: 240px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            object-fit: contain;
+        }
     }
     
     .bottom {
