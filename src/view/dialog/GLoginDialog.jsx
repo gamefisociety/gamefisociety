@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 //
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -92,6 +92,54 @@ const GLoginDialog = () => {
             // console.log('create profile msg', msg);
         });
     }
+
+    const IOSSwitch = styled((props) => (
+        <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+    ))(({ theme }) => ({
+        width: 42,
+        height: 22,
+        padding: 0,
+        '& .MuiSwitch-switchBase': {
+            padding: 0,
+            margin: 2,
+            transitionDuration: '300ms',
+            '&.Mui-checked': {
+                transform: 'translateX(20px)',
+                color: '#fff',
+                '& + .MuiSwitch-track': {
+                    backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466', //'#2ECA45',#65C466
+                    opacity: 1,
+                    border: 0,
+                },
+                '&.Mui-disabled + .MuiSwitch-track': {
+                    opacity: 0.5,
+                },
+            },
+            '&.Mui-focusVisible .MuiSwitch-thumb': {
+                color: '#33cf4d',
+                border: '6px solid #fff',
+            },
+            '&.Mui-disabled .MuiSwitch-thumb': {
+                color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+            },
+        },
+        '& .MuiSwitch-thumb': {
+            boxSizing: 'border-box',
+            width: 18,
+            height: 18,
+        },
+        '& .MuiSwitch-track': {
+            borderRadius: 22 / 2,
+            backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+            opacity: 1,
+            transition: theme.transitions.create(['background-color'], {
+                duration: 500,
+            }),
+        },
+    }));
 
     const handleLogin = () => {
         if (isNip19) {
@@ -306,12 +354,15 @@ const GLoginDialog = () => {
                         setKeys({ ...keys });
                     }}
                 />
-                <FormGroup sx={{ width: '100%', mt: '12px' }}>
-                    <FormControlLabel sx={{ mt: '12px' }} control={<Switch checked={isNip19}
-                        onChange={(ev) => {
-                            console.log('target', ev.target.checked);
-                            setNip19(ev.target.checked);
-                        }} />} label="nip19" />
+                <FormGroup sx={{ width: '100%', mt: '36px' }}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        <IOSSwitch checked={isNip19}
+                            onChange={(ev) => {
+                                setNip19(ev.target.checked);
+                            }} />
+                        <Typography>{'NIP19'}</Typography>
+                    </Stack>
+                    {/* <FormControlLabel control={ } /> */}
                 </FormGroup>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 <Button sx={{
