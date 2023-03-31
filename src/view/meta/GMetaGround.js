@@ -11,13 +11,13 @@ import { SkyMaterial } from '@babylonjs/materials/sky';
 
 export const createGround = (scene) => {
 
-    scene.fogMode = Scene.FOGMODE_LINEAR;
-    //BABYLON.Scene.FOGMODE_NONE;
-    //BABYLON.Scene.FOGMODE_EXP;
-    //BABYLON.Scene.FOGMODE_EXP2;
-    //BABYLON.Scene.FOGMODE_LINEAR;
-    scene.fogColor = new Color3(0.9, 0.9, 0.85);
-    scene.fogDensity = 0.002;
+    // scene.fogMode = Scene.FOGMODE_LINEAR;
+    // //BABYLON.Scene.FOGMODE_NONE;
+    // //BABYLON.Scene.FOGMODE_EXP;
+    // //BABYLON.Scene.FOGMODE_EXP2;
+    // //BABYLON.Scene.FOGMODE_LINEAR;
+    // scene.fogColor = new Color3(1.0, 1.0, 1.0);
+    // scene.fogDensity = 0.001;
 
 
     const skyMaterial = new SkyMaterial("skyMaterial", scene);
@@ -30,7 +30,7 @@ export const createGround = (scene) => {
     skyMaterial.useSunPosition = true; // Do not set sun position from azimuth and inclination
     skyMaterial.sunPosition = new Vector3(0, 100, 0);
     //
-    const skybox = MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, scene);
+    const skybox = MeshBuilder.CreateBox("skyBox", { size: 5000.0 }, scene);
     skybox.material = skyMaterial;
 
     const ground = MeshBuilder.CreateGround('ground', { width: 2000, height: 2000 }, scene);
