@@ -13,10 +13,10 @@ import Avatar from "@mui/material/Avatar";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import { useNavigate } from "react-router-dom";
-import "./GArticleList.scss";
+import "./GArticles.scss";
 import GSTArticlesBase from "web3/GSTArticles";
 import closeImg from "./../../asset/image/social/close.png";
-function GArticleList() {
+function GArticles() {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
@@ -192,7 +192,7 @@ function GArticleList() {
                   justifyContent: "flex-start",
                 }}
                 onClick={() => {
-                  navigate("/article", {
+                  navigate("/detailarticle", {
                     state: {
                       name: item.name,
                       cid: item.cid,
@@ -267,4 +267,4 @@ function GArticleList() {
   );
 }
 
-export default GArticleList;
+export default GArticles;

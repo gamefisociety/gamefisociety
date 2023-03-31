@@ -20,11 +20,11 @@ const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
 const GPostReplay = Loadable(lazy(() => import("view/page/GPostReplay")));
-const GArticleList = Loadable(lazy(() => import("view/page/GArticleList")));
+const GArticles = Loadable(lazy(() => import("view/page/GArticles")));
 const GGroupChat = Loadable(lazy(() => import("view/page/GGroupChat")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
 const GFTWallet = Loadable(lazy(() => import("view/page/GFTWallet")));
-const GArticle = Loadable(lazy(() => import("view/page/GArticle")));
+const GDetailArticle = Loadable(lazy(() => import("view/page/GDetailArticle")));
 
 const MainRoutes = {
   path: "/",
@@ -92,11 +92,11 @@ const MainRoutes = {
     },
     {
       path: "/articles",
-      element: <GArticleList />,
+      element: <GArticles />,
     },
     {
-      path: "/article",
-      element: <GArticle />,
+      path: "/detailarticle",
+      element: <GDetailArticle />,
     },
     {
       path: "/groupchat",

@@ -2,13 +2,12 @@ import { React, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "./GArticle.scss";
+import "./GDetailArticle.scss";
 import MDEditor from "@uiw/react-md-editor";
 import xhelp from "module/utils/xhelp";
-import { def_ipfs_public_gateway } from "module/utils/xdef";
 import icon_back from "../../asset/image/social/icon_back.png";
 import { catIPFSContent } from "../../api/requestData";
-function GArticle() {
+function GDetailArticle() {
   const location = useLocation();
   const navigate = useNavigate();
   console.log("GProfile enter", location);
@@ -139,4 +138,4 @@ function GArticle() {
   );
 }
 
-export default GArticle;
+export default GDetailArticle;
