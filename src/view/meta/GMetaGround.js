@@ -2,12 +2,23 @@
 import {
     MeshBuilder,
     Vector3,
+    Color3,
+    Scene
 } from '@babylonjs/core';
 
 import { GridMaterial } from '@babylonjs/materials/grid';
 import { SkyMaterial } from '@babylonjs/materials/sky';
 
 export const createGround = (scene) => {
+
+    scene.fogMode = Scene.FOGMODE_LINEAR;
+    //BABYLON.Scene.FOGMODE_NONE;
+    //BABYLON.Scene.FOGMODE_EXP;
+    //BABYLON.Scene.FOGMODE_EXP2;
+    //BABYLON.Scene.FOGMODE_LINEAR;
+    scene.fogColor = new Color3(0.9, 0.9, 0.85);
+    scene.fogDensity = 0.002;
+
 
     const skyMaterial = new SkyMaterial("skyMaterial", scene);
     skyMaterial.backFaceCulling = false;
@@ -22,7 +33,7 @@ export const createGround = (scene) => {
     const skybox = MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, scene);
     skybox.material = skyMaterial;
 
-    const ground = MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
+    const ground = MeshBuilder.CreateGround('ground', { width: 2000, height: 2000 }, scene);
     ground.material = new GridMaterial("groundMat");
     ground.material.backFaceCulling = false;
     ground.material.gridRatio = 10;

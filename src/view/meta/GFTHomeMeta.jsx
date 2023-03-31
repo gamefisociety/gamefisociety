@@ -3,11 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
 import GMetaBase from './GMetaBase';
 import {
-    Engine,
-    FreeCamera,
     HemisphericLight,
     MeshBuilder,
-    Scene,
     Vector3,
 } from '@babylonjs/core'
 
