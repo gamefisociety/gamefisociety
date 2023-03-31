@@ -300,10 +300,11 @@ const GSociety = (props) => {
 
   return (
     <Box
+    className="boxbg"
       sx={{
         backgroundColor: "#0F0F0F",
         width: "400px",
-        minHeight: "100%",
+
         paddingLeft: "32px",
         paddingRight: "20px",
       }}
@@ -312,6 +313,7 @@ const GSociety = (props) => {
         sx={{
           marginTop: "84px",
           display: "flex",
+           
           flexDierction: "row",
           alignItems: "center",
           justifyContent: "space-evenly",
