@@ -3,13 +3,11 @@ $fontname2: Saira;
 
 .bg {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
+    justify-content: flex-start;
+    // overflow: hidden;
     // background-color: aqua;
     .warpper {
         display: block;
