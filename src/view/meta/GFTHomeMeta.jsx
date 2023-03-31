@@ -23,8 +23,8 @@ const GFTHomeMeta = () => {
         createCamera(scene);
         var light = new HemisphericLight('light', new Vector3(0, 1, 0), scene);
         light.intensity = 0.7;
-        box = MeshBuilder.CreateBox('box', { size: 2 }, scene);
-        box.position.y = 1;
+        box = MeshBuilder.CreateBox('box', { size: 10 }, scene);
+        box.position.y = 200;
         //
         createGround(scene);
     }
