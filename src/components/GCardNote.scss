@@ -1,24 +1,101 @@
 .card_note_bg {
     background-color: transparent;
+
+    .base_info {
+        width: calc( 100% - 48px);
+        padding-left: 24px;
+        padding-right: 24px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            &:hover{
+                transform: scale(1.08);
+            }
+        }
+        
+    }
     
     .content {
-        // margin-top: 10px;
-        width: 100%;
+        width: calc( 100% - 120px);
+        padding-left: 60px;
+        padding-right: 60px;
         height: auto;
-        text-align: left;
-        // color: rgba(69, 69, 69, 0.613);
-        font-size: 15px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
     }
     
-    .avatar {
-        cursor: pointer;
-        &:hover{
-            transform: scale(1.08);
+    .bottom {
+        width: calc( 100% - 48px);
+        padding-left: 60px;
+        // padding-right: 24px;
+        padding-top: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1;
+        border-color: #191A1B;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        .icon_chat {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            background-image: url(../asset/image/logo/ic_chat.png);
+            background-size: 100% 100%;
+            // pointer-events: none;
+            &:hover {
+                background-image: url(../asset/image/logo/ic_chat.png);
+            }
+        }
+    
+        .icon_right {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            margin-left: 26px;
+            background-image: url(../asset/image/logo/icon_praise.png);
+            background-size: 100% 100%;
+            &:hover {
+                background-image: url(../asset/image/logo/icon_praise.png);
+            }
+        }
+    
+        .icon_pay {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            margin-left: 26px;
+            background-image: url(../asset/image/logo/icon_pay.png);
+            background-size: 100% 100%;
+            // pointer-events: none;
+            &:hover {
+                background-image: url(../asset/image/logo/icon_pay.png);
+            }
+        }
+    
+        .icon_trans {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            margin-left: 26px;
+            background-image: url(../asset/image/logo/icon_trans.png);
+            background-size: 100% 100%;
+            &:hover {
+                background-image: url(../asset/image/logo/icon_trans.png);
+            }
         }
     }
-    
+
+
     .name {
         cursor: pointer;
         &:hover {

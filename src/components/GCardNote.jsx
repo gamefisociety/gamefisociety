@@ -31,15 +31,7 @@ const GCardNote = (props) => {
   const renderContent = (str) => {
     const strArray = str.split("\n");
     return (
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box className={'content'}>
         {strArray.map((stritem, index) => {
           try {
             if (stritem === "") {
@@ -47,7 +39,6 @@ const GCardNote = (props) => {
                 <Typography
                   key={"card_note_txt_" + index}
                   sx={{
-                    // margin: "12px",
                     wordWrap: "break-word",
                     whiteSpace: "pre-wrap",
                     fontSize: "14px",
@@ -132,19 +123,9 @@ const GCardNote = (props) => {
 
   return (
     <Card className={'card_note_bg'} elevation={0}>
-      <Box
-        sx={{
-          py: "12px",
-          px: "24px",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box className={'base_info'}>
         <Avatar
           className="avatar"
-          sx={{ width: "36px", height: "36px" }}
           alt="Avatar"
           src={info && info.picture ? info.picture : default_avatar}
           onClick={() => {
@@ -157,7 +138,6 @@ const GCardNote = (props) => {
           className="name"
           sx={{
             ml: "8px",
-            // width: "120px",
             whiteSpace: "nowrap",
             overflow: "hidden",
             fontSize: "14px",
@@ -186,64 +166,17 @@ const GCardNote = (props) => {
           {xhelp.formateSinceTime(note.created_at * 1000)}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          width: "100%",
-          paddingLeft: "64px",
-          paddingRight: "64px",
-        }}
-        onClick={() => {
-          navigate("/notethread", {
-            state: {
-              note: { ...note },
-              info: { ...info },
-            },
-          });
-        }}
-      >
-        {/* <CardContent>{content && renderContent(content)}</CardContent> */}
-        {renderContent(note.content)}
-        <Box
-          sx={{
-            width: "100%",
-            paddingBottom: "16px",
-            borderBottom: 1,
-            borderColor: "#191A1B",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            marginTop: "23px",
-          }}
-        >
-          <Button
-            sx={{
-              minWidth: "28px",
-              width: "28px",
-              height: "28px",
-              marginRight: "28px",
-            }}
-            onClick={() => {
-              //
-              dispatch(setPost({
-                post: true,
-                target: note,
-              }));
-            }}
-          >
-            <img src={icon_comment} width="28px" alt="comment" />
-          </Button>
-          <Button
-            sx={{
-              minWidth: "28px",
-              width: "28px",
-              height: "28px",
-            }}
-            onClick={() => { }}
-          >
-            <img src={icon_praise} width="28px" alt="praise" />
-          </Button>
-        </Box>
+      {renderContent(note.content)}
+      <Box className={'bottom'}>
+        <img className={'icon_chat'} onClick={() => {
+          dispatch(setPost({
+            post: true,
+            target: note,
+          }));
+        }} />
+        <img className={'icon_right'} />
+        <img className={'icon_trans'} />
+        <img className={'icon_pay'} />
       </Box>
     </Card>
   );
