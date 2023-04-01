@@ -59,33 +59,20 @@ function GPublishArticle() {
       return;
     }
     //extract header
-    const regXHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g;
-    const headers = Array.from(new_content.matchAll(regXHeader)).map(
-      ({ groups: { flag, content } }) => ({
-        header: `h${flag.length}`,
-        content,
-      })
-    );
+    const headers = xhelp.extractMDHeaders(new_content);
     if (headers.length > 0) {
       header = headers[0].content;
     }
-    //
+    //upload
     setPublishState(1);
-    if (currentService === "infura") {
-      infuraUploadString(new_content);
-    } else if (currentService === "fleek") {
-      fleekUploadString(new_content);
-    } else if (currentService === "pinata") {
-      pinataUploadString(new_content);
-    }
-  };
-  const infuraUploadString = (data) => {
-    ipfsupload.infuraUpload(
+    ipfsupload.upload(
       apiKey,
       apiSecret,
-      data,
+      currentService,
+      new_content,
+      header,
       (response) => {
-        const cid = response.cid.toString();
+        const cid = response.CID;
         setPublishState(2);
         setStep(1);
         stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
@@ -97,55 +84,12 @@ function GPublishArticle() {
         setPublishState(0);
         setStep(0);
         stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
+        console.log("ipfs upload error", err);
       }
     );
   };
 
-  const fleekUploadString = (data) => {
-    ipfsupload.fleekUpload(
-      apiKey,
-      apiSecret,
-      data,
-      header,
-      (response) => {
-        const cid = response.hashV0;
-        setPublishState(2);
-        setStep(1);
-        stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
-        articleInfo.name = header;
-        articleInfo.cid = cid;
-        setArticleInfo({ ...articleInfo });
-      },
-      (err) => {
-        setPublishState(0);
-        setStep(0);
-        stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
-      }
-    );
-  };
-
-  const pinataUploadString = (data) => {
-    ipfsupload.pinataUpload(
-      apiKey,
-      apiSecret,
-      data,
-      header,
-      (response) => {
-        const cid = response.IpfsHash;
-        setPublishState(2);
-        setStep(1);
-        stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
-        articleInfo.name = header;
-        articleInfo.cid = cid;
-        setArticleInfo({ ...articleInfo });
-      },
-      (err) => {
-        setPublishState(0);
-        setStep(0);
-        stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
-      }
-    );
-  };
+ 
   ///
   const uploadImageOnIPFS = (event) => {
     if (apiKey.length === 0 || apiSecret.length === 0) {
@@ -157,72 +101,27 @@ function GPublishArticle() {
     }
     if (event.target.files && event.target.files[0]) {
       let data = event.target.files[0];
-      setUploadingImage(true);
       console.log("uploadImageOnIPFS", data);
-      if (currentService === "infura") {
-        infuraUploadImage(data);
-      } else if (currentService === "fleek") {
-        fleekUploadImage(data);
-      } else if (currentService === "pinata") {
-        pinataUploadImage(data);
-      }
+      //upload
+      setUploadingImage(true);
+      let cache = uploadedImages.concat();
+      ipfsupload.upload( apiKey,
+        apiSecret,
+        currentService,
+        data,
+        header,
+        (response) => {
+          const cid = response.CID;
+          cache.push({ CID: cid });
+          setUploadedImages(cache);
+          setUploadingImage(false);
+        },
+        (err) => {
+          setUploadingImage(false);
+        })
     }
   };
 
-  const pinataUploadImage = (data) => {
-    let cache = uploadedImages.concat();
-    ipfsupload.pinataUpload(
-      apiKey,
-      apiSecret,
-      data,
-      header,
-      (response) => {
-        const cid = response.IpfsHash;
-        cache.push({ CID: cid });
-        setUploadedImages(cache);
-        setUploadingImage(false);
-      },
-      (err) => {
-        setUploadingImage(false);
-      }
-    );
-  };
-
-  const fleekUploadImage = (data) => {
-    let cache = uploadedImages.concat();
-    ipfsupload.fleekUpload(
-      apiKey,
-      apiSecret,
-      data,
-      (response) => {
-        const cid = response.hashV0;
-        cache.push({ CID: cid });
-        setUploadedImages(cache);
-        setUploadingImage(false);
-      },
-      (err) => {
-        setUploadingImage(false);
-      }
-    );
-  };
-
-  const infuraUploadImage = (data) => {
-    let cache = uploadedImages.concat();
-    ipfsupload.infuraUpload(
-      apiKey,
-      apiSecret,
-      data,
-      (response) => {
-        const cid = response.cid.toString();
-        cache.push({ CID: cid });
-        setUploadedImages(cache);
-        setUploadingImage(false);
-      },
-      (err) => {
-        setUploadingImage(false);
-      }
-    );
-  };
   //
   const publishiOnBlockchain = () => {
     if (articleInfo.name.length === 0 || articleInfo.cid.length === 0) {
