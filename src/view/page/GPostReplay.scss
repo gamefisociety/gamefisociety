@@ -1,10 +1,36 @@
 .post_replay_bg {
     min-height: calc( 100vh - 64px );
     width: 760px;
-    background-color: rgba(0, 0, 0, 0.708);
+    background-color: rgba(0, 0, 0, 0.75);
     z-index: 0;
 
-    .top_button {
+    .post_menu {
+        // background-color: red;
+        position: fixed;
+        top: 64px;
+        left: calc( 50vw - 400px );
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
+
+    .post_menu_item {
+        cursor: pointer;
+        margin-top: 6px;
+    }
+
+    .post_button {
+        width: 58px;
+        height: 58px;
+        position: fixed;
+        top: calc( 64px + 6px );
+        right: calc( 50vw - 570px );
+        cursor: pointer;
+        // background-color: white;
+        border-radius: 29px;
+        background-image: url(../../asset/image/logo/icon_post.png);
+        background-size: 100% 100%;
+    }
+
 }

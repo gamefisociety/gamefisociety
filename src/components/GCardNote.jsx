@@ -91,14 +91,6 @@ const GCardNote = (props) => {
       </Box>
     );
   };
-  // const renderSke = () => {
-  //     return (
-  //         <React.Fragment>
-  //             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-  //             <Skeleton animation="wave" height={10} width="80%" />
-  //         </React.Fragment>
-  //     )
-  // }
 
   const displayname = () => {
     if (info && info.display_name) {
@@ -125,7 +117,7 @@ const GCardNote = (props) => {
         );
       }
     }
-    return "anonymous";
+    return "@anonymous";
   };
 
   const renderReplayLable = () => {
