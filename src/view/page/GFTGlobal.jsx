@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./GFTGlobal.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -36,7 +37,13 @@ const labels = [
   '#GPT-4'
 ];
 
+const createTestWorker = createWorkerFactory(() => import('worker/test'));
+
 const GFTGlobal = () => {
+  //
+  const testWorker = useWorker(createTestWorker);
+  //
+
   const dispatch = useDispatch();
   const { relays } = useSelector((s) => s.profile);
   //
@@ -119,25 +126,31 @@ const GFTGlobal = () => {
     );
   };
 
-  const getInfor = (pkeys, curRelay) => {
+  const getInfor = async (pkeys, curRelay) => {
+    //
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    //
-    const newInfo = new Map();
-    System.BroadcastSub(subTextNode, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        setInforData(newInfo);
-        System.BroadcastClose(subTextNode, client, null);
-      } else if (tag === 'EVENT') {
-        console.log('info', msg);
-        let info = {};
-        if (msg.content !== "") {
-          info = JSON.parse(msg.content);
-        }
-        newInfo.set(msg.pubkey, info);
-      }
-    }, curRelay
-    );
+    const webWorkerMessage = await testWorker.fetch_user_metadata(subTextNode, curRelay);
+    console.log('webWorkerMessage', webWorkerMessage);
+    // //
+    // const filterMetaData = FetchUserMetadata.get(Array.from(pkeys));
+    // let subTextNode = BuildSub('metadata', [filterMetaData]);
+    // //
+    // const newInfo = new Map();
+    // System.BroadcastSub(subTextNode, (tag, client, msg) => {
+    //   if (tag === 'EOSE') {
+    //     setInforData(newInfo);
+    //     System.BroadcastClose(subTextNode, client, null);
+    //   } else if (tag === 'EVENT') {
+    //     console.log('info', msg);
+    //     let info = {};
+    //     if (msg.content !== "") {
+    //       info = JSON.parse(msg.content);
+    //     }
+    //     newInfo.set(msg.pubkey, info);
+    //   }
+    // }, curRelay
+    // );
   };
 
   const renderPartment = () => {

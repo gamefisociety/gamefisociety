@@ -22,6 +22,7 @@
     "@noble/secp256k1": "^1.7.1",
     "@protobufjs/base64": "^1.1.2",
     "@reduxjs/toolkit": "^1.9.0",
+    "@shopify/react-web-worker": "^5.0.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
