@@ -22,17 +22,21 @@ import { Divider } from '@mui/material/index';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-import ic_bnb from "asset/image/home/ic_bnb.png";
-import ic_eth from "asset/image/home/ic_eth.png";
-import ic_swap from "asset/image/home/ic_swap.png";
 import ic_polgon from "asset/image/home/ic_polgon.png";
 import ic_check_in from "asset/image/home/ic_check_in.png";
-import ic_free_nft from "asset/image/home/ic_free_nft.png";
 import ic_create from 'asset/image/home/ic_create.png';
 import ic_home from 'asset/image/logo/ic_home.png';
 import ic_chat from 'asset/image/logo/ic_chat.png';
 import ic_sub from 'asset/image/logo/ic_sub.png';
 import ic_menu_wallet from 'asset/image/home/ic_menu_wallet.png';
+import ic_dm from "asset/image/logo/icon_dm.png";
+import ic_global from "asset/image/logo/icon_global.png";
+import ic_bnb from "asset/image/home/ic_bnb.png";
+import ic_eth from "asset/image/home/ic_eth.png";
+import ic_swap from "asset/image/home/ic_swap.png";
+
+
+
 
 const mapData = [
     // {
@@ -40,16 +44,21 @@ const mapData = [
     //     img: ic_home
     // },
     {
-        txt: 'META Beta',
+        txt: 'META(beta)',
         img: ic_home
     },
     {
         txt: 'GLOBAL',
-        img: ic_chat
+        img: ic_global
     },
     {
         txt: 'POST & REPLAY',
         img: ic_chat,
+        // out: true
+    },
+    {
+        txt: 'DM',
+        img: ic_dm,
         // out: true
     },
     {
@@ -142,7 +151,7 @@ const GFTLeftMenu = () => {
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
-        } else if (item.txt === 'META Beta') {
+        } else if (item.txt === 'META(beta)') {
             dispatch(setMainContent(false));
             navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
