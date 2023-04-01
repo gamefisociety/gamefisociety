@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
@@ -113,50 +114,69 @@ const GCardNote = (props) => {
     return "anonymous";
   };
 
+  const username = () => {
+    if (info && info.name) {
+      return '@' + info.name;
+    } else {
+      if (note.pubkey) {
+        return (
+          "@Nostr#" +
+          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
+        );
+      }
+    }
+    return "anonymous";
+  };
+
+  const renderReplayLable = () => {
+    if (!note) {
+      return null;
+    }
+    // console.log('renderReplayLable note', note);
+    if (note.tags && note.tags.length === 0) {
+      return null;
+    }
+    return (
+      <Typography className="level2_lable" sx={{ ml: "12px" }}>
+        {'reply to xxx'}
+      </Typography>
+    );
+  }
+
   return (
     <Card className={'card_note_bg'} elevation={0}>
-      <Box className={'base_info'}>
+      <Box className={'base_info'}
+        onClick={() => {
+          navigate("/userhome", {
+            state: { info: { ...info }, pubkey: note.pubkey },
+          });
+        }}>
         <Avatar
           className="avatar"
           alt="Avatar"
           src={info && info.picture ? info.picture : default_avatar}
-          onClick={() => {
-            navigate("/userhome", {
-              state: { info: { ...info }, pubkey: note.pubkey },
-            });
-          }}
         />
-        <Typography
-          className="name"
-          sx={{
-            ml: "8px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          }}
-          color={"#FFFFFF"}
-          noWrap={true}
-          onClick={() => {
-            navigate("/userhome", {
-              state: { info: { ...info }, pubkey: note.pubkey },
-            });
-          }}
-        >
-          {displayname()}
-        </Typography>
-        <Typography
-          sx={{
-            ml: "20px",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          }}
-          color="#666666"
-        >
-          {xhelp.formateSinceTime(note.created_at * 1000)}
-        </Typography>
+        <Box className={'base_ext'}>
+          <Stack direction='row'>
+            <Typography className="level1_lable"
+              sx={{
+                ml: "8px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+              noWrap={true}
+            >
+              {displayname()}
+            </Typography>
+            <Typography className="level2_lable" sx={{ ml: "12px" }}>
+              {username()}
+            </Typography>
+            <Typography className="level2_lable" sx={{ ml: "12px" }}>
+              {xhelp.formateSinceTime(note.created_at * 1000)}
+            </Typography>
+          </Stack>
+          {renderReplayLable()}
+        </Box>
       </Box>
       {renderContent(note.content)}
       <Box className={'bottom'}>
