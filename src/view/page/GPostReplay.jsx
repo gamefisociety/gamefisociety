@@ -73,7 +73,6 @@ const GPostReplay = () => {
   useEffect(() => {
     let textNote = getSubNote(curCreateAt);
     getNoteList(textNote);
-    console.log('loadMore2', curCreateAt, textNote);
     return () => {
       System.BroadcastClose(textNote, null, null);
     };
@@ -90,18 +89,15 @@ const GPostReplay = () => {
     //
     System.BroadcastSub(subTextNode, (tag, client, msg) => {
       if (tag === 'EOSE') {
-        console.log('loadMore2 new event eose');
         const noteCache = TLCache.get(post_replay_note_cache_flag);
         if (!noteCache) {
           return;
         }
         setData(noteCache.concat());
-        // fetch user info ,note info
         const pubkeys = [msg.pubkey];
         const pubkyes_filter = new Set(pubkeys);
         getInfor(pubkyes_filter, null);
       } else if (tag === 'EVENT') {
-        // console.log('loadMore2 new event', msg.created_at);
         TLCache.pushGlobalNote(post_replay_note_cache_flag, msg);
       }
     },
@@ -118,7 +114,6 @@ const GPostReplay = () => {
         setInforData(newInfo);
         System.BroadcastClose(subTextNode, client, null);
       } else if (tag === 'EVENT') {
-        // console.log('info', msg);
         let info = {};
         if (msg.content !== "") {
           info = JSON.parse(msg.content);
@@ -129,42 +124,35 @@ const GPostReplay = () => {
     );
   };
 
-  const renderPartment = () => {
+  const postNote = (note) => {
+    dispatch(setPost({
+      post: true,
+      target: note,
+    }));
+  }
+
+  const renderMenu = () => {
     return (
-      <Box
-        sx={{
-          // backgroundColor: 'red',
-          padding: "24px",
-          display: "flex",
-          flexDirection: "row",
-          alighItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: 'background.paper'
-        }}
-      >
+      <Box className={'post_menu'}>
         <Button
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
+          className={'post_menu_item'}
+          sx={{ backgroundColor: 'background.default' }}
           variant="contained"
-          backgroundColor={"background.default"}
           onClick={() => {
-            dispatch(setPost({
-              post: true,
-              target: null,
-            }));
+            //
           }}
         >
           {"Post"}
         </Button>
         <Button
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
+          className={'post_menu_item'}
+          sx={{ backgroundColor: 'background.default' }}
           variant="contained"
           onClick={() => {
             // setCurCreateAt(99999999999999);
           }}
         >
-          {"Refresh"}
+          {"Replay"}
         </Button>
       </Box>
     );
@@ -190,8 +178,10 @@ const GPostReplay = () => {
 
   return (
     <Paper className={'post_replay_bg'} elevation={0}>
-      {renderPartment()}
-      <Divider />
+      {renderMenu()}
+      <Button className={'post_button'} onClick={() => {
+        postNote(null);
+      }}></Button>
       {renderContent()}
     </Paper>
   );

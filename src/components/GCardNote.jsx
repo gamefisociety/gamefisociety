@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { setPost } from "module/store/features/dialogSlice";
+import { setPost } from 'module/store/features/dialogSlice';
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GCardNote.scss";
@@ -91,14 +91,6 @@ const GCardNote = (props) => {
       </Box>
     );
   };
-  // const renderSke = () => {
-  //     return (
-  //         <React.Fragment>
-  //             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-  //             <Skeleton animation="wave" height={10} width="80%" />
-  //         </React.Fragment>
-  //     )
-  // }
 
   const displayname = () => {
     if (info && info.display_name) {
@@ -125,7 +117,7 @@ const GCardNote = (props) => {
         );
       }
     }
-    return "anonymous";
+    return "@anonymous";
   };
 
   const renderReplayLable = () => {
