@@ -175,7 +175,9 @@ const GSociety = (props) => {
       return null;
     }
     return (
-      <List>
+      <List
+      className="list_bg"
+      >
         {" "}
         {follows.map((pubkey, index) => {
           const { info } = NorCache.getMetadata(metadata_cache_flag, pubkey);
@@ -191,7 +193,7 @@ const GSociety = (props) => {
               secondaryAction={
                 <Button
                   variant="contained"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px",backgroundColor: "#202122" }}
+                  sx={{ width: "80px", height: "24px", fontSize: "12px", backgroundColor: "#202122" }}
                   onClick={() => {
                     removeFollow(pubkey);
                   }}
@@ -201,7 +203,9 @@ const GSociety = (props) => {
               }
               disablePadding
             >
-              <ListItemButton>
+              <ListItemButton
+                sx={{ my: "2px", alignItems: "start" }}
+              >
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
@@ -235,7 +239,7 @@ const GSociety = (props) => {
       return null;
     }
     return (
-      <List>
+      <List className="list_bg">
         {" "}
         {followers.map((item, index) => {
           const { info } = NorCache.getMetadata(
@@ -253,7 +257,7 @@ const GSociety = (props) => {
               secondaryAction={
                 <Button
                   variant="contained"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px",backgroundColor: "#202122"  }}
+                  sx={{ width: "80px", height: "24px", fontSize: "12px", backgroundColor: "#202122" }}
                   onClick={() => {
                     if (isFollowYou(item.pubkey) === true) {
                       removeFollow(item.pubkey);
@@ -268,7 +272,9 @@ const GSociety = (props) => {
               }
               disablePadding
             >
-              <ListItemButton>
+              <ListItemButton
+                sx={{ my: "2px", alignItems: "start" }}
+              >
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
@@ -289,7 +295,7 @@ const GSociety = (props) => {
                   <span className="txt">{cxt.name} </span>
                   <span className="txt_about">{cxt.about} </span>
                 </div>
-                
+
               </ListItemButton>
             </ListItem>
           );
@@ -300,20 +306,21 @@ const GSociety = (props) => {
 
   return (
     <Box
-    className="boxbg"
+    className="gsociety_box_bg"
       sx={{
         backgroundColor: "#0F0F0F",
         width: "400px",
-
+        height:"100%",
         paddingLeft: "32px",
-        paddingRight: "20px",
+      
+        overflow: 'hidden',
+        boxSizing: 'border-box',
       }}
     >
       <Box
         sx={{
           marginTop: "84px",
           display: "flex",
-           
           flexDierction: "row",
           alignItems: "center",
           justifyContent: "space-evenly",
