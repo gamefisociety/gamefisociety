@@ -18,6 +18,35 @@
                 transform: scale(1.08);
             }
         }
+
+        .base_ext {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .level1_lable {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            cursor: pointer;
+            &:hover {
+                text-decoration:underline
+            }
+        }
+
+        .level2_lable {
+            color: #666666;
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            cursor: pointer;
+            &:hover {
+                text-decoration:underline
+            }
+        }
     }
     
     .content {
@@ -103,12 +132,5 @@
         }
     }
 
-
-    .name {
-        cursor: pointer;
-        &:hover {
-            text-decoration:underline
-        }
-    }
 }
 

@@ -112,7 +112,6 @@ const GNoteThread = () => {
             return <GCardNote
                 key={'other_node_' + index}
                 note={{ ...item.msg }}
-            // info={{...info}}
             />
         })
     }
