@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
@@ -43,27 +44,52 @@ const GPostDialog = () => {
         }
     }
 
+    const renderHeader = () => {
+        console.log('target note', targetPost);
+        if (targetPost === null) {
+            return <Box className={'post_header'}>
+                <Typography className={'target_tips'}>{'Post new note!'}</Typography>
+            </Box>;
+        }
+        return <Box className={'post_header'}>
+            <Typography className={'target_tips'}>{'Replay a note!'}</Typography>
+            <Typography className={'target_note'}>{targetPost.content}</Typography>
+        </Box>;
+    }
+
     return (
         <Dialog
             className={'dialog_post_bg'}
-            // backgroundColor={'background.default'}
             open={isPost}
             fullWidth={true}
             PaperProps={{
                 style: {
                     width: '400px',
                     height: '580px',
-                    // backgroundColor: 'red',
                     boxShadow: 'none',
                 },
             }}
         >
-            {/* <DialogTitle id="scroll-dialog-title">{'Replay to xxxx'}</DialogTitle> */}
-            <DialogActions sx={{
-                mt: '27px',
-                mb: '12px',
-                px: '24px'
-            }}>
+            {renderHeader()}
+            <DialogContent className={'post_context'} >
+                <TextField
+                    className={'post_text'}
+                    InputProps={{
+                        sx: { flexGrow: 1 },
+                    }}
+                    fullWidth
+                    variant={'outlined'}
+                    minRows={17}
+                    maxRows={17}
+                    multiline={true}
+                    // label="Replay"
+                    value={text}
+                    onChange={(e) => {
+                        setText(e.target.value);
+                    }}
+                />
+            </DialogContent>
+            <DialogActions className={'post_op'}>
                 <Button sx={{
                     color: 'text.primary'
                 }}
@@ -90,24 +116,6 @@ const GPostDialog = () => {
                     {'Post'}
                 </Button>
             </DialogActions>
-            <DialogContent className={'post_context'} >
-                <TextField
-                    className={'post_text'}
-                    InputProps={{
-                        sx: { height: '100%' },
-                    }}
-                    fullWidth
-                    variant={'outlined'}
-                    minRows={18}
-                    maxRows={18}
-                    multiline={true}
-                    // label="Replay"
-                    value={text}
-                    onChange={(e) => {
-                        setText(e.target.value);
-                    }}
-                />
-            </DialogContent>
         </Dialog >
     );
 }
