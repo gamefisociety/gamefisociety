@@ -136,21 +136,17 @@ const GPostReplay = () => {
       <Box className={'post_menu'}>
         <Button
           className={'post_menu_item'}
-          sx={{ width: '110px', height: '36px', backgroundColor: 'background.default' }}
+          sx={{ backgroundColor: 'background.default' }}
           variant="contained"
-          backgroundColor={"background.default"}
           onClick={() => {
-            dispatch(setPost({
-              post: true,
-              target: null,
-            }));
+            //
           }}
         >
           {"Post"}
         </Button>
         <Button
           className={'post_menu_item'}
-          sx={{ width: '110px', height: '36px', backgroundColor: 'background.default' }}
+          sx={{ backgroundColor: 'background.default' }}
           variant="contained"
           onClick={() => {
             // setCurCreateAt(99999999999999);

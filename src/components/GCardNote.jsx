@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { setPost } from "module/store/features/dialogSlice";
+import { setPost } from 'module/store/features/dialogSlice';
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import "./GCardNote.scss";

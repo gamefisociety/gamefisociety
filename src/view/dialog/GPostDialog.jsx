@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import './GPostDialog.scss';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { setPost } from 'module/store/features/dialogSlice';
 
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
-// import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button';
@@ -13,7 +14,6 @@ import TextField from '@mui/material/TextField';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
 
-import './GPostDialog.scss';
 
 const GPostDialog = () => {
 
