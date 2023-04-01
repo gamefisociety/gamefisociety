@@ -3,8 +3,23 @@ import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
 import xhelp from "module/utils/xhelp";
+//
+const uploadInner = (key, secret, curService, data, name, onsucess, onerror) => {
+  if(key.length === 0 || secret.length === 0){
+    onerror("no key or secret");
+    return;
+  }
+  if (curService === "infura") {
+    infuraUploadInner(key, secret, data, name, onsucess, onerror);
+  } else if (curService === "fleek") {
+    fleekUploadInner(key, secret, data, name, onsucess, onerror);
+  } else if (curService === "pinata") {
+    pinataUploadInner(key, secret, data, name, onsucess, onerror);
+  }
+}
+
 //infura
-const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
+const infuraUploadInner = async (key, secret, data,name, onsucess, onerror) => {
   let authorization =
     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
   let ipfs = create({
@@ -19,7 +34,8 @@ const infuraUploadInner = async (key, secret, data, onsucess, onerror) => {
     .add(data)
     .then((response) => {
       console.log("infura publish success ", response);
-      onsucess(response);
+      const cid = response.cid.toString();
+      onsucess({CID: cid});
     })
     .catch((err) => {
       console.log("infura publish error ", String(err));
@@ -68,7 +84,8 @@ const fleekUploadInner = (key, secret, data, name, onsucess, onerror) => {
       })
       .then((response) => {
         console.log(response);
-        onsucess(response);
+        const cid = response.hashV0;
+        onsucess({CID: cid});
       })
       .catch((err) => {
         console.log(String(err));
@@ -87,7 +104,8 @@ const fleekUploadInner = (key, secret, data, name, onsucess, onerror) => {
       })
       .then((response) => {
         console.log(response);
-        onsucess(response);
+        const cid = response.hashV0;
+        onsucess({CID: cid});
       })
       .catch((err) => {
         console.log(String(err));
@@ -113,7 +131,8 @@ const pinataUploadInner = (key, secret, data, name, onsucess, onerror) => {
     pinataPinJSON(key, secret, newData)
       .then((response) => {
         console.log(response);
-        onsucess(response);
+        const cid = response.IpfsHash;
+        onsucess({CID: cid});
       })
       .catch((err) => {
         console.log(String(err));
@@ -133,8 +152,8 @@ const pinataUploadInner = (key, secret, data, name, onsucess, onerror) => {
     console.log("pinataPinFile", newData);
     pinataPinFile(key, secret, newData)
       .then((response) => {
-        console.log(response);
-        onsucess(response);
+        const cid = response.IpfsHash;
+        onsucess({CID: cid});
       })
       .catch((err) => {
         console.log(String(err));
@@ -144,6 +163,7 @@ const pinataUploadInner = (key, secret, data, name, onsucess, onerror) => {
 };
 
 const ipfspublish = {
+  upload: uploadInner,
   infuraUpload: infuraUploadInner,
   fleekUpload: fleekUploadInner,
   pinataUpload: pinataUploadInner,
