@@ -126,63 +126,12 @@ const GFTGlobal = () => {
     );
   };
 
-  const getInfor = async (pkeys, curRelay) => {
-    //
+  const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    const webWorkerMessage = await testWorker.fetch_user_metadata(subTextNode, curRelay);
-    console.log('webWorkerMessage', webWorkerMessage);
-    // //
-    // const filterMetaData = FetchUserMetadata.get(Array.from(pkeys));
-    // let subTextNode = BuildSub('metadata', [filterMetaData]);
-    // //
-    // const newInfo = new Map();
-    // System.BroadcastSub(subTextNode, (tag, client, msg) => {
-    //   if (tag === 'EOSE') {
-    //     setInforData(newInfo);
-    //     System.BroadcastClose(subTextNode, client, null);
-    //   } else if (tag === 'EVENT') {
-    //     console.log('info', msg);
-    //     let info = {};
-    //     if (msg.content !== "") {
-    //       info = JSON.parse(msg.content);
-    //     }
-    //     newInfo.set(msg.pubkey, info);
-    //   }
-    // }, curRelay
-    // );
-  };
-
-  const renderPartment = () => {
-    return (
-      <Box class={'op'}>
-        <Button
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
-          variant="contained"
-          //   backgroundColor={"background.default"}
-          onClick={() => {
-            dispatch(setPost({
-              post: true,
-              target: null,
-            }));
-          }}
-        >
-          {"Post"}
-        </Button>
-        <Button
-          className={'top_button'}
-          sx={{ px: "18px", py: "6px", backgroundColor: 'background.default' }}
-          variant="contained"
-          onClick={() => {
-            setCurCreateAt(0);
-            // setCurLable(item);
-          }}
-        >
-          {"Refresh"}
-        </Button>
-      </Box>
-    );
+    testWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
+      setInforData(data);
+    });
   };
 
   const renderLables = () => {
@@ -261,8 +210,6 @@ const GFTGlobal = () => {
     <Paper className={'global_bg'} elevation={0}>
       {renderGlobalHead()}
       {renderLables()}
-      {/* {renderPartment()}
-      <Divider /> */}
       {renderContent()}
     </Paper>
   );
