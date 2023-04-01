@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import * as secp from '@noble/secp256k1';
 import * as base64 from "@protobufjs/base64";
 import NostrFactory from 'nostr/NostrFactory';

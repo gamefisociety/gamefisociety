@@ -61,9 +61,11 @@ const GNoteThread = () => {
                 // console.log('root msg textnotes receive', msg);
                 if (tag === 'EOSE') {
                     System.BroadcastClose(sueThread, client, null);
-                    const notes_cache = TLCache.get(thread_node_cache_flag)
-                    setNotes(notes_cache.concat());
-                    console.log('note cache', notes_cache);
+                    const notes_cache = TLCache.get(thread_node_cache_flag);
+                    if (notes_cache) {
+                        setNotes(notes_cache.concat());
+                        console.log('note cache', notes_cache);
+                    }
                 } else if (tag === 'EVENT') {
                     // console.log('root msg textnotes receive', msg);
                     TLCache.pushThreadNote(thread_node_cache_flag, msg);

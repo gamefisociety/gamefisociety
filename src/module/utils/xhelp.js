@@ -50,18 +50,32 @@ const convertImageUrlFromGFSToIPFSInner = (str) => {
 
 const isJsonInner = (str) => {
   try {
-      JSON.parse(str);
+    JSON.parse(str);
   } catch (e) {
-      return false;
+    return false;
   }
   return true;
-}
+};
+
+//extract markdown header
+const extractMDHeadersInner = (content) => {
+  const regXHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g;
+  const headers = Array.from(content.matchAll(regXHeader)).map(
+    ({ groups: { flag, content } }) => ({
+      header: `h${flag.length}`,
+      content,
+    })
+  );
+  return headers;
+};
+
 const xhelp = {
   formateDate: formateDateInner,
   formateSinceTime: formateSinceTimeInner,
   convertImageUrlFromIPFSToGFS: convertImageUrlFromIPFSToGFSInner,
   convertImageUrlFromGFSToIPFS: convertImageUrlFromGFSToIPFSInner,
-  isJson: isJsonInner
+  isJson: isJsonInner,
+  extractMDHeaders: extractMDHeadersInner
 };
 
 export default xhelp;
