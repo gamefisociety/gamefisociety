@@ -26,6 +26,8 @@ import "./GProjectEditor.scss";
 function GProjectEditor() {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
+  const { currentService, apiKey, apiSecret } = useSelector((s) => s.ipfs);
+  const [publishState, setPublishState] = useState(0);
   const [project, setProject] = useState({
     thumb: "",
     banner: "",
@@ -43,6 +45,60 @@ function GProjectEditor() {
   useEffect(() => {
     return () => {};
   }, []);
+
+  const publishOnIPFS = (content) => {
+    console.log("publish on ipfs", content);
+    if (apiKey.length === 0 || apiSecret.length === 0) {
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
+      return;
+    }
+    if (publishState === 1) {
+      return;
+    }
+    //
+    // let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
+    // if (new_content.length === 0) {
+    //   return;
+    // }
+    //upload
+    setPublishState(1);
+    ipfsupload.upload(
+      apiKey,
+      apiSecret,
+      currentService,
+      content,
+      project.name,
+      (response) => {
+        const cid = response.CID;
+        setPublishState(2);
+        // setStep(1);
+        // stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
+        // articleInfo.name = header;
+        // articleInfo.cid = cid;
+        // setArticleInfo({ ...articleInfo });
+      },
+      (err) => {
+        setPublishState(0);
+        // setStep(0);
+        // stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
+        console.log("ipfs upload error", err);
+      }
+    );
+  };
+
+  const publishMsg = () => {
+    if (publishState === 0) {
+      return "publish on ipfs";
+    } else if (publishState === 1) {
+      return "publishing on ipfs...";
+    } else if (publishState === 2) {
+      return "publish on blockchain";
+    } else if (publishState === 3) {
+      return "publishing on blockchain...";
+    } else if (publishState === 4) {
+      return "published";
+    }
+  };
 
   return (
     <Box
@@ -274,7 +330,7 @@ function GProjectEditor() {
                 fontWeight: "500",
                 color: "#FFFFFF",
               }}
-              value={project.wesite}
+              value={project.website}
               variant="outlined"
               onChange={(event) => {
                 project.website = event.target.value;
@@ -537,6 +593,7 @@ function GProjectEditor() {
             }}
             onClick={() => {
               const projectStr = JSON.stringify(project);
+              publishOnIPFS(projectStr);
               console.log(projectStr);
             }}
           >
