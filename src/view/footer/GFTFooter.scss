@@ -11,6 +11,9 @@
         color: #909090;
         cursor: pointer;
         font-size: 0.8rem;
+        &:hover {
+            color: #fff;
+        }
     }
 
     .logo_layout {
@@ -21,18 +24,12 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
+        
         flex-wrap: wrap;
-
-        .media {
-            width: auto;
-            height: auto;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
 
             .icon_reddit {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_reddit.png);
@@ -45,7 +42,7 @@
 
             .icon_meduim {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_medium.png);
@@ -58,7 +55,7 @@
 
             .icon_discord {
                 cursor: pointer;
-                margin-left: 8px;
+               
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_discord.png);
@@ -71,7 +68,7 @@
 
             .icon_facebook {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_facebook.png);
@@ -84,7 +81,7 @@
 
             .icon_github {
                 cursor: pointer;
-                margin-left: 8px;
+               
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_github.png);
@@ -97,7 +94,7 @@
 
             .icon_telegram {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_telegram.png);
@@ -110,7 +107,7 @@
 
             .icon_youtube {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_youtube.png);
@@ -123,7 +120,7 @@
 
             .icon_ins {
                 cursor: pointer;
-                margin-left: 8px;
+                
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_ins.png);
@@ -136,7 +133,7 @@
 
             .icon_twitter {
                 cursor: pointer;
-                margin-left: 8px;
+               
                 width: 34px;
                 height: 34px;
                 background-image: url(../../asset/image/logo/ic_twitter.png);
@@ -146,7 +143,7 @@
                     background-image: url(../../asset/image/logo/ic_twitter_en.png);
                 }
             }
-        }
+        
     }
 
     .layout_setting {

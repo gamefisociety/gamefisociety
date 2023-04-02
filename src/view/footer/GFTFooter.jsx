@@ -28,6 +28,8 @@ const GFTFooter = () => {
     const openClickLink = (type) => {
         if (type === 'twitter') {
             window.open("https://twitter.com/GameFi_Society");
+        }else if(type === 'telegram'){
+            window.open("https://t.me/gamefi_society_g1");
         }
     }
 
@@ -38,55 +40,41 @@ const GFTFooter = () => {
             <Typography className='text_line'>{'Blog'}</Typography>
             <Typography className='text_line'>{'Disclaimer'}</Typography>
             <Box className='logo_layout'>
-                <CardMedia
-                    component="img"
+                <Box
+                    className="icon_twitter"
                     sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_twitter}
-                    alt="no logo"
-                    onClick={() => openClickLink('twitter')}
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_github}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_telegram}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_discord}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_youtube}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_ins}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_reddit}
-                    alt="no logo"
-                />
-                <CardMedia
-                    component="img"
-                    sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    src={logo_facebook}
-                    alt="no logo"
-                />
+                    onClick={() => openClickLink('twitter')}>
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_github">
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_telegram"
+                    onClick={() => openClickLink('telegram')} >
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_discord">
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_youtube">
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_ins">
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_reddit">
+                </Box>
+                <Box
+                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                    className="icon_facebook">
+                </Box>
+                
             </Box>
             {/* <div className='lang'>
                 <span className='txt'>English</span>
