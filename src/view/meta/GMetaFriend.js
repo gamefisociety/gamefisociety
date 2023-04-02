@@ -8,6 +8,8 @@ import {
 
 import {
     AdvancedDynamicTexture,
+    Rectangle,
+    TextBlock,
 } from '@babylonjs/gui'
 
 let box = null;
@@ -37,8 +39,42 @@ export const updateFriends = (dt, scene) => {
         const rpm = 10;
         box.rotation.y += (rpm / 60) * Math.PI * 2 * (dt / 1000);
     }
+    // update mtl
+    // scene.getMeshByName
     // followers_ent_map.forEach()
 };
+
+const createLabel = (mesh) => {
+    var label = new Rectangle("label-" + mesh.name);
+    label.background = "black"
+    label.alpha = 0.5;
+    label.height = "30px";
+    label.width = "100px";
+    label.cornerRadius = 12;
+    label.thickness = 1;
+    label.linkOffsetY = 30;
+    followers_gui.addControl(label);
+    label.linkWithMesh(mesh);
+
+    var text1 = new TextBlock();
+    text1.text = mesh.name;
+    text1.color = "white";
+    label.addControl(text1);
+
+    label.onPointerEnterObservable.add((event) => {
+        // console.log('aa onPointerEnterObservable', event);
+        label.scaleX = 1.1;
+        label.scaleY = 1.1;
+        label.alpha = 0.85;
+    });
+
+    label.onPointerOutObservable.add((event) => {
+        // console.log('aa onPointerOutObservable', event);
+        label.scaleX = 1.0;
+        label.scaleY = 1.0;
+        label.alpha = 0.5;
+    });
+}
 
 export const addFriends = (follows) => {
     if (!curScene || !follows) {
@@ -63,6 +99,8 @@ export const addFriends = (follows) => {
         cur_ent.material = mat;
         //
         followers_ent_map.set(ent_name, cur_ent);
+        //
+        createLabel(cur_ent);
     });
 };
 
