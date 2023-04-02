@@ -92,11 +92,11 @@ const GUserHome = () => {
           }
         }
       });
-      //
       //user_note_cache
       let target_note_cache = user_note_cache.get(pubkey);
-      setNotes(target_note_cache.concat());
-      //
+      if (target_note_cache) {
+        setNotes(target_note_cache.concat());
+      }
     });
   };
 
