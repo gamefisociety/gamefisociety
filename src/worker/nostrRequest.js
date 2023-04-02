@@ -34,11 +34,37 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
         callback(cache, client);
       }
     } else if (tag === 'EVENT') {
-      console.log('global msg', msg);
+      // console.log('global msg', msg);
       globalNoteCache.pushNote(msg)
     }
   },
     curRelay
   );
+}
+
+//
+export const listen_follow_notes = (sub, curRelay, goon, callback) => {
+  let globalNoteCache = GlobalNoteCache();
+  System.BroadcastSub(sub, (tag, client, msg) => {
+    if (tag === 'EOSE') {
+      if (goon === false) {
+        System.BroadcastClose(sub, curRelay, null);
+      }
+    } else if (tag === 'EVENT') {
+      console.log('listen global msg', msg);
+      globalNoteCache.pushNote(msg);
+      if (callback) {
+        let cache = globalNoteCache.get();
+        callback(cache, client);
+      }
+    }
+  },
+    curRelay
+  );
+}
+
+//
+export const unlisten_follow_notes = (sub, curRelay, callback) => {
+  System.BroadcastClose(sub, curRelay, null);
 }
 
