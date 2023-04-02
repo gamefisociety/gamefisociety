@@ -6,7 +6,7 @@ import {
 
 export const createCamera = (scene) => {
 
-    var camera = new ArcRotateCamera("camera-main", Math.PI / 3, Math.PI / 3, 800, new Vector3(0, 100, 0), scene);
+    var camera = new ArcRotateCamera("camera-main", Math.PI / 3, Math.PI / 3, 500, new Vector3(0, 100, 0), scene);
     camera.setTarget(new Vector3(0, 100, 0));
     // var camera = new ArcFollowCamera("camera-main", Math.PI / 3, Math.PI / 3, 200, new Vector3(0, 100, 0), scene);
     camera.minZ = 0.1;

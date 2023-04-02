@@ -28,7 +28,7 @@ const GFTHomeMeta = () => {
         light.intensity = 0.7;
         //
         createGround(scene);
-
+        //
         createFriends(scene);
     }
 
