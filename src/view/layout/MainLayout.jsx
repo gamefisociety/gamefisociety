@@ -55,6 +55,7 @@ const MainLayout = () => {
       <Drawer
         PaperProps={{
           style: {
+            marginTop: "64px",
             borderRadius: "12px",
             backgroundColor: "background.paper",
           },
