@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./GPostReplay.scss";
+import "./GPostReply.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
@@ -19,7 +19,7 @@ import GlobalNoteCache from 'db/GlobalNoteCache';
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
-const GPostReplay = () => {
+const GPostReply = () => {
   //
   const nostrWorker = useWorker(createNostrWorker);
   const { publicKey, loggedOut } = useSelector((s) => s.login);
@@ -149,7 +149,7 @@ const GPostReplay = () => {
   };
 
   return (
-    <Paper className={'post_replay_bg'} elevation={0}>
+    <Paper className={'post_reply_bg'} elevation={0}>
       {renderMenu()}
       <Button className={'post_button'} onClick={() => {
         postNote(null);
@@ -159,4 +159,4 @@ const GPostReplay = () => {
   );
 };
 
-export default GPostReplay;
+export default GPostReply;

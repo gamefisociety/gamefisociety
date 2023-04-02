@@ -29,6 +29,7 @@ const GNoteThread = () => {
     const TLCache = TimelineCache();
 
     let main_note_id = '0';
+    let reply_note_id = '0';
 
     let notethread_flag = 'note_thread';
     const fetchNotes = (curNote) => {
@@ -55,10 +56,7 @@ const GNoteThread = () => {
             // filterTextNote.ids = [parseRet.eArray[0]];
             // filterTextNote['#e'] = [parseRet.eArray[1]];
             const sueThread = BuildSub(notethread_flag, [filterTextNote]);
-            // console.log('root msg textnotes curNote', curNote);
-            // console.log('root msg textnotes send', sueThread);
             System.BroadcastSub(sueThread, (tag, client, msg) => {
-                // console.log('root msg textnotes receive', msg);
                 if (tag === 'EOSE') {
                     System.BroadcastClose(sueThread, client, null);
                     const notes_cache = TLCache.get(thread_node_cache_flag);
@@ -67,7 +65,6 @@ const GNoteThread = () => {
                         console.log('note cache', notes_cache);
                     }
                 } else if (tag === 'EVENT') {
-                    // console.log('root msg textnotes receive', msg);
                     TLCache.pushThreadNote(thread_node_cache_flag, msg);
                 }
             })
@@ -75,25 +72,29 @@ const GNoteThread = () => {
     }
 
     useEffect(() => {
-        // console.log('main note', note);
         TLCache.clear(thread_node_cache_flag);
-        // TLCache.pushThreadNote(thread_node_cache_flag, note);
-        //
         if (note.tags.length === 0) {
             main_note_id = note.id;
         } else {
             let eNum = 0;
+            let pNum = 0;
+            let eArray = [];
+            let pArray = [];
             note.tags.map(item => {
                 if (item[0] === '#e') {
                     eNum = eNum + 1;
+                    eArray.push(item[1]);
+                    if (item[3] && item[3] === 'root') {
+                        main_note_id = item[1];
+                    }
+                    if (item[3] && item[3] === 'reply') {
+                        reply_note_id = item[1];
+                    }
+                } else if (item[0] === '#p') {
+                    pNum = pNum + 1;
+                    pArray.push(item[1]);
                 }
             });
-            if (eNum === 1) {
-                // the first e is main note id;
-            } else if (eNum === 2) {
-                // the first e is main note id;
-                // the second e is relay note id
-            }
         }
         // get relate information
         fetchNotes(note);

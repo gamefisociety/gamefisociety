@@ -52,7 +52,7 @@ const mapData = [
         img: ic_global
     },
     {
-        txt: 'POST & REPLAY',
+        txt: 'POST & REPLY',
         img: ic_chat,
         // out: true
     },
@@ -163,8 +163,8 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'GLOBAL') {
             navigate('/global');
             openMainContent();
-        } else if (item.txt === 'POST & REPLAY') {
-            navigate('/post-replay');
+        } else if (item.txt === 'POST & REPLY') {
+            navigate('/post-reply');
             openMainContent();
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');

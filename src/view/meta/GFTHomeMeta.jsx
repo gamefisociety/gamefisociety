@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from "react-redux";
 import GMetaBase from './GMetaBase';
 import './GFTHomeMeta.scss';
 
@@ -24,7 +23,7 @@ const GFTHomeMeta = () => {
         // console.log('onSceneReady friends', friendRef);
         createCamera(scene);
         //
-        var light = new HemisphericLight('light', new Vector3(0, 1, 0), scene);
+        var light = new HemisphericLight('light', new Vector3(1, 1, 1), scene);
         light.intensity = 0.7;
         //
         createGround(scene);

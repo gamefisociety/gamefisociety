@@ -120,11 +120,11 @@ const GCardNote = (props) => {
     return "@anonymous";
   };
 
-  const renderReplayLable = () => {
+  const renderReplyLable = () => {
     if (!note) {
       return null;
     }
-    // console.log('renderReplayLable note', note);
+    // console.log('renderReplyLable note', note);
     if (note.tags && note.tags.length === 0) {
       return null;
     }
@@ -165,7 +165,7 @@ const GCardNote = (props) => {
               {xhelp.formateSinceTime(note.created_at * 1000)}
             </Typography>
           </Stack>
-          {renderReplayLable()}
+          {renderReplyLable()}
         </Box>
       </Box>
       {renderContent(note.content)}
