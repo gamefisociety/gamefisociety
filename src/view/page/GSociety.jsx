@@ -176,7 +176,7 @@ const GSociety = (props) => {
     }
     return (
       <List
-      className="list_bg"
+        className="list_bg"
       >
         {" "}
         {follows.map((pubkey, index) => {
@@ -209,9 +209,7 @@ const GSociety = (props) => {
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
-                    navigate("/userhome", {
-                      state: { info: { ...cxt }, pubkey: pubkey },
-                    });
+                    navigate("/userhome", { state: { pubkey: pubkey } });
                     if (callback) {
                       callback();
                     }
@@ -278,9 +276,7 @@ const GSociety = (props) => {
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
-                    navigate("/userhome", {
-                      state: { info: { ...cxt }, pubkey: item.pubkey },
-                    });
+                    navigate("/userhome", { state: { pubkey: item.pubkey } });
                     if (callback) {
                       callback();
                     }
@@ -306,13 +302,13 @@ const GSociety = (props) => {
 
   return (
     <Box
-    className="gsociety_box_bg"
+      className="gsociety_box_bg"
       sx={{
         backgroundColor: "#0F0F0F",
         width: "400px",
-        height:"100%",
+        height: "100%",
         paddingLeft: "32px",
-      
+
         overflow: 'hidden',
         boxSizing: 'border-box',
       }}

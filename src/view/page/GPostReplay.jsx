@@ -43,7 +43,7 @@ const GPostReplay = () => {
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 5;
+    filterTextNote.limit = 10;
     let tmpAuthors = follows.concat([publicKey]);
     filterTextNote.authors = tmpAuthors;
     let subTextNode = BuildSub('textnode-follows', [filterTextNote]);

@@ -139,9 +139,7 @@ const GCardNote = (props) => {
     <Card className={'card_note_bg'} elevation={0}>
       <Box className={'base_info'}
         onClick={() => {
-          navigate("/userhome", {
-            state: { info: { ...info }, pubkey: note.pubkey },
-          });
+          navigate("/userhome", { state: { pubkey: note.pubkey } });
         }}>
         <Avatar
           className="avatar"
