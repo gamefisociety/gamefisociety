@@ -17,8 +17,7 @@ export const createGround = (scene) => {
     // //BABYLON.Scene.FOGMODE_EXP2;
     // //BABYLON.Scene.FOGMODE_LINEAR;
     // scene.fogColor = new Color3(1.0, 1.0, 1.0);
-    // scene.fogDensity = 0.001;
-
+    // scene.fogDensity = 0.01;
 
     const skyMaterial = new SkyMaterial("skyMaterial", scene);
     skyMaterial.backFaceCulling = false;
@@ -33,8 +32,12 @@ export const createGround = (scene) => {
     const skybox = MeshBuilder.CreateBox("skyBox", { size: 5000.0 }, scene);
     skybox.material = skyMaterial;
 
-    const ground = MeshBuilder.CreateGround('ground', { width: 2000, height: 2000 }, scene);
+    const ground = MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
     ground.material = new GridMaterial("groundMat");
     ground.material.backFaceCulling = false;
     ground.material.gridRatio = 10;
+    ground.material.mainColor = new Color3(163 / 255, 157 / 255, 157 / 255);
+    // ground.material.needAlphaBlend = true;
+    // ground.material.alpha = 0.2;
+    // ground.material.fogEnabled = false;
 };
