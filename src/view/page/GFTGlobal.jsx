@@ -26,6 +26,7 @@ import { BuildSub } from "nostr/NostrUtils";
 import { setPost } from 'module/store/features/dialogSlice';
 
 import TimelineCache from 'db/TimelineCache';
+import GlobalNoteCache from 'db/GlobalNoteCache';
 
 const labels = [
   "ALL",
@@ -37,13 +38,12 @@ const labels = [
   '#GPT-4'
 ];
 
-const createTestWorker = createWorkerFactory(() => import('worker/test'));
+const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
 const GFTGlobal = () => {
   //
-  const testWorker = useWorker(createTestWorker);
+  const nostrWorker = useWorker(createNostrWorker);
   //
-
   const dispatch = useDispatch();
   const { relays } = useSelector((s) => s.profile);
   //
@@ -57,8 +57,7 @@ const GFTGlobal = () => {
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
 
-  const TLCache = TimelineCache();
-  let global_note_cache_flag = 'global_not_cache';
+  const gNoteCache = GlobalNoteCache();
 
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
@@ -80,56 +79,39 @@ const GFTGlobal = () => {
       window.innerHeight + document.documentElement.scrollTop >
       document.scrollingElement.scrollHeight - 50
     ) {
-      // console.log('loadMore', curCreateAt);
       getNoteList();
     }
   };
 
   const getNoteList = () => {
+    //build sub
     const filterTextNote = textNotePro.get();
     if (curCreateAt === 0) {
-      TLCache.clear(global_note_cache_flag);
+      gNoteCache.clear();
       filterTextNote.until = Date.now();
     } else {
       setMore(true);
       filterTextNote.until = curCreateAt;
     }
     filterTextNote.limit = 50;
-    let subTextNode = BuildSub('textnode', [filterTextNote]);
-    System.BroadcastSub(subTextNode, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        System.BroadcastClose(subTextNode, client, null);
-        const noteCache = TLCache.get(global_note_cache_flag);
-        if (!noteCache) {
-          return;
-        }
-        setData(noteCache.concat());
+    //request
+    let subTextNode = BuildSub('global-textnode', [filterTextNote]);
+    nostrWorker.fetch_global_notes(subTextNode, curRelay, (data, client) => {
+      setData(data.concat());
+      const pubkeys = [];
+      data.map((item) => {
+        pubkeys.push(item.pubkey);
+      });
+      const pubkyes_filter = new Set(pubkeys);
+      getInfor(pubkyes_filter, null);
+    });
 
-        let timeFlag = 100000000000000;
-        const pubkeys = [];
-        noteCache.map((item) => {
-          pubkeys.push(item.msg.pubkey);
-          if (item.create < timeFlag) {
-            timeFlag = item.create;
-          }
-        });
-        setCurCreateAt(timeFlag);
-        //
-        const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, null);
-      } else if (tag === 'EVENT') {
-        // console.log('text note', msg);
-        TLCache.pushGlobalNote(global_note_cache_flag, msg)
-      }
-    },
-      null
-    );
   };
 
   const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    testWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
+    nostrWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
       setInforData(data);
     });
   };
@@ -176,12 +158,6 @@ const GFTGlobal = () => {
                 return (<MenuItem key={'relay-index-' + index} value={index} >{item[0]}</MenuItem>);
               })
             }
-            {/* <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem> */}
           </Select>
         </FormControl>
       </Box>
@@ -193,11 +169,11 @@ const GFTGlobal = () => {
     return (
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
-          const info = inforData.get(item.msg.pubkey);
+          const info = inforData.get(item.pubkey);
           return (
             <GCardNote
               key={"global-note-" + index}
-              note={{ ...item.msg }}
+              note={{ ...item }}
               info={info}
             />
           );

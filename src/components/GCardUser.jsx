@@ -23,6 +23,7 @@ import { setRelays, setFollows } from "module/store/features/profileSlice";
 //
 const GCardUser = (props) => {
   const { follows } = useSelector((s) => s.profile);
+  const { publicKey } = useSelector((s) => s.login);
   const { profile, pubkey, ownFollows, ownRelays } = props;
   const dispatch = useDispatch();
   //
@@ -63,14 +64,18 @@ const GCardUser = (props) => {
     });
   };
 
+  const isSelf = (key) => {
+    return publicKey === key;
+  };
+
+
   const isFollow = (key) => {
-    // console.log('isFollow', key, follows.includes(key), follows);
     return follows.includes(key);
   };
 
   useEffect(() => {
     // console.log("profile", profile);
-    return () => {};
+    return () => { };
   }, [props]);
 
   //#1F1F1F
@@ -126,7 +131,7 @@ const GCardUser = (props) => {
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => {}}
+              onClick={() => { }}
             >
               <img src={logo_lighting} width="40px" alt="lighting" />
             </Button>
@@ -138,17 +143,17 @@ const GCardUser = (props) => {
               }}
               onClick={() => {
                 dispatch(
-                    setChatDrawer({
-                      chatDrawer: true,
-                      chatPubKey: pubkey,
-                      chatProfile: profile,
-                    })
-                  );
+                  setChatDrawer({
+                    chatDrawer: true,
+                    chatPubKey: pubkey,
+                    chatProfile: profile,
+                  })
+                );
               }}
             >
               <img src={logo_chat} width="40px" alt="chat" />
             </Button>
-            <Button
+            {isSelf(pubkey) === false && <Button
               variant="contained"
               sx={{
                 width: "96px",
@@ -166,7 +171,7 @@ const GCardUser = (props) => {
               }}
             >
               {isFollow(pubkey) === true ? "Unfollow" : "Follow"}
-            </Button>
+            </Button>}
           </Box>
           <Box
             sx={{
