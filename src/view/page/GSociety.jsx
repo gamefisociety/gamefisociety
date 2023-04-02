@@ -308,14 +308,13 @@ const GSociety = (props) => {
         width: "400px",
         height: "100%",
         paddingLeft: "32px",
-
         overflow: 'hidden',
         boxSizing: 'border-box',
       }}
     >
       <Box
         sx={{
-          marginTop: "84px",
+          marginTop: "32px",
           display: "flex",
           flexDierction: "row",
           alignItems: "center",
