@@ -12,14 +12,12 @@ const GListenDM = (props) => {
   const chatPro = useChatPro();
 
   const createSub = () => {
-
     const filterDM = chatPro.getDM(pubkey);
     let subListenDM = BuildSub("listen_chat_dm", [filterDM]);
     return subListenDM;
   }
 
-  console.log('dm msg', dms);
-
+  // console.log('dm msg', dms);
   const listenSub = (sub) => {
     System.BroadcastSub(sub, (tag, client, msg) => {
       dispatch(addDirectMessage(msg));

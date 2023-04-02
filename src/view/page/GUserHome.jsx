@@ -1,7 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./GUserHome.scss";
 
-import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
@@ -16,7 +15,6 @@ import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { BuildSub } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
-import { System } from "nostr/NostrSystem";
 import icon_back from "../../asset/image/social/icon_back.png";
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));

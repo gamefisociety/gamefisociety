@@ -12,7 +12,6 @@ import List from "@mui/material/List";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 import { setPost } from 'module/store/features/dialogSlice';
 

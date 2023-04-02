@@ -119,9 +119,9 @@ const GNoteThread = () => {
     }
     return (
         <Paper className='node_thread_bg' elevation={1}>
-            <div className='back' onClick={() => {
+            {/* <div className='back' onClick={() => {
                 navigate(-1);
-            }}></div>
+            }}></div> */}
             <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'THREAD'}</Typography>
             {renderRootNote()}
             {renderNotes()}
