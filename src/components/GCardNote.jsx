@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./GCardNote.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
@@ -10,19 +12,38 @@ import Typography from "@mui/material/Typography";
 import { setPost } from 'module/store/features/dialogSlice';
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
-import "./GCardNote.scss";
-import { System } from "nostr/NostrSystem";
+
+
+import UserDataCache from 'db/UserDataCache';
 
 const GCardNote = (props) => {
   const { note, info } = props;
-
+  const { replyInfo, setReplyInfo } = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const UserCache = UserDataCache();
+
   useEffect(() => {
-    //
+    // let reply_note_id = 0;
+    // note.tags.map(item => {
+    //   if (item[0] === '#e') {
+    //     if (item[3] && item[3] === 'reply') {
+    //       reply_note_id = item[1];
+    //     }
+    //   }
+    // });
+    // //
+    // let context = {};
+    // let info = UserCache.getMetadata(reply_note_id);
+    // if (info) {
+    //   context = JSON.parse(info.content)
+    //   setReplyInfo({ ...context });
+    // } else {
+    //   //fetch relpy info
+    // }
     return () => { };
-  }, [props]);
+  }, [note]);
 
   const renderContent = (str) => {
     const strArray = str.split("\n");
@@ -124,13 +145,9 @@ const GCardNote = (props) => {
     if (!note) {
       return null;
     }
-    // console.log('renderReplyLable note', note);
-    if (note.tags && note.tags.length === 0) {
-      return null;
-    }
     return (
       <Typography className="level2_lable" sx={{ ml: "12px" }}>
-        {'reply to xxx'}
+        {replyInfo ? 'reply to @' + replyInfo.name : 'reply to @default'}
       </Typography>
     );
   }
