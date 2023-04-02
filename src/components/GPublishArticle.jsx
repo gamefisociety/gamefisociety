@@ -109,7 +109,7 @@ function GPublishArticle() {
         apiSecret,
         currentService,
         data,
-        header,
+        data.name,
         (response) => {
           const cid = response.CID;
           cache.push({ CID: cid });

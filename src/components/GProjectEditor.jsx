@@ -2,7 +2,9 @@ import { React, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import LoadingButton from "@mui/lab/LoadingButton";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
@@ -28,14 +30,13 @@ function GProjectEditor() {
     useWeb3React();
   const { currentService, apiKey, apiSecret } = useSelector((s) => s.ipfs);
   const [publishState, setPublishState] = useState(0);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [project, setProject] = useState({
     thumb: "",
-    banner: "",
     name: "",
     description: "",
     chainAddress: "",
     wesite: "",
-    youtube: "",
     twitter: "",
     discord: "",
     reddit: "",
@@ -86,6 +87,38 @@ function GProjectEditor() {
     );
   };
 
+  const uploadThumbOnIPFS = (event) => {
+    if (apiKey.length === 0 || apiSecret.length === 0) {
+      alert("Please enter PROJECT KEY and PROJECT SECRET");
+      return;
+    }
+    if (uploadingImage === true) {
+      return;
+    }
+    if (event.target.files && event.target.files[0]) {
+      let data = event.target.files[0];
+      console.log("uploadImageOnIPFS", data);
+      //upload
+      setUploadingImage(true);
+      ipfsupload.upload(
+        apiKey,
+        apiSecret,
+        currentService,
+        data,
+        data.name,
+        (response) => {
+          const cid = response.CID;
+          project.thumb = "gamefisociety/temp/image/ipfs/" + cid;
+          setProject({ ...project });
+          setUploadingImage(false);
+        },
+        (err) => {
+          setUploadingImage(false);
+        }
+      );
+    }
+  };
+
   const publishMsg = () => {
     if (publishState === 0) {
       return "publish on ipfs";
@@ -108,7 +141,6 @@ function GProjectEditor() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        // backgroundColor: "red"
       }}
     >
       <Box
@@ -125,19 +157,90 @@ function GProjectEditor() {
       >
         <GIPFSLogin />
       </Box>
-      <Box className={"bg"}>
-        <img className="banner" src={default_banner} alt="banner" />
-        <Box className="content">
-          <Avatar
+      <Box
+        sx={{
+          width: "663px",
+          paddingTop: "24px",
+          paddingBottom: "66px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            paddingLeft: "52px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Box
             sx={{
-              marginTop: "-43px",
-              width: "86px",
-              height: "86px",
+              width: "100%",
+              marginTop: "35px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
             }}
-            edge="end"
-            alt="GameFi Society"
-            src={default_avatar}
-          />
+          >
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+              }}
+            >
+              {"ICON"}
+            </Typography>
+            <Box
+              sx={{
+                marginTop: "12px",
+                position: "relative",
+                width: "160px",
+                height: "160px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                sx={{
+                  width: "160px",
+                  height: "160px",
+                }}
+                edge="end"
+                alt="GameFi Society"
+                src={project.thumb.replace("gamefisociety/temp/image", def_ipfs_public_gateway)}
+              />
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  left: "40px",
+                  top: "40px",
+                  width: "80px",
+                  height: "80px",
+                }}
+                color="primary"
+                aria-label="upload picture"
+                component="label"
+              >
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  onChange={uploadThumbOnIPFS}
+                />
+                <AddAPhotoIcon />
+              </IconButton>
+            </Box>
+          </Box>
           <Box
             sx={{
               width: "100%",
@@ -236,86 +339,6 @@ function GProjectEditor() {
                 color: "#919191",
               }}
             >
-              {"THUMB"}
-            </Typography>
-            <TextField
-              sx={{
-                marginTop: "12px",
-                width: "80%",
-                borderRadius: "5px",
-                borderColor: "#323232",
-                backgroundColor: "#202122",
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-              value={project.thumb}
-              variant="outlined"
-              onChange={(event) => {
-                project.thumb = event.target.value;
-                setProject({ ...project });
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              width: "100%",
-              marginTop: "35px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#919191",
-              }}
-            >
-              {"BANNER"}
-            </Typography>
-            <TextField
-              sx={{
-                marginTop: "12px",
-                width: "80%",
-                borderRadius: "5px",
-                borderColor: "#323232",
-                backgroundColor: "#202122",
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-              value={project.banner}
-              variant="outlined"
-              onChange={(event) => {
-                project.banner = event.target.value;
-                setProject({ ...project });
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              width: "100%",
-              marginTop: "35px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#919191",
-              }}
-            >
               {"WEBSITE"}
             </Typography>
             <TextField
@@ -334,46 +357,6 @@ function GProjectEditor() {
               variant="outlined"
               onChange={(event) => {
                 project.website = event.target.value;
-                setProject({ ...project });
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              width: "100%",
-              marginTop: "35px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#919191",
-              }}
-            >
-              {"YOUTUBE"}
-            </Typography>
-            <TextField
-              sx={{
-                marginTop: "12px",
-                width: "80%",
-                borderRadius: "5px",
-                borderColor: "#323232",
-                backgroundColor: "#202122",
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-              value={project.youtube}
-              variant="outlined"
-              onChange={(event) => {
-                project.youtube = event.target.value;
                 setProject({ ...project });
               }}
             />
