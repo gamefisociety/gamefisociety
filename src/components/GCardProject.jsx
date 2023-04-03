@@ -13,7 +13,7 @@ import "./GCardProject.scss";
 const GCardProject = (props) => {
   let fetching = false;
   const navigate = useNavigate();
-  const { cid } = props;
+  const { cid, owner } = props;
   const [projectInfo, setProjectInfo] = useState({});
   useEffect(() => {
     catContent();
@@ -90,6 +90,7 @@ const GCardProject = (props) => {
           navigate("/detailproject", {
             state: {
               info: projectInfo,
+              owner: owner
             },
           });
           // navigate("/detail?name=" + item.name);

@@ -22,13 +22,12 @@ import {
   default_banner,
   def_ipfs_public_gateway,
 } from "../module/utils/xdef";
-
-import xhelp from "module/utils/xhelp";
 import "./GProjectEditor.scss";
 
-function GProjectEditor() {
+const GProjectEditor = (props) => {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
+  const { info } = props;
   const { currentService, apiKey, apiSecret } = useSelector((s) => s.ipfs);
   const [publishState, setPublishState] = useState(0);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -45,6 +44,9 @@ function GProjectEditor() {
     github: "",
   });
   useEffect(() => {
+    if (info) {
+      setProject(info);
+    }
     return () => {};
   }, []);
 
@@ -85,11 +87,7 @@ function GProjectEditor() {
         return;
       }
       setPublishState(2);
-      GSTProjectsBase.createProject(
-        library,
-        account,
-        cid
-      )
+      GSTProjectsBase.createProject(library, account, cid)
         .then((res) => {
           console.log("createProject", res);
           if (res) {
@@ -232,7 +230,10 @@ function GProjectEditor() {
                 }}
                 edge="end"
                 alt="GameFi Society"
-                src={project.thumb.replace("gamefisociety/temp/image", def_ipfs_public_gateway)}
+                src={project.thumb.replace(
+                  "gamefisociety/temp/image",
+                  def_ipfs_public_gateway
+                )}
               />
               <IconButton
                 sx={{
@@ -590,7 +591,7 @@ function GProjectEditor() {
               color: "#FFFFFF",
             }}
             onClick={() => {
-              if(publishState === 1 || publishState === 2){
+              if (publishState === 1 || publishState === 2) {
                 return;
               }
               const projectStr = JSON.stringify(project);
@@ -604,6 +605,6 @@ function GProjectEditor() {
       </Box>
     </Box>
   );
-}
+};
 
 export default GProjectEditor;

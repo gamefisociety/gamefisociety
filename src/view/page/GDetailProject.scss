@@ -14,6 +14,7 @@
     justify-content: flex-start;
     overflow-y: scroll;
     box-sizing: border-box;
+
     .boxClick {
         cursor: pointer;
     }
@@ -229,21 +230,26 @@
 
         .tab_info_layout {
             margin-top: 18px;
-            width: 340px;
-            height: 48px;
-            background: #222528;
-            border-radius: 9px;
+            // width: 340px;
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
-            justify-content: center;
-            padding-left: 4px;
-            padding-right: 4px;
-            box-sizing: border-box;
+            .overviewbg {
+                width: 172px;
+                height: 48px;
+                border-radius: 9px;
+                padding-left: 4px;
+                padding-right: 4px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                background: #222528;
+            }
 
-            .btn_en {
-                cursor: pointer;
+            .overview {
+                // cursor: pointer;
                 width: 164px;
                 height: 40px;
                 background: #454FBF;
@@ -262,6 +268,7 @@
 
             .btn_un {
                 cursor: pointer;
+                margin-left: 10px;
                 width: 164px;
                 height: 40px;
                 background: #161719;

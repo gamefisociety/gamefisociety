@@ -1,30 +1,46 @@
 import { React, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import GProjectEditor from "components/GProjectEditor";
 import icon_back from "../../asset/image/social/icon_back.png";
 import copy from "copy-to-clipboard";
 import "./GDetailProject.scss";
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png";
 import ic_report from "../../asset/image/logo/ic_report.png";
 import ic_share from "../../asset/image/logo/ic_share.png";
-
+import closeImg from "./../../asset/image/social/close.png";
 function GDetailProject() {
   let location = useLocation();
   const navigate = useNavigate();
-  const { info } = location.state;
+  const { info, owner } = location.state;
+  const [dialogOpen, setDialogOpen] = useState(false);
   useEffect(() => {
     console.log(info);
     return () => {};
   }, []);
 
+  const handleClickDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   const copyUrlShare = () => {
     let url = window.location;
     copy(url.href);
   };
-  
+
   const openClickLink = (url) => {
     window.open(url);
+  };
+
+  const editProject = () => {
+    handleClickDialogOpen();
   };
 
   return (
@@ -93,8 +109,15 @@ function GDetailProject() {
           </div>
         </div>
         <div className="tab_info_layout">
-          <span className="btn_en">Overview</span>
-          {/* <span className="btn_un">Marketplace</span> */}
+          <div className="overviewbg">
+            <span className="overview">Overview</span>
+          </div>
+
+          {info.owner === owner ? (
+            <span className="btn_un" onClick={editProject}>
+              Edit
+            </span>
+          ) : null}
         </div>
         <div className="info_layout">
           <div className="info_content">
@@ -137,6 +160,37 @@ function GDetailProject() {
           </div>
         </div>
       </div>
+      <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            backgroundColor: "#0F0F0F",
+          }}
+        >
+          <Button
+            className="button"
+            sx={{
+              position: "absolute",
+              top: "0px",
+              right: "20px",
+              width: "60px",
+              height: "60px",
+              zIndex: 10,
+            }}
+            onClick={() => {
+              handleDialogClose();
+            }}
+          >
+            <img src={closeImg} width="60px" alt="close" />
+          </Button>
+          <GProjectEditor info={info} />
+        </Box>
+      </Drawer>
     </div>
   );
 }
