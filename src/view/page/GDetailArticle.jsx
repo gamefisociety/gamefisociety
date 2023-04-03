@@ -57,8 +57,6 @@ function GDetailArticle() {
     <Box
       sx={{
         width: "960px",
-        height: "1000px",
-        minHeight: "1000px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -124,16 +122,34 @@ function GDetailArticle() {
       >
         {xhelp.formateSinceTime(timestamp * 1000)}
       </Typography>
-      <MDEditor.Markdown
-        source={content}
-        style={{
+      <Box
+        sx={{
           marginTop: "10px",
-          whiteSpace: "pre-wrap",
           width: "100%",
           height: "100%",
+          minHeight: "1000px",
           padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          backgroundColor: "#FFFFFF",
         }}
-      />
+      >
+        <MDEditor.Markdown
+          source={content}
+          style={{
+            whiteSpace: "pre-wrap",
+            width: "100%",
+            // height: "100%",
+            // padding: "20px",
+            // display: "flex",
+            // flexDirection: "column",
+            // alignItems: "center",
+            // justifyContent: "flex-start",
+          }}
+        />
+      </Box>
     </Box>
   );
 }
