@@ -126,7 +126,7 @@ const GGamePage = () => {
       <Box className={"project_card_contain"}>
         {projectDatas.map((item, index) => {
           return (
-            <GCardProject cid={item.cid} owner={account} key={"project-card-" + index}/>
+            <GCardProject tokenInfo={item} owner={account} key={"project-card-" + index}/>
           );
         })}
       </Box>

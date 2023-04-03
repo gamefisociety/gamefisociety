@@ -13,7 +13,7 @@ import "./GCardProject.scss";
 const GCardProject = (props) => {
   let fetching = false;
   const navigate = useNavigate();
-  const { cid, owner } = props;
+  const { tokenInfo, owner } = props;
   const [projectInfo, setProjectInfo] = useState({});
   useEffect(() => {
     catContent();
@@ -21,7 +21,7 @@ const GCardProject = (props) => {
   }, [props]);
 
   const catContent = () => {
-    if (cid.length === 0) {
+    if (tokenInfo.cid.length === 0) {
       alert("CID is empty!");
       return;
     }
@@ -29,7 +29,7 @@ const GCardProject = (props) => {
       return;
     }
     fetching = true;
-    catIPFSContent(cid)
+    catIPFSContent(tokenInfo.cid)
       .then((res) => {
         console.log("catContent", res);
         fetching = false;
@@ -52,16 +52,6 @@ const GCardProject = (props) => {
         console.log(err);
       });
   };
-  // thumb: "",
-  //   name: "",
-  //   description: "",
-  //   chainAddress: "",
-  //   website: "",
-  //   twitter: "",
-  //   discord: "",
-  //   reddit: "",
-  //   telegram: "",
-  //   github: "",
 
   return (
     <Card className={"project_card"}>
@@ -89,11 +79,11 @@ const GCardProject = (props) => {
           console.log(projectInfo);
           navigate("/detailproject", {
             state: {
-              info: projectInfo,
+              projectInfo: projectInfo,
+              tokenInfo: tokenInfo,
               owner: owner
             },
           });
-          // navigate("/detail?name=" + item.name);
         }}
       >
         {"DETAIL"}

@@ -15,10 +15,10 @@ import closeImg from "./../../asset/image/social/close.png";
 function GDetailProject() {
   let location = useLocation();
   const navigate = useNavigate();
-  const { info, owner } = location.state;
+  const { projectInfo, tokenInfo, owner } = location.state;
   const [dialogOpen, setDialogOpen] = useState(false);
   useEffect(() => {
-    console.log(info);
+    console.log(location.state);
     return () => {};
   }, []);
 
@@ -83,15 +83,15 @@ function GDetailProject() {
       <div className="layout">
         <div className="head_layout">
           <div className="product_layout">
-            <img className="icon" src={info.thumb} alt="icon"></img>
+            <img className="icon" src={projectInfo.thumb} alt="icon"></img>
             <div className="title_layout">
-              <span className="title">{info.name}</span>
+              <span className="title">{projectInfo.name}</span>
             </div>
           </div>
           <div className="right_layout">
             <div
               className="btn_open"
-              onClick={() => openClickLink(info.website)}
+              onClick={() => openClickLink(projectInfo.website)}
             >
               <img className="img" src={ic_open_dapp} alt="dapp"></img>
               <span className="txt">Open dapp</span>
@@ -113,7 +113,7 @@ function GDetailProject() {
             <span className="overview">Overview</span>
           </div>
 
-          {info.owner === owner ? (
+          {tokenInfo.owner === owner ? (
             <span className="btn_un" onClick={editProject}>
               Edit
             </span>
@@ -121,39 +121,39 @@ function GDetailProject() {
         </div>
         <div className="info_layout">
           <div className="info_content">
-            <span className="title">About {info.name}</span>
-            <span className="desc">{info.description}</span>
+            <span className="title">About {projectInfo.name}</span>
+            <span className="desc">{projectInfo.description}</span>
             <span className="moreBtn">Read more.</span>
             <div className="item_fc_layout">
               <span className="name2">Social</span>
-              {info.twitter && (
+              {projectInfo.twitter && (
                 <div
                   className="icon_twitter"
-                  onClick={() => openClickLink(info.twitter)}
+                  onClick={() => openClickLink(projectInfo.twitter)}
                 ></div>
               )}
-              {info.discord && (
+              {projectInfo.discord && (
                 <div
                   className="icon_discord"
-                  onClick={() => openClickLink(info.discord)}
+                  onClick={() => openClickLink(projectInfo.discord)}
                 ></div>
               )}
-              {info.reddit && (
+              {projectInfo.reddit && (
                 <div
                   className="icon_reddit"
-                  onClick={() => openClickLink(info.reddit)}
+                  onClick={() => openClickLink(projectInfo.reddit)}
                 ></div>
               )}
-              {info.github && (
+              {projectInfo.github && (
                 <div
                   className="icon_github"
-                  onClick={() => openClickLink(info.github)}
+                  onClick={() => openClickLink(projectInfo.github)}
                 ></div>
               )}
-              {info.telegram && (
+              {projectInfo.telegram && (
                 <div
                   className="icon_telegram"
-                  onClick={() => openClickLink(info.telegram)}
+                  onClick={() => openClickLink(projectInfo.telegram)}
                 ></div>
               )}
             </div>
@@ -188,7 +188,7 @@ function GDetailProject() {
           >
             <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <GProjectEditor info={info} />
+          <GProjectEditor info={projectInfo} />
         </Box>
       </Drawer>
     </div>
