@@ -16,6 +16,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { useWeb3React } from "@web3-react/core";
 import GIPFSLogin from "./GIPFSLogin";
 import ipfsupload from "api/ipfsupload";
+import GSTProjectsBase from "web3/GSTProjects";
 import {
   default_avatar,
   default_banner,
@@ -56,11 +57,6 @@ function GProjectEditor() {
     if (publishState === 1) {
       return;
     }
-    //
-    // let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
-    // if (new_content.length === 0) {
-    //   return;
-    // }
     //upload
     setPublishState(1);
     ipfsupload.upload(
@@ -71,20 +67,41 @@ function GProjectEditor() {
       project.name,
       (response) => {
         const cid = response.CID;
-        setPublishState(2);
-        // setStep(1);
-        // stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
-        // articleInfo.name = header;
-        // articleInfo.cid = cid;
-        // setArticleInfo({ ...articleInfo });
+        publishOnBlockchain(cid);
       },
       (err) => {
         setPublishState(0);
-        // setStep(0);
-        // stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
         console.log("ipfs upload error", err);
       }
     );
+  };
+
+  const publishOnBlockchain = (cid) => {
+    if (cid.length === 0) {
+      return;
+    }
+    if (account) {
+      if (publishState === 2) {
+        return;
+      }
+      setPublishState(2);
+      GSTProjectsBase.createProject(
+        library,
+        account,
+        cid
+      )
+        .then((res) => {
+          console.log("createProject", res);
+          if (res) {
+            setPublishState(3);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+          setPublishState(1);
+        });
+    } else {
+    }
   };
 
   const uploadThumbOnIPFS = (event) => {
@@ -119,17 +136,15 @@ function GProjectEditor() {
     }
   };
 
-  const publishMsg = () => {
+  const saveMsg = () => {
     if (publishState === 0) {
-      return "publish on ipfs";
+      return "save";
     } else if (publishState === 1) {
-      return "publishing on ipfs...";
+      return "saving...";
     } else if (publishState === 2) {
-      return "publish on blockchain";
+      return "saving...";
     } else if (publishState === 3) {
-      return "publishing on blockchain...";
-    } else if (publishState === 4) {
-      return "published";
+      return "saved";
     }
   };
 
@@ -575,12 +590,15 @@ function GProjectEditor() {
               color: "#FFFFFF",
             }}
             onClick={() => {
+              if(publishState === 1 || publishState === 2){
+                return;
+              }
               const projectStr = JSON.stringify(project);
               publishOnIPFS(projectStr);
               console.log(projectStr);
             }}
           >
-            SAVE
+            {saveMsg()}
           </Button>
         </Box>
       </Box>

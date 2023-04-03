@@ -123,15 +123,15 @@ function GPublishArticle() {
   };
 
   //
-  const publishiOnBlockchain = () => {
+  const publishOnBlockchain = () => {
     if (articleInfo.name.length === 0 || articleInfo.cid.length === 0) {
       return;
     }
-    if (publishState === 3) {
-      return;
-    }
-    setPublishState(3);
     if (account) {
+      if (publishState === 3) {
+        return;
+      }
+      setPublishState(3);
       GSTArticlesBase.creatArticle(
         library,
         account,
@@ -304,7 +304,7 @@ function GPublishArticle() {
           if (publishState === 0) {
             publishOnIPFS();
           } else if (publishState === 2) {
-            publishiOnBlockchain();
+            publishOnBlockchain();
           }
         }}
       >

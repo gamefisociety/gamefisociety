@@ -1,0 +1,17 @@
+.project_card {
+    width: calc( 33% - 22.5px ) !important;
+    height: 200px;
+    border-radius: 12px;
+    background-color: #15171c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    cursor: pointer;
+    transition: all .3s cubic-bezier(.17,.67,.83,.67);
+    overflow: hidden;
+    &:hover{
+        transform: scale(1.1);
+    }
+}

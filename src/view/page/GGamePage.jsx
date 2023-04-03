@@ -1,41 +1,74 @@
 import { React, useEffect, useState, useRef } from "react";
 import { useLocation, Link, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { useWeb3React } from "@web3-react/core";
+import { useDispatch } from "react-redux";
+import { setIsOpen } from "module/store/features/dialogSlice";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
-import Avatar from "@mui/material/Avatar";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { getListChainData } from "api/requestData";
+import GSTProjectsBase from "web3/GSTProjects";
+import GCardProject from "components/GCardProject";
 import GProjectEditor from "components/GProjectEditor";
 import closeImg from "./../../asset/image/social/close.png";
 import "./GGamePage.scss";
 
 const GGamePage = () => {
   const navigate = useNavigate();
-
-  const [chainList, setChainList] = useState([]);
+  const { activate, account, chainId, active, library, deactivate } =
+    useWeb3React();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const requsetData = () => {
-    getListChainData().then((res) => {
-      console.log(res.list, "res");
-      setChainList(res.list);
-    });
-  };
-
+  const [projectDatas, setProjectDatas] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
-    requsetData();
-    // fetchAllNFTs();
-    return () => {};
-  }, []);
+    if (account) {
+      setProjectDatas([]);
+      getAllProjects();
+    } else {
+      dispatch(setIsOpen(true));
+    }
+    return () => {
+      setProjectDatas([]);
+    };
+  }, [account]);
+
+  const getAllProjects = () => {
+    if (account) {
+      GSTProjectsBase.totalSupply(library)
+        .then((res) => {
+          console.log("totalSupply", res);
+          if (res > 0) {
+            fetchProjects(0, Number(res));
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
+      return 0;
+    }
+  };
+  const fetchProjects = (index, count) => {
+    if (account) {
+      let projectCache = projectDatas.concat();
+      GSTProjectsBase.getProjects(library, index, count)
+        .then((res) => {
+          if (res && res.length > 0) {
+            projectCache = projectCache.concat(res);
+            projectCache.reverse();
+            setProjectDatas(projectCache);
+            console.log(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
+      return 0;
+    }
+  };
 
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
@@ -91,37 +124,9 @@ const GGamePage = () => {
     <Paper className={"main_game_bg"}>
       {renderGamesTop()}
       <Box className={"game_card_contain"}>
-        {chainList.map((item, index) => {
+        {projectDatas.map((item, index) => {
           return (
-            <Card className={"game_card"} key={"gamepage-card-index" + index}>
-              <Avatar
-                sx={{
-                  width: "64px",
-                  height: "64px",
-                }}
-                alt="Remy Sharp"
-                src={item.icon}
-              />
-              <Typography
-                sx={{
-                  mt: "12px",
-                }}
-                color={"white"}
-                variant={"body1"}
-              >
-                {item.name}
-              </Typography>
-              <Box sx={{ flexGrow: 1 }}></Box>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  console.log(item);
-                  navigate("/detail?name=" + item.name);
-                }}
-              >
-                {"DETAIL"}
-              </Button>
-            </Card>
+            <GCardProject cid={item.cid} key={"project-card-" + index}/>
           );
         })}
       </Box>

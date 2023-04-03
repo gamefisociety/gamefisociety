@@ -25,16 +25,15 @@ function GArticles() {
   useEffect(() => {
     if (account) {
       setArticleDatas([]);
-      getArticleCount();
+      getAllArticles();
     } else {
       dispatch(setIsOpen(true));
     }
-
     return () => {
       setArticleDatas([]);
     };
   }, [account]);
-  const getArticleCount = () => {
+  const getAllArticles = () => {
     if (account) {
       GSTArticlesBase.totalSupply(library)
         .then((res) => {
@@ -258,8 +257,7 @@ function GArticles() {
           >
             <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <GPublishArticle
-          />
+          <GPublishArticle />
         </Box>
       </Drawer>
     </Box>
