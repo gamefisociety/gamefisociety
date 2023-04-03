@@ -1,6 +1,7 @@
 .gsociety_box_bg {
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 
     .list_bg {
         // min-height: 100vh;
@@ -8,6 +9,8 @@
         height: 0;
         overflow: auto;
         padding-right: "20px";
+        padding-bottom: 60px;
+        box-sizing: border-box;
 
         .gsociety_text_item {
             display: flex;
