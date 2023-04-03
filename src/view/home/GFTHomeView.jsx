@@ -232,7 +232,7 @@ const GFTHomeView = () => {
                     <Button sx={{
                         mr: '24px',
                     }} onClick={() => {
-                        navigate('/gamepage');
+                        navigate('/projects');
                     }}>{'more'}</Button>
                 </Box>
             </Stack>

@@ -6,7 +6,7 @@ import MainLayout from "view/layout/MainLayout";
 
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
 const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
-const GGamePage = Loadable(lazy(() => import("view/page/GGamePage")));
+const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
 // const GFTNFTDetail = Loadable(lazy(() => import("view/home/GFTNFTDetail")));
@@ -64,8 +64,8 @@ const MainRoutes = {
       element: <GPostReply />,
     },
     {
-      path: "/gamepage",
-      element: <GGamePage />,
+      path: "/projects",
+      element: <GProjects />,
     },
     {
       path: "/detailproject",

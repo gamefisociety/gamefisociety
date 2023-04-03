@@ -1,14 +1,8 @@
 import { React, useEffect, useState, useRef } from "react";
-import { useWeb3React } from "@web3-react/core";
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { useLocation, Link, useSearchParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { useSnackbar } from "notistack";
-import FsLightbox from "fslightbox-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import icon_back from "../../asset/image/social/icon_back.png";
 import copy from "copy-to-clipboard";
 import "./GDetailProject.scss";
 import ic_open_dapp from "../../asset/image/logo/ic_open_dapp.png";
@@ -16,20 +10,9 @@ import ic_report from "../../asset/image/logo/ic_report.png";
 import ic_share from "../../asset/image/logo/ic_share.png";
 
 function GDetailProject() {
-  const { enqueueSnackbar } = useSnackbar();
   let location = useLocation();
+  const navigate = useNavigate();
   const { info } = location.state;
-  const [videosBox, setVideosBox] = useState([]);
-  const [togglerVideos, setTogglerVideos] = useState({
-    slide: 0,
-    toggles: false,
-  });
-  const [bannerBox, setBannerBox] = useState([]);
-  const [togglerBanner, setTogglerBanner] = useState({
-    slide: 0,
-    toggles: false,
-  });
-
   useEffect(() => {
     console.log(info);
     return () => {};
@@ -38,31 +21,49 @@ function GDetailProject() {
   const copyUrlShare = () => {
     let url = window.location;
     copy(url.href);
-    enqueueSnackbar("copy share url success", {
-      variant: "success",
-      anchorOrigin: { horizontal: "center", vertical: "top" },
-    });
   };
-  const itemVideo = (index) => {
-    console.log(index);
-
-    setTogglerVideos({
-      toggles: !togglerVideos.toggles,
-      slide: index + 1,
-    });
-  };
-  const itemBanner = (index) => {
-    setTogglerBanner({
-      toggles: !togglerBanner.toggles,
-      slide: index + 1,
-    });
-  };
+  
   const openClickLink = (url) => {
     window.open(url);
   };
 
   return (
-    <div className="nft_detail_bg">
+    <div className="project_detail_bg">
+      <Box
+        sx={{
+          width: "960px",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <Box
+          className={"boxClick"}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <img src={icon_back} width="38px" alt="icon_back" />
+          <Typography
+            sx={{
+              marginLeft: "5px",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+          >
+            {"Projects"}
+          </Typography>
+        </Box>
+      </Box>
       <div className="layout">
         <div className="head_layout">
           <div className="product_layout">

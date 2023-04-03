@@ -13,7 +13,7 @@ import GSTProjectsBase from "web3/GSTProjects";
 import GCardProject from "components/GCardProject";
 import GProjectEditor from "components/GProjectEditor";
 import closeImg from "./../../asset/image/social/close.png";
-import "./GGamePage.scss";
+import "./GProjects.scss";
 
 const GGamePage = () => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const GGamePage = () => {
           variant={"h6"}
           align={"left"}
         >
-          {"Game Projects"}
+          {"Projects"}
         </Typography>
         <Button
           variant="contained"
@@ -121,9 +121,9 @@ const GGamePage = () => {
   };
 
   return (
-    <Paper className={"main_game_bg"}>
+    <Paper className={"bg"}>
       {renderGamesTop()}
-      <Box className={"game_card_contain"}>
+      <Box className={"project_card_contain"}>
         {projectDatas.map((item, index) => {
           return (
             <GCardProject cid={item.cid} key={"project-card-" + index}/>

@@ -128,6 +128,7 @@ function GArticles() {
         {articleDatas.map((item, index) => {
           return (
             <Box
+              key={"article" + index}
               sx={{
                 marginTop: "30px",
                 width: "100%",
