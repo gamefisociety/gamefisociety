@@ -46,7 +46,7 @@ const mapData = [
         img: ic_chat
     },
     {
-        txt: 'POST & REPLAY',
+        txt: 'POST & REPLY',
         img: ic_chat,
     },
     {
@@ -152,8 +152,8 @@ const GBottomMenu = () => {
             }
         } else if (item.txt === 'GLOBAL') {
             navigate('/global');
-        } else if (item.txt === 'POST & REPLAY') {
-            navigate('/post-replay');
+        } else if (item.txt === 'POST & REPLY') {
+            navigate('/post-reply');
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'CREATE') {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'
 import './GNoteThread.scss';
+
+import { useLocation, useNavigate } from 'react-router-dom'
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
 import { parseTextNote, BuildSub } from 'nostr/NostrUtils';
 import { useMetadataPro } from 'nostr/protocal/MetadataPro';
@@ -8,123 +10,148 @@ import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
 
 import NormalCache from 'db/NormalCache';
-import TimelineCache, { thread_node_cache_flag } from 'db/TimelineCache';
+import TimelineCache from 'db/TimelineCache';
+import UserDataCache from 'db/UserDataCache';
 
 import Paper from '@mui/material/Paper';
 import Typography from "@mui/material/Typography";
 
 import GCardNote from "components/GCardNote";
 
+const createThreadWorker = createWorkerFactory(() => import('worker/threadRequest'));
+
 const GNoteThread = () => {
+    const threadWorker = useWorker(createThreadWorker);
+
     let location = useLocation();
     const navigate = useNavigate();
 
     const { note } = location.state;
+    const [mainNote, setMainNote] = useState(null);
+    const [replyNote, setReplyNote] = useState(null);
     const [notes, setNotes] = useState([]);
     //
     const metadataPro = useMetadataPro();
     const textnotePro = useTextNotePro();
     //
-    const NorCache = NormalCache();
     const TLCache = TimelineCache();
+    const UserCache = UserDataCache();
 
     let main_note_id = '0';
+    let reply_note_id = '0';
 
-    let notethread_flag = 'note_thread';
-    const fetchNotes = (curNote) => {
-        console.log('GNoteThread', curNote);
-        if (!curNote) {
-            return;
+    const fetchMainNotes = (nodeId) => {
+        //
+        let tmpMainNote = TLCache.getThreadNote(nodeId);
+        if (tmpMainNote) {
+            setMainNote({ ...tmpMainNote });
         }
-        let parseRet = parseTextNote(curNote);
-        console.log('GNoteThread parse', parseRet);
-        if (parseRet.notestate === 0) {
-            const filterMetadata = metadataPro.get(curNote.pubkey);
-            const sueThread = BuildSub(notethread_flag, [filterMetadata]);
-            System.BroadcastSub(sueThread, (tag, client, msg) => {
-                console.log('root msg', msg);
-                if (tag === 'EOSE') {
-                    System.BroadcastClose(sueThread, client, null);
-                } else if (tag === 'EVENT') {
+        //
+        const filterTextNote = textnotePro.getEvents([nodeId]);
+        const subThread = BuildSub('root_note', [filterTextNote]);
+        threadWorker.fetch_thread_note(subThread, null, (datas, client) => {
+            console.log('fetchMainNotes', datas);
+            setNotes(datas.concat());
+        });
+    }
 
-                }
-            })
-        } else {
-            // const filterMetadata = metadataPro.get(parseRet.pArray); //parseRet.eArray
-            const filterTextNote = textnotePro.getEvents([curNote.id]); //
-            // filterTextNote.ids = [parseRet.eArray[0]];
-            // filterTextNote['#e'] = [parseRet.eArray[1]];
-            const sueThread = BuildSub(notethread_flag, [filterTextNote]);
-            // console.log('root msg textnotes curNote', curNote);
-            // console.log('root msg textnotes send', sueThread);
-            System.BroadcastSub(sueThread, (tag, client, msg) => {
-                // console.log('root msg textnotes receive', msg);
-                if (tag === 'EOSE') {
-                    System.BroadcastClose(sueThread, client, null);
-                    const notes_cache = TLCache.get(thread_node_cache_flag);
-                    if (notes_cache) {
-                        setNotes(notes_cache.concat());
-                        console.log('note cache', notes_cache);
-                    }
-                } else if (tag === 'EVENT') {
-                    // console.log('root msg textnotes receive', msg);
-                    TLCache.pushThreadNote(thread_node_cache_flag, msg);
-                }
-            })
+    const fetchReplyNotes = (nodeId) => {
+        let tmpReplyNote = TLCache.getThreadNote(nodeId);
+        if (tmpReplyNote) {
+            setReplyNote({ ...tmpReplyNote });
         }
+        //
+        const filterTextNote = textnotePro.getEvents([nodeId]);
+        const subThread = BuildSub('reply_note', [filterTextNote]);
+        threadWorker.fetch_thread_note(subThread, null, (datas, client) => {
+            console.log('fetchReplyNotes', datas);
+            setNotes(datas.concat());
+        });
+    }
+
+    const fetchMeta = (pubkeys) => {
+
     }
 
     useEffect(() => {
-        // console.log('main note', note);
-        TLCache.clear(thread_node_cache_flag);
-        // TLCache.pushThreadNote(thread_node_cache_flag, note);
-        //
+        TLCache.clear();
+        let ret = TLCache.pushThreadNote(note);
+        // console.log('pushThreadNote', note, ret);
+        let eNum = 0;
+        let pNum = 0;
+        let eArray = [];
+        let pArray = [];
         if (note.tags.length === 0) {
             main_note_id = note.id;
         } else {
-            let eNum = 0;
             note.tags.map(item => {
                 if (item[0] === '#e') {
                     eNum = eNum + 1;
+                    eArray.push(item[1]);
+                    if (item[3] && item[3] === 'root') {
+                        main_note_id = item[1];
+                    }
+                    if (item[3] && item[3] === 'reply') {
+                        reply_note_id = item[1];
+                    }
+                } else if (item[0] === '#p') {
+                    pNum = pNum + 1;
+                    pArray.push(item[1]);
                 }
             });
-            if (eNum === 1) {
-                // the first e is main note id;
-            } else if (eNum === 2) {
-                // the first e is main note id;
-                // the second e is relay note id
-            }
         }
+        console.log('pushThreadNote', note, ret, main_note_id);
         // get relate information
-        fetchNotes(note);
+        fetchMainNotes(main_note_id);
+        fetchReplyNotes(reply_note_id);
+        fetchMeta(pArray);
         return () => {
         }
     }, [note])
 
     const renderRootNote = () => {
-        let info = NorCache.getMetadata('user_metadata', note.pubkey);
+        if (mainNote === null) {
+            return null;
+        }
+        let context = {};
+        let info = UserCache.getMetadata(mainNote.pubkey);
+        if (info) {
+            context = JSON.parse(info.content)
+        }
+        // console.log('mainNote', info, mainNote.pubkey);
         return <GCardNote
-            note={{ ...note }}
-            info={info}
+            note={{ ...mainNote }}
+            info={{ ...context }}
         />
     }
 
-    const renderNotes = () => {
+    const renderLocalNote = () => {
+        if (note && note.id === main_note_id) {
+            return null;
+        }
         return notes.map((item, index) => {
-            return <GCardNote
-                key={'other_node_' + index}
-                note={{ ...item.msg }}
-            />
-        })
+            return <GCardNote key={'other_node_' + index} note={{ ...item }} />
+        });
     }
+
+    const renderReplyNote = () => {
+        // if (note && note.id !== main_note_id) {
+        //     return null;
+        // }
+        return notes.map((item, index) => {
+            return <GCardNote key={'reply_node_' + index} note={{ ...item }} />
+        });
+    }
+
     return (
         <Paper className='node_thread_bg' elevation={1}>
-            <div className='back' onClick={() => {
+            {/* <div className='back' onClick={() => {
                 navigate(-1);
-            }}></div>
+            }}></div> */}
             <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'THREAD'}</Typography>
             {renderRootNote()}
-            {renderNotes()}
+            {renderLocalNote()}
+            {renderReplyNote()}
         </Paper >
     );
 

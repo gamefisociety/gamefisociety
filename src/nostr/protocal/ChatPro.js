@@ -58,7 +58,7 @@ export const useChatPro = () => {
       ev.PubKey = publicKey;
       ev.Content = content;
       ev.Tags.push(['e', rootEv.id, '', 'root']);
-      ev.Tags.push(['e', ev.Id, '', 'replay']);
+      ev.Tags.push(['e', ev.Id, '', 'reply']);
       ev.Tags.push(['p', publicKey]);
       return await nostrEvent.Sign(privateKey, ev);
     },

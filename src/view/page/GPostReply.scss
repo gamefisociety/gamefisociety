@@ -1,4 +1,4 @@
-.post_replay_bg {
+.post_reply_bg {
     min-height: calc( 100vh - 64px );
     width: 760px;
     background-color: rgba(0, 0, 0, 0.75);
@@ -32,6 +32,12 @@
         border-radius: 29px;
         background-image: url(../../asset/image/logo/icon_post.png);
         background-size: 100% 100%;
+    }
+
+    .list_bg {
+        width: 100%;
+        overflow: auto;
+        background-color: transparent;
     }
 
 }

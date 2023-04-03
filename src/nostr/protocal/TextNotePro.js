@@ -35,7 +35,7 @@ export const useTextNotePro = () => {
       return await nostrEvent.Sign(privateKey, ev);
 
     },
-    sendReplay: async (cxt, targetEvId, targetPubkey) => {
+    sendReply: async (cxt, targetEvId, targetPubkey) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.TextNote;
       ev.Content = cxt;

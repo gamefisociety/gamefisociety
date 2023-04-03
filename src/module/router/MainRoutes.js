@@ -19,7 +19,7 @@ const GUserHome = Loadable(lazy(() => import("view/page/GUserHome")));
 const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
-const GPostReplay = Loadable(lazy(() => import("view/page/GPostReplay")));
+const GPostReply = Loadable(lazy(() => import("view/page/GPostReply")));
 const GArticles = Loadable(lazy(() => import("view/page/GArticles")));
 const GGroupChat = Loadable(lazy(() => import("view/page/GGroupChat")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
@@ -59,8 +59,8 @@ const MainRoutes = {
       element: <GFTGlobal />,
     },
     {
-      path: "/post-replay",
-      element: <GPostReplay />,
+      path: "/post-reply",
+      element: <GPostReply />,
     },
     {
       path: "/gamepage",

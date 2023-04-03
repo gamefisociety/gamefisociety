@@ -1,83 +1,110 @@
 import { React, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import "./GUserHome.scss";
+
 import { useLocation, useNavigate } from "react-router-dom";
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
 import Typography from "@mui/material/Typography";
 import UserNoteCache from "db/UserNoteCache";
-import { EventKind } from "nostr/def";
+import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { BuildSub } from "nostr/NostrUtils";
-import { System } from "nostr/NostrSystem";
+import { EventKind } from "nostr/def";
 import icon_back from "../../asset/image/social/icon_back.png";
-import "./GUserHome.scss";
+
+const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
 let lastPubKey = "";
 
 const GUserHome = () => {
+
+  const nostrWorker = useWorker(createNostrWorker);
+
   const location = useLocation();
-  const { info, pubkey } = location.state;
-  console.log("GProfile enter", location);
+  const { pubkey } = location.state;
+  console.log("GProfile enter", pubkey);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const user_note_cache = UserNoteCache();
+  const [info, setInfo] = useState(null);
   const [notes, setNotes] = useState([]);
   const [ownRelays, setOwnRelays] = useState({});
   const [ownFollows, setOwnFollows] = useState([]);
   const textNotePro = useTextNotePro();
+  const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
-  let follow_create_at = 0;
   //
   const fetchTextNote = (pub) => {
+    const filterMeta = MetaPro.get(pubkey);
     const filterTextNote = textNotePro.get();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
-    let textNote = BuildSub("profile_note_follow", [
+    let profileNote = BuildSub("profile_note", [
+      filterMeta,
       filterTextNote,
       filterFollowPro,
     ]);
-    System.BroadcastSub(
-      textNote,
-      (tag, client, msg) => {
-        if (tag === "EOSE") {
-          let target_note_cache = user_note_cache.get(pubkey);
-          if (target_note_cache) {
-            console.log("target_note_cache", target_note_cache);
-            setNotes(target_note_cache.concat());
+    //
+    let metadata_time = 0;
+    let contactlist_time = 0;
+    nostrWorker.fetch_user_profile(profileNote, null, (data, client) => {
+      console.log('fetch_user_profile data', data);
+      data.map((item) => {
+        if (item.kind === EventKind.SetMetadata) {
+          console.log('fetch_user_profile data', item);
+          let update_flag = false;
+          if (info === null) {
+            update_flag = true;
+          } else if (item.created_at > metadata_time) {
+            update_flag = true;
           }
-          System.BroadcastClose(textNote, client, null);
-        } else if (tag === "EVENT") {
-          if (msg.kind === EventKind.TextNote) {
-            // console.log("BroadcastSub textNote", msg);
-            user_note_cache.pushNote(pubkey, msg);
-          } else if (msg.kind === EventKind.ContactList) {
-            // console.log("profile_note_follow", client.addr, msg);
-            if (msg.created_at < follow_create_at) {
-              return;
+          if (update_flag) {
+            metadata_time = item.created_at;
+            if (item.content !== "") {
+              setInfo(JSON.parse(item.content));
             }
-            follow_create_at = msg.created_at;
-            if (msg.content && msg.content !== "") {
-              let relays = JSON.parse(msg.content);
+          }
+        } else if (item.kind === EventKind.TextNote) {
+          //push in cache
+          user_note_cache.pushNote(item.pubkey, item);
+          //
+        } else if (item.kind === EventKind.ContactList) {
+          let update_flag = false;
+          if (contactlist_time === 0) {
+            update_flag = true;
+          } else if (item.created_at > contactlist_time) {
+            update_flag = true;
+          }
+          if (update_flag) {
+            contactlist_time = item.created_at;
+            if (item.content && item.content !== "") {
+              let relays = JSON.parse(item.content);
               setOwnRelays(relays);
             }
-            if (msg.tags && msg.tags.length > 0) {
-              setOwnFollows(msg.tags.concat());
+            if (item.tags && item.tags.length > 0) {
+              setOwnFollows(item.tags.concat());
             }
           }
         }
-      },
-      null
-    );
+      });
+      //user_note_cache
+      let target_note_cache = user_note_cache.get(pubkey);
+      if (target_note_cache) {
+        setNotes(target_note_cache.concat());
+      }
+    });
   };
 
   useEffect(() => {
     if (pubkey && lastPubKey !== pubkey) {
-      setNotes([]);
       lastPubKey = pubkey;
+      setNotes([]);
+      setInfo(null);
       fetchTextNote(pubkey);
     }
     return () => {
@@ -131,7 +158,7 @@ const GUserHome = () => {
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => (
           <GCardNote
-            key={"profile-note-index" + index + '-' + pubkey}
+            key={"userhome-note-index" + index + '-' + pubkey}
             note={{ ...item }}
             info={info}
           />

@@ -37,7 +37,7 @@ const GPostDialog = () => {
                 console.log('post tag', tag, msg);
             });
         } else {
-            let event = await textNotrPro.sendReplay(text, targetPost.id, targetPost.pubkey);
+            let event = await textNotrPro.sendReply(text, targetPost.id, targetPost.pubkey);
             System.BroadcastEvent(event, (tag, client, msg) => {
                 console.log('post tag', tag, msg);
             });
@@ -52,7 +52,7 @@ const GPostDialog = () => {
             </Box>;
         }
         return <Box className={'post_header'}>
-            <Typography className={'target_tips'}>{'Replay a note!'}</Typography>
+            <Typography className={'target_tips'}>{'Reply a note!'}</Typography>
             <Typography className={'target_note'}>{targetPost.content}</Typography>
         </Box>;
     }
