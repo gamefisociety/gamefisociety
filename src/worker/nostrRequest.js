@@ -68,7 +68,6 @@ export const fetch_user_metadata = (sub, curRelay, callback) => {
     }
   }, curRelay
   );
-
   return null;
 }
 
