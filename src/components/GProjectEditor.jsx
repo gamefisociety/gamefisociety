@@ -36,7 +36,7 @@ function GProjectEditor() {
     name: "",
     description: "",
     chainAddress: "",
-    wesite: "",
+    website: "",
     twitter: "",
     discord: "",
     reddit: "",

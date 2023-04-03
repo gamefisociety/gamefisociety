@@ -59,22 +59,13 @@ const GFTFooter = () => {
                     className="icon_discord">
                 </Box>
                 <Box
-                 sx={{ width: '34px', height: '34px', mx: '2px' }}
+                 sx={{ width: '34px', height: '34px', marginTop:'6px', mx: '2px' }}
                     className="icon_youtube">
                 </Box>
-                <Box
-                 sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    className="icon_ins">
-                </Box>
-                <Box
+                {/* <Box
                  sx={{ width: '34px', height: '34px', mx: '2px' }}
                     className="icon_reddit">
-                </Box>
-                <Box
-                 sx={{ width: '34px', height: '34px', mx: '2px' }}
-                    className="icon_facebook">
-                </Box>
-                
+                </Box> */}
             </Box>
             {/* <div className='lang'>
                 <span className='txt'>English</span>

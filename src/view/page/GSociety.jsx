@@ -306,10 +306,8 @@ const GSociety = (props) => {
       sx={{
         backgroundColor: "#0F0F0F",
         width: "400px",
-        height: "100%",
         paddingLeft: "32px",
         overflow: 'hidden',
-        boxSizing: 'border-box',
       }}
     >
       <Box
