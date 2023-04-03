@@ -111,7 +111,7 @@ const mapData = [
     //     img: ic_bnb
     // },
     {
-        txt: 'GAMES',
+        txt: 'PROJECTS',
         img: ic_polgon
     },
     // {
@@ -177,8 +177,8 @@ const GFTLeftMenu = () => {
             } else {
                 dispatch(setIsOpen(true));
             }
-        } else if (item.txt === 'GAMES') {
-            navigate('/gamepage');
+        } else if (item.txt === 'PROJECTS') {
+            navigate('/projects');
             openMainContent();
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
