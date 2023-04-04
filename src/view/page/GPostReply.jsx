@@ -37,6 +37,11 @@ const GPostReply = () => {
 
   const getSubNote = (tim) => {
     const filterTextNote = textNotePro.get();
+    let tmpAuthors = follows.concat([publicKey]);
+    filterTextNote.authors = tmpAuthors;
+    // if (curLabel === 'Post') {
+    //   filterTextNote['#e'] = [null];
+    // }
     if (tim === 0) {
       gNoteCache.clear();
       filterTextNote.until = Date.now();
@@ -44,8 +49,6 @@ const GPostReply = () => {
       filterTextNote.until = tim;
     }
     filterTextNote.limit = 10;
-    let tmpAuthors = follows.concat([publicKey]);
-    filterTextNote.authors = tmpAuthors;
     let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
     return subTextNode;
   }
@@ -91,12 +94,15 @@ const GPostReply = () => {
   }
 
   useEffect(() => {
+    //
+    setData([]);
+    //
     let textNote = getSubNote(0);
     getNoteList(textNote, true);
     return () => {
       nostrWorker.unlisten_follow_notes(textNote, null, null);
     };
-  }, [follows]);
+  }, [follows, curLabel]);
 
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
