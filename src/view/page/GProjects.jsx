@@ -9,6 +9,8 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import GSTProjectsBase from "web3/GSTProjects";
 import GCardProject from "components/GCardProject";
 import GProjectEditor from "components/GProjectEditor";
@@ -21,6 +23,8 @@ const GGamePage = () => {
     useWeb3React();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [projectDatas, setProjectDatas] = useState([]);
+  const [waittingDatas, setWaittingDatas] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (account) {
@@ -36,14 +40,21 @@ const GGamePage = () => {
 
   const getAllProjects = () => {
     if (account) {
+      if (fetching) {
+        return;
+      }
+      setFetching(true);
       GSTProjectsBase.totalSupply(library)
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
             fetchProjects(0, Number(res));
+          } else {
+            setFetching(false);
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
     } else {
@@ -55,6 +66,7 @@ const GGamePage = () => {
       let projectCache = projectDatas.concat();
       GSTProjectsBase.getProjects(library, index, count)
         .then((res) => {
+          setFetching(false);
           if (res && res.length > 0) {
             projectCache = projectCache.concat(res);
             projectCache.reverse();
@@ -63,9 +75,11 @@ const GGamePage = () => {
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
     } else {
+      setFetching(false);
       return 0;
     }
   };
@@ -82,7 +96,7 @@ const GGamePage = () => {
     return (
       <Box
         sx={{
-          marginTop: "20px",
+          marginTop: "40px",
           width: "100%",
           display: "flex",
           flexDirection: "row",
@@ -96,8 +110,8 @@ const GGamePage = () => {
             fontFamily: "Saira",
             fontWeight: "500",
             color: "#FFFFFF",
-            textAlign:"center",
-            marginLeft: "24px"
+            textAlign: "center",
+            marginLeft: "24px",
           }}
         >
           {"Projects"}
@@ -122,9 +136,8 @@ const GGamePage = () => {
     );
   };
 
-  return (
-    <Paper className={"bg"}>
-      {renderTop()}
+  const renderProjectCards = () => {
+    return (
       <Box className={"project_card_contain"}>
         {projectDatas.map((item, index) => {
           return (
@@ -136,6 +149,38 @@ const GGamePage = () => {
           );
         })}
       </Box>
+    );
+  };
+
+  const renderWaittingCards = () => {
+    return (
+      <Box className={"project_card_contain"}>
+        {waittingDatas.map((item, index) => {
+          return (
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+              key={"project_waitting_" + index}
+              spacing={1}
+            >
+              <Skeleton variant="circular" width={60} height={60} />
+              <Skeleton variant="rectangular" width={214} height={60} />
+              <Skeleton variant="rounded" width={214} height={60} />
+            </Stack>
+          );
+        })}
+      </Box>
+    );
+  };
+
+  return (
+    <Paper className={"bg"}>
+      {renderTop()}
+      {fetching === true ? renderWaittingCards():renderProjectCards()}
       <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
