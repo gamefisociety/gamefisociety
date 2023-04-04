@@ -23,11 +23,9 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
-import {
-  setMainContent,
-} from 'module/store/features/dialogSlice';
+import { setMainContent } from 'module/store/features/dialogSlice';
 
-import NormalCache from "db/NormalCache";
+import UserDataCache from 'db/UserDataCache';
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
@@ -58,13 +56,12 @@ TabPanel.propTypes = {
 
 const GSociety = (props) => {
   const { callback } = props;
-  
+
   const nostrWorker = useWorker(createNostrWorker);
+  const UserCache = UserDataCache();
 
   const navigate = useNavigate();
   const followPro = useFollowPro();
-
-  const NorCache = NormalCache();
 
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
@@ -80,36 +77,20 @@ const GSociety = (props) => {
   //
   const fetchAllMeta = (pubkeys) => {
     let filteMeta = MetadataPro.get(pubkeys);
-    let subMeta = BuildSub("follow_meta", [filteMeta]);
-    System.BroadcastSub(subMeta, (tag, client, msg) => {
-      if (tag === "EOSE") {
-        System.BroadcastClose(subMeta, client, null);
-        let metadatas = NorCache.get(metadata_cache_flag);
-        // console.log('subMeta', metadatas);
-        if (metadatas) {
-          setDatas(metadatas.concat());
-        }
-      } else if (tag === "EVENT") {
-        NorCache.pushMetadata(metadata_cache_flag, msg.pubkey, msg);
-      }
+    let subMeta = BuildSub("followers_meta", [filteMeta]);
+    nostrWorker.fetch_user_profile(subMeta, null, (datas, client) => {
+      // console.log('followers_meta', datas);
+      setDatas(datas.concat());
     });
   };
 
   //
   const fetchFollowers = () => {
-    NorCache.clear(followers_cache_flag);
     let filterFollowing = followPro.getFollowings(publicKey);
     let subFollowing = BuildSub("followings_metadata", [filterFollowing]);
-    System.BroadcastSub(subFollowing, (tag, client, msg) => {
-      if (tag === "EOSE") {
-        System.BroadcastClose(subFollowing, client, null);
-        let cache = NorCache.get(followers_cache_flag);
-        if (cache) {
-          setFollowers(cache.concat());
-        }
-      } else if (tag === "EVENT") {
-        NorCache.pushFollowers(followers_cache_flag, msg.pubkey, msg);
-      }
+    nostrWorker.fetch_user_profile(subFollowing, null, (datas, client) => {
+      console.log('followings_metadata', datas);
+      setFollowers(datas.concat());
     });
   };
 
@@ -181,14 +162,11 @@ const GSociety = (props) => {
       return null;
     }
     return (
-      <List
-        className="list_bg"
-      >
-        {" "}
+      <List className="list_bg">
         {follows.map((pubkey, index) => {
-          const { info } = NorCache.getMetadata(metadata_cache_flag, pubkey);
-          console.log();
-          if (info === null) {
+          const info = UserCache.getMetadata(pubkey);
+          console.log('info111', pubkey, info);
+          if (!info) {
             return null;
           }
           let cxt = JSON.parse(info.content);
@@ -244,20 +222,12 @@ const GSociety = (props) => {
     }
     return (
       <List className="list_bg">
-        {" "}
         {followers.map((item, index) => {
-          const { info } = NorCache.getMetadata(
-            metadata_cache_flag,
-            item.pubkey
-          );
-          if (info === null) {
-            return null;
-          }
-          let cxt = JSON.parse(info.content);
+          let cxt = JSON.parse(item.content);
           return (
             <ListItem
               sx={{ my: "2px" }}
-              key={"following-list-" + index}
+              key={"followers-list-" + index}
               secondaryAction={
                 <Button
                   variant="contained"
@@ -276,9 +246,7 @@ const GSociety = (props) => {
               }
               disablePadding
             >
-              <ListItemButton
-                sx={{ my: "2px", alignItems: "start" }}
-              >
+              <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
@@ -307,38 +275,9 @@ const GSociety = (props) => {
   };
 
   return (
-    <Box
-      className="gsociety_box_bg"
-      sx={{
-        backgroundColor: "#0F0F0F",
-        width: "400px",
-        paddingLeft: "32px",
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          marginTop: "32px",
-          display: "flex",
-          flexDierction: "row",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-          borderBottom: 1,
-          borderColor: "#202122",
-          paddingBottom: "25px",
-        }}
-      >
-        <Button
-          variant="contained"
-          sx={{
-            width: "136px",
-            height: "36px",
-            backgroundColor: tabIndex === 0 ? "#4900BD" : "#202122",
-            borderRadius: "6px",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          }}
+    <Box className={'gsociety_box_bg'}>
+      <Box className={'header_bg'}>
+        <Button className={'header_btn'} variant="contained" sx={{ backgroundColor: tabIndex === 0 ? "#4900BD" : "#202122", }}
           onClick={() => {
             if (tabIndex !== 0) {
               setTabIndex(0);
@@ -347,17 +286,7 @@ const GSociety = (props) => {
         >
           {"Following " + follows.length}
         </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "136px",
-            height: "36px",
-            backgroundColor: tabIndex === 1 ? "#4900BD" : "#202122",
-            borderRadius: "6px",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          }}
+        <Button className={'header_btn'} variant="contained" sx={{ backgroundColor: tabIndex === 1 ? "#4900BD" : "#202122", }}
           onClick={() => {
             if (tabIndex !== 1) {
               setTabIndex(1);
