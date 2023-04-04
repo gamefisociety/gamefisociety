@@ -60,7 +60,7 @@ const GCardNote = (props) => {
           });
         }}
       >
-        {  Helpers.highlightEverything(str.trim(),null,{ showMentionedMessages: true })}
+        {Helpers.highlightEverything(str.trim(), null, { showMentionedMessages: true })}
         {strArray.map((stritem, index) => {
           try {
             if (stritem === "") {
@@ -91,22 +91,22 @@ const GCardNote = (props) => {
               return null;
             } else {
               return null;
-            //   return (
+              //   return (
 
-            //     <Typography
-            //       sx={{
-            //         width: "100%",
-            //         // backgroundColor: 'red',
-            //         wordWrap: "break-word",
-            //         whiteSpace: "pre-wrap",
-            //         fontSize: "14px",
-            //       }}
-            //       color="#FFFFFF"
-            //       align="left"
-            //     >
-            //       {stritem}
-            //     </Typography>
-            //   );
+              //     <Typography
+              //       sx={{
+              //         width: "100%",
+              //         // backgroundColor: 'red',
+              //         wordWrap: "break-word",
+              //         whiteSpace: "pre-wrap",
+              //         fontSize: "14px",
+              //       }}
+              //       color="#FFFFFF"
+              //       align="left"
+              //     >
+              //       {stritem}
+              //     </Typography>
+              //   );
             }
           } catch (error) {
             // console.log('strArray error', error, stritem);
@@ -148,6 +148,36 @@ const GCardNote = (props) => {
   const renderReplyLable = () => {
     if (!note) {
       return null;
+    }
+    // if (!replyInfo) {
+    //   return null;
+    // }
+    if (note.tags.length === 0) {
+      return null;
+    }
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
+    if (note.tags.length === 0) {
+      return null;
+    } else {
+      note.tags.map(item => {
+        if (item[0] === 'e') {
+          eNum = eNum + 1;
+          eArray.push(item[1]);
+        } else if (item[0] === 'p') {
+          pNum = pNum + 1;
+          pArray.push(item[1]);
+        }
+      });
+    }
+    //
+    if (eNum === 0) {
+      return null;
+    } else if (eNum === 1) {
+      // root_note_id = eArray[0];
+      // reply_note_id = note.id;
     }
     return (
       <Typography className="level2_lable" sx={{ ml: "12px" }}>
