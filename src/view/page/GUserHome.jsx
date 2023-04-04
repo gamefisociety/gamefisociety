@@ -19,8 +19,6 @@ import icon_back from "../../asset/image/social/icon_back.png";
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
-let lastPubKey = "";
-
 const GUserHome = () => {
 
   const nostrWorker = useWorker(createNostrWorker);
@@ -101,12 +99,9 @@ const GUserHome = () => {
   };
 
   useEffect(() => {
-    if (pubkey && lastPubKey !== pubkey) {
-      lastPubKey = pubkey;
-      setNotes([]);
-      setInfo(null);
-      fetchTextNote(pubkey);
-    }
+    setNotes([]);
+    setInfo(null);
+    fetchTextNote(pubkey);
     return () => {
       //
     };

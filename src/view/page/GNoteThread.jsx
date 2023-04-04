@@ -4,14 +4,14 @@ import './GNoteThread.scss';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
-import { parseTextNote, BuildSub } from 'nostr/NostrUtils';
-import { useMetadataPro } from 'nostr/protocal/MetadataPro';
+import { BuildSub } from 'nostr/NostrUtils';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import TimelineCache from 'db/TimelineCache';
 import UserDataCache from 'db/UserDataCache';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import Typography from "@mui/material/Typography";
 
 import GCardNote from "components/GCardNote";
@@ -116,10 +116,15 @@ const GNoteThread = () => {
                 }
             });
         }
-        if (eNum === 1) {
+        //
+        if (eNum === 0) {
+            root_note_id = note.id;
+            reply_note_id = 0;
+        } else if (eNum === 1) {
             root_note_id = eArray[0];
             reply_note_id = note.id;
         }
+        //
         setRootNote(root_note_id);
         setReplyNote(reply_note_id);
         console.log('pushThreadNote', note, root_note_id, reply_note_id, eArray, pArray);
@@ -143,13 +148,22 @@ const GNoteThread = () => {
         if (info) {
             context = JSON.parse(info.content)
         }
-        console.log('renderRootNote', rootNote, targetNote);
+        console.log('GNoteThread renderRootNote', rootNote, targetNote);
         return <GCardNote note={{ ...targetNote }} info={{ ...context }} />
     }
 
     const renderReplyNotes = () => {
+        if (notesReply.length === 0) {
+            return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
+        }
         return notesReply.map((item, index) => {
-            return <GCardNote key={'reply_node_' + index} note={{ ...item }} />
+            console.log('notesReply', item);
+            let targetNote = TLCache.getThreadNote(item);
+            if (targetNote === null) {
+                return null;
+            }
+            console.log('GNoteThread renderReplyNotes', rootNote, targetNote);
+            return <GCardNote key={'reply_node_' + index} note={{ ...targetNote }} info={null} />
         });
     }
 
@@ -163,6 +177,10 @@ const GNoteThread = () => {
             context = JSON.parse(info.content)
         }
         let targetNote = TLCache.getThreadNote(replyNote);
+        if (targetNote === null) {
+            return null;
+        }
+        console.log('GNoteThread renderReplyNote', rootNote, targetNote);
         return <GCardNote note={{ ...targetNote }} info={{ ...context }} />
     }
 
@@ -170,42 +188,83 @@ const GNoteThread = () => {
         if (note === null) {
             return null;
         }
-        console.log('renderSelf', note);
         let context = {};
         let info = UserCache.getMetadata(note.pubkey);
         if (info) {
             context = JSON.parse(info.content)
         }
+        console.log('GNoteThread renderSelf', note);
         return <GCardNote note={{ ...note }} info={{ ...context }} />
     }
 
     const renderRootNotes = () => {
-        if (note && note.id === notesRoot) {
-            return null;
+        if (notesRoot.length === 0) {
+            return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
         return notesRoot.map((item, index) => {
-            return <GCardNote key={'other_node_' + index} note={{ ...item }} />
+            console.log('notesRoot', item);
+            let targetNote = TLCache.getThreadNote(item);
+            if (targetNote === null) {
+                return null;
+            }
+            console.log('GNoteThread renderRootNotes', rootNote, targetNote);
+            return <GCardNote key={'other_node_' + index} note={{ ...targetNote }} info={null} />
         });
     }
 
     const renderContent = () => {
+        console.log('GNoteThread renderContent', note, rootNote, replyNote);
         if (!note) {
             return null;
         }
         if (rootNote === note.id) {
+            console.log('GNoteThread renderContent renderRoot', rootNote);
             return (
-                <Stack direction={'column'}>
-                    {renderRootNote()}
-                    {renderRootNotes()}
+                <Stack sx={{ width: '100%' }} direction={'column'} alignItems={'center'}>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        {renderRootNote()}
+                    </Stack>
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLYs'}</Divider>
+                    <Stack sx={{ width: '80%' }} direction={'column'}>
+                        {renderRootNotes()}
+                    </Stack>
                 </Stack>
             );
         } else if (replyNote === note.id) {
+            console.log('GNoteThread renderContent replyNote', replyNote);
             return (
-                <Stack direction={'column'}>
-                    {renderRootNote()}
+                <Stack sx={{ width: '100%' }} direction={'column'} alignItems={'center'}>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        {renderRootNote()}
+                    </Stack>
                     {/* {renderReplyNote()} */}
-                    {renderSelf()}
-                    {/* {renderReplyNotes()} */}
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY'}</Divider>
+                    <Stack sx={{ width: '80%', border: 1, borderColor: 'white', py: '6px' }} direction={'column'}>
+                        {renderSelf()}
+                    </Stack>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'RELATIVE'}</Divider>
+                        {renderReplyNotes()}
+                    </Stack>
+                </Stack>
+            );
+        } else {
+            return (
+                <Stack sx={{ width: '100%' }} direction={'column'} alignItems={'center'}>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        {renderRootNote()}
+                    </Stack>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        {renderReplyNote()}
+                    </Stack>
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY'}</Divider>
+                    <Stack sx={{ width: '80%', border: 1, borderColor: 'white', py: '6px' }} direction={'column'}>
+                        {renderSelf()}
+                    </Stack>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'RELATIVE'}</Divider>
+                        {renderReplyNotes()}
+                    </Stack>
                 </Stack>
             );
         }
