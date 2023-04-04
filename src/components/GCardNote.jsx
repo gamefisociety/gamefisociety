@@ -19,13 +19,43 @@ import UserDataCache from 'db/UserDataCache';
 
 const GCardNote = (props) => {
   const { note, info } = props;
-  const { replyInfo, setReplyInfo } = useState(null);
+  const [replyInfo, setReplyInfo] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const UserCache = UserDataCache();
 
   useEffect(() => {
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
+    if (note.tags.length === 0) {
+      setReplyInfo(null);
+      return;
+    } else {
+      note.tags.map(item => {
+        if (item[0] === 'e') {
+          eNum = eNum + 1;
+          eArray.push(item[1]);
+        } else if (item[0] === 'p') {
+          pNum = pNum + 1;
+          pArray.push(item[1]);
+        }
+      });
+    }
+    //
+    if (eNum === 0) {
+      setReplyInfo(null);
+    } else if (eNum === 1 && pNum === 1) {
+      if (pArray.length > 0) {
+        setReplyInfo(pArray[0]);
+      }
+    } else if (eNum === 2 && pNum === 2) {
+      if (pArray.length > 0) {
+        setReplyInfo(pArray[1]);
+      }
+    }
     // let reply_note_id = 0;
     // note.tags.map(item => {
     //   if (item[0] === '#e') {
@@ -149,39 +179,16 @@ const GCardNote = (props) => {
     if (!note) {
       return null;
     }
-    // if (!replyInfo) {
-    //   return null;
-    // }
-    if (note.tags.length === 0) {
+    if (replyInfo === null) {
       return null;
     }
-    let eNum = 0;
-    let pNum = 0;
-    let eArray = [];
-    let pArray = [];
-    if (note.tags.length === 0) {
-      return null;
-    } else {
-      note.tags.map(item => {
-        if (item[0] === 'e') {
-          eNum = eNum + 1;
-          eArray.push(item[1]);
-        } else if (item[0] === 'p') {
-          pNum = pNum + 1;
-          pArray.push(item[1]);
-        }
-      });
-    }
-    //
-    if (eNum === 0) {
-      return null;
-    } else if (eNum === 1) {
-      // root_note_id = eArray[0];
-      // reply_note_id = note.id;
+    let showName = '@default';
+    if (replyInfo) {
+      showName = replyInfo.substr(0, 4) + '...' + replyInfo.substr(-4, 4);
     }
     return (
       <Typography className="level2_lable" sx={{ ml: "12px" }}>
-        {replyInfo ? 'reply to @' + replyInfo.name : 'reply to @default'}
+        {'reply to @' + showName}
       </Typography>
     );
   }
