@@ -116,10 +116,15 @@ const GNoteThread = () => {
                 }
             });
         }
-        if (eNum === 1) {
+        //
+        if (eNum === 0) {
+            root_note_id = note.id;
+            reply_note_id = 0;
+        } else if (eNum === 1) {
             root_note_id = eArray[0];
             reply_note_id = note.id;
         }
+        //
         setRootNote(root_note_id);
         setReplyNote(reply_note_id);
         console.log('pushThreadNote', note, root_note_id, reply_note_id, eArray, pArray);
