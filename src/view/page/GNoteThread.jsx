@@ -224,7 +224,7 @@ const GNoteThread = () => {
                     <Stack sx={{ width: '100%' }} direction={'column'}>
                         {renderRootNote()}
                     </Stack>
-                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLYs'}</Divider>
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLIES'}</Divider>
                     <Stack sx={{ width: '80%' }} direction={'column'}>
                         {renderRootNotes()}
                     </Stack>
@@ -257,7 +257,7 @@ const GNoteThread = () => {
                     <Stack sx={{ width: '100%' }} direction={'column'}>
                         {renderReplyNote()}
                     </Stack>
-                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY'}</Divider>
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLIES'}</Divider>
                     <Stack sx={{ width: '80%', border: 1, borderColor: 'white', py: '6px' }} direction={'column'}>
                         {renderSelf()}
                     </Stack>
