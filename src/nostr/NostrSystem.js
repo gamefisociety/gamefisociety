@@ -70,8 +70,9 @@ export class NostrSystem {
     if (!sub) {
       return;
     }
-    for (const [addr, tmpRelay] of this.Clients) {
+    for (let [addr, tmpRelay] of this.Clients.entries()) {
       if (relay) {
+        // console.log('BroadcastSub relay', relay, addr, tmpRelay);
         if (relay === addr && relay.canSub) {
           Relay.SendSub(tmpRelay, sub, callback);
         }

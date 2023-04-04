@@ -5,16 +5,12 @@
     pointer-events: all;
 
     .global_head {
-        // position: sticky;
-        // top: 64px;
-        // right: 0px;
-        // background-color: black;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-        padding-top: 2px;
-        padding-bottom: 2px;
+        padding-top: 6px;
+        padding-bottom: 6px;
         z-index: 1000;
 
         .tip0 {

@@ -72,6 +72,7 @@ export const fetch_user_metadata = (sub, curRelay, callback) => {
 }
 
 export const fetch_global_notes = (sub, curRelay, callback) => {
+  // console.log('fetch_global_notes111', curRelay);
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
     if (tag === 'EOSE') {

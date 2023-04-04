@@ -3,6 +3,7 @@ import "./GFTGlobal.scss";
 
 import { useSelector, useDispatch } from 'react-redux';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+import { setCurRelay } from "module/store/features/profileSlice";
 
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -42,7 +43,6 @@ const GFTGlobal = () => {
   //
   const dispatch = useDispatch();
   const { relays, curRelay } = useSelector((s) => s.profile);
-  //
   const [curLable, setCurLable] = useState("ALL");
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
@@ -91,24 +91,28 @@ const GFTGlobal = () => {
     filterTextNote.limit = 50;
     //request
     let subTextNode = BuildSub('global-textnode', [filterTextNote]);
-    nostrWorker.fetch_global_notes(subTextNode, curRelay, (data, client) => {
+    let targetAddr = curRelay ? curRelay.addr : null;
+    targetAddr = null;
+    console.log('fetch_global_notes', targetAddr);
+    nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
+      // console.log('fetch_global_notes', data);
       setData(data.concat());
       const pubkeys = [];
       data.map((item) => {
         pubkeys.push(item.pubkey);
       });
       const pubkyes_filter = new Set(pubkeys);
-      getInfor(pubkyes_filter, null);
+      getInfor(pubkyes_filter, targetAddr);
       //
       setCurCreateAt(gNoteCache.minTime());
     });
 
   };
 
-  const getInfor = (pkeys, curRelay) => {
+  const getInfor = (pkeys, addr) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
     let subTextNode = BuildSub('metadata', [filterMetaData]);
-    nostrWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
+    nostrWorker.fetch_user_metadata(subTextNode, addr, (data, client) => {
       setInforData(data);
     });
   };
@@ -134,7 +138,7 @@ const GFTGlobal = () => {
   };
 
   const renderGlobalHead = () => {
-    console.log('renderGlobalHead', curRelay);
+    // console.log('renderGlobalHead', curRelay);
     return (
       <Box className={'global_head'}>
         <Typography className={'tip0'}>
@@ -143,17 +147,21 @@ const GFTGlobal = () => {
         <FormControl >
           <Select
             className={'select0'}
-            value={curRelay}
+            value={curRelay?.addr}
             onChange={({ target }) => {
               if (target && target.value) {
-                // setCurRelay(target.value);
+                let ret_relay = relays.find((item) => {
+                  return item.addr === target.value;
+                });
+                if (ret_relay) {
+                  dispatch(setCurRelay(ret_relay));
+                }
               }
             }}
           >
             {
-              Object.entries(relays).map((item, index) => {
-                // console.log('global relays item', item);
-                return (<MenuItem key={'relay-index-' + index} value={index} >{item[0]}</MenuItem>);
+              relays.map((item, index) => {
+                return (<MenuItem key={'relay-index-' + index} value={item.addr} >{item.addr}</MenuItem>);
               })
             }
           </Select>
