@@ -71,15 +71,11 @@ const GSociety = (props) => {
   const [datas, setDatas] = useState([]);
   const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
-
-  let metadata_cache_flag = "metadata_cache";
-  let followers_cache_flag = "followers_cache";
   //
   const fetchAllMeta = (pubkeys) => {
     let filteMeta = MetadataPro.get(pubkeys);
     let subMeta = BuildSub("followers_meta", [filteMeta]);
     nostrWorker.fetch_user_profile(subMeta, null, (datas, client) => {
-      // console.log('followers_meta', datas);
       setDatas(datas.concat());
     });
   };
@@ -140,7 +136,7 @@ const GSociety = (props) => {
     if (tabIndex === 0) {
       fetchAllMeta(follows);
     } else if (tabIndex === 1) {
-      console.log("change followers", followers);
+      // console.log("change followers", followers);
       let pubkeys = [];
       followers.map((item) => {
         pubkeys.push(item.pubkey);
@@ -223,7 +219,11 @@ const GSociety = (props) => {
     return (
       <List className="list_bg">
         {followers.map((item, index) => {
-          let cxt = JSON.parse(item.content);
+          const info = UserCache.getMetadata(item.pubkey);
+          if (!info) {
+            return null;
+          }
+          let cxt = JSON.parse(info.content);
           return (
             <ListItem
               sx={{ my: "2px" }}
