@@ -107,19 +107,23 @@ export const addFriends = (follows) => {
 
 const GMetaFriend = forwardRef((props, ref) => {
 
+    const init = (scene) => {
+        createFriends(scene);
+    }
+
+    const render = (dt, scene) => {
+        updateFriends(dt, scene);
+    }
+
+    const addFriend = (scene) => {
+        addFriends(scene);
+    }
+
     useImperativeHandle(ref, () => (
         {
-            init: (scene) => {
-                createFriends(scene);
-            },
-            render: (dt, scene) => {
-                updateFriends(dt, scene);
-                // console.log('GMetaGround render');
-            },
-            addFriend: (scene) => {
-                // console.log('GMetaFriend init');
-                addFriends(scene);
-            },
+            init: init,
+            render: render,
+            addFriend: addFriend,
         }
     ));
 
