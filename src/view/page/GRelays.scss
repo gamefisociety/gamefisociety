@@ -1,9 +1,22 @@
-.button{
-    &:hover{
-        background-color: #191A1B;
+.relay_bg {
+
+    width: 400px;
+    // minHeight: "100%",
+    background-color: rgba(19, 19, 19, 0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 32px;
+    padding-right: 32px;
+
+    .button{
+        &:hover{
+            background-color: #191A1B;
+        }
+    }
+    
+    .goback{
+        cursor: pointer;
     }
 }
 
-.goback{
-    cursor: pointer;
-}

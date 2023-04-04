@@ -348,7 +348,7 @@ const GRelays = () => {
       >
         <Typography
           sx={{
-            marginTop: "88px",
+            marginTop: "24px",
             width: "100%",
             height: "50px",
             fontSize: "18px",
@@ -524,7 +524,7 @@ const GRelays = () => {
               sx={{ width: "48px", height: "48px" }}
               edge="end"
               alt="GameFi Society"
-              // src={}
+            // src={}
             />
             <Typography
               sx={{
@@ -545,7 +545,7 @@ const GRelays = () => {
               width: "36px",
               backgroundColor: "transparent",
             }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={icon_detail} width="36px" alt="icon_detail" />
           </Button>
@@ -795,18 +795,7 @@ const GRelays = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: "400px",
-        // minHeight: "100%",
-        backgroundColor: "#0F0F0F",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingLeft: "32px",
-        paddingRight: "32px",
-      }}
-    >
+    <Box className={'relay_bg'}>
       {module.isDetail ? renderCurRelay() : renderRelays()}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
