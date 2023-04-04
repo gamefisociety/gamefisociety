@@ -50,7 +50,7 @@ const GMetaGround = forwardRef((props, ref) => {
                 createGround(scene);
 
             },
-            render: (scene) => {
+            render: (dt,scene) => {
                 // console.log('GMetaGround render');
             }
         }

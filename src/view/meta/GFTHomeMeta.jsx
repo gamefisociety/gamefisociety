@@ -41,14 +41,17 @@ const GFTHomeMeta = () => {
 
     const onRender = (scene) => {
         let dt = scene.getEngine().getDeltaTime();
-        updateFriends(dt, scene);
 
         if (metaGroundRef.current && metaGroundRef.current.render) {
-            metaGroundRef.current.render(scene);
+            metaGroundRef.current.render(dt, scene);
         }
 
         if (metaLightRef.current && metaLightRef.current.render) {
-            metaLightRef.current.render(scene);
+            metaLightRef.current.render(dt, scene);
+        }
+
+        if (metaFriendRef.current && metaFriendRef.current.render) {
+            metaFriendRef.current.render(dt, scene);
         }
     }
 

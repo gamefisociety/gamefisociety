@@ -112,7 +112,8 @@ const GMetaFriend = forwardRef((props, ref) => {
             init: (scene) => {
                 createFriends(scene);
             },
-            render: (scene) => {
+            render: (dt, scene) => {
+                updateFriends(dt, scene);
                 // console.log('GMetaGround render');
             },
             addFriend: (scene) => {

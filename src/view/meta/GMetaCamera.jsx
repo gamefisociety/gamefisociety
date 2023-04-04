@@ -26,7 +26,7 @@ const GMetaCamera = forwardRef((props, ref) => {
                 createCamera(scene);
 
             },
-            render: (scene) => {
+            render: (dt,scene) => {
                 // console.log('GMetaGround render');
             }
         }
