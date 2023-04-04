@@ -148,6 +148,9 @@ const GNoteThread = () => {
     }
 
     const renderReplyNotes = () => {
+        if (notesReply.length === 0) {
+            return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
+        }
         return notesReply.map((item, index) => {
             console.log('notesReply', item);
             let targetNote = TLCache.getThreadNote(item);
@@ -190,8 +193,8 @@ const GNoteThread = () => {
     }
 
     const renderRootNotes = () => {
-        if (note && note.id === notesRoot) {
-            return null;
+        if (notesRoot.length === 0) {
+            return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
         return notesRoot.map((item, index) => {
             console.log('notesRoot', item);
