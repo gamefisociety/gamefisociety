@@ -85,7 +85,7 @@ const GSociety = (props) => {
     let filterFollowing = followPro.getFollowings(publicKey);
     let subFollowing = BuildSub("followings_metadata", [filterFollowing]);
     nostrWorker.fetch_user_profile(subFollowing, null, (datas, client) => {
-      console.log('followings_metadata', datas);
+      // console.log('followings_metadata', datas);
       setFollowers(datas.concat());
     });
   };
@@ -161,7 +161,7 @@ const GSociety = (props) => {
       <List className="list_bg">
         {follows.map((pubkey, index) => {
           const info = UserCache.getMetadata(pubkey);
-          console.log('info111', pubkey, info);
+          // console.log('info111', pubkey, info);
           if (!info) {
             return null;
           }
