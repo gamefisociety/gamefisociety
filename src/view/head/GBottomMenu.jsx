@@ -166,7 +166,7 @@ const GBottomMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GAMES') {
-            navigate('/gamepage');
+            navigate('/projects');
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {

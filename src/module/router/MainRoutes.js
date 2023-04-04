@@ -6,10 +6,10 @@ import MainLayout from "view/layout/MainLayout";
 
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
 const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
-const GGamePage = Loadable(lazy(() => import("view/page/GGamePage")));
+const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
-const GFTNFTDetail = Loadable(lazy(() => import("view/home/GFTNFTDetail")));
+// const GFTNFTDetail = Loadable(lazy(() => import("view/home/GFTNFTDetail")));
 const GFTCreateProject = Loadable(
   lazy(() => import("view/home/GFTCreateProject"))
 );
@@ -25,6 +25,7 @@ const GGroupChat = Loadable(lazy(() => import("view/page/GGroupChat")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
 const GFTWallet = Loadable(lazy(() => import("view/page/GFTWallet")));
 const GDetailArticle = Loadable(lazy(() => import("view/page/GDetailArticle")));
+const GDetailProject = Loadable(lazy(() => import("view/page/GDetailProject")));
 
 const MainRoutes = {
   path: "/",
@@ -42,10 +43,10 @@ const MainRoutes = {
         path: '/meta',
         element: <GFTHomeMeta />,
     },
-    {
-      path: "/detail",
-      element: <GFTNFTDetail />,
-    },
+    // {
+    //   path: "/detail",
+    //   element: <GFTNFTDetail />,
+    // },
     {
       path: "/create_project",
       element: <GFTCreateProject />,
@@ -63,8 +64,12 @@ const MainRoutes = {
       element: <GPostReply />,
     },
     {
-      path: "/gamepage",
-      element: <GGamePage />,
+      path: "/projects",
+      element: <GProjects />,
+    },
+    {
+      path: "/detailproject",
+      element: <GDetailProject />,
     },
     {
       path: "/newspage",

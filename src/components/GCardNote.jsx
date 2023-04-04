@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { setPost } from 'module/store/features/dialogSlice';
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
+import Helpers from "../../src/view/utils/Helpers";
 
 
 import UserDataCache from 'db/UserDataCache';
@@ -59,6 +60,7 @@ const GCardNote = (props) => {
           });
         }}
       >
+        {  Helpers.highlightEverything(str.trim(),null,{ showMentionedMessages: true })}
         {strArray.map((stritem, index) => {
           try {
             if (stritem === "") {
@@ -88,21 +90,23 @@ const GCardNote = (props) => {
               console.log("render video", stritem);
               return null;
             } else {
-              return (
-                <Typography
-                  sx={{
-                    width: "100%",
-                    // backgroundColor: 'red',
-                    wordWrap: "break-word",
-                    whiteSpace: "pre-wrap",
-                    fontSize: "14px",
-                  }}
-                  color="#FFFFFF"
-                  align="left"
-                >
-                  {stritem}
-                </Typography>
-              );
+              return null;
+            //   return (
+
+            //     <Typography
+            //       sx={{
+            //         width: "100%",
+            //         // backgroundColor: 'red',
+            //         wordWrap: "break-word",
+            //         whiteSpace: "pre-wrap",
+            //         fontSize: "14px",
+            //       }}
+            //       color="#FFFFFF"
+            //       align="left"
+            //     >
+            //       {stritem}
+            //     </Typography>
+            //   );
             }
           } catch (error) {
             // console.log('strArray error', error, stritem);

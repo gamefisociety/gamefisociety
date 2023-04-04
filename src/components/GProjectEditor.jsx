@@ -16,18 +16,18 @@ import StepLabel from "@mui/material/StepLabel";
 import { useWeb3React } from "@web3-react/core";
 import GIPFSLogin from "./GIPFSLogin";
 import ipfsupload from "api/ipfsupload";
+import GSTProjectsBase from "web3/GSTProjects";
 import {
   default_avatar,
   default_banner,
   def_ipfs_public_gateway,
 } from "../module/utils/xdef";
-
-import xhelp from "module/utils/xhelp";
 import "./GProjectEditor.scss";
 
-function GProjectEditor() {
+const GProjectEditor = (props) => {
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
+  const { info } = props;
   const { currentService, apiKey, apiSecret } = useSelector((s) => s.ipfs);
   const [publishState, setPublishState] = useState(0);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -44,6 +44,9 @@ function GProjectEditor() {
     github: "",
   });
   useEffect(() => {
+    if (info) {
+      setProject(info);
+    }
     return () => {};
   }, []);
 
@@ -56,11 +59,6 @@ function GProjectEditor() {
     if (publishState === 1) {
       return;
     }
-    //
-    // let new_content = xhelp.convertImageUrlFromIPFSToGFS(content);
-    // if (new_content.length === 0) {
-    //   return;
-    // }
     //upload
     setPublishState(1);
     ipfsupload.upload(
@@ -71,20 +69,37 @@ function GProjectEditor() {
       project.name,
       (response) => {
         const cid = response.CID;
-        setPublishState(2);
-        // setStep(1);
-        // stepMsgs[0] = "PUBLISH ON IPFS SUCCEED \n" + "cid:" + cid;
-        // articleInfo.name = header;
-        // articleInfo.cid = cid;
-        // setArticleInfo({ ...articleInfo });
+        publishOnBlockchain(cid);
       },
       (err) => {
         setPublishState(0);
-        // setStep(0);
-        // stepMsgs[0] = "PUBLISH ON IPFS FAILED \n" + err;
         console.log("ipfs upload error", err);
       }
     );
+  };
+
+  const publishOnBlockchain = (cid) => {
+    if (cid.length === 0) {
+      return;
+    }
+    if (account) {
+      if (publishState === 2) {
+        return;
+      }
+      setPublishState(2);
+      GSTProjectsBase.createProject(library, account, cid)
+        .then((res) => {
+          console.log("createProject", res);
+          if (res) {
+            setPublishState(3);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
+          setPublishState(1);
+        });
+    } else {
+    }
   };
 
   const uploadThumbOnIPFS = (event) => {
@@ -119,17 +134,15 @@ function GProjectEditor() {
     }
   };
 
-  const publishMsg = () => {
+  const saveMsg = () => {
     if (publishState === 0) {
-      return "publish on ipfs";
+      return "save";
     } else if (publishState === 1) {
-      return "publishing on ipfs...";
+      return "saving...";
     } else if (publishState === 2) {
-      return "publish on blockchain";
+      return "saving...";
     } else if (publishState === 3) {
-      return "publishing on blockchain...";
-    } else if (publishState === 4) {
-      return "published";
+      return "saved";
     }
   };
 
@@ -217,7 +230,10 @@ function GProjectEditor() {
                 }}
                 edge="end"
                 alt="GameFi Society"
-                src={project.thumb.replace("gamefisociety/temp/image", def_ipfs_public_gateway)}
+                src={project.thumb.replace(
+                  "gamefisociety/temp/image",
+                  def_ipfs_public_gateway
+                )}
               />
               <IconButton
                 sx={{
@@ -575,17 +591,20 @@ function GProjectEditor() {
               color: "#FFFFFF",
             }}
             onClick={() => {
+              if (publishState === 1 || publishState === 2) {
+                return;
+              }
               const projectStr = JSON.stringify(project);
               publishOnIPFS(projectStr);
               console.log(projectStr);
             }}
           >
-            SAVE
+            {saveMsg()}
           </Button>
         </Box>
       </Box>
     </Box>
   );
-}
+};
 
 export default GProjectEditor;
