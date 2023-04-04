@@ -26,6 +26,7 @@ const GPostReply = () => {
   //
   const dispatch = useDispatch();
   const { follows } = useSelector((s) => s.profile);
+  const [curLabel, setCurLabel] = useState('Post');
   const [curCreateAt, setCurCreateAt] = useState(0);
   const [data, setData] = useState([]);
   const [moreTimes, setMoreTimes] = useState(0);
@@ -109,23 +110,26 @@ const GPostReply = () => {
       <Box className={'post_menu'}>
         <Button
           className={'post_menu_item'}
-          sx={{ backgroundColor: 'background.default' }}
+          sx={{
+            backgroundColor: curLabel === 'Post' ? '#006CF9' : '#272727'
+          }}
           variant="contained"
           onClick={() => {
-            //
+            setCurLabel('Post');
           }}
         >
           {"Post"}
         </Button>
-        <Button
-          className={'post_menu_item'}
-          sx={{ backgroundColor: 'background.default' }}
+        <Button className={'post_menu_item'}
+          sx={{
+            backgroundColor: curLabel === 'Post & Replay' ? '#006CF9' : '#272727'
+          }}
           variant="contained"
           onClick={() => {
-            // setCurCreateAt(99999999999999);
+            setCurLabel('Post & Replay');
           }}
         >
-          {"Replay"}
+          {"Post & Replay"}
         </Button>
       </Box>
     );
