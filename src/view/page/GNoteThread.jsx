@@ -4,14 +4,14 @@ import './GNoteThread.scss';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
-import { parseTextNote, BuildSub } from 'nostr/NostrUtils';
-import { useMetadataPro } from 'nostr/protocal/MetadataPro';
+import { BuildSub } from 'nostr/NostrUtils';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import TimelineCache from 'db/TimelineCache';
 import UserDataCache from 'db/UserDataCache';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import Typography from "@mui/material/Typography";
 
 import GCardNote from "components/GCardNote";
@@ -149,7 +149,12 @@ const GNoteThread = () => {
 
     const renderReplyNotes = () => {
         return notesReply.map((item, index) => {
-            return <GCardNote key={'reply_node_' + index} note={{ ...item }} />
+            console.log('notesReply', item);
+            let targetNote = TLCache.getThreadNote(item);
+            if (targetNote === null) {
+                return null;
+            }
+            return <GCardNote key={'reply_node_' + index} note={{ ...targetNote }} info={null} />
         });
     }
 
@@ -201,11 +206,19 @@ const GNoteThread = () => {
             );
         } else if (replyNote === note.id) {
             return (
-                <Stack direction={'column'}>
-                    {renderRootNote()}
+                <Stack sx={{ width: '100%' }} direction={'column'} alignItems={'center'}>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        {renderRootNote()}
+                    </Stack>
                     {/* {renderReplyNote()} */}
-                    {renderSelf()}
-                    {/* {renderReplyNotes()} */}
+                    <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY'}</Divider>
+                    <Stack sx={{ width: '80%', border: 1, borderColor: 'white', py: '6px' }} direction={'column'}>
+                        {renderSelf()}
+                    </Stack>
+                    <Stack sx={{ width: '100%' }} direction={'column'}>
+                        <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'RELATIVE'}</Divider>
+                        {renderReplyNotes()}
+                    </Stack>
                 </Stack>
             );
         }
