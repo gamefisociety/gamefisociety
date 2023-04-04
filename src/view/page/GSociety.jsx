@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -26,6 +28,8 @@ import {
 } from 'module/store/features/dialogSlice';
 
 import NormalCache from "db/NormalCache";
+
+const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +58,8 @@ TabPanel.propTypes = {
 
 const GSociety = (props) => {
   const { callback } = props;
+  
+  const nostrWorker = useWorker(createNostrWorker);
 
   const navigate = useNavigate();
   const followPro = useFollowPro();
