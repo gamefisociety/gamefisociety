@@ -1,3 +1,4 @@
+import React, { forwardRef, useImperativeHandle } from 'react';
 import {
     MeshBuilder,
     Vector3,
@@ -103,4 +104,26 @@ export const addFriends = (follows) => {
         createLabel(cur_ent);
     });
 };
+
+const GMetaFriend = forwardRef((props, ref) => {
+
+    useImperativeHandle(ref, () => (
+        {
+            init: (scene) => {
+                createFriends(scene);
+            },
+            render: (scene) => {
+                // console.log('GMetaGround render');
+            },
+            addFriend: (scene) => {
+                // console.log('GMetaFriend init');
+                addFriends(scene);
+            },
+        }
+    ));
+
+    return null;
+});
+
+export default GMetaFriend;
 

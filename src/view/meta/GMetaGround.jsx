@@ -1,9 +1,8 @@
-
+import React, { forwardRef, useImperativeHandle } from 'react';
 import {
     MeshBuilder,
     Vector3,
     Color3,
-    Scene
 } from '@babylonjs/core';
 
 import { GridMaterial } from '@babylonjs/materials/grid';
@@ -41,3 +40,23 @@ export const createGround = (scene) => {
     // ground.material.alpha = 0.2;
     // ground.material.fogEnabled = false;
 };
+
+const GMetaGround = forwardRef((props, ref) => {
+
+    useImperativeHandle(ref, () => (
+        {
+            init: (scene) => {
+                console.log('GMetaGround init');
+                createGround(scene);
+
+            },
+            render: (scene) => {
+                // console.log('GMetaGround render');
+            }
+        }
+    ));
+
+    return null;
+});
+
+export default GMetaGround;
