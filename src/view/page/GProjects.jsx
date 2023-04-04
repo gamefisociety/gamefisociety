@@ -78,35 +78,37 @@ const GGamePage = () => {
     setDialogOpen(false);
   };
 
-  const renderGamesTop = () => {
+  const renderTop = () => {
     return (
       <Box
         sx={{
+          marginTop: "20px",
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
           alignItems: "center",
         }}
       >
         <Typography
           sx={{
-            py: "12px",
-            pl: "24px",
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "#FFFFFF",
+            textAlign:"center",
+            marginLeft: "24px"
           }}
-          color={"white"}
-          variant={"h6"}
-          align={"left"}
         >
           {"Projects"}
         </Typography>
         <Button
           variant="contained"
           sx={{
-            marginRight: "24px",
-            width: "160px",
-            height: "35px",
-            borderRadius: "20px",
+            marginLeft: "20px",
+            width: "140px",
+            height: "30px",
+            borderRadius: "10px",
             backgroundColor: "#006CF9",
             fontSize: "14px",
             fontFamily: "Saira",
@@ -122,11 +124,15 @@ const GGamePage = () => {
 
   return (
     <Paper className={"bg"}>
-      {renderGamesTop()}
+      {renderTop()}
       <Box className={"project_card_contain"}>
         {projectDatas.map((item, index) => {
           return (
-            <GCardProject tokenInfo={item} owner={account} key={"project-card-" + index}/>
+            <GCardProject
+              tokenInfo={item}
+              owner={account}
+              key={"project-card-" + index}
+            />
           );
         })}
       </Box>

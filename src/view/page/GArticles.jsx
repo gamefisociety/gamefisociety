@@ -76,36 +76,37 @@ function GArticles() {
     setDialogOpen(false);
   };
 
-  return (
-    <Box
-      sx={{
-        width: "960px",
-        minHeight: "1000px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        pointerEvents: "all",
-        // backgroundColor: "red",
-      }}
-    >
+  const renderTop = () => {
+    return (
       <Box
         sx={{
-          marginTop: "60px",
+          marginTop: "20px",
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",
           justifyContent: "flex-start",
+          alignItems: "center",
         }}
       >
+        <Typography
+          sx={{
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "#FFFFFF",
+            textAlign:"center",
+            marginLeft: "24px"
+          }}
+        >
+          {"Articles"}
+        </Typography>
         <Button
           variant="contained"
           sx={{
-            marginRight: "50px",
-            width: "160px",
-            height: "35px",
-            borderRadius: "20px",
+            marginLeft: "20px",
+            width: "140px",
+            height: "30px",
+            borderRadius: "10px",
             backgroundColor: "#006CF9",
             fontSize: "14px",
             fontFamily: "Saira",
@@ -116,9 +117,27 @@ function GArticles() {
           {"Create Article"}
         </Button>
       </Box>
+    );
+  };
+
+  return (
+    <Box
+      sx={{
+        width: "760px",
+        minHeight: "1000px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        pointerEvents: "all",
+        backgroundColor: "rgba(0, 0, 0, 0.708)",
+      }}
+    >
+      {renderTop()}
       <List
         sx={{
-          marginTop: "50px",
+          marginTop: "10px",
+          marginLeft: "24px",
           width: "100%",
           height: "100%",
           overflow: "auto",
