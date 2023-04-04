@@ -46,11 +46,11 @@ const useEventClient = () => {
       }
     },
     broadcastForBootstrap: (ev) => {
-      if (ev) {
-        for (const [k] of DefaultRelays) {
-          System.WriteOnceToRelay(k, ev);
-        }
-      }
+      // if (ev) {
+      //   for (const [k] of DefaultRelays) {
+      //     System.WriteOnceToRelay(k, ev);
+      //   }
+      // }
     },
     broadcastAll: (ev, relays) => {
       if (ev) {

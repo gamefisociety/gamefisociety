@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./GCardRelays.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -8,18 +10,13 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActions } from "@mui/material";
 import { setRelays, removeRelay } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
-import { System } from "nostr/NostrSystem";
-import { EventKind } from "nostr/def";
-import AddTaskIcon from "@mui/icons-material/AddTask";
-import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
-import { DefaultRelays } from "nostr/Const";
 import logo_delete from "../asset/image/social/icon_delete.png";
 import icon_save from "../asset/image/social/icon_save.png";
-import "./GCardRelays.scss";
+
 let deletingRealy = "";
 const GCardRelays = () => {
-  const { relays } = useSelector((s) => s.profile);
+  const { relays, curRelay } = useSelector((s) => s.profile);
   const { publicKey, loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
@@ -104,8 +101,9 @@ const GCardRelays = () => {
   };
 
   const renderCacheRelays = () => {
-    return Object.entries(relays).map((item, index) => {
-      console.log("relay", item);
+    console.log("renderCacheRelays", relays);
+    return relays.map((cfg, index) => {
+      console.log("renderCacheRelays", cfg);
       return (
         <Box
           key={"relaycard-index-" + index}
@@ -127,15 +125,15 @@ const GCardRelays = () => {
               fontColor: "#FFFFFF",
             }}
           >
-            {item[0]}
+            {cfg.addr}
           </Typography>
           <Chip
             sx={{ ml: "6px", width: "12px", height: "12px" }}
-            color={item[1].read ? "success" : "error"}
+            color={cfg.read ? "success" : "error"}
           />
           <Chip
             sx={{ ml: "6px", width: "12px", height: "12px" }}
-            color={item[1].write ? "success" : "error"}
+            color={cfg.write ? "success" : "error"}
           />
           <Button
             variant="contained"
@@ -146,7 +144,7 @@ const GCardRelays = () => {
               backgroundColor: "transparent",
             }}
             onClick={() => {
-              deletingRealy = item[0];
+              deletingRealy = cfg.addr;
               handleClickDialogOpen();
             }}
           >
@@ -177,6 +175,7 @@ const GCardRelays = () => {
             margin="dense"
             size="small"
             onChange={(event) => {
+              // console.log('new event', event);
               newRelays[index] = event.target.value;
               setNewRelays(newRelays.concat());
             }}
@@ -246,7 +245,7 @@ const GCardRelays = () => {
         }}
         align={"left"}
       >
-        {"Your Relays " + Object.entries(relays).length}
+        {"Your Relays " + relays.length}
       </Typography>
       <Button
         variant="contained"
@@ -262,8 +261,8 @@ const GCardRelays = () => {
           color: "white",
         }}
         onClick={() => {
-          newRelays.push("");
-          setNewRelays(newRelays.concat());
+          // newRelays.push("");
+          // setNewRelays(newRelays.concat());
         }}
       >
         {"+"}
@@ -310,7 +309,6 @@ const GCardRelays = () => {
       >
         {renderCacheRelays()}
       </Stack>
-
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{

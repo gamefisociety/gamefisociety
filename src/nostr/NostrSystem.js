@@ -12,9 +12,9 @@ export class NostrSystem {
   }
 
   initRelays() {
-    for (const [addr, cfg] of DefaultRelays) {
-      this.ConnectRelay(addr, cfg.read, cfg.write);
-    }
+    DefaultRelays.map((cfg) => {
+      this.ConnectRelay(cfg.addr, cfg.read, cfg.write);
+    });
   }
 
   getRelay(addr) {

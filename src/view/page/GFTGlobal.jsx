@@ -41,10 +41,9 @@ const GFTGlobal = () => {
   const nostrWorker = useWorker(createNostrWorker);
   //
   const dispatch = useDispatch();
-  const { relays } = useSelector((s) => s.profile);
+  const { relays, curRelay } = useSelector((s) => s.profile);
   //
   const [curLable, setCurLable] = useState("ALL");
-  const [curRelay, setCurRelay] = useState('');
   const [curCreateAt, setCurCreateAt] = useState(0);
   //
   const [data, setData] = useState([]);
@@ -135,6 +134,7 @@ const GFTGlobal = () => {
   };
 
   const renderGlobalHead = () => {
+    console.log('renderGlobalHead', curRelay);
     return (
       <Box className={'global_head'}>
         <Typography className={'tip0'}>
@@ -146,7 +146,7 @@ const GFTGlobal = () => {
             value={curRelay}
             onChange={({ target }) => {
               if (target && target.value) {
-                setCurRelay(target.value);
+                // setCurRelay(target.value);
               }
             }}
           >
