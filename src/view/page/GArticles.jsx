@@ -80,7 +80,7 @@ function GArticles() {
     return (
       <Box
         sx={{
-          marginTop: "20px",
+          marginTop: "40px",
           width: "100%",
           display: "flex",
           flexDirection: "row",
@@ -136,7 +136,6 @@ function GArticles() {
       {renderTop()}
       <List
         sx={{
-          marginTop: "10px",
           marginLeft: "24px",
           width: "100%",
           height: "100%",
