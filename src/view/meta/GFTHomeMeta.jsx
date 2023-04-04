@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, createRef } from 'react';
 import './GFTHomeMeta.scss';
 
-import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 import GMetaBase from './GMetaBase';
 import GMetaLight from './GMetaLight';
@@ -12,8 +11,6 @@ import GMetaFriend from './GMetaFriend';
 import { createFriends, updateFriends, addFriends } from 'view/meta/GMetaFriend';
 
 const GFTHomeMeta = () => {
-
-    const { follows } = useSelector((s) => s.profile);
 
     const metaLightRef = useRef(null);
     const metaGroundRef = useRef(null);
@@ -55,11 +52,11 @@ const GFTHomeMeta = () => {
         }
     }
 
-    useEffect(() => {
-        if (metaFriendRef.current && metaFriendRef.current.init) {
-            metaFriendRef.current.addFriend(follows);
-        }
-    }, [follows]);
+    // useEffect(() => {
+    //     if (metaFriendRef.current && metaFriendRef.current.init) {
+    //         metaFriendRef.current.addFriend(follows);
+    //     }
+    // }, [follows]);
 
     return <GMetaBase
         canvasId="babylon-canvas"
