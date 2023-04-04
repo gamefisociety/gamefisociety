@@ -71,6 +71,7 @@ export class NostrSystem {
       return;
     }
     for (let [addr, tmpRelay] of this.Clients.entries()) {
+      // console.log('BroadcastSub relay', addr);
       if (relay) {
         // console.log('BroadcastSub relay', relay, addr, tmpRelay);
         if (relay === addr && relay.canSub) {
