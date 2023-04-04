@@ -159,7 +159,6 @@ const GFTGlobal = () => {
           </Select>
         </FormControl>
       </Box>
-
     );
   }
 
@@ -182,8 +181,8 @@ const GFTGlobal = () => {
 
   return (
     <Paper className={'global_bg'} elevation={0}>
-      {renderGlobalHead()}
       {renderLables()}
+      {renderGlobalHead()}
       {renderContent()}
     </Paper>
   );
