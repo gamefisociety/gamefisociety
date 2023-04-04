@@ -39,9 +39,6 @@ const GPostReply = () => {
     const filterTextNote = textNotePro.get();
     let tmpAuthors = follows.concat([publicKey]);
     filterTextNote.authors = tmpAuthors;
-    // if (curLabel === 'Post') {
-    //   filterTextNote['#e'] = [null];
-    // }
     if (tim === 0) {
       gNoteCache.clear();
       filterTextNote.until = Date.now();
@@ -94,9 +91,7 @@ const GPostReply = () => {
   }
 
   useEffect(() => {
-    //
     setData([]);
-    //
     let textNote = getSubNote(0);
     getNoteList(textNote, true);
     return () => {
@@ -141,11 +136,40 @@ const GPostReply = () => {
     );
   };
 
+  const parseNote = (target) => {
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
+
+    target.tags.map(item => {
+      if (item[0] === 'e') {
+        eNum = eNum + 1;
+        eArray.push(item[1]);
+      } else if (item[0] === 'p') {
+        pNum = pNum + 1;
+        pArray.push(item[1]);
+      }
+    });
+    return {
+      eNum: eNum,
+      pNum: pNum,
+      eArray: eArray.concat(),
+      pArray: pArray.concat()
+    }
+  }
+
   const renderContent = () => {
     return (
       <List className={'list_bg'}>
         {data.map((item, index) => {
           const info = inforData.get(item.pubkey);
+          if (curLabel === 'Post') {
+            let retInfo = parseNote(item);
+            if (retInfo.eNum > 0) {
+              return null;
+            }
+          }
           return (
             <GCardNote
               key={"global-note-" + index}
