@@ -89,7 +89,7 @@ function GDetailArticle() {
           <Typography
             sx={{
               marginLeft: "5px",
-              fontSize: "14px",
+              fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
               color: "#FFFFFF",
@@ -99,7 +99,7 @@ function GDetailArticle() {
           </Typography>
         </Box>
       </Box>
-      <Typography
+      {/* <Typography
         sx={{
           fontSize: "18px",
           fontFamily: "Saira",
@@ -109,7 +109,7 @@ function GDetailArticle() {
         }}
       >
         {name}
-      </Typography>
+      </Typography> */}
       <Typography
         sx={{
           width: "100%",
