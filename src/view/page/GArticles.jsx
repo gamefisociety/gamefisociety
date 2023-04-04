@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
+import { useNavigate } from "react-router-dom";
 import GPublishArticle from "components/GPublishArticle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,11 +10,12 @@ import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import Avatar from "@mui/material/Avatar";
-import { default_avatar } from "module/utils/xdef";
-import xhelp from "module/utils/xhelp";
-import { useNavigate } from "react-router-dom";
-import "./GArticles.scss";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import GSTArticlesBase from "web3/GSTArticles";
+import xhelp from "module/utils/xhelp";
+import { default_avatar } from "module/utils/xdef";
+import "./GArticles.scss";
 import closeImg from "./../../asset/image/social/close.png";
 function GArticles() {
   const navigate = useNavigate();
@@ -21,6 +23,10 @@ function GArticles() {
     useWeb3React();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [articleDatas, setArticleDatas] = useState([]);
+  const [waittingDatas, setWaittingDatas] = useState([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+  ]);
+  const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (account) {
@@ -35,18 +41,23 @@ function GArticles() {
   }, [account]);
   const getAllArticles = () => {
     if (account) {
+      if (fetching) {
+        return;
+      }
+      setFetching(true);
       GSTArticlesBase.totalSupply(library)
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
             fetchArticles(0, Number(res));
+          } else {
+            setFetching(false);
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
-    } else {
-      return 0;
     }
   };
   const fetchArticles = (index, count) => {
@@ -54,6 +65,7 @@ function GArticles() {
       let articleCache = articleDatas.concat();
       GSTArticlesBase.getArticles(library, index, count)
         .then((res) => {
+          setFetching(false);
           if (res && res.length > 0) {
             articleCache = articleCache.concat(res);
             articleCache.reverse();
@@ -61,9 +73,11 @@ function GArticles() {
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
     } else {
+      setFetching(false);
       return 0;
     }
   };
@@ -94,8 +108,8 @@ function GArticles() {
             fontFamily: "Saira",
             fontWeight: "500",
             color: "#FFFFFF",
-            textAlign:"center",
-            marginLeft: "24px"
+            textAlign: "center",
+            marginLeft: "24px",
           }}
         >
           {"Articles"}
@@ -120,20 +134,8 @@ function GArticles() {
     );
   };
 
-  return (
-    <Box
-      sx={{
-        width: "760px",
-        minHeight: "1000px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
-        pointerEvents: "all",
-        backgroundColor: "rgba(0, 0, 0, 0.708)",
-      }}
-    >
-      {renderTop()}
+  const renderArticleList = () => {
+    return (
       <List
         sx={{
           marginLeft: "24px",
@@ -246,6 +248,65 @@ function GArticles() {
           );
         })}
       </List>
+    );
+  };
+
+  const renderWaittingList = () => {
+    return (
+      <List
+        sx={{
+          marginLeft: "24px",
+          width: "100%",
+          height: "100%",
+          overflow: "auto",
+          backgroundColor: "transparent",
+        }}
+      >
+        {waittingDatas.map((item, index) => {
+          return (
+            <Box
+              key={"article" + index}
+              sx={{
+                marginTop: "40px",
+                width: "700px",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton animation="wave" width={"90%"} />
+              </Box>
+
+              <Skeleton animation={false} width={"100%"} />
+            </Box>
+          );
+        })}
+      </List>
+    );
+  };
+
+  return (
+    <Box
+      sx={{
+        width: "760px",
+        minHeight: "1000px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        pointerEvents: "all",
+        backgroundColor: "rgba(0, 0, 0, 0.708)",
+      }}
+    >
+      {renderTop()}
+      {fetching === true ? renderWaittingList() : renderArticleList()}
       <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
