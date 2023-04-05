@@ -10,8 +10,14 @@ import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+
 import { alpha, styled } from "@mui/material/styles";
-import { setRelays,setFollows } from "module/store/features/profileSlice";
+import { setRelays, setFollows } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
@@ -135,67 +141,79 @@ const GRelays = () => {
   };
 
   const renderCacheRelays = () => {
-    return relays.map((cfg, index) => {
-      // console.log("relay", item);
-      return (
+    return (
+      <List className="list_bg">
+        {
+          relays.map((cfg, index) => {
+            return (
+              <ListItem>
+                <Box className={'relay_item'} key={"relaycard-index-" + index}
+                  onClick={(event) => {
+                    console.log('new event', event);
+                    module.isDetail = true;
+                    module.curRelay = cfg;
+                    setModule({ ...module });
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontFamily: "Saira",
+                      fontWeight: "500",
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    {cfg.addr}
+                  </Typography>
+                  <Box
+                    sx={{
+                      ml: "10px",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "8px",
+                      backgroundColor: cfg.read ? "#4B8B1F" : "#D9D9D9",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      ml: "10px",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "8px",
+                      backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
+                    }}
+                  />
+                  <Button
+                    className="button"
+                    variant="contained"
+                    sx={{
+                      position: "absolute",
+                      right: "-30px",
+                      width: "40px",
+                      backgroundColor: "transparent",
+                    }}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      //
+                      deletingRealy = cfg.addr;
+                      handleClickDialogOpen();
+                    }}
+                  >
+                    <img src={logo_delete} width="40px" alt="logo_delete" />
+                  </Button>
+                </Box>
+              </ListItem>
+            )
+          })
+        }
+      </List>
+    );
+    // relays.map((cfg, index) => {
+    //   // console.log("relay", item);
+    //   return (
 
-        <Box className={'relay_item'} key={"relaycard-index-" + index}
-          onClick={(event) => {
-            console.log('new event', event);
-            module.isDetail = true;
-            module.curRelay = cfg;
-            setModule({ ...module });
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-          >
-            {cfg.addr}
-          </Typography>
-          <Box
-            sx={{
-              ml: "10px",
-              width: "16px",
-              height: "16px",
-              borderRadius: "8px",
-              backgroundColor: cfg.read ? "#4B8B1F" : "#D9D9D9",
-            }}
-          />
-          <Box
-            sx={{
-              ml: "10px",
-              width: "16px",
-              height: "16px",
-              borderRadius: "8px",
-              backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
-            }}
-          />
-          <Button
-            className="button"
-            variant="contained"
-            sx={{
-              position: "absolute",
-              right: "-30px",
-              width: "40px",
-              backgroundColor: "transparent",
-            }}
-            onClick={(event) => {
-              event.stopPropagation();
-              //
-              deletingRealy = cfg.addr;
-              handleClickDialogOpen();
-            }}
-          >
-            <img src={logo_delete} width="40px" alt="logo_delete" />
-          </Button>
-        </Box>
-      );
-    });
+    //   );
+    // });
   };
 
   //
@@ -281,8 +299,6 @@ const GRelays = () => {
             fontFamily: "Saira",
             fontWeight: "500",
             align: "left",
-            borderBottom: 1,
-            borderColor: "#202122",
           }}
           align={"left"}
         >
@@ -330,24 +346,8 @@ const GRelays = () => {
             {'sync'}
           </Button>
         </Stack>
-
-        <Stack
-          sx={{
-            width: "100%",
-            marginTop: "20px",
-          }}
-        >
-          {renderNewRelay()}
-        </Stack>
-        <Stack
-          sx={{
-            width: "100%",
-            marginTop: "20px",
-          }}
-          spacing={3}
-        >
-          {renderCacheRelays()}
-        </Stack>
+        {renderNewRelay()}
+        {renderCacheRelays()}
       </Box>
     );
   };
@@ -699,9 +699,8 @@ const GRelays = () => {
     );
   };
 
-  return (
-    <Box className={'relay_bg'}>
-      {module.isDetail ? renderCurRelay() : renderRelays()}
+  const renderDlg = () => {
+    return (
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
@@ -783,6 +782,12 @@ const GRelays = () => {
           </Button>
         </Box>
       </Dialog>
+    );
+  }
+  return (
+    <Box className={'relay_bg'}>
+      {module.isDetail ? renderCurRelay() : renderRelays()}
+      {renderDlg()}
     </Box>
   );
 };

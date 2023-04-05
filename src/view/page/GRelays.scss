@@ -1,15 +1,24 @@
 .relay_bg {
     width: 400px;
     min-height: calc( 100vh - 64px );
-    background-color: rgba(27, 27, 27, 0.75);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-left: 32px;
     padding-right: 32px;
+    background-color: transparent;
 
     .inner_relays {
         width: 100%;
+    }
+
+    .list_bg {
+        // flex: 1;
+        height: auto;
+        // overflow: auto;
+        // padding-right: 20px;
+        padding-bottom: 100px;
+        box-sizing: border-box;
     }
 
     .relay_item {
