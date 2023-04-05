@@ -225,16 +225,16 @@ const GCardNote = (props) => {
       </Box>
       {renderContent(note.content)}
       <Box className={'bottom'}>
-        <img className={'icon_chat'} onClick={() => {
+        <Box className="icon_chat" onClick={() => {
           dispatch(setPost({
             post: true,
             target: note,
           }));
         }} />
-        <img className={'icon_chain_push'} />
-        <img className={'icon_pay'} />
-        <img className={'icon_trans'} />
-        <img className={'icon_right'} />
+        <Box className="icon_chain_push" />
+        <Box className="icon_pay" />
+        <Box className="icon_trans" />
+        <Box className="icon_right" />
       </Box>
     </Card>
   );
