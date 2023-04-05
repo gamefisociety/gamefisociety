@@ -15,6 +15,7 @@ import GFTHomeMeta from 'view/meta/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
 import GRelaysShow from "view/page/GRelaysShow";
+import GSocietyShow from "view/page/GSocietyShow";
 import GFTChat from "view/page/GFTChat";
 
 import GLoginDialog from "view/dialog/GLoginDialog";
@@ -88,8 +89,7 @@ const MainLayout = () => {
         )}
         {cardDrawer === "relays" && <GRelays />}
         {cardDrawer === "relay-show" && <GRelaysShow />}
-        {cardDrawer === "follower-show" && <GRelaysShow />}
-        {cardDrawer === "following-show" && <GRelaysShow />}
+        {cardDrawer === "follower-show" && <GSocietyShow />}
       </Drawer>
       <Drawer
         PaperProps={{

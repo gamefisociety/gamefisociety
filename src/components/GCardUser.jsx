@@ -344,7 +344,7 @@ const GCardUser = (props) => {
                     isDrawer: true,
                     placeDrawer: "right",
                     cardDrawer: "follower-show",
-                    followerDrawer: { ...ownFollows }
+                    followerDrawer: ownFollows.concat()
                   })
                 );
               }}>
@@ -369,8 +369,8 @@ const GCardUser = (props) => {
                   setDrawer({
                     isDrawer: true,
                     placeDrawer: "right",
-                    cardDrawer: "following-show",
-                    followingDrawer: ownFollowings.concat(),
+                    cardDrawer: "follower-show",
+                    followerDrawer: ownFollowings.concat(),
                   })
                 );
               }}>

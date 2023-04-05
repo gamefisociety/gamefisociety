@@ -79,9 +79,6 @@ export const dialogSlice = createSlice({
       if (action.payload.followerDrawer) {
         state.followerDrawer = action.payload.followerDrawer.concat();
       }
-      if (action.payload.followingDrawer) {
-        state.followingDrawer = { ...action.payload.followingDrawer }
-      }
     },
     setChatDrawer: (state, action) => {
       state.chatDrawer = action.payload.chatDrawer;
