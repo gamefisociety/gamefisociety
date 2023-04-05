@@ -5,7 +5,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
 import "./GSetting.scss";
-
+import Helpers from "view/utils/Helpers";
+import { logout } from "module/store/features/loginSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
 import { setProfile } from "module/store/features/profileSlice";
@@ -17,7 +18,7 @@ const GSetting = () => {
   const { publicKey, privateKey } = useSelector((s) => s.login);
 
   const [localProfile, setLocalProfile] = useState({});
-
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -40,7 +41,9 @@ const GSetting = () => {
         <Typography className={'setting_context'}>
           {publicKey}
         </Typography>
-        <img className={'icon_copy'} />
+        <img className={'icon_copy'} onClick={()=>{
+          Helpers.copyToClipboard(publicKey);
+        }} />
       </Stack>
       <Typography className={'setting_title'} sx={{ mt: '36px' }}>
         {"SECRET ACCOUNT LOGIN"}
@@ -52,12 +55,16 @@ const GSetting = () => {
         sx={{
           width: '100%'
         }}>
-        <Typography className={'setting_context'}>
-          {privateKey}
+        <Typography className={'setting_context'} type="password">
+          {show?privateKey:"*********************************************************************"}
         </Typography>
         <Box sx={{ flexGrow: 1 }}></Box>
-        <img className={'icon_show'} />
-        <img className={'icon_copy'} />
+        <img className={'icon_show'}  onClick={()=>{
+            setShow(!show);
+        }}/>
+        <img className={'icon_copy'} onClick={()=>{
+          Helpers.copyToClipboard(privateKey);
+        }}/>
       </Stack>
       <Divider sx={{
         my: '24px',
@@ -124,6 +131,9 @@ const GSetting = () => {
           variant="contained"
           className={'bt_out'}
         // onClick={saveProfile}
+        onClick={()=>{
+          dispatch(logout());
+        }}
         >
           {'Sign Out'}
         </Button>
