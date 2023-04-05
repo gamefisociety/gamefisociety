@@ -54,14 +54,12 @@ const WSwitch = styled(Switch)(({ theme }) => ({
 
 const GRelays = () => {
   const { relays, curRelay } = useSelector((s) => s.profile);
-  const { publicKey, loggedOut } = useSelector((s) => s.login);
+  const { loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
   const [newRelay, setNewRelay] = useState(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [module, setModule] = useState({ isDetail: false, curRelay: {} });
-
-  const followPro = useFollowPro();
 
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
@@ -79,6 +77,21 @@ const GRelays = () => {
         console.log('remove relay', event, msg);
       }
     });
+  };
+
+  const addRelays = async (addr) => {
+    let tmps = relays.concat();
+    let flagIndex = tmps.findIndex((item) => {
+      return item.addr === addr;
+    });
+    if (flagIndex < 0) {
+      tmps.push({ addr: addr, read: true, write: false });
+    }
+    dispatch(setRelays(tmps));
+    if (loggedOut === false) {
+      saveRelays(tmps);
+    }
+    return null;
   };
 
   const deleteRelays = async (addr) => {
@@ -208,7 +221,7 @@ const GRelays = () => {
               backgroundColor: "transparent",
             }}
             onClick={() => {
-              // saveRelays();
+              addRelays(newRelay);
             }}
           >
             <img src={icon_save} width="30px" alt="icon_save" />

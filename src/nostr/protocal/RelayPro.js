@@ -20,17 +20,6 @@ export const useRelayPro = () => {
         return filter;
       }
     },
-    send: async (pubKey, obj, tmpPrivate) => {
-      if (publicKey) {
-        const ev = NostrFactory.createEvent(publicKey);
-        ev.Kind = EventKind.ContactList;
-        ev.Content = JSON.stringify(obj);
-        if (tmpPrivate) {
-          return await nostrEvent.Sign(tmpPrivate, ev);
-        }
-        return await nostrEvent.Sign(privateKey, ev);
-      }
-    },
     syncRelayKind3: async (paramRelays) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList;
