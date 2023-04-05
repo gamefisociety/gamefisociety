@@ -71,71 +71,25 @@ const GRelays = () => {
     setDialogOpen(false);
   };
 
-  const saveRelays = async () => {
-    let tmp_new_relays = {};
-    relays.map((relayInfo) => {
-      if (relayInfo.addr.startsWith('wss://')) {
-        tmp_new_relays[relayInfo.addr] = {
-          read: relayInfo.read,
-          write: relayInfo.write,
-        }
+  const saveRelays = async (tmpRelays) => {
+    //sync to users
+    let event = await relayPro.syncRelayKind3(tmpRelays);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === "OK" && msg.ret === true) {
+        console.log('remove relay', event, msg);
       }
     });
-    console.log('GRelays relays', relays, tmp_new_relays);
-    let cxt = JSON.stringify(tmp_new_relays);
-
-    // // getFollows
-    // let event = await followPro.addFollow(pubkey);
-    // let newFollows = follows.concat();
-    // newFollows.push(pubkey);
-    // System.BroadcastEvent(event, (tags, client, msg) => {
-    //   if (tags === "OK" && msg.ret === true) {
-    //     let followsInfo = {
-    //       create_at: event.CreatedAt,
-    //       follows: newFollows,
-    //     };
-    //     dispatch(setFollows(followsInfo));
-    //   }
-    // });
-
-    // let tmp_new_relays = [];
-    // newRelays.map((newitem) => {
-    //   if (newitem !== "") {
-    //     let tmp = [];
-    //     tmp.push(newitem);
-    //     tmp.push({
-    //       read: true,
-    //       write: true,
-    //     });
-    //     tmp_new_relays.push(tmp);
-    //   }
-    // });
-    // let tmpRelays = {
-    //   relays: {
-    //     ...relays,
-    //     ...Object.fromEntries(tmp_new_relays),
-    //   },
-    //   createdAt: new Date().getTime(),
-    // };
-    // setNewRelay('');
-    // dispatch(setRelays(tmpRelays));
-    // if (loggedOut === false) {
-    //   //sync to users
-    // }
-    return null;
   };
 
   const deleteRelays = async (addr) => {
-    // relays.find
     let tmps = relays.concat();
     let flagIndex = tmps.findIndex((item) => {
       return item.addr === addr;
     });
     tmps.splice(flagIndex, 1);
     dispatch(setRelays(tmps));
-    //need disconnect relays
     if (loggedOut === false) {
-      //sync to users
+      saveRelays(tmps);
     }
     return null;
   };
@@ -247,17 +201,6 @@ const GRelays = () => {
             right: "-20px",
           }}
         >
-          {/* <IconButton
-              sx={{
-                width: "24px",
-                height: "24px",
-              }}
-              onClick={() => {
-                saveRelays();
-              }}
-            >
-              <AddTaskIcon sx={{ width: "24px", height: "24px" }} />
-            </IconButton> */}
           <Button
             variant="contained"
             sx={{
@@ -265,7 +208,7 @@ const GRelays = () => {
               backgroundColor: "transparent",
             }}
             onClick={() => {
-              saveRelays();
+              // saveRelays();
             }}
           >
             <img src={icon_save} width="30px" alt="icon_save" />
@@ -304,7 +247,7 @@ const GRelays = () => {
         >
           {"Your Relays " + relays.length}
         </Typography>
-        <Stack sx={{ py: '12px' }} direction={'row'} alignItems={'center'}>
+        <Stack sx={{ py: '12px' }} direction={'row'} alignItems={'center'} justifyContent={'center'}>
           <Button
             variant="contained"
             sx={{
@@ -326,7 +269,7 @@ const GRelays = () => {
           >
             {"+"}
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               width: "15%",
@@ -344,7 +287,7 @@ const GRelays = () => {
             }}
           >
             {'sync'}
-          </Button>
+          </Button> */}
         </Stack>
         {renderNewRelay()}
         {renderCacheRelays()}

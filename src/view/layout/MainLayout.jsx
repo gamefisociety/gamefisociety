@@ -58,6 +58,7 @@ const MainLayout = () => {
             marginTop: "64px",
             borderRadius: "12px",
             backgroundColor: "rgba(17,17,17,0.95)",
+            // backgroundColor: "rgba(17,17,17,0.95)",
           },
         }}
         anchor={placeDrawer}

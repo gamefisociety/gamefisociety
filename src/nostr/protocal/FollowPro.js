@@ -29,7 +29,6 @@ export const useFollowPro = () => {
     addFollow: async (newFollow) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
-      //
       let tmp_relays = {};
       relays.map((relayInfo) => {
         if (relayInfo.addr.startsWith('wss://')) {
@@ -39,9 +38,7 @@ export const useFollowPro = () => {
           }
         }
       });
-      //
       ev.Content = JSON.stringify(tmp_relays);
-      console.log('ev.Content', ev.Content);
       let newTags = follows.concat();
       newTags.push(newFollow);
       newTags.map(item => {
