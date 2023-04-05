@@ -20,6 +20,7 @@ const GListenDM = (props) => {
   // console.log('dm msg', dms);
   const listenSub = (sub) => {
     System.BroadcastSub(sub, (tag, client, msg) => {
+      console.log('listenSub msg', msg);
       dispatch(addDirectMessage(msg));
     })
   }

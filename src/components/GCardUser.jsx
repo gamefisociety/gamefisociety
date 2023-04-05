@@ -27,6 +27,7 @@ const GCardUser = (props) => {
   const { follows } = useSelector((s) => s.profile);
   const { publicKey } = useSelector((s) => s.login);
   const { profile, pubkey, ownFollows, ownRelays } = props;
+  const [ownFollowings, setOwnFollowings] = useState(null);
   const dispatch = useDispatch();
   //
   const followPro = useFollowPro();
@@ -343,6 +344,7 @@ const GCardUser = (props) => {
                     isDrawer: true,
                     placeDrawer: "right",
                     cardDrawer: "follower-show",
+                    followerDrawer: { ...ownFollows }
                   })
                 );
               }}>
@@ -368,6 +370,7 @@ const GCardUser = (props) => {
                     isDrawer: true,
                     placeDrawer: "right",
                     cardDrawer: "following-show",
+                    followingDrawer: ownFollowings.concat(),
                   })
                 );
               }}>
@@ -393,6 +396,7 @@ const GCardUser = (props) => {
                     isDrawer: true,
                     placeDrawer: "right",
                     cardDrawer: "relay-show",
+                    relayDrawer: { ...ownRelays }
                   })
                 );
               }}>

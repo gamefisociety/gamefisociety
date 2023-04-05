@@ -17,8 +17,12 @@ const initialState = {
   isPost: false,
   isMainContent: false,
   targetPost: null,
+  //
   placeDrawer: 'right',
   cardDrawer: 'follow',
+  relayDrawer: null,
+  followerDrawer: [],
+  followingDrawer: [],
   //
   chatDrawer: false,
   chatPubKey: "",
@@ -69,6 +73,15 @@ export const dialogSlice = createSlice({
       state.isDrawer = action.payload.isDrawer;
       state.placeDrawer = action.payload.placeDrawer;
       state.cardDrawer = action.payload.cardDrawer;
+      if (action.payload.relayDrawer) {
+        state.relayDrawer = { ...action.payload.relayDrawer }
+      }
+      if (action.payload.followerDrawer) {
+        state.followerDrawer = action.payload.followerDrawer.concat();
+      }
+      if (action.payload.followingDrawer) {
+        state.followingDrawer = { ...action.payload.followingDrawer }
+      }
     },
     setChatDrawer: (state, action) => {
       state.chatDrawer = action.payload.chatDrawer;
