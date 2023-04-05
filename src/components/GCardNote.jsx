@@ -66,10 +66,10 @@ const GCardNote = (props) => {
     } else {
       setMeta({ ...metaInfo });
     }
-    console.log('request reply_pubkey', reply_pubkey);
     if (reply_pubkey !== null) {
       let replyInfo = UserCache.getMetadata(reply_pubkey);
-      if (reply_pubkey && !replyInfo) {
+      console.log('request reply_pubkey', reply_pubkey, replyInfo);
+      if (!replyInfo) {
         metaKeys.push(reply_pubkey);
       } else {
         setReplyMeta({ ...replyInfo });
@@ -95,13 +95,13 @@ const GCardNote = (props) => {
           if (msg.pubkey === self_pubkey) {
             //process reply meta
             if (meta === null || meta.created_at < msg.created_at) {
-              setMeta(msg);
+              setMeta({ ...msg });
             }
           }
+          console.log('GCardNote fetch_user_info', msg, reply_pubkey);
           if (msg.pubkey === reply_pubkey) {
-            //process reply meta
-            if (meta === null || replyMeta.created_at < msg.created_at) {
-              setReplyMeta(msg);
+            if (replyMeta === null || replyMeta.created_at < msg.created_at) {
+              setReplyMeta({ ...msg });
             }
           }
         } else if (msg.kind === EventKind.ContactList) {
@@ -214,20 +214,21 @@ const GCardNote = (props) => {
     if (replyMeta === null) {
       return null;
     }
-    // console.log('renderReplyLable', replyMeta);
     let showName = 'default';
     if (replyMeta && replyMeta.content && replyMeta.content !== '') {
       let replyMetaCxt = JSON.parse(replyMeta.content);
       showName = replyMetaCxt.name;
     }
+    console.log('renderReplyLable', showName);
     return (
       <Stack direction={'row'} alignItems={'center'}>
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {'reply to '}
         </Typography>
-        <Typography className="level3_lable" sx={{ ml: "12px" }} onClick={() => {
-          console.log('navigate userhome', replyMeta);
-          navigate("/userhome", { state: { pubkey: replyMeta.pubkey } });
+        <Typography className="level3_lable" sx={{ ml: "12px" }} onClick={(event) => {
+          console.log('navigate userhome', replyMeta.pubkey);
+          navigate("/userhome:" + replyMeta.pubkey, { state: { pubkey: replyMeta.pubkey } });
+          event.stopPropagation();
         }}>
           {'@' + showName}
         </Typography>
@@ -246,7 +247,7 @@ const GCardNote = (props) => {
     <Card className={'card_note_bg'} elevation={0}>
       <Box className={'base_info'}
         onClick={() => {
-          navigate("/userhome", { state: { pubkey: note.pubkey } });
+          navigate("/userhome:" + note.pubkey, { state: { pubkey: note.pubkey } });
         }}>
         <Avatar
           className="avatar"

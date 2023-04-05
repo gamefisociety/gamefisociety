@@ -40,8 +40,8 @@ const MainRoutes = {
       element: <GFTHomeView />,
     },
     {
-        path: '/meta',
-        element: <GFTHomeMeta />,
+      path: '/meta',
+      element: <GFTHomeMeta />,
     },
     // {
     //   path: "/detail",
@@ -84,7 +84,7 @@ const MainRoutes = {
     //     element: <GFTMintNFT />,
     // },
     {
-      path: "/userhome",
+      path: "/userhome:pubkey",
       element: <GUserHome />,
     },
     {

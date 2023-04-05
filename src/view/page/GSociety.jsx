@@ -189,7 +189,7 @@ const GSociety = (props) => {
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
-                    navigate("/userhome", { state: { pubkey: pubkey } });
+                    navigate("/userhome:" + pubkey, { state: { pubkey: pubkey } });
                     if (callback) {
                       callback();
                     }
@@ -250,7 +250,7 @@ const GSociety = (props) => {
                 <ListItemAvatar
                   onClick={() => {
                     dispatch(setMainContent(true));
-                    navigate("/userhome", { state: { pubkey: item.pubkey } });
+                    navigate("/userhome:" + item.pubkey, { state: { pubkey: item.pubkey } });
                     if (callback) {
                       callback();
                     }
