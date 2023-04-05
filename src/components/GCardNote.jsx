@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardNote.scss";
-
 import { useSelector, useDispatch } from "react-redux";
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -14,16 +15,74 @@ import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
 
-
+import { useMetadataPro } from "nostr/protocal/MetadataPro";
+import { useFollowPro } from "nostr/protocal/FollowPro";
+import { useTextNotePro } from "nostr/protocal/TextNotePro";
+import { System } from "nostr/NostrSystem";
+import { BuildSub } from "nostr/NostrUtils"
+import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
 
+const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+
 const GCardNote = (props) => {
-  const { note, info } = props;
+  const nostrWorker = useWorker(createNostrWorker);
+  const { note } = props;
   const [replyInfo, setReplyInfo] = useState(null);
+  const [meta, setMeta] = useState(null);
+  const [metaCxt, setMetaCxt] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const UserCache = UserDataCache();
+  const MetaPro = useMetadataPro();
+
+  const fetch_rela_info = () => {
+    let filter = [];
+    console.log('GCardNote', note);
+    //get meta info
+    let metaInfo = UserCache.getMetadata(note.pubkey);
+    if (!metaInfo) {
+      let filterMeta = MetaPro.get(note.pubkey);
+      filter.push(filterMeta)
+    } else {
+      if (metaInfo.content && metaInfo.content !== '') {
+        setMetaCxt({ ...JSON.parse(metaInfo.content) });
+      }
+      setMeta({ ...metaInfo });
+    }
+    //get reaction
+
+    //get relative
+
+    //request
+    if (filter.length === 0) {
+      return;
+    }
+    let subMeta = BuildSub("note_relat_info", filter.concat());
+    nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {
+      // console.log('GCardNote fetch_user_info', datas);
+      datas.map((msg) => {
+        if (msg.kind === EventKind.SetMetadata) {
+          let update_meta = false;
+          if (meta === null || meta.created_at < msg.created_at) {
+            update_meta = true;
+          }
+          if (update_meta) {
+            if (msg.content && msg.content !== '') {
+              setMetaCxt({ ...JSON.parse(msg.content) });
+            }
+            setMeta(msg);
+          }
+        } else if (msg.kind === EventKind.ContactList) {
+          //
+        } else if (msg.kind === EventKind.Relays) {
+          //
+        } else if (msg.kind === EventKind.TextNote) {
+          //
+        }
+      });
+    })
+  }
 
   useEffect(() => {
     let eNum = 0;
@@ -56,23 +115,9 @@ const GCardNote = (props) => {
         setReplyInfo(pArray[1]);
       }
     }
-    // let reply_note_id = 0;
-    // note.tags.map(item => {
-    //   if (item[0] === '#e') {
-    //     if (item[3] && item[3] === 'reply') {
-    //       reply_note_id = item[1];
-    //     }
-    //   }
-    // });
-    // //
-    // let context = {};
-    // let info = UserCache.getMetadata(reply_note_id);
-    // if (info) {
-    //   context = JSON.parse(info.content)
-    //   setReplyInfo({ ...context });
-    // } else {
-    //   //fetch relpy info
-    // }
+    //
+    fetch_rela_info();
+    //
     return () => { };
   }, [note]);
 
@@ -85,7 +130,7 @@ const GCardNote = (props) => {
           navigate("/notethread", {
             state: {
               note: { ...note },
-              info: { ...info },
+              info: { ...metaCxt },
             },
           });
         }}
@@ -148,8 +193,8 @@ const GCardNote = (props) => {
   };
 
   const displayname = () => {
-    if (info && info.display_name) {
-      return info.display_name;
+    if (metaCxt && metaCxt.display_name) {
+      return metaCxt.display_name;
     } else {
       if (note.pubkey) {
         return (
@@ -162,8 +207,8 @@ const GCardNote = (props) => {
   };
 
   const username = () => {
-    if (info && info.name) {
-      return '@' + info.name;
+    if (metaCxt && metaCxt.name) {
+      return '@' + metaCxt.name;
     } else {
       if (note.pubkey) {
         return (
@@ -202,7 +247,7 @@ const GCardNote = (props) => {
         <Avatar
           className="avatar"
           alt="Avatar"
-          src={info && info.picture ? info.picture : default_avatar}
+          src={metaCxt && metaCxt.picture ? metaCxt.picture : default_avatar}
         />
         <Box className={'base_ext'}>
           <Stack direction='row'>

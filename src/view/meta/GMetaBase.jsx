@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   Engine,
   Scene,
-} from '@babylonjs/core'
+} from '@babylonjs/core';
 
 const GMetaBase = (props) => {
 
-  const reactCanvas = useRef(null)
+  const reactCanvas = useRef(null);
+
   const {
     canvasId,
     antialias,
@@ -23,6 +25,8 @@ const GMetaBase = (props) => {
     if (!reactCanvas.current)
       return;
 
+    console.log('GMetaBase ref', reactCanvas.current)
+
     const engine = new Engine(
       reactCanvas.current,
       antialias,
@@ -32,14 +36,14 @@ const GMetaBase = (props) => {
 
     const scene = new Scene(engine, sceneOptions)
     if (scene.isReady()) {
-      onSceneReady(scene)
+      onSceneReady(scene);
     } else {
       scene.onReadyObservable.addOnce(onSceneReady)
     }
 
     engine.runRenderLoop(() => {
-      onRender(scene)
-      scene.render()
+      onRender(scene);
+      scene.render();
     })
 
     const resize = () => {
@@ -65,7 +69,7 @@ const GMetaBase = (props) => {
     onSceneReady,
   ])
 
-  return <canvas className='meta_bg' id={canvasId} ref={reactCanvas} {...rest} />
+  return (<canvas className='meta_bg' id={canvasId} ref={reactCanvas} {...rest} ></canvas>);
 }
 
 export default React.memo(GMetaBase);

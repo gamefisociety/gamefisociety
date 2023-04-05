@@ -24,7 +24,6 @@ const GFetchMetadata = (props) => {
 
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
-  const textNotePro = useTextNotePro();
 
   const selfMetadata = (msg) => {
     if (msg.kind === EventKind.SetMetadata) {
@@ -36,14 +35,19 @@ const GFetchMetadata = (props) => {
       //relays
       if (msg.content !== "") {
         let content = JSON.parse(msg.content);
-        let tmpRelays = {
-          relays: {
-            ...content,
-            ...relays,
-          },
-          createdAt: 1,
-        };
-        dispatch(setRelays(tmpRelays));
+        let tmp_relays = relays.concat();
+        for (let key in content) {
+          let target = { addr: key, read: content[key].read, write: content[key].write };
+          let flag = tmp_relays.find((item) => {
+            return item.addr === key;
+          });
+          // console.log('relay content includes', flag);
+          if (!flag) {
+            tmp_relays.push(target);
+          }
+        }
+        console.log('set relay content', tmp_relays);
+        dispatch(setRelays(tmp_relays));
       }
       //follows
       if (msg.tags.length > 0) {

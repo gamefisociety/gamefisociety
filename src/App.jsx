@@ -34,11 +34,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (relays) {
-      for (const [addr, v] of Object.entries(relays)) {
-        System.ConnectRelay(addr, v.read, v.write);
-      }
-    }
+    relays?.map((cfg) => {
+      System.ConnectRelay(cfg.addr, cfg.read, cfg.write);
+    });
   }, [relays]);
 
   return (
