@@ -46,7 +46,6 @@ const GFetchMetadata = (props) => {
             tmp_relays.push(target);
           }
         }
-        console.log('set relay content', tmp_relays);
         dispatch(setRelays(tmp_relays));
       }
       //follows

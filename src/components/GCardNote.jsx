@@ -97,7 +97,7 @@ const GCardNote = (props) => {
               setMeta({ ...msg });
             }
           }
-          console.log('GCardNote fetch_user_info', msg, reply_pubkey);
+          // console.log('GCardNote fetch_user_info', msg, reply_pubkey);
           if (msg.pubkey === reply_pubkey) {
             if (replyMeta === null || replyMeta.created_at < msg.created_at) {
               setReplyMeta({ ...msg });

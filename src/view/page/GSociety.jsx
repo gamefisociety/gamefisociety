@@ -96,6 +96,7 @@ const GSociety = (props) => {
     let newFollows = follows.concat();
     newFollows.push(pubkey);
     System.BroadcastEvent(event, (tags, client, msg) => {
+      console.log('addFollow', event, msg);
       if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
@@ -112,6 +113,7 @@ const GSociety = (props) => {
     let newFollows = follows.concat();
     newFollows.splice(follows.indexOf(pubkey), 1);
     System.BroadcastEvent(event, (tags, client, msg) => {
+      console.log('removeFollow', event, msg);
       if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,

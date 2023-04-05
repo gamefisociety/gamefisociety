@@ -11,12 +11,15 @@ import Switch from "@mui/material/Switch";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { alpha, styled } from "@mui/material/styles";
-import { setRelays } from "module/store/features/profileSlice";
+import { setRelays,setFollows } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
 import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
+
+import { useFollowPro } from "nostr/protocal/FollowPro";
+import { System } from "nostr/NostrSystem";
 
 let deletingRealy = "";
 
@@ -51,6 +54,9 @@ const GRelays = () => {
   const [newRelay, setNewRelay] = useState(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [module, setModule] = useState({ isDetail: false, curRelay: {} });
+
+  const followPro = useFollowPro();
+
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -60,6 +66,32 @@ const GRelays = () => {
   };
 
   const saveRelays = async () => {
+    let tmp_new_relays = {};
+    relays.map((relayInfo) => {
+      if (relayInfo.addr.startsWith('wss://')) {
+        tmp_new_relays[relayInfo.addr] = {
+          read: relayInfo.read,
+          write: relayInfo.write,
+        }
+      }
+    });
+    console.log('GRelays relays', relays, tmp_new_relays);
+    let cxt = JSON.stringify(tmp_new_relays);
+
+    // // getFollows
+    // let event = await followPro.addFollow(pubkey);
+    // let newFollows = follows.concat();
+    // newFollows.push(pubkey);
+    // System.BroadcastEvent(event, (tags, client, msg) => {
+    //   if (tags === "OK" && msg.ret === true) {
+    //     let followsInfo = {
+    //       create_at: event.CreatedAt,
+    //       follows: newFollows,
+    //     };
+    //     dispatch(setFollows(followsInfo));
+    //   }
+    // });
+
     // let tmp_new_relays = [];
     // newRelays.map((newitem) => {
     //   if (newitem !== "") {
@@ -95,7 +127,6 @@ const GRelays = () => {
     });
     tmps.splice(flagIndex, 1);
     dispatch(setRelays(tmps));
-    //
     //need disconnect relays
     if (loggedOut === false) {
       //sync to users
@@ -257,28 +288,49 @@ const GRelays = () => {
         >
           {"Your Relays " + relays.length}
         </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            mt: "24px",
-            width: "100%",
-            height: "36px",
-            backgroundColor: "#454FBF",
-            borderRadius: "6px",
-            fontSize: "28px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            color: "white",
-          }}
-          disabled={newRelay !== null}
-          onClick={() => {
-            if (newRelay === null) {
-              setNewRelay('');
-            }
-          }}
-        >
-          {"+"}
-        </Button>
+        <Stack sx={{ py: '12px' }} direction={'row'} alignItems={'center'}>
+          <Button
+            variant="contained"
+            sx={{
+              width: "80%",
+              height: "36px",
+              backgroundColor: "#454FBF",
+              borderRadius: "6px",
+              fontSize: "28px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "white",
+            }}
+            disabled={newRelay !== null}
+            onClick={() => {
+              if (newRelay === null) {
+                setNewRelay('');
+              }
+            }}
+          >
+            {"+"}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              width: "15%",
+              height: "36px",
+              ml: '16px',
+              backgroundColor: "#454FBF",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "white",
+            }}
+            onClick={() => {
+              saveRelays();
+            }}
+          >
+            {'sync'}
+          </Button>
+        </Stack>
+
         <Stack
           sx={{
             width: "100%",

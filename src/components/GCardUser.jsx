@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./GCardUser.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -16,7 +18,6 @@ import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 
-import "./GCardUser.scss";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
@@ -27,12 +28,6 @@ const GCardUser = (props) => {
   const { profile, pubkey, ownFollows, ownRelays } = props;
   const dispatch = useDispatch();
   //
-  const relayMap = new Map();
-  for (const [k, v] of Object.entries(ownRelays)) {
-    if (k.startsWith("wss://") || k.startsWith("ws://")) {
-      relayMap.set(k, v);
-    }
-  }
   const followPro = useFollowPro();
   const addFollow = async (pubkey) => {
     let event = await followPro.addFollow(pubkey);
@@ -363,7 +358,7 @@ const GCardUser = (props) => {
               }}
             >
               <Typography className={'lable_1'}>
-                {relayMap.size}
+                {0}
               </Typography>
               <Typography className={'lable_2'}>
                 {"Relays"}
