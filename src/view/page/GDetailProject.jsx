@@ -70,10 +70,10 @@ function GDetailProject() {
           <Typography
             sx={{
               marginLeft: "5px",
-              fontSize: "14px",
+              fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
-              color: "#FFFFFF",
+              color: "#666666",
             }}
           >
             {"Projects"}

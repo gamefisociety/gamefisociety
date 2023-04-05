@@ -12,21 +12,12 @@ const RelayListKey = "last-relays";
 export const InitState = {
   useDb: "redux",
   newUserKey: false,
-  relays: {},
+  relays: [],
+  curRelay: '',
   latestRelays: 0,
   profile: {},
-  name: "Nostr",
-  display_name: "Nostr",
-  about: "",
-  picture: "",
-  website: "",
-  banner: "",
-  nip05: "",
-  lud06: "",
-  lud16: "",
   loaded: 0, //时间戳
   created: 0, //时间戳
-  followsData: 0,
   follows: [],
   followsUpdate: 0,
 };
@@ -37,32 +28,23 @@ const ProfileSlice = createSlice({
   reducers: {
     initRelays: (state, action) => {
       const lastRelayList = window.localStorage.getItem(RelayListKey);
+      let tmp_relays = [];
       if (lastRelayList) {
-        state.relays = JSON.parse(lastRelayList);
+        tmp_relays = JSON.parse(lastRelayList);
       } else {
-        state.relays = Object.fromEntries(DefaultRelays.entries());
+        tmp_relays = DefaultRelays;
       }
+      state.relays = tmp_relays;
+      state.curRelay = tmp_relays[0];
+      console.log('lastRelayList', tmp_relays);
     },
     setRelays: (state, action) => {
-      const relays = action.payload.relays;
-      const createdAt = action.payload.createdAt;
-      if (state.latestRelays > createdAt) {
-        return;
-      }
-      const filtered = new Map();
-      for (const [k, v] of Object.entries(relays)) {
-        if (k.startsWith("wss://") || k.startsWith("ws://")) {
-          filtered.set(k, v);
-        }
-      }
-      state.relays = Object.fromEntries(filtered.entries());
-      state.latestRelays = createdAt;
+      console.log('action setRelays', action.payload);
+      state.relays = action.payload;
       window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
     },
-    removeRelay: (state, action) => {
-      delete state.relays[action.payload];
-      state.relays = { ...state.relays };
-      window.localStorage.setItem(RelayListKey, JSON.stringify(state.relays));
+    setCurRelay: (state, action) => {
+      state.curRelay = { ...action.payload };
     },
     setProfile: (state, action) => {
       state.profile = { ...action.payload };
@@ -77,7 +59,7 @@ const ProfileSlice = createSlice({
 export const {
   initRelays,
   setRelays,
-  removeRelay,
+  setCurRelay,
   setProfile,
   setFollows,
 } = ProfileSlice.actions;

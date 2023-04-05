@@ -19,20 +19,18 @@ import icon_back from "../../asset/image/social/icon_back.png";
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
-let lastPubKey = "";
-
 const GUserHome = () => {
 
   const nostrWorker = useWorker(createNostrWorker);
 
   const location = useLocation();
   const { pubkey } = location.state;
-  console.log("GProfile enter", pubkey);
+  console.log("GUserHome enter", pubkey);
   const navigate = useNavigate();
   const user_note_cache = UserNoteCache();
   const [info, setInfo] = useState(null);
   const [notes, setNotes] = useState([]);
-  const [ownRelays, setOwnRelays] = useState({});
+  const [ownRelays, setOwnRelays] = useState(null);
   const [ownFollows, setOwnFollows] = useState([]);
   const textNotePro = useTextNotePro();
   const MetaPro = useMetadataPro();
@@ -51,19 +49,13 @@ const GUserHome = () => {
     ]);
     //
     let metadata_time = 0;
-    let contactlist_time = 0;
+    let contactlist = null;
     nostrWorker.fetch_user_profile(profileNote, null, (data, client) => {
       console.log('fetch_user_profile data', data);
       data.map((item) => {
         if (item.kind === EventKind.SetMetadata) {
           console.log('fetch_user_profile data', item);
-          let update_flag = false;
-          if (info === null) {
-            update_flag = true;
-          } else if (item.created_at > metadata_time) {
-            update_flag = true;
-          }
-          if (update_flag) {
+          if (info === null || item.created_at > metadata_time) {
             metadata_time = item.created_at;
             if (item.content !== "") {
               setInfo(JSON.parse(item.content));
@@ -74,17 +66,11 @@ const GUserHome = () => {
           user_note_cache.pushNote(item.pubkey, item);
           //
         } else if (item.kind === EventKind.ContactList) {
-          let update_flag = false;
-          if (contactlist_time === 0) {
-            update_flag = true;
-          } else if (item.created_at > contactlist_time) {
-            update_flag = true;
-          }
-          if (update_flag) {
-            contactlist_time = item.created_at;
+          if (contactlist === null || contactlist.created_at < item.created_at) {
+            contactlist = { ...item };
             if (item.content && item.content !== "") {
               let relays = JSON.parse(item.content);
-              setOwnRelays(relays);
+              setOwnRelays({ ...relays });
             }
             if (item.tags && item.tags.length > 0) {
               setOwnFollows(item.tags.concat());
@@ -97,16 +83,14 @@ const GUserHome = () => {
       if (target_note_cache) {
         setNotes(target_note_cache.concat());
       }
+      console.log('user home', target_note_cache);
     });
   };
 
   useEffect(() => {
-    if (pubkey && lastPubKey !== pubkey) {
-      lastPubKey = pubkey;
-      setNotes([]);
-      setInfo(null);
-      fetchTextNote(pubkey);
-    }
+    setNotes([]);
+    setInfo(null);
+    fetchTextNote(pubkey);
     return () => {
       //
     };
@@ -153,16 +137,10 @@ const GUserHome = () => {
         profile={{ ...info }}
         pubkey={pubkey}
         ownFollows={ownFollows.concat()}
-        ownRelays={{ ...ownRelays }}
+        ownRelays={ownRelays}
       />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
-        {notes.map((item, index) => (
-          <GCardNote
-            key={"userhome-note-index" + index + '-' + pubkey}
-            note={{ ...item }}
-            info={info}
-          />
-        ))}
+        {notes.map((item, index) => (<GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />))}
       </List>
     </Box>
   );

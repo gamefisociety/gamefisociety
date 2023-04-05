@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./GRelays.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -7,15 +9,24 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+
 import { alpha, styled } from "@mui/material/styles";
-import { Button, CardActions } from "@mui/material";
-import { setRelays, removeRelay } from "module/store/features/profileSlice";
+import { setRelays, setFollows } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
 import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
-import "./GRelays.scss";
+
+import { useFollowPro } from "nostr/protocal/FollowPro";
+import { System } from "nostr/NostrSystem";
+
 let deletingRealy = "";
 
 const RSwitch = styled(Switch)(({ theme }) => ({
@@ -40,14 +51,16 @@ const WSwitch = styled(Switch)(({ theme }) => ({
     backgroundColor: "#565656",
   },
 }));
+
 const GRelays = () => {
-  const { relays } = useSelector((s) => s.profile);
-  const { publicKey, loggedOut } = useSelector((s) => s.login);
+  const { relays, curRelay } = useSelector((s) => s.profile);
+  const { loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
-  const [newRelays, setNewRelays] = useState([]);
+  const [newRelay, setNewRelay] = useState(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [module, setModule] = useState({ isDetail: false, curRelay: {} });
+
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -56,401 +69,250 @@ const GRelays = () => {
     setDialogOpen(false);
   };
 
-  const fetchRelays = () => {
-    // console.log('fetchRelays', Object.entries(relays), sub);
-    // let sub = relayPro.get(publicKey);
-    // System.Broadcast(sub, 0, (msgs) => {
-    //     if (msgs) {
-    //         msgs.map(msg => {
-    //             // console.log('fetchRelays msgs', msg);
-    //             if (msg.kind === EventKind.ContactList && msg.pubkey === publicKey && msg.content !== '') {
-    //                 let content = JSON.parse(msg.content);
-    //                 let tmpRelays = {
-    //                     relays: {
-    //                         ...content,
-    //                         ...Object.fromEntries(DefaultRelays.entries()),
-    //                     },
-    //                     createdAt: 1,
-    //                 };
-    //                 dispatch(setRelays(tmpRelays));
-    //             }
-    //         });
-    //     }
-    // });
-  };
-
-  const saveRelays = async () => {
-    let tmp_new_relays = [];
-    newRelays.map((newitem) => {
-      if (newitem !== "") {
-        let tmp = [];
-        tmp.push(newitem);
-        tmp.push({
-          read: true,
-          write: true,
-        });
-        tmp_new_relays.push(tmp);
+  const saveRelays = async (tmpRelays) => {
+    //sync to users
+    let event = await relayPro.syncRelayKind3(tmpRelays);
+    System.BroadcastEvent(event, (tags, client, msg) => {
+      if (tags === "OK" && msg.ret === true) {
+        console.log('remove relay', event, msg);
       }
     });
-    let tmpRelays = {
-      relays: {
-        ...relays,
-        ...Object.fromEntries(tmp_new_relays),
-      },
-      createdAt: new Date().getTime(),
-    };
-    setNewRelays([]);
-    dispatch(setRelays(tmpRelays));
+  };
+
+  const addRelays = async (addr) => {
+    let tmps = relays.concat();
+    let flagIndex = tmps.findIndex((item) => {
+      return item.addr === addr;
+    });
+    if (flagIndex < 0) {
+      tmps.push({ addr: addr, read: true, write: false });
+    }
+    dispatch(setRelays(tmps));
     if (loggedOut === false) {
-      //sync to users
+      saveRelays(tmps);
     }
     return null;
   };
 
   const deleteRelays = async (addr) => {
-    const relayArray = Object.entries(relays);
-    const retArray = relayArray.filter((value) => {
-      return value[0] !== addr;
+    let tmps = relays.concat();
+    let flagIndex = tmps.findIndex((item) => {
+      return item.addr === addr;
     });
-    let tmpRelays = {
-      relays: {
-        ...Object.fromEntries(retArray),
-      },
-      createdAt: new Date().getTime(),
-    };
-    dispatch(setRelays(tmpRelays));
-    //need disconnect relays
+    tmps.splice(flagIndex, 1);
+    dispatch(setRelays(tmps));
     if (loggedOut === false) {
-      //sync to users
+      saveRelays(tmps);
     }
     return null;
   };
+
   const renderCacheRelays = () => {
-    return Object.entries(relays).map((item, index) => {
-      console.log("relay", item);
-      return (
-        <Box
-          key={"relaycard-index-" + index}
-          sx={{
-            position: "relative",
-            width: "100%",
-            // height: "36px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              height: "36px",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-            >
-              {item[0]}
-            </Typography>
-            <Box
-              sx={{
-                ml: "10px",
-                width: "16px",
-                height: "16px",
-                borderRadius: "8px",
-                backgroundColor: item[1].read ? "#4B8B1F" : "#D9D9D9",
-              }}
-            />
-            <Box
-              sx={{
-                ml: "10px",
-                width: "16px",
-                height: "16px",
-                borderRadius: "8px",
-                backgroundColor: item[1].write ? "#F5A900" : "#D9D9D9",
-              }}
-            />
-            <Button
-              className="button"
-              variant="contained"
-              sx={{
-                position: "absolute",
-                right: "40px",
-                width: "36px",
-                backgroundColor: "transparent",
-              }}
-              onClick={() => {
-                module.isDetail = true;
-                module.curRelay = item;
-                setModule({ ...module });
-              }}
-            >
-              <img src={icon_detail} width="36px" alt="icon_detail" />
-            </Button>
-            <Button
-              className="button"
-              variant="contained"
-              sx={{
-                position: "absolute",
-                right: "-30px",
-                width: "40px",
-                backgroundColor: "transparent",
-              }}
-              onClick={() => {
-                deletingRealy = item[0];
-                handleClickDialogOpen();
-              }}
-            >
-              <img src={logo_delete} width="40px" alt="logo_delete" />
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "12px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#666666",
-              }}
-            >
-              {"R"}
-            </Typography>
-            <RSwitch
-              inputProps={{ "aria-label": "controlled" }}
-              checked={item[1].read}
-              onChange={() => {
-                // item[1].read = !item[1].read;
-              }}
-            />
-            <Typography
-              sx={{
-                marginLeft: "20px",
-                fontSize: "12px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#666666",
-              }}
-            >
-              {"W"}
-            </Typography>
-            <WSwitch
-              inputProps={{ "aria-label": "controlled" }}
-              checked={item[1].write}
-              onChange={() => {
-                // item[1].write = !item[1].write;
-              }}
-            />
-          </Box>
-        </Box>
-      );
-    });
+    return (
+      <List className="list_bg">
+        {
+          relays.map((cfg, index) => {
+            return (
+              <ListItem key={'relay-' + index}>
+                <Box
+                  className={'relay_item'}
+                  onClick={(event) => {
+                    console.log('new event', event);
+                    module.isDetail = true;
+                    module.curRelay = cfg;
+                    setModule({ ...module });
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontFamily: "Saira",
+                      fontWeight: "500",
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    {cfg.addr}
+                  </Typography>
+                  <Box
+                    sx={{
+                      ml: "10px",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "8px",
+                      backgroundColor: cfg.read ? "#4B8B1F" : "#D9D9D9",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      ml: "10px",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "8px",
+                      backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
+                    }}
+                  />
+                  <Button
+                    className="button"
+                    variant="contained"
+                    sx={{
+                      position: "absolute",
+                      right: "-30px",
+                      width: "40px",
+                      backgroundColor: "transparent",
+                    }}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      //
+                      deletingRealy = cfg.addr;
+                      handleClickDialogOpen();
+                    }}
+                  >
+                    <img src={logo_delete} width="40px" alt="logo_delete" />
+                  </Button>
+                </Box>
+              </ListItem>
+            )
+          })
+        }
+      </List>
+    );
+    // relays.map((cfg, index) => {
+    //   // console.log("relay", item);
+    //   return (
+
+    //   );
+    // });
   };
 
   //
-  const renderNewRelays = () => {
-    return newRelays.map((item, index) => {
-      return (
+  const renderNewRelay = () => {
+    if (newRelay === null) {
+      return null;
+    }
+    return (
+      <Box key={"add-new-relay-"}
+        sx={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        <TextField
+          sx={{ width: "60%" }}
+          value={newRelay}
+          margin="dense"
+          size="small"
+          // focus={true}
+          onChange={(event) => {
+            setNewRelay(event.target.value);
+          }}
+        />
         <Box
-          key={"add-new-relay-" + index}
           sx={{
-            position: "relative",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
+            position: "absolute",
+            right: "-20px",
           }}
         >
-          <TextField
-            sx={{ width: "60%" }}
-            value={item}
-            margin="dense"
-            size="small"
-            onChange={(event) => {
-              newRelays[index] = event.target.value;
-              setNewRelays(newRelays.concat());
-            }}
-          />
-          <Box
+          <Button
+            variant="contained"
             sx={{
-              position: "absolute",
-              right: "-20px",
+              width: "30px",
+              backgroundColor: "transparent",
+            }}
+            onClick={() => {
+              addRelays(newRelay);
             }}
           >
-            {/* <IconButton
-              sx={{
-                width: "24px",
-                height: "24px",
-              }}
-              onClick={() => {
-                saveRelays();
-              }}
-            >
-              <AddTaskIcon sx={{ width: "24px", height: "24px" }} />
-            </IconButton> */}
-            <Button
-              variant="contained"
-              sx={{
-                width: "30px",
-                backgroundColor: "transparent",
-              }}
-              onClick={() => {
-                saveRelays();
-              }}
-            >
-              <img src={icon_save} width="30px" alt="icon_save" />
-            </Button>
+            <img src={icon_save} width="30px" alt="icon_save" />
+          </Button>
 
-            <Button
-              variant="contained"
-              sx={{
-                width: "40px",
-                backgroundColor: "transparent",
-              }}
-              onClick={() => {
-                newRelays.splice(index, 1);
-                setNewRelays(newRelays.concat());
-              }}
-            >
-              <img src={logo_delete} width="40px" alt="logo_delete" />
-            </Button>
-          </Box>
+          <Button
+            variant="contained"
+            sx={{
+              width: "40px",
+              backgroundColor: "transparent",
+            }}
+            onClick={() => {
+              setNewRelay(null);
+            }}
+          >
+            <img src={logo_delete} width="40px" alt="logo_delete" />
+          </Button>
         </Box>
-      );
-    });
+      </Box>
+    );
   };
 
   const renderRelays = () => {
     return (
-      <Box
-        sx={{
-          width: "100%",
-          paddingBottom: "80px",
-        }}
-      >
+      <Box className={'inner_relays'}>
         <Typography
           sx={{
-            marginTop: "88px",
+            marginTop: "24px",
             width: "100%",
-            height: "50px",
             fontSize: "18px",
             fontFamily: "Saira",
             fontWeight: "500",
             align: "left",
-            borderBottom: 1,
-            borderColor: "#202122",
           }}
           align={"left"}
         >
-          {"Your Relays " + Object.entries(relays).length}
+          {"Your Relays " + relays.length}
         </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            marginTop: "23px",
-            width: "100%",
-            height: "36px",
-            backgroundColor: "#454FBF",
-            borderRadius: "6px",
-            fontSize: "28px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            color: "white",
-          }}
-          onClick={() => {
-            newRelays.push("");
-            setNewRelays(newRelays.concat());
-          }}
-        >
-          {"+"}
-        </Button>
-        <CardActions
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-          }}
-        >
-          {/* {loggedOut === false && (
-      <Button
-        variant="text"
-        sx={{
-          width: "80px",
-          fontSize: "20px",
-          fontFamily: "Saira",
-          fontWeight: "500",
-          fontColor: "#454FBF",
-        }}
-        onClick={fetchRelays}
-      >
-        {"Sync"}
-      </Button>
-    )} */}
-        </CardActions>
-        <Stack
-          sx={{
-            width: "100%",
-            marginTop: "20px",
-          }}
-        >
-          {renderNewRelays()}
+        <Stack sx={{ py: '12px' }} direction={'row'} alignItems={'center'} justifyContent={'center'}>
+          <Button
+            variant="contained"
+            sx={{
+              width: "80%",
+              height: "36px",
+              backgroundColor: "#454FBF",
+              borderRadius: "6px",
+              fontSize: "28px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "white",
+            }}
+            disabled={newRelay !== null}
+            onClick={() => {
+              if (newRelay === null) {
+                setNewRelay('');
+              }
+            }}
+          >
+            {"+"}
+          </Button>
+          {/* <Button
+            variant="contained"
+            sx={{
+              width: "15%",
+              height: "36px",
+              ml: '16px',
+              backgroundColor: "#454FBF",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "white",
+            }}
+            onClick={() => {
+              saveRelays();
+            }}
+          >
+            {'sync'}
+          </Button> */}
         </Stack>
-        <Stack
-          sx={{
-            width: "100%",
-            marginTop: "20px",
-          }}
-          spacing={3}
-        >
-          {renderCacheRelays()}
-        </Stack>
+        {renderNewRelay()}
+        {renderCacheRelays()}
       </Box>
     );
   };
 
   const renderCurRelay = () => {
     return (
-      <Box
-        sx={{
-          paddingBottom: "80px",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            marginTop: "88px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            borderBottom: 1,
-            borderColor: "#202122",
-          }}
-        >
+      <Box className={'relay_detail_bg'}>
+        <Box className={'relay_detail_header'}>
           <Box
             className={"goback"}
             sx={{
@@ -524,7 +386,7 @@ const GRelays = () => {
               sx={{ width: "48px", height: "48px" }}
               edge="end"
               alt="GameFi Society"
-              // src={}
+            // src={}
             />
             <Typography
               sx={{
@@ -545,7 +407,7 @@ const GRelays = () => {
               width: "36px",
               backgroundColor: "transparent",
             }}
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <img src={icon_detail} width="36px" alt="icon_detail" />
           </Button>
@@ -794,20 +656,8 @@ const GRelays = () => {
     );
   };
 
-  return (
-    <Box
-      sx={{
-        width: "400px",
-        // minHeight: "100%",
-        backgroundColor: "#0F0F0F",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingLeft: "32px",
-        paddingRight: "32px",
-      }}
-    >
-      {module.isDetail ? renderCurRelay() : renderRelays()}
+  const renderDlg = () => {
+    return (
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
@@ -861,7 +711,8 @@ const GRelays = () => {
               borderRadius: "5px",
               color: "#FFFFFF",
             }}
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               deleteRelays(deletingRealy);
               handleDialogClose();
             }}
@@ -879,7 +730,8 @@ const GRelays = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               handleDialogClose();
             }}
           >
@@ -887,6 +739,12 @@ const GRelays = () => {
           </Button>
         </Box>
       </Dialog>
+    );
+  }
+  return (
+    <Box className={'relay_bg'}>
+      {module.isDetail ? renderCurRelay() : renderRelays()}
+      {renderDlg()}
     </Box>
   );
 };

@@ -132,7 +132,7 @@ const GFTHead = () => {
 
   const openUserHome = () => {
     openMainContent();
-    navigate("/userhome", { state: { pubkey: publicKey } });
+    navigate("/userhome:" + publicKey, { state: { pubkey: publicKey } });
     handleMenuClose();
   };
 

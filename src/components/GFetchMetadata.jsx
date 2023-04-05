@@ -4,14 +4,12 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
-import { System } from "nostr/NostrSystem";
+import { useRelayPro } from "nostr/protocal/RelayPro";
 import { BuildSub } from "nostr/NostrUtils"
 
 import { EventKind } from "nostr/def";
 import { setProfile } from "module/store/features/profileSlice";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
-
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 //
@@ -24,7 +22,7 @@ const GFetchMetadata = (props) => {
 
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
-  const textNotePro = useTextNotePro();
+  const relayPro = useRelayPro();
 
   const selfMetadata = (msg) => {
     if (msg.kind === EventKind.SetMetadata) {
@@ -34,16 +32,23 @@ const GFetchMetadata = (props) => {
       console.log('setProfile', contentMeta);
     } else if (msg.kind === EventKind.ContactList) {
       //relays
-      if (msg.content !== "") {
+      if (msg.content !== "" && relays) {
         let content = JSON.parse(msg.content);
-        let tmpRelays = {
-          relays: {
-            ...content,
-            ...relays,
-          },
-          createdAt: 1,
-        };
-        dispatch(setRelays(tmpRelays));
+        let tmp_relays = relays.concat();
+        for (let key in content) {
+          let target = { addr: key, read: content[key].read, write: content[key].write };
+          let flag = tmp_relays.find((item) => {
+            return item.addr === key;
+          });
+          if (!flag) {
+            tmp_relays.push(target);
+          }
+        }
+        tmp_relays.sort((a, b) => {
+          return a.addr.localeCompare(b.addr);
+        });
+        dispatch(setRelays(tmp_relays));
+        console.log('selfMetadata', tmp_relays);
       }
       //follows
       if (msg.tags.length > 0) {
@@ -59,14 +64,17 @@ const GFetchMetadata = (props) => {
         };
         dispatch(setFollows(followsInfo));
       }
+    } else if (msg.kind === EventKind.Relays) {
+      console.log('EventKind.Relays', msg);
     }
   };
 
   const fetchMeta = (pubkey, callback) => {
     let filterMeta = MetaPro.get(pubkey);
     let filterFollow = followPro.getFollows(pubkey);
+    let filterRelay = relayPro.get(pubkey);
     // let fillterTextNote = textNotePro.getTarget(pubkey);
-    let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow]);
+    let subMeta = BuildSub("profile_contact", [filterMeta, filterFollow, filterRelay]);
     let SetMetadata_create_at = 0;
     let ContactList_create_at = 0;
     nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {

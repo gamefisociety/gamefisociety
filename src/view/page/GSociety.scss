@@ -2,14 +2,37 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    background-color: transparent;
+    width: 400px;
+    overflow: hidden;
+
+    .header_bg {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        border-bottom: 1;
+        border-color: #202122;
+        padding-bottom: 25px;
+    }
+
+    .header_btn {
+        width: 136px;
+        height: 36px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+    }
 
     .list_bg {
         // min-height: 100vh;
         flex: 1;
         height: 0;
         overflow: auto;
-        padding-right: "20px";
-        padding-bottom: 60px;
+        padding-right: 20px;
+        padding-bottom: 100px;
         box-sizing: border-box;
 
         .gsociety_text_item {

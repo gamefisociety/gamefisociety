@@ -21,6 +21,12 @@ export const useTextNotePro = () => {
       filter.authors = [pubkey]
       return filter;
     },
+    getEventsByIds: (eventIds) => {
+      const filter = NostrFactory.createFilter();
+      filter.ids = eventIds?.concat();
+      filter.kinds = [EventKind.TextNote];
+      return filter;
+    },
     getEvents: (eventIds) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.TextNote];

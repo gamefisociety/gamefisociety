@@ -1,8 +1,9 @@
 .node_thread_bg {
     min-height: calc( 100vh - 64px );
     width: 760px;
-    background-color: rgba(0, 0, 0, 0.708);
+    background-color: rgba(27, 27, 27, 0.95);
     z-index: 0;
+    padding-bottom: 64px;
 
     .back {
         cursor: pointer;

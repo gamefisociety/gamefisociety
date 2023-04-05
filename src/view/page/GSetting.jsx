@@ -93,6 +93,28 @@ const GSetting = () => {
         alignItems={'center'}
         justifyContent={'space-between'}
         sx={{
+          py: '24px',
+          width: '100%'
+        }}>
+        <Typography className={'setting_title'}>
+          {'CLEAR CACHE'}
+        </Typography>
+        <Button
+          variant="contained"
+          className={'bt_out'}
+        // onClick={saveProfile}
+        >
+          {'Clear Cache'}
+        </Button>
+      </Stack>
+      <Divider sx={{
+        my: '24px',
+      }} />
+      <Stack
+        direction={'row'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        sx={{
           width: '100%'
         }}>
         <Typography className={'setting_title'}>

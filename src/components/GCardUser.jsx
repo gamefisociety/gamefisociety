@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./GCardUser.scss";
+
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -16,7 +18,7 @@ import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 
-import "./GCardUser.scss";
+import { setDrawer } from "module/store/features/dialogSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
@@ -27,12 +29,6 @@ const GCardUser = (props) => {
   const { profile, pubkey, ownFollows, ownRelays } = props;
   const dispatch = useDispatch();
   //
-  const relayMap = new Map();
-  for (const [k, v] of Object.entries(ownRelays)) {
-    if (k.startsWith("wss://") || k.startsWith("ws://")) {
-      relayMap.set(k, v);
-    }
-  }
   const followPro = useFollowPro();
   const addFollow = async (pubkey) => {
     let event = await followPro.addFollow(pubkey);
@@ -73,8 +69,18 @@ const GCardUser = (props) => {
     return follows.includes(key);
   };
 
+  const relayNum = () => {
+    let num = 0;
+    if (ownRelays !== null) {
+      for (let key in ownRelays) {
+        num = num + 1;
+      }
+    }
+    return num;
+  }
+
   useEffect(() => {
-    // console.log("profile", profile);
+    console.log("GCardUser", ownRelays);
     return () => { };
   }, [props]);
 
@@ -330,21 +336,19 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  marginRight: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "follower-show",
+                  })
+                );
+              }}>
                 {ownFollows.length}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Following"}
               </Typography>
             </Box>
@@ -357,21 +361,19 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  marginRight: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
-                {11}
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "following-show",
+                  })
+                );
+              }}>
+                {'...'}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Followers"}
               </Typography>
             </Box>
@@ -384,21 +386,19 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  mr: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
-                {relayMap.size}
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "relay-show",
+                  })
+                );
+              }}>
+                {relayNum()}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Relays"}
               </Typography>
             </Box>

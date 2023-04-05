@@ -39,15 +39,15 @@ export const ProfileCacheExpire = 1_000 * 60 * 5;
 /**
  * Default bootstrap relays
  */
-export const DefaultRelays = new Map([
-  ["wss://relay.snort.social", { read: true, write: true }],
-  ["wss://relay.current.fyi", { read: true, write: true }],
-  ["wss://eden.nostr.land", { read: true, write: true }],
-  ["wss://atlas.nostr.land", { read: true, write: true }],
-  ["wss://nos.lol", { read: true, write: true }],
-  ["wss://relay.damus.io", { read: true, write: true }],
-  ["wss://brb.io", { read: true, write: true }],
-]);
+export const DefaultRelays = [
+  { addr: "wss://relay.snort.social", read: true, write: true },
+  { addr: "wss://relay.current.fyi", read: true, write: true },
+  { addr: "wss://eden.nostr.land", read: true, write: true },
+  { addr: "wss://atlas.nostr.land", read: true, write: true },
+  { addr: "wss://nos.lol", read: true, write: true },
+  { addr: "wss://relay.damus.io", read: true, write: true },
+  // { addr: "wss://brb.io", read: true, write: true },
+];
 
 /**
  * Default search relays

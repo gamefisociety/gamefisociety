@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { setDrawer, setChatDrawer, setRightDrawer } from "module/store/features/dialogSlice";
+import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
 
 import GFTHead from "view/head/GFTHead";
 // import GBottomMenu from "view/head/GBottomMenu";
@@ -14,9 +14,9 @@ import GFTLeftMenu from "view/head/GFTLeftMenu";
 import GFTHomeMeta from 'view/meta/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
 import GRelays from "view/page/GRelays";
+import GRelaysShow from "view/page/GRelaysShow";
 import GFTChat from "view/page/GFTChat";
 
-//
 import GLoginDialog from "view/dialog/GLoginDialog";
 
 import { System } from "nostr/NostrSystem";
@@ -57,7 +57,8 @@ const MainLayout = () => {
           style: {
             marginTop: "64px",
             borderRadius: "12px",
-            backgroundColor: "background.paper",
+            backgroundColor: "rgba(17,17,17,0.95)",
+            // backgroundColor: "rgba(17,17,17,0.95)",
           },
         }}
         anchor={placeDrawer}
@@ -86,6 +87,9 @@ const MainLayout = () => {
           />
         )}
         {cardDrawer === "relays" && <GRelays />}
+        {cardDrawer === "relay-show" && <GRelaysShow />}
+        {cardDrawer === "follower-show" && <GRelaysShow />}
+        {cardDrawer === "following-show" && <GRelaysShow />}
       </Drawer>
       <Drawer
         PaperProps={{

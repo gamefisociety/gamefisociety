@@ -1,3 +1,4 @@
+import React, { forwardRef, useImperativeHandle } from 'react';
 import {
     ArcRotateCamera,
     ArcFollowCamera,
@@ -15,3 +16,23 @@ export const createCamera = (scene) => {
     const canvas = scene.getEngine().getRenderingCanvas();
     camera.attachControl(canvas, true);
 };
+
+const GMetaCamera = forwardRef((props, ref) => {
+
+    useImperativeHandle(ref, () => (
+        {
+            init: (scene) => {
+                console.log('GMetaGround init');
+                createCamera(scene);
+
+            },
+            render: (dt,scene) => {
+                // console.log('GMetaGround render');
+            }
+        }
+    ));
+
+    return null;
+});
+
+export default GMetaCamera;

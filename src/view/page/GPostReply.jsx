@@ -26,6 +26,7 @@ const GPostReply = () => {
   //
   const dispatch = useDispatch();
   const { follows } = useSelector((s) => s.profile);
+  const [curLabel, setCurLabel] = useState('Post');
   const [curCreateAt, setCurCreateAt] = useState(0);
   const [data, setData] = useState([]);
   const [moreTimes, setMoreTimes] = useState(0);
@@ -36,6 +37,8 @@ const GPostReply = () => {
 
   const getSubNote = (tim) => {
     const filterTextNote = textNotePro.get();
+    let tmpAuthors = follows.concat([publicKey]);
+    filterTextNote.authors = tmpAuthors;
     if (tim === 0) {
       gNoteCache.clear();
       filterTextNote.until = Date.now();
@@ -43,8 +46,6 @@ const GPostReply = () => {
       filterTextNote.until = tim;
     }
     filterTextNote.limit = 10;
-    let tmpAuthors = follows.concat([publicKey]);
-    filterTextNote.authors = tmpAuthors;
     let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
     return subTextNode;
   }
@@ -83,19 +84,17 @@ const GPostReply = () => {
   };
 
   const postNote = (note) => {
-    dispatch(setPost({
-      post: true,
-      target: note,
-    }));
+    dispatch(setPost({ post: true, target: note, }));
   }
 
   useEffect(() => {
+    setData([]);
     let textNote = getSubNote(0);
     getNoteList(textNote, true);
     return () => {
       nostrWorker.unlisten_follow_notes(textNote, null, null);
     };
-  }, [follows]);
+  }, [follows, curLabel]);
 
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
@@ -109,40 +108,65 @@ const GPostReply = () => {
       <Box className={'post_menu'}>
         <Button
           className={'post_menu_item'}
-          sx={{ backgroundColor: 'background.default' }}
+          sx={{
+            backgroundColor: curLabel === 'Post' ? '#006CF9' : '#272727'
+          }}
           variant="contained"
           onClick={() => {
-            //
+            setCurLabel('Post');
           }}
         >
           {"Post"}
         </Button>
-        <Button
-          className={'post_menu_item'}
-          sx={{ backgroundColor: 'background.default' }}
+        <Button className={'post_menu_item'}
+          sx={{
+            backgroundColor: curLabel === 'Post & Replay' ? '#006CF9' : '#272727'
+          }}
           variant="contained"
           onClick={() => {
-            // setCurCreateAt(99999999999999);
+            setCurLabel('Post & Replay');
           }}
         >
-          {"Replay"}
+          {"Post & Replay"}
         </Button>
       </Box>
     );
   };
 
+  const parseNote = (target) => {
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
+
+    target.tags.map(item => {
+      if (item[0] === 'e') {
+        eNum = eNum + 1;
+        eArray.push(item[1]);
+      } else if (item[0] === 'p') {
+        pNum = pNum + 1;
+        pArray.push(item[1]);
+      }
+    });
+    return {
+      eNum: eNum,
+      pNum: pNum,
+      eArray: eArray.concat(),
+      pArray: pArray.concat()
+    }
+  }
+
   const renderContent = () => {
     return (
       <List className={'list_bg'}>
         {data.map((item, index) => {
-          const info = inforData.get(item.pubkey);
-          return (
-            <GCardNote
-              key={"global-note-" + index}
-              note={{ ...item }}
-              info={info}
-            />
-          );
+          if (curLabel === 'Post') {
+            let retInfo = parseNote(item);
+            if (retInfo.eNum > 0) {
+              return null;
+            }
+          }
+          return <GCardNote key={"post-reply-note-" + index} note={{ ...item }} />;
         })}
       </List>
     );
@@ -151,9 +175,7 @@ const GPostReply = () => {
   return (
     <Paper className={'post_reply_bg'} elevation={0}>
       {renderMenu()}
-      <Button className={'post_button'} onClick={() => {
-        postNote(null);
-      }} />
+      <Button className={'post_button'} onClick={() => { postNote(null); }} />
       {renderContent()}
     </Paper>
   );

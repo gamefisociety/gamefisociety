@@ -1,13 +1,13 @@
 .post_reply_bg {
     min-height: calc( 100vh - 64px );
     width: 760px;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(27, 27, 27, 0.95);
     z-index: 0;
 
     .post_menu {
         position: fixed;
         top: 64px;
-        left: calc( 50vw - 400px );
+        left: calc( 50vw - 432px );
         cursor: pointer;
         display: flex;
         flex-direction: column;
@@ -17,7 +17,7 @@
     .post_menu_item {
         cursor: pointer;
         margin-top: 6px;
-        width: 110px;
+        width: 140px;
         height: 36px;
     }
 

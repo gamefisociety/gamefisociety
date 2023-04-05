@@ -9,18 +9,22 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import GSTProjectsBase from "web3/GSTProjects";
 import GCardProject from "components/GCardProject";
 import GProjectEditor from "components/GProjectEditor";
 import closeImg from "./../../asset/image/social/close.png";
 import "./GProjects.scss";
 
-const GGamePage = () => {
+const GProjects = () => {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [projectDatas, setProjectDatas] = useState([]);
+  const [waittingDatas, setWaittingDatas] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (account) {
@@ -36,14 +40,21 @@ const GGamePage = () => {
 
   const getAllProjects = () => {
     if (account) {
+      if (fetching) {
+        return;
+      }
+      setFetching(true);
       GSTProjectsBase.totalSupply(library)
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
             fetchProjects(0, Number(res));
+          } else {
+            setFetching(false);
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
     } else {
@@ -55,6 +66,7 @@ const GGamePage = () => {
       let projectCache = projectDatas.concat();
       GSTProjectsBase.getProjects(library, index, count)
         .then((res) => {
+          setFetching(false);
           if (res && res.length > 0) {
             projectCache = projectCache.concat(res);
             projectCache.reverse();
@@ -63,9 +75,11 @@ const GGamePage = () => {
           }
         })
         .catch((err) => {
+          setFetching(false);
           console.log(err, "err");
         });
     } else {
+      setFetching(false);
       return 0;
     }
   };
@@ -78,35 +92,37 @@ const GGamePage = () => {
     setDialogOpen(false);
   };
 
-  const renderGamesTop = () => {
+  const renderTop = () => {
     return (
       <Box
         sx={{
+          marginTop: "40px",
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
           alignItems: "center",
         }}
       >
         <Typography
           sx={{
-            py: "12px",
-            pl: "24px",
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "#FFFFFF",
+            textAlign: "center",
+            marginLeft: "24px",
           }}
-          color={"white"}
-          variant={"h6"}
-          align={"left"}
         >
           {"Projects"}
         </Typography>
         <Button
           variant="contained"
           sx={{
-            marginRight: "24px",
-            width: "160px",
-            height: "35px",
-            borderRadius: "20px",
+            marginLeft: "20px",
+            width: "140px",
+            height: "30px",
+            borderRadius: "10px",
             backgroundColor: "#006CF9",
             fontSize: "14px",
             fontFamily: "Saira",
@@ -120,16 +136,73 @@ const GGamePage = () => {
     );
   };
 
-  return (
-    <Paper className={"bg"}>
-      {renderGamesTop()}
-      <Box className={"project_card_contain"}>
+  const renderProjectCards = () => {
+    return (
+      <Box
+        sx={{
+          paddingTop: "24px",
+          paddingLeft: "24px",
+          paddingRight: "24px",
+          width: "calc( 100% - 48px)",
+          display: "flex",
+          flexWrap: "wrap",
+          gridGap: "32px",
+          gap: "32px",
+        }}
+      >
         {projectDatas.map((item, index) => {
           return (
-            <GCardProject tokenInfo={item} owner={account} key={"project-card-" + index}/>
+            <GCardProject
+              tokenInfo={item}
+              owner={account}
+              key={"project-card-" + index}
+            />
           );
         })}
       </Box>
+    );
+  };
+
+  const renderWaittingCards = () => {
+    return (
+      <Box className={"project_card_contain"}>
+        {waittingDatas.map((item, index) => {
+          return (
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+              key={"project_waitting_" + index}
+              spacing={1}
+            >
+              <Skeleton variant="circular" width={60} height={60} />
+              <Skeleton variant="rectangular" width={214} height={60} />
+              <Skeleton variant="rounded" width={214} height={60} />
+            </Stack>
+          );
+        })}
+      </Box>
+    );
+  };
+
+  return (
+    <Box
+      sx={{
+        width: "760px",
+        minHeight: "1000px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        pointerEvents: "all",
+        backgroundColor: "rgba(0, 0, 0, 0.708)",
+      }}
+    >
+      {renderTop()}
+      {fetching === true ? renderWaittingCards() : renderProjectCards()}
       <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
@@ -161,8 +234,8 @@ const GGamePage = () => {
           <GProjectEditor />
         </Box>
       </Drawer>
-    </Paper>
+    </Box>
   );
 };
 
-export default GGamePage;
+export default GProjects;

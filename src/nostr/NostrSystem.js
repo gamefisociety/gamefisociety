@@ -12,9 +12,9 @@ export class NostrSystem {
   }
 
   initRelays() {
-    for (const [addr, cfg] of DefaultRelays) {
-      this.ConnectRelay(addr, cfg.read, cfg.write);
-    }
+    DefaultRelays.map((cfg) => {
+      this.ConnectRelay(cfg.addr, cfg.read, cfg.write);
+    });
   }
 
   getRelay(addr) {
@@ -70,8 +70,10 @@ export class NostrSystem {
     if (!sub) {
       return;
     }
-    for (const [addr, tmpRelay] of this.Clients) {
+    for (let [addr, tmpRelay] of this.Clients.entries()) {
+      // console.log('BroadcastSub relay', addr);
       if (relay) {
+        // console.log('BroadcastSub relay', relay, addr, tmpRelay);
         if (relay === addr && relay.canSub) {
           Relay.SendSub(tmpRelay, sub, callback);
         }

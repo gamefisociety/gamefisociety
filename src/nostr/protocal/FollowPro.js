@@ -29,7 +29,16 @@ export const useFollowPro = () => {
     addFollow: async (newFollow) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
-      ev.Content = JSON.stringify({ ...relays });
+      let tmp_relays = {};
+      relays.map((relayInfo) => {
+        if (relayInfo.addr.startsWith('wss://')) {
+          tmp_relays[relayInfo.addr] = {
+            read: relayInfo.read,
+            write: relayInfo.write,
+          }
+        }
+      });
+      ev.Content = JSON.stringify(tmp_relays);
       let newTags = follows.concat();
       newTags.push(newFollow);
       newTags.map(item => {
@@ -40,7 +49,16 @@ export const useFollowPro = () => {
     removeFollow: async (newFollow) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ContactList
-      ev.Content = JSON.stringify({ ...relays });
+      let tmp_relays = {};
+      relays.map((relayInfo) => {
+        if (relayInfo.addr.startsWith('wss://')) {
+          tmp_relays[relayInfo.addr] = {
+            read: relayInfo.read,
+            write: relayInfo.write,
+          }
+        }
+      });
+      ev.Content = JSON.stringify({ ...tmp_relays });
       follows.map(item => {
         if (item !== newFollow) {
           ev.Tags.push(['p', item]);

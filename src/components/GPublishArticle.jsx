@@ -89,7 +89,6 @@ function GPublishArticle() {
     );
   };
 
- 
   ///
   const uploadImageOnIPFS = (event) => {
     if (apiKey.length === 0 || apiSecret.length === 0) {
@@ -105,7 +104,8 @@ function GPublishArticle() {
       //upload
       setUploadingImage(true);
       let cache = uploadedImages.concat();
-      ipfsupload.upload( apiKey,
+      ipfsupload.upload(
+        apiKey,
         apiSecret,
         currentService,
         data,
@@ -118,7 +118,8 @@ function GPublishArticle() {
         },
         (err) => {
           setUploadingImage(false);
-        })
+        }
+      );
     }
   };
 
