@@ -52,19 +52,6 @@ const GRelaysShow = () => {
     return null;
   };
 
-  const deleteRelays = async (addr) => {
-    let tmps = relays.concat();
-    let flagIndex = tmps.findIndex((item) => {
-      return item.addr === addr;
-    });
-    tmps.splice(flagIndex, 1);
-    dispatch(setRelays(tmps));
-    if (loggedOut === false) {
-      saveRelays(tmps);
-    }
-    return null;
-  };
-
   const renderCacheRelays = () => {
     return (
       <List className="list_bg">

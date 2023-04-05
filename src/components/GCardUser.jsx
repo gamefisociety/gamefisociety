@@ -18,6 +18,7 @@ import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 
+import { setDrawer } from "module/store/features/dialogSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
@@ -335,7 +336,16 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography className={'lable_1'}>
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "follower-show",
+                  })
+                );
+              }}>
                 {ownFollows.length}
               </Typography>
               <Typography className={'lable_2'}>
@@ -351,7 +361,16 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography className={'lable_1'}>
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "following-show",
+                  })
+                );
+              }}>
                 {'...'}
               </Typography>
               <Typography className={'lable_2'}>
@@ -367,7 +386,16 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography className={'lable_1'}>
+              <Typography className={'lable_1'} onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "relay-show",
+                  })
+                );
+              }}>
                 {relayNum()}
               </Typography>
               <Typography className={'lable_2'}>
