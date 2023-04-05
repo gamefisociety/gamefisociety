@@ -29,14 +29,14 @@ const ProfileSlice = createSlice({
     initRelays: (state, action) => {
       const lastRelayList = window.localStorage.getItem(RelayListKey);
       let tmp_relays = [];
-      if (lastRelayList) {
+      if (lastRelayList && false) {
         tmp_relays = JSON.parse(lastRelayList);
       } else {
         tmp_relays = DefaultRelays;
       }
       state.relays = tmp_relays;
       state.curRelay = tmp_relays[0];
-      console.log('lastRelayList', tmp_relays);
+      // console.log('lastRelayList', tmp_relays);
     },
     setRelays: (state, action) => {
       console.log('action setRelays', action.payload);
