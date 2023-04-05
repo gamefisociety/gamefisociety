@@ -256,8 +256,7 @@ const GSociety = (props) => {
                     if (callback) {
                       callback();
                     }
-                  }}
-                >
+                  }}>
                   <Avatar
                     alt={"GameFi Society"}
                     src={cxt.picture ? cxt.picture : ""}

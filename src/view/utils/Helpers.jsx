@@ -44,7 +44,7 @@ export default {
 
   handleLightningLinkClick(e) {
     e.preventDefault();
-  
+
     const link = ((e.target).closest('A')).href;
 
     if (!link.startsWith('lightning:')) {
@@ -221,25 +221,25 @@ export default {
 
 
     // twitch channels
-    if(true){
-    const twitchRegex = /(?:https?:\/\/)?(?:www\.)?(?:twitch\.tv\/)([\w-]+)?/g;
-    replacedText = reactStringReplace(replacedText, twitchRegex, (match, i) => {
-      return (
-        <iframe
-          class="video"
-          scrolling="no"
-          key={match + i}
-          width="650"
-          height="400"
-          style={{ maxWidth: '100%' }}
-          src={`https://player.twitch.tv/?channel=${match}&parent=${window.location.hostname}&autoplay=false`}
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      );
-    });
-  }
+    if (true) {
+      const twitchRegex = /(?:https?:\/\/)?(?:www\.)?(?:twitch\.tv\/)([\w-]+)?/g;
+      replacedText = reactStringReplace(replacedText, twitchRegex, (match, i) => {
+        return (
+          <iframe
+            class="video"
+            scrolling="no"
+            key={match + i}
+            width="650"
+            height="400"
+            style={{ maxWidth: '100%' }}
+            src={`https://player.twitch.tv/?channel=${match}&parent=${window.location.hostname}&autoplay=false`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        );
+      });
+    }
 
 
     const wavlakeRegex =
@@ -262,14 +262,19 @@ export default {
 
     // find .jpg .jpeg .gif .png .webp urls in msg.text and create img tag
 
-    // const imgRegex = /(https?:\/\/.*\.(?:jpg|jpeg|gif|png|webp))/gi;
-    // replacedText = reactStringReplace(replacedText, imgRegex, (match, i) => {
-    //   return (
-    //     <div className="img-container">
-    //       <SafeImg onClick={opts.onImageClick} width={569} src={match} key={match + i} />
-    //     </div>
-    //   );
-    // });
+    const imgRegex = /(https?:\/\/.*\.(?:jpg|jpeg|gif|png|webp))/gi;
+    replacedText = reactStringReplace(replacedText, imgRegex, (match, i) => {
+      return (
+        <div className="img-container">
+          <img
+            key={match + i}
+            src={match}
+            style={{ width: '560px' }}
+            alt=""
+          />
+        </div>
+      );
+    });
 
 
     replacedText = this.highlightText(replacedText, event, opts);
@@ -342,7 +347,7 @@ export default {
             key={match + i}
             target="_blank"
             onClick={(e) => {
-    
+
             }}
             href={url}
           >
