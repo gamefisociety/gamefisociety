@@ -21,7 +21,7 @@
 
     .relay_item {
         width: 100%;
-        height: 36px;
+        // height: 36px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -46,6 +46,8 @@
         font-family: Saira;
         font-weight: 500;
         color: #FFFFFF;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 
     .circle_button{
