@@ -98,7 +98,7 @@ export const listen_follow_notes = (sub, curRelay, goon, callback) => {
         System.BroadcastClose(sub, curRelay, null);
       }
     } else if (tag === 'EVENT') {
-      console.log('listen global msg', msg);
+      // console.log('listen global msg', msg);
       globalNoteCache.pushNote(msg);
       if (callback) {
         let cache = globalNoteCache.get();

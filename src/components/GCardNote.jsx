@@ -36,11 +36,11 @@ const GCardNote = (props) => {
   const UserCache = UserDataCache();
   const MetaPro = useMetadataPro();
 
-  const fetch_rela_info = () => {
+  const fetch_relative_info = () => {
     let filter = [];
-    console.log('GCardNote', note);
     //get meta info
     let metaInfo = UserCache.getMetadata(note.pubkey);
+    console.log('fetch_relative_info', note, metaInfo);
     if (!metaInfo) {
       let filterMeta = MetaPro.get(note.pubkey);
       filter.push(filterMeta)
@@ -91,6 +91,7 @@ const GCardNote = (props) => {
     let pArray = [];
     if (note.tags.length === 0) {
       setReplyInfo(null);
+      fetch_relative_info();
       return;
     } else {
       note.tags.map(item => {
@@ -115,9 +116,7 @@ const GCardNote = (props) => {
         setReplyInfo(pArray[1]);
       }
     }
-    //
-    fetch_rela_info();
-    //
+    fetch_relative_info();
     return () => { };
   }, [note]);
 

@@ -84,10 +84,7 @@ const GPostReply = () => {
   };
 
   const postNote = (note) => {
-    dispatch(setPost({
-      post: true,
-      target: note,
-    }));
+    dispatch(setPost({ post: true, target: note, }));
   }
 
   useEffect(() => {
@@ -178,9 +175,7 @@ const GPostReply = () => {
   return (
     <Paper className={'post_reply_bg'} elevation={0}>
       {renderMenu()}
-      <Button className={'post_button'} onClick={() => {
-        postNote(null);
-      }} />
+      <Button className={'post_button'} onClick={() => { postNote(null); }} />
       {renderContent()}
     </Paper>
   );
