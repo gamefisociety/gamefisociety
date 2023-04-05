@@ -46,7 +46,7 @@ export const DefaultRelays = [
   { addr: "wss://atlas.nostr.land", read: true, write: true },
   { addr: "wss://nos.lol", read: true, write: true },
   { addr: "wss://relay.damus.io", read: true, write: true },
-  { addr: "wss://brb.io", read: true, write: true },
+  // { addr: "wss://brb.io", read: true, write: true },
 ];
 
 /**

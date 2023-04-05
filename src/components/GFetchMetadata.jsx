@@ -5,14 +5,11 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useRelayPro } from "nostr/protocal/RelayPro";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
-import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils"
 
 import { EventKind } from "nostr/def";
 import { setProfile } from "module/store/features/profileSlice";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
-
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 //
