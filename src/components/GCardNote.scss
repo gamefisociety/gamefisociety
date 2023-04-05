@@ -141,6 +141,18 @@
                 background-image: url(../asset/image/logo/icon_trans.png);
             }
         }
+
+        .icon_chain_push {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            margin-left: 26px;
+            background-image: url(../asset/image/logo/icon_chain_push.png);
+            background-size: 100% 100%;
+            &:hover {
+                background-image: url(../asset/image/logo/icon_chain_push.png);
+            }
+        }
     }
 
 }

@@ -231,9 +231,10 @@ const GCardNote = (props) => {
             target: note,
           }));
         }} />
-        <img className={'icon_right'} />
-        <img className={'icon_trans'} />
+        <img className={'icon_chain_push'} />
         <img className={'icon_pay'} />
+        <img className={'icon_trans'} />
+        <img className={'icon_right'} />
       </Box>
     </Card>
   );
