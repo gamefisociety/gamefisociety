@@ -11,6 +11,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Upload from 'components/buttons/Upload';
 
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
@@ -28,6 +29,8 @@ const GPostDialog = () => {
         return () => {
         }
     }, [])
+
+    
 
     // console.log('GPostDialog', targetPost);
     const postContext = async () => {
@@ -55,6 +58,13 @@ const GPostDialog = () => {
             <Typography className={'target_tips'}>{'Reply a note!'}</Typography>
             <Typography className={'target_note'}>{targetPost.content}</Typography>
         </Box>;
+    }
+
+   const setProfileAttribute = (key, value) => {
+        key = key.trim();
+        console.log(key,value);
+        let  content =text+"\n"+value;
+        setText(content);
     }
 
     return (
@@ -102,6 +112,7 @@ const GPostDialog = () => {
                     {'Cancel'}
                 </Button>
                 <Box sx={{ flexGrow: 1 }}></Box>
+                <Upload onUrl={(url) => setProfileAttribute("string", url)} />
                 <Button sx={{
                     color: 'text.primary'
                 }}
