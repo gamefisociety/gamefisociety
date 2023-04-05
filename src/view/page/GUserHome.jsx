@@ -55,13 +55,7 @@ const GUserHome = () => {
       data.map((item) => {
         if (item.kind === EventKind.SetMetadata) {
           console.log('fetch_user_profile data', item);
-          let update_flag = false;
-          if (info === null) {
-            update_flag = true;
-          } else if (item.created_at > metadata_time) {
-            update_flag = true;
-          }
-          if (update_flag) {
+          if (info === null || item.created_at > metadata_time) {
             metadata_time = item.created_at;
             if (item.content !== "") {
               setInfo(JSON.parse(item.content));
@@ -95,6 +89,7 @@ const GUserHome = () => {
       if (target_note_cache) {
         setNotes(target_note_cache.concat());
       }
+      console.log('user home', target_note_cache);
     });
   };
 

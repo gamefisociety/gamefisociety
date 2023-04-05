@@ -1,6 +1,23 @@
 .carduser-bg{
     width: 100%;
     background-color: transparent;
+
+    .lable_1 {
+        cursor: pointer;
+        color: #FFFFFF;
+        &:hover{
+            text-decoration:underline
+        }
+    }
+
+    .lable_2 {
+        margin-left: 8px;
+        // cursor: pointer;
+        color: #666666;
+        // &:hover{
+        //     // background-color: #3c3d3d00;
+        // }
+    }
 }
 
 .button{

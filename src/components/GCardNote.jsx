@@ -68,7 +68,6 @@ const GCardNote = (props) => {
     }
     if (reply_pubkey !== null) {
       let replyInfo = UserCache.getMetadata(reply_pubkey);
-      console.log('request reply_pubkey', reply_pubkey, replyInfo);
       if (!replyInfo) {
         metaKeys.push(reply_pubkey);
       } else {
@@ -76,7 +75,7 @@ const GCardNote = (props) => {
       }
     }
     if (metaKeys.length > 0) {
-      let filterMeta = MetaPro.get(note.pubkey);
+      let filterMeta = MetaPro.get(metaKeys);
       filter.push(filterMeta)
     }
     //get reaction

@@ -330,21 +330,10 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  marginRight: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
+              <Typography className={'lable_1'}>
                 {ownFollows.length}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Following"}
               </Typography>
             </Box>
@@ -357,21 +346,10 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  marginRight: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
-                {11}
+              <Typography className={'lable_1'}>
+                {'...'}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Followers"}
               </Typography>
             </Box>
@@ -384,21 +362,10 @@ const GCardUser = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography
-                sx={{
-                  mr: "8px",
-                }}
-                variant={"body"}
-                color="text.primary"
-                align={"center"}
-              >
+              <Typography className={'lable_1'}>
                 {relayMap.size}
               </Typography>
-              <Typography
-                variant={"body"}
-                color="text.disabled"
-                align={"center"}
-              >
+              <Typography className={'lable_2'}>
                 {"Relays"}
               </Typography>
             </Box>
