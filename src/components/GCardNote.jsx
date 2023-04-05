@@ -28,27 +28,56 @@ const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'
 const GCardNote = (props) => {
   const nostrWorker = useWorker(createNostrWorker);
   const { note } = props;
-  const [replyInfo, setReplyInfo] = useState(null);
   const [meta, setMeta] = useState(null);
-  const [metaCxt, setMetaCxt] = useState(null);
+  const [replyMeta, setReplyMeta] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
   const MetaPro = useMetadataPro();
 
   const fetch_relative_info = () => {
+
+    let reply_pubkey = null;
+    let self_pubkey = note.pubkey;
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
+    note.tags.map(item => {
+      if (item[0] === 'e') {
+        eNum = eNum + 1;
+        eArray.push(item[1]);
+      } else if (item[0] === 'p') {
+        pNum = pNum + 1;
+        pArray.push(item[1]);
+      }
+    });
+    if (eNum === 1 && pNum === 1 && pArray.length > 0) {
+      reply_pubkey = pArray[0];
+    } else if (eNum === 2 && pNum === 2 && pArray.length > 1) {
+      reply_pubkey = pArray[1];
+    }
+    //
     let filter = [];
-    //get meta info
-    let metaInfo = UserCache.getMetadata(note.pubkey);
-    console.log('fetch_relative_info', note, metaInfo);
+    let metaKeys = [];
+    let metaInfo = UserCache.getMetadata(self_pubkey);
     if (!metaInfo) {
+      metaKeys.push(self_pubkey);
+    } else {
+      setMeta({ ...metaInfo });
+    }
+    console.log('request reply_pubkey', reply_pubkey);
+    if (reply_pubkey !== null) {
+      let replyInfo = UserCache.getMetadata(reply_pubkey);
+      if (reply_pubkey && !replyInfo) {
+        metaKeys.push(reply_pubkey);
+      } else {
+        setReplyMeta({ ...replyInfo });
+      }
+    }
+    if (metaKeys.length > 0) {
       let filterMeta = MetaPro.get(note.pubkey);
       filter.push(filterMeta)
-    } else {
-      if (metaInfo.content && metaInfo.content !== '') {
-        setMetaCxt({ ...JSON.parse(metaInfo.content) });
-      }
-      setMeta({ ...metaInfo });
     }
     //get reaction
 
@@ -63,15 +92,17 @@ const GCardNote = (props) => {
       // console.log('GCardNote fetch_user_info', datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
-          let update_meta = false;
-          if (meta === null || meta.created_at < msg.created_at) {
-            update_meta = true;
-          }
-          if (update_meta) {
-            if (msg.content && msg.content !== '') {
-              setMetaCxt({ ...JSON.parse(msg.content) });
+          if (msg.pubkey === self_pubkey) {
+            //process reply meta
+            if (meta === null || meta.created_at < msg.created_at) {
+              setMeta(msg);
             }
-            setMeta(msg);
+          }
+          if (msg.pubkey === reply_pubkey) {
+            //process reply meta
+            if (meta === null || replyMeta.created_at < msg.created_at) {
+              setReplyMeta(msg);
+            }
           }
         } else if (msg.kind === EventKind.ContactList) {
           //
@@ -85,37 +116,6 @@ const GCardNote = (props) => {
   }
 
   useEffect(() => {
-    let eNum = 0;
-    let pNum = 0;
-    let eArray = [];
-    let pArray = [];
-    if (note.tags.length === 0) {
-      setReplyInfo(null);
-      fetch_relative_info();
-      return;
-    } else {
-      note.tags.map(item => {
-        if (item[0] === 'e') {
-          eNum = eNum + 1;
-          eArray.push(item[1]);
-        } else if (item[0] === 'p') {
-          pNum = pNum + 1;
-          pArray.push(item[1]);
-        }
-      });
-    }
-    //
-    if (eNum === 0) {
-      setReplyInfo(null);
-    } else if (eNum === 1 && pNum === 1) {
-      if (pArray.length > 0) {
-        setReplyInfo(pArray[0]);
-      }
-    } else if (eNum === 2 && pNum === 2) {
-      if (pArray.length > 0) {
-        setReplyInfo(pArray[1]);
-      }
-    }
     fetch_relative_info();
     return () => { };
   }, [note]);
@@ -125,14 +125,7 @@ const GCardNote = (props) => {
     return (
       <Box
         className={'content'}
-        onClick={() => {
-          navigate("/notethread", {
-            state: {
-              note: { ...note },
-              info: { ...metaCxt },
-            },
-          });
-        }}
+        onClick={() => { navigate("/notethread", { state: { note: { ...note } }, }) }}
       >
         {Helpers.highlightEverything(str.trim(), null, { showMentionedMessages: true })}
         {strArray.map((stritem, index) => {
@@ -192,49 +185,61 @@ const GCardNote = (props) => {
   };
 
   const displayname = () => {
-    if (metaCxt && metaCxt.display_name) {
-      return metaCxt.display_name;
+    let tmp_display_name = 'anonymous';
+    if (meta && meta.content !== '') {
+      let metaCxt = JSON.parse(meta.content);
+      tmp_display_name = metaCxt.display_name;
     } else {
-      if (note.pubkey) {
-        return (
-          "Nostr#" +
-          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
-        );
+      if (note && note.pubkey) {
+        tmp_display_name = "Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
       }
     }
-    return "anonymous";
+    return tmp_display_name;
   };
 
   const username = () => {
-    if (metaCxt && metaCxt.name) {
-      return '@' + metaCxt.name;
+    let tmp_user_name = '@anonymous';
+    if (meta && meta.content !== '') {
+      let metaCxt = JSON.parse(meta.content);
+      tmp_user_name = '@' + metaCxt.name;
     } else {
-      if (note.pubkey) {
-        return (
-          "@Nostr#" +
-          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length)
-        );
+      if (note && note.pubkey) {
+        tmp_user_name = "@Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
       }
     }
-    return "@anonymous";
+    return tmp_user_name;
   };
 
   const renderReplyLable = () => {
-    if (!note) {
+    if (replyMeta === null) {
       return null;
     }
-    if (replyInfo === null) {
-      return null;
-    }
-    let showName = '@default';
-    if (replyInfo) {
-      showName = replyInfo.substr(0, 4) + '...' + replyInfo.substr(-4, 4);
+    // console.log('renderReplyLable', replyMeta);
+    let showName = 'default';
+    if (replyMeta && replyMeta.content && replyMeta.content !== '') {
+      let replyMetaCxt = JSON.parse(replyMeta.content);
+      showName = replyMetaCxt.name;
     }
     return (
-      <Typography className="level2_lable" sx={{ ml: "12px" }}>
-        {'reply to @' + showName}
-      </Typography>
+      <Stack direction={'row'} alignItems={'center'}>
+        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+          {'reply to '}
+        </Typography>
+        <Typography className="level3_lable" sx={{ ml: "12px" }} onClick={() => {
+          console.log('navigate userhome', replyMeta);
+          navigate("/userhome", { state: { pubkey: replyMeta.pubkey } });
+        }}>
+          {'@' + showName}
+        </Typography>
+      </Stack>
+
     );
+  }
+
+  let pictrue = default_avatar;
+  if (meta && meta.content !== '') {
+    let metaCxt = JSON.parse(meta.content);
+    pictrue = metaCxt.picture;
   }
 
   return (
@@ -246,7 +251,7 @@ const GCardNote = (props) => {
         <Avatar
           className="avatar"
           alt="Avatar"
-          src={metaCxt && metaCxt.picture ? metaCxt.picture : default_avatar}
+          src={pictrue}
         />
         <Box className={'base_ext'}>
           <Stack direction='row'>

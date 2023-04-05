@@ -47,6 +47,17 @@
                 text-decoration:underline
             }
         }
+
+        .level3_lable {
+            color: #00B7FF;
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            cursor: pointer;
+            &:hover {
+                text-decoration:underline
+            }
+        }
     }
     
     .content {

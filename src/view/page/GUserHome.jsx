@@ -25,7 +25,7 @@ const GUserHome = () => {
 
   const location = useLocation();
   const { pubkey } = location.state;
-  console.log("GProfile enter", pubkey);
+  console.log("GUserHome enter", pubkey);
   const navigate = useNavigate();
   const user_note_cache = UserNoteCache();
   const [info, setInfo] = useState(null);
