@@ -127,58 +127,6 @@ const GCardNote = (props) => {
         onClick={() => { navigate("/notethread", { state: { note: { ...note } }, }) }}
       >
         {Helpers.highlightEverything(str.trim(), null, { showMentionedMessages: true })}
-        {strArray.map((stritem, index) => {
-          try {
-            if (stritem === "") {
-              return null;
-            } else if (
-              (stritem.startsWith("http://") ||
-                stritem.startsWith("https://")) &&
-              (stritem.endsWith(".png") ||
-                stritem.endsWith(".jpg") ||
-                stritem.endsWith(".jpeg") ||
-                stritem.endsWith(".gif"))
-            ) {
-              // console.log('render image', stritem);
-              return (
-                <CardMedia
-                  component="img"
-                  key={"cxt-" + index + "-" + stritem}
-                  className={'inner_img'}
-                  src={stritem}
-                />
-              );
-            } else if (
-              (stritem.startsWith("http://") ||
-                stritem.startsWith("https://")) &&
-              stritem.endsWith(".mp4")
-            ) {
-              console.log("render video", stritem);
-              return null;
-            } else {
-              return null;
-              //   return (
-
-              //     <Typography
-              //       sx={{
-              //         width: "100%",
-              //         // backgroundColor: 'red',
-              //         wordWrap: "break-word",
-              //         whiteSpace: "pre-wrap",
-              //         fontSize: "14px",
-              //       }}
-              //       color="#FFFFFF"
-              //       align="left"
-              //     >
-              //       {stritem}
-              //     </Typography>
-              //   );
-            }
-          } catch (error) {
-            // console.log('strArray error', error, stritem);
-            return null;
-          }
-        })}
       </Box>
     );
   };
