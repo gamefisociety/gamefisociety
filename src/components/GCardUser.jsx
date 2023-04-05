@@ -68,8 +68,18 @@ const GCardUser = (props) => {
     return follows.includes(key);
   };
 
+  const relayNum = () => {
+    let num = 0;
+    if (ownRelays !== null) {
+      for (let key in ownRelays) {
+        num = num + 1;
+      }
+    }
+    return num;
+  }
+
   useEffect(() => {
-    // console.log("profile", profile);
+    console.log("GCardUser", ownRelays);
     return () => { };
   }, [props]);
 
@@ -358,7 +368,7 @@ const GCardUser = (props) => {
               }}
             >
               <Typography className={'lable_1'}>
-                {0}
+                {relayNum()}
               </Typography>
               <Typography className={'lable_2'}>
                 {"Relays"}

@@ -34,6 +34,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    //
+    console.log('app relays', relays);
     relays?.map((cfg) => {
       System.ConnectRelay(cfg.addr, cfg.read, cfg.write);
     });

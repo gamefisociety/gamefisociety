@@ -113,8 +113,9 @@ const GRelays = () => {
         {
           relays.map((cfg, index) => {
             return (
-              <ListItem>
-                <Box className={'relay_item'} key={"relaycard-index-" + index}
+              <ListItem key={'relay-' + index}>
+                <Box
+                  className={'relay_item'}
                   onClick={(event) => {
                     console.log('new event', event);
                     module.isDetail = true;

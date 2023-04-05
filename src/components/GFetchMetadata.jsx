@@ -48,6 +48,7 @@ const GFetchMetadata = (props) => {
           return a.addr.localeCompare(b.addr);
         });
         dispatch(setRelays(tmp_relays));
+        console.log('selfMetadata', tmp_relays);
       }
       //follows
       if (msg.tags.length > 0) {
