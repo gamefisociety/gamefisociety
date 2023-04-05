@@ -28,15 +28,15 @@ const ProfileSlice = createSlice({
   reducers: {
     initRelays: (state, action) => {
       const lastRelayList = window.localStorage.getItem(RelayListKey);
-      let relays = [];
+      let tmp_relays = [];
       if (lastRelayList) {
-        relays = JSON.parse(lastRelayList);
+        tmp_relays = JSON.parse(lastRelayList);
       } else {
-        relays = DefaultRelays;
+        tmp_relays = DefaultRelays;
       }
-      state.relays = relays;
-      state.curRelay = relays[0];
-      console.log('lastRelayList', relays);
+      state.relays = tmp_relays;
+      state.curRelay = tmp_relays[0];
+      console.log('lastRelayList', tmp_relays);
     },
     setRelays: (state, action) => {
       console.log('action setRelays', action.payload);
