@@ -32,7 +32,7 @@ const GFetchMetadata = (props) => {
       console.log('setProfile', contentMeta);
     } else if (msg.kind === EventKind.ContactList) {
       //relays
-      if (msg.content !== "") {
+      if (msg.content !== "" && relays) {
         let content = JSON.parse(msg.content);
         let tmp_relays = relays.concat();
         for (let key in content) {
