@@ -290,7 +290,7 @@ export default {
         match = `lightning:${match}`;
       }
       return (
-        <a style={{color:"#0380f5"}} href={match} onClick={(e) => this.handleLightningLinkClick(e)}>
+        <a style={{color:"#00B7FF"}} href={match} onClick={(e) => this.handleLightningLinkClick(e)}>
           ⚡ Pay with lightning
         </a>
       );
@@ -323,7 +323,7 @@ export default {
       return (
         <>
           {' '}
-          <a style={{color:"#0380f5"}} href={link}>
+          <a style={{color:"#00B7FF"}} href={link}>
             @{link}
           </a>
         </>
@@ -336,7 +336,7 @@ export default {
       return (
         <>
           {' '}
-          <a style={{color:"#0380f5"}} href={link}>{match}</a>
+          <a style={{color:"#00B7FF"}} href={link}>{match}</a>
         </>
       );
     });
@@ -348,7 +348,7 @@ export default {
         const url = match.replace(/^(https:\/\/)?iris.to/, '');
         return (
           <a
-          style={{color:"#0380f5"}}
+          style={{color:"#00B7FF"}}
             key={match + i}
             target="_blank"
             onClick={(e) => {
@@ -384,7 +384,7 @@ export default {
 
     // highlight hashtags, link to /search/${encodeUriComponent(hashtag)}
     s = reactStringReplace(s, hashtagRegex, (match) => {
-      return <a style={{color:"#0380f5"}} href={`/search/${encodeURIComponent(match)}`}>{match}</a>;
+      return <a style={{color:"#00B7FF"}} href={`/search/${encodeURIComponent(match)}`}>{match}</a>;
     });
 
     return s;
