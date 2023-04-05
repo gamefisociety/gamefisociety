@@ -123,14 +123,7 @@ const GRelays = () => {
                     setModule({ ...module });
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontFamily: "Saira",
-                      fontWeight: "500",
-                      color: "#FFFFFF",
-                    }}
-                  >
+                  <Typography className={'lable_relay'}>
                     {cfg.addr}
                   </Typography>
                   <Box
@@ -151,12 +144,11 @@ const GRelays = () => {
                       backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
                     }}
                   />
+                  <Box sx={{ flexGrow: 1 }} />
                   <Button
                     className="button"
                     variant="contained"
                     sx={{
-                      position: "absolute",
-                      right: "-30px",
                       width: "40px",
                       backgroundColor: "transparent",
                     }}
@@ -248,61 +240,32 @@ const GRelays = () => {
   const renderRelays = () => {
     return (
       <Box className={'inner_relays'}>
-        <Typography
-          sx={{
-            marginTop: "24px",
-            width: "100%",
-            fontSize: "18px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            align: "left",
-          }}
-          align={"left"}
-        >
+        <Typography className={'tips_relay'}>
           {"Your Relays " + relays.length}
         </Typography>
-        <Stack sx={{ py: '12px' }} direction={'row'} alignItems={'center'} justifyContent={'center'}>
-          <Button
-            variant="contained"
-            sx={{
-              width: "80%",
-              height: "36px",
-              backgroundColor: "#454FBF",
-              borderRadius: "6px",
-              fontSize: "28px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "white",
-            }}
-            disabled={newRelay !== null}
-            onClick={() => {
-              if (newRelay === null) {
-                setNewRelay('');
-              }
-            }}
-          >
-            {"+"}
-          </Button>
-          {/* <Button
-            variant="contained"
-            sx={{
-              width: "15%",
-              height: "36px",
-              ml: '16px',
-              backgroundColor: "#454FBF",
-              borderRadius: "6px",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "white",
-            }}
-            onClick={() => {
-              saveRelays();
-            }}
-          >
-            {'sync'}
-          </Button> */}
-        </Stack>
+        <Button
+          variant="contained"
+          sx={{
+            width: "80%",
+            height: "36px",
+            marginLeft: '10%',
+            my: '12px',
+            backgroundColor: "#454FBF",
+            borderRadius: "6px",
+            fontSize: "28px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: "white",
+          }}
+          disabled={newRelay !== null}
+          onClick={() => {
+            if (newRelay === null) {
+              setNewRelay('');
+            }
+          }}
+        >
+          {"+"}
+        </Button>
         {renderNewRelay()}
         {renderCacheRelays()}
       </Box>
@@ -339,16 +302,6 @@ const GRelays = () => {
               {"Relays"}
             </Typography>
           </Box>
-          <Typography
-            sx={{
-              fontSize: "18px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-          >
-            {"Current Relay"}
-          </Typography>
         </Box>
         <Typography
           sx={{

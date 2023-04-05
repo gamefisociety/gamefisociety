@@ -8,14 +8,13 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
-import { setRelays, setFollows } from "module/store/features/profileSlice";
+import { setRelays } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import { System } from "nostr/NostrSystem";
 
 const GRelaysShow = () => {
-  const { relays, curRelay } = useSelector((s) => s.profile);
+  const { relays } = useSelector((s) => s.profile);
   const { relayDrawer } = useSelector((s) => s.dialog);
-  const { loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
 
