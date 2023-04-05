@@ -160,9 +160,7 @@ const GFTGlobal = () => {
             }}
           >
             {
-              relays.map((item, index) => {
-                return (<MenuItem key={'relay-index-' + index} value={item.addr} >{item.addr}</MenuItem>);
-              })
+              relays.map((item, index) => (<MenuItem key={'relay-index-' + index} value={item.addr} >{item.addr}</MenuItem>))
             }
           </Select>
         </FormControl>
@@ -174,13 +172,8 @@ const GFTGlobal = () => {
     return (
       <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
         {data.map((item, index) => {
-          const info = inforData.get(item.pubkey);
           return (
-            <GCardNote
-              key={"global-note-" + index}
-              note={{ ...item }}
-              info={info}
-            />
+            <GCardNote key={"global-note-" + index} note={{ ...item }} />
           );
         })}
       </List>

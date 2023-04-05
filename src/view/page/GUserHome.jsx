@@ -151,13 +151,7 @@ const GUserHome = () => {
         ownRelays={{ ...ownRelays }}
       />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
-        {notes.map((item, index) => (
-          <GCardNote
-            key={"userhome-note-index" + index + '-' + pubkey}
-            note={{ ...item }}
-            info={info}
-          />
-        ))}
+        {notes.map((item, index) => (<GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />))}
       </List>
     </Box>
   );

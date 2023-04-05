@@ -163,20 +163,13 @@ const GPostReply = () => {
     return (
       <List className={'list_bg'}>
         {data.map((item, index) => {
-          const info = inforData.get(item.pubkey);
           if (curLabel === 'Post') {
             let retInfo = parseNote(item);
             if (retInfo.eNum > 0) {
               return null;
             }
           }
-          return (
-            <GCardNote
-              key={"global-note-" + index}
-              note={{ ...item }}
-              info={info}
-            />
-          );
+          return <GCardNote key={"post-reply-note-" + index} note={{ ...item }} />;
         })}
       </List>
     );

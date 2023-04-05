@@ -143,13 +143,7 @@ const GNoteThread = () => {
         if (targetNote === null) {
             return null;
         }
-        let context = {};
-        let info = UserCache.getMetadata(rootNote);
-        if (info) {
-            context = JSON.parse(info.content)
-        }
-        console.log('GNoteThread renderRootNote', rootNote, targetNote);
-        return <GCardNote note={{ ...targetNote }} info={{ ...context }} />
+        return <GCardNote note={{ ...targetNote }} />
     }
 
     const renderReplyNotes = () => {
@@ -163,7 +157,7 @@ const GNoteThread = () => {
                 return null;
             }
             console.log('GNoteThread renderReplyNotes', rootNote, targetNote);
-            return <GCardNote key={'reply_node_' + index} note={{ ...targetNote }} info={null} />
+            return <GCardNote key={'reply_node_' + index} note={{ ...targetNote }} />
         });
     }
 
@@ -171,30 +165,18 @@ const GNoteThread = () => {
         if (replyNote === null) {
             return null;
         }
-        let context = {};
-        let info = UserCache.getMetadata(replyNote);
-        if (info) {
-            context = JSON.parse(info.content)
-        }
         let targetNote = TLCache.getThreadNote(replyNote);
         if (targetNote === null) {
             return null;
         }
-        console.log('GNoteThread renderReplyNote', rootNote, targetNote);
-        return <GCardNote note={{ ...targetNote }} info={{ ...context }} />
+        return <GCardNote note={{ ...targetNote }} />
     }
 
     const renderSelf = () => {
         if (note === null) {
-            return null;
+            return null
         }
-        let context = {};
-        let info = UserCache.getMetadata(note.pubkey);
-        if (info) {
-            context = JSON.parse(info.content)
-        }
-        console.log('GNoteThread renderSelf', note);
-        return <GCardNote note={{ ...note }} info={{ ...context }} />
+        return <GCardNote note={{ ...note }} />
     }
 
     const renderRootNotes = () => {
@@ -202,13 +184,11 @@ const GNoteThread = () => {
             return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
         return notesRoot.map((item, index) => {
-            console.log('notesRoot', item);
             let targetNote = TLCache.getThreadNote(item);
             if (targetNote === null) {
                 return null;
             }
-            console.log('GNoteThread renderRootNotes', rootNote, targetNote);
-            return <GCardNote key={'other_node_' + index} note={{ ...targetNote }} info={null} />
+            return <GCardNote key={'other_node_' + index} note={{ ...targetNote }} />
         });
     }
 
