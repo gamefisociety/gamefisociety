@@ -73,7 +73,7 @@ function GDetailProject() {
               fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
-              color: "#FFFFFF",
+              color: "#666666",
             }}
           >
             {"Projects"}

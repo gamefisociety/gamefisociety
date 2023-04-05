@@ -92,7 +92,7 @@ function GDetailArticle() {
               fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
-              color: "#FFFFFF",
+              color: "#666666",
             }}
           >
             {"Articles"}
@@ -125,15 +125,21 @@ function GDetailArticle() {
       <Box
         sx={{
           marginTop: "10px",
+          marginBottom: "40px",
           width: "100%",
           height: "100%",
           minHeight: "1000px",
-          padding: "20px",
+          paddingTop: "40px",
+          paddingBottom: "60px",
+          paddingLeft: "80px",
+          paddingRight: "80px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
           backgroundColor: "#FFFFFF",
+          // borderColor: "#D0D7DF",
+          borderRadius: "6px"
         }}
       >
         <MDEditor.Markdown
