@@ -17,7 +17,7 @@ import GProjectEditor from "components/GProjectEditor";
 import closeImg from "./../../asset/image/social/close.png";
 import "./GProjects.scss";
 
-const GGamePage = () => {
+const GProjects = () => {
   const navigate = useNavigate();
   const { activate, account, chainId, active, library, deactivate } =
     useWeb3React();
@@ -138,7 +138,18 @@ const GGamePage = () => {
 
   const renderProjectCards = () => {
     return (
-      <Box className={"project_card_contain"}>
+      <Box
+        sx={{
+          paddingTop: "24px",
+          paddingLeft: "24px",
+          paddingRight: "24px",
+          width: "calc( 100% - 48px)",
+          display: "flex",
+          flexWrap: "wrap",
+          gridGap: "32px",
+          gap: "32px",
+        }}
+      >
         {projectDatas.map((item, index) => {
           return (
             <GCardProject
@@ -178,9 +189,20 @@ const GGamePage = () => {
   };
 
   return (
-    <Paper className={"bg"}>
+    <Box
+      sx={{
+        width: "760px",
+        minHeight: "1000px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        pointerEvents: "all",
+        backgroundColor: "rgba(0, 0, 0, 0.708)",
+      }}
+    >
       {renderTop()}
-      {fetching === true ? renderWaittingCards():renderProjectCards()}
+      {fetching === true ? renderWaittingCards() : renderProjectCards()}
       <Drawer anchor={"bottom"} open={dialogOpen} onClose={handleDialogClose}>
         <Box
           sx={{
@@ -212,8 +234,8 @@ const GGamePage = () => {
           <GProjectEditor />
         </Box>
       </Drawer>
-    </Paper>
+    </Box>
   );
 };
 
-export default GGamePage;
+export default GProjects;
