@@ -226,7 +226,9 @@ const GFTGlobal = () => {
   const renderLables = () => {
     return (
       <Box className={"global_lables"}>
-        <Button className={"lable_btn"} onClick={handleClickOpen}>
+        <Button variant="contained" sx={{
+          width: "80%"
+        }} onClick={handleClickOpen}>
           {"Create"}
         </Button>
 
