@@ -38,12 +38,26 @@
         justify-content: flex-start;
         background-color: rgba(36, 36, 36, 0.75);
 
-        .lable_bg {
-             margin-left: 12px;
+        .lable_btn {
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: left;
+            &:hover{
+                background-color: #3c3d3d;
+            }
         }
 
-        .lable_text {
-            padding-bottom: 6px;
+        .lable_btn_selected {
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #c9c3c3;
+            text-align: left;
+            &:hover{
+                background-color: transparent;
+            }
         }
     }
 

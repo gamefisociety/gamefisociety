@@ -1,13 +1,13 @@
 import GSTSubjects from "../asset/abi/GSTSubjects.json";
 const address = "0xBeA56Cd8d41aEe8A39fDB9ea9049a5F5E09E3901";
 class GSTSubjectsBase {
-  static createSubject(library, account, cid) {
+  static createSubject(library, account, name) {
     return new Promise((resolve, reject) => {
       const _web3 = library;
       let contract = new _web3.eth.Contract(GSTSubjects.abi, address);
       try {
         contract.methods
-          .createSubject(cid)
+          .createSubject(name)
           .send({
             from: account,
           })

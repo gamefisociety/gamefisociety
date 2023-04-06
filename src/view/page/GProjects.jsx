@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
