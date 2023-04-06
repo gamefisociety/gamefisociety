@@ -35,3 +35,43 @@ export const BuildSub = (subname, filters) => {
     })
     return ret;
 }
+
+export const ParseNote = (note) => {
+    let ret = {
+        root_note_id: 0,
+        reply_note_id: 0,
+        local_note: 0,
+        eNum: 0,
+        pNum: 0,
+        eArray: [],
+        pArray: [],
+    }
+    if (note.tags.length === 0) {
+        ret.root_note_id = note.id;
+    } else {
+        note.tags.map(item => {
+            if (item[0] === 'e') {
+                ret.eNum = ret.eNum + 1;
+                ret.eArray.push(item[1]);
+                if (item[3] && item[3] === 'root') {
+                    ret.root_note_id = item[1];
+                }
+                if (item[3] && item[3] === 'reply') {
+                    ret.reply_note_id = item[1];
+                    ret.local_note = note.id;
+                }
+            } else if (item[0] === 'p') {
+                ret.pNum = ret.pNum + 1;
+                ret.pArray.push(item[1]);
+            }
+        });
+        //
+        if (ret.eNum === 0) {
+            ret.root_note_id = note.id;
+        } else if (ret.eNum === 1) {
+            ret.root_note_id = ret.eArray[0];
+            ret.local_note = note.id;
+        }
+    }
+    return ret;
+}

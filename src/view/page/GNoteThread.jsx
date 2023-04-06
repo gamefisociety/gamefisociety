@@ -4,7 +4,7 @@ import './GNoteThread.scss';
 import { useLocation, useNavigate } from 'react-router-dom'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
-import { BuildSub } from 'nostr/NostrUtils';
+import { BuildSub, ParseNote } from 'nostr/NostrUtils';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import TimelineCache from 'db/TimelineCache';
 import UserDataCache from 'db/UserDataCache';
@@ -31,24 +31,30 @@ const GNoteThread = () => {
     const [notesReply, setNotesReply] = useState([]);
     const textnotePro = useTextNotePro();
     const TLCache = TimelineCache();
-    const UserCache = UserDataCache();
 
-    const fetchMainNotes = (nodeId) => {
-        if (nodeId === 0) {
-            return;
-        }
-        //
+    const fetchMainNotes = (rootNodeId, replyNoteId) => {
         let filterArray = [];
-        const filterTextNote = textnotePro.getEvents([nodeId]);
-        filterArray.push(filterTextNote);
-        let tmpMainNote = TLCache.getThreadNote(nodeId);
-        if (!tmpMainNote) {
-            let filterTarget = textnotePro.getEventsByIds([nodeId]);
-            filterArray.push(filterTextNote, filterTarget);
+        //fetch [main note] and [main note] reply
+        if (rootNodeId !== 0) {
+            let tmpMainNote = TLCache.getThreadNote(rootNodeId);
+            if (!tmpMainNote) {
+                let filterRoot = textnotePro.getEventsByIds([rootNodeId]);
+                filterArray.push(filterRoot);
+            }
+            const filterTextNote = textnotePro.getEvents([rootNodeId]);
+            filterArray.push(filterTextNote);
+        }
+        //fetch [reply note] and [reply note] reply
+        if (replyNoteId !== 0) {
+            let tmpReplyNote = TLCache.getThreadNote(replyNoteId);
+            if (!tmpReplyNote) {
+                let filterReply = textnotePro.getEventsByIds([replyNoteId]);
+                filterArray.push(filterReply);
+            }
         }
         const subThread = BuildSub('root_note', filterArray);
         threadWorker.fetch_thread_note(subThread, null, (datas, client) => {
-            console.log('fetchMainNotes', datas);
+            // console.log('fetchMainNotes', datas);
             let tmpNoteIds = []
             datas.map((item) => {
                 TLCache.pushThreadNote(item);
@@ -59,13 +65,13 @@ const GNoteThread = () => {
         });
     }
 
-    const fetchReplyNotes = (nodeId) => {
+    const fetchReplyNotesToLocal = (nodeId) => {
         if (nodeId === 0) {
             return;
         }
         let tmpReplyNote = TLCache.getThreadNote(nodeId);
         if (tmpReplyNote) {
-
+            //
         }
         //
         const filterTextNote = textnotePro.getEvents([nodeId]);
@@ -82,57 +88,16 @@ const GNoteThread = () => {
         });
     }
 
-    const fetchMeta = (pubkeys) => {
-
-    }
-
     useEffect(() => {
         TLCache.clear();
         TLCache.pushThreadNote(note);
+        let ret = ParseNote(note);
         // console.log('pushThreadNote', note, ret);
-        let root_note_id = 0;
-        let reply_note_id = 0;
-        let eNum = 0;
-        let pNum = 0;
-        let eArray = [];
-        let pArray = [];
-        if (note.tags.length === 0) {
-            root_note_id = note.id;
-            reply_note_id = 0;
-        } else {
-            note.tags.map(item => {
-                if (item[0] === 'e') {
-                    eNum = eNum + 1;
-                    eArray.push(item[1]);
-                    if (item[3] && item[3] === 'root') {
-                        root_note_id = item[1];
-                    }
-                    if (item[3] && item[3] === 'reply') {
-                        reply_note_id = item[1];
-                    }
-                } else if (item[0] === 'p') {
-                    pNum = pNum + 1;
-                    pArray.push(item[1]);
-                }
-            });
-        }
-        //
-        if (eNum === 0) {
-            root_note_id = note.id;
-            reply_note_id = 0;
-        } else if (eNum === 1) {
-            root_note_id = eArray[0];
-            reply_note_id = note.id;
-        }
-        //
-        setRootNote(root_note_id);
-        setReplyNote(reply_note_id);
-        console.log('pushThreadNote', note, root_note_id, reply_note_id, eArray, pArray);
-        fetchMainNotes(root_note_id);
-        fetchReplyNotes(reply_note_id);
-        fetchMeta(pArray);
-        return () => {
-        }
+        setRootNote(ret.root_note_id);
+        setReplyNote(ret.reply_note_id);
+        fetchMainNotes(ret.root_note_id, ret.reply_note_id);
+        fetchReplyNotesToLocal(ret.local_note);
+        return () => { }
     }, [note])
 
     const renderRootNote = () => {
