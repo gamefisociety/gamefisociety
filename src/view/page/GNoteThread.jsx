@@ -138,7 +138,7 @@ const GNoteThread = () => {
         }
         return (
             <Stack sx={{ width: '100%' }} direction={'column'}>
-                <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'RELATIVE'}</Divider>
+                <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY TO'}</Divider>
                 {
                     notesReply.map((item, index) => {
                         let targetNote = TLCache.getThreadNote(item);
