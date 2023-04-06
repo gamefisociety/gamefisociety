@@ -14,21 +14,15 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material/index";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
 import GlobalNoteCache from "db/GlobalNoteCache";
-
-const labels = ["ALL", "#ETH", "#BTC", "#DOT", "#GAMES", "#SPORTS", "#GPT-4"];
 
 const createNostrWorker = createWorkerFactory(() =>
   import("worker/nostrRequest")
@@ -47,8 +41,8 @@ const GFTGlobal = () => {
   const [data, setData] = useState([]);
   const [isMore, setMore] = useState(false);
   const [inforData, setInforData] = useState(new Map());
-  const [sbujects, setSubjects] = useState([]);
-  const [curSubjectIndex, setCurSubjectIndex] = useState(0);
+  const [subjects, setSubjects] = useState([]);
+  const [curSubjectIndex, setCurSubjectIndex] = useState(-1);
   const [newSujbect, setNewSubject] = React.useState("");
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
@@ -69,14 +63,14 @@ const GFTGlobal = () => {
     if (curCreateAt === 0) {
       getNoteList();
     }
-    return () => {};
+    return () => { };
   }, [curCreateAt]);
 
   useEffect(() => {
     if (account) {
       getAllSubjects();
     }
-    return () => {};
+    return () => { };
   }, [account]);
 
   //get subjects
@@ -103,6 +97,8 @@ const GFTGlobal = () => {
       return 0;
     }
   };
+
+  //
   const fetchSubjects = (index, count) => {
     if (account) {
       let subjectCache = [];
@@ -181,6 +177,16 @@ const GFTGlobal = () => {
       filterTextNote.until = curCreateAt;
     }
     filterTextNote.limit = 50;
+    //add t tag
+    // const [sbujects, setSubjects] = useState([]);
+    // const [curSubjectIndex, setCurSubjectIndex] = useState(0);
+
+    console.log('getNoteList', subjects);
+    // if (sbujects[curSubjectIndex]) {
+    //   console.log('getNoteList', sbujects[curSubjectIndex]);
+    //   // filterTextNote['#t'] = []
+    // }
+    // filterTextNote['#t'] = []
     //request
     let subTextNode = BuildSub("global-textnode", [filterTextNote]);
     let targetAddr = curRelay ? curRelay.addr : null;
@@ -224,13 +230,22 @@ const GFTGlobal = () => {
   };
 
   const renderLables = () => {
+    console.log('renderLables', subjects);
     return (
       <Box className={"global_lables"}>
         <Button className={"lable_btn"} onClick={handleClickOpen}>
           {"Create"}
         </Button>
-
-        {sbujects.map((item, index) => (
+        <Button
+          className={
+            curSubjectIndex === -1 ? "lable_btn_selected" : "lable_btn"
+          }
+          onClick={() => {
+            setCurSubjectIndex(-1);
+          }}>
+          {"#ALL"}
+        </Button>
+        {subjects.map((item, index) => (
           <Button
             key={"label-index-" + index}
             className={
@@ -292,6 +307,7 @@ const GFTGlobal = () => {
       </List>
     );
   };
+
   const renderSujuectDialog = () => {
     return (
       <Dialog open={dislogOpen} onClose={handleClose}>

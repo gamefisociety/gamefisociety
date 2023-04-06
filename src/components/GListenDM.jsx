@@ -7,8 +7,8 @@ import { addDirectMessage } from 'module/store/features/societySlice';
 //
 const GListenDM = (props) => {
   const { logout, pubkey } = props;
-  const { dms } = useSelector((s) => s.society);
-  const dispatch = useDispatch();
+  // const { dms } = useSelector((s) => s.society);
+  // const dispatch = useDispatch();
   const chatPro = useChatPro();
 
   const createSub = () => {
@@ -21,7 +21,7 @@ const GListenDM = (props) => {
   const listenSub = (sub) => {
     System.BroadcastSub(sub, (tag, client, msg) => {
       console.log('listenSub msg', msg);
-      dispatch(addDirectMessage(msg));
+      // dispatch(addDirectMessage(msg));
     })
   }
 
