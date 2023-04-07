@@ -5,7 +5,7 @@ import Loadable from "components/Loadable";
 import MainLayout from "view/layout/MainLayout";
 import KeepAlive from "react-activation";
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
-const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
+const GFTHomeMeta = Loadable(lazy(() => import("view/meta/GFTHomeMeta")));
 const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
@@ -32,7 +32,7 @@ const MainRoutes = {
       path: "/",
     },
     {
-      path: '/meta',
+      path: "/meta",
     },
     {
       path: "/home",
@@ -44,7 +44,15 @@ const MainRoutes = {
     },
     {
       path: "/global",
-      element: <GFTGlobal />,
+      element: (
+        <KeepAlive
+          cacheKey="GlobalCache_ID"
+          name="GlobalCache"
+          when={() => true}
+        >
+          <GFTGlobal />
+        </KeepAlive>
+      ),
     },
     {
       path: "/post-reply",

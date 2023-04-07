@@ -160,6 +160,7 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
+            clear();
             navigate('/global');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
