@@ -78,15 +78,27 @@ export const ParseNote = (note) => {
         });
         //
         if (ret.eNum === 1) {
-            ret.root_note_id = ret.eArray[0][1];
-            ret.root_note_p = ret.pArray[0][1];
+            if (ret.eArray[0]) {
+                ret.root_note_id = ret.eArray[0][1];
+            }
+            if (ret.pArray[0]) {
+                ret.root_note_p = ret.pArray[0][1];
+            }
             ret.reply_note_id = note.id;
             ret.reply_note_p = note.pubkey;
         } else if (ret.eNum === 2) {
-            ret.root_note_id = ret.eArray[0][1];
-            ret.root_note_p = ret.pArray[0][1];
-            ret.reply_note_id = ret.eArray[1][1];
-            ret.reply_note_p = ret.pArray[1][1];
+            if (ret.eArray[0]) {
+                ret.root_note_id = ret.eArray[0][1];
+            }
+            if (ret.pArray[0]) {
+                ret.root_note_p = ret.pArray[0][1];
+            }
+            if (ret.eArray[1]) {
+                ret.reply_note_id = ret.eArray[1][1];
+            }
+            if (ret.pArray[1]) {
+                ret.reply_note_p = ret.pArray[1][1];
+            }
         }
     }
     return ret;
