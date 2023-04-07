@@ -8,6 +8,7 @@
     justify-content: flex-start;
     align-items: center;
     background-color: rgba(27, 27, 27, 0.95);
+    pointer-events: all;
 
     .banner{
         object-fit: cover;

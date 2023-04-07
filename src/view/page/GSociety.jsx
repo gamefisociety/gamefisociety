@@ -23,7 +23,6 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
-import { setMainContent } from 'module/store/features/dialogSlice';
 
 import UserDataCache from 'db/UserDataCache';
 
@@ -190,7 +189,6 @@ const GSociety = (props) => {
               >
                 <ListItemAvatar
                   onClick={() => {
-                    dispatch(setMainContent(true));
                     navigate("/userhome:" + pubkey, { state: { pubkey: pubkey } });
                     if (callback) {
                       callback();
@@ -251,7 +249,6 @@ const GSociety = (props) => {
               <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
                 <ListItemAvatar
                   onClick={() => {
-                    dispatch(setMainContent(true));
                     navigate("/userhome:" + item.pubkey, { state: { pubkey: item.pubkey } });
                     if (callback) {
                       callback();

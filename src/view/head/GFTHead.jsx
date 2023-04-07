@@ -34,8 +34,6 @@ import GListenDM from "components/GListenDM";
 import {
   setIsOpen,
   setIsOpenWallet,
-  setOpenMenuLeft,
-  setMainContent,
 } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
@@ -126,18 +124,12 @@ const GFTHead = () => {
     handleMobileMenuClose();
   };
 
-  const openMainContent = () => {
-    dispatch(setMainContent(true));
-  }
-
   const openUserHome = () => {
-    openMainContent();
     navigate("/userhome:" + publicKey, { state: { pubkey: publicKey } });
     handleMenuClose();
   };
 
   const openProfile = () => {
-    openMainContent();
     navigate("/profile", {
       state: { info: { ...profile }, pubkey: publicKey },
     });
@@ -167,7 +159,6 @@ const GFTHead = () => {
 
   const openSetting = () => {
     handleMenuClose();
-    openMainContent();
     navigate("/setting");
   };
 

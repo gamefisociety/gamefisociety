@@ -4,6 +4,26 @@
     background-color: rgba(27, 27, 27, 0.95);
     z-index: 0;
     padding-bottom: 64px;
+    pointer-events: all;
+
+    .note_out {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .note_in {
+        width: 80%;
+        // border: 2;
+        // border-width: 1;
+        // border-bottom: 1;
+        border-color: white;
+        background-color: rgb(70, 70, 70);
+        // background-color: red;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        flex-direction: column;
+    }
+
 
     .back {
         cursor: pointer;

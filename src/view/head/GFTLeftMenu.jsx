@@ -9,7 +9,6 @@ import {
     isCheckIn,
     setOpenCheckIn,
     setIsOpen,
-    setMainContent,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
@@ -137,7 +136,6 @@ const GFTLeftMenu = () => {
     const { drop, dropScope, clear, refresh } = useAliveController()
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft, isMainContent } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -147,14 +145,13 @@ const GFTLeftMenu = () => {
     }, [])
 
     const openMainContent = () => {
-        dispatch(setMainContent(true));
+        //
     }
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
         } else if (item.txt === 'META(beta)') {
-            dispatch(setMainContent(false));
             navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
@@ -183,7 +180,6 @@ const GFTLeftMenu = () => {
             dropScope('ProjectsCache');
             // clear();
             navigate('/projects');
-            openMainContent();
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
@@ -191,7 +187,6 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'ARTICLES') {
             dropScope('ArticlesCache')
             navigate('/articles');
-            openMainContent();
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
         } else if (item.txt === 'GROUP CHAT') {

@@ -55,7 +55,9 @@ const GNoteThread = () => {
             let tmpNoteIds = []
             datas.map((item) => {
                 TLCache.pushThreadNote(item);
-                tmpNoteIds.push(item.id);
+                if (item.id !== rootNodeId || item.id !== replyNoteId) {
+                    tmpNoteIds.push(item.id);
+                }
             });
             let no_re_note_ids = new Set([...tmpNoteIds]);
             setNotesRoot(Array.from(no_re_note_ids));
@@ -110,11 +112,14 @@ const GNoteThread = () => {
         if (!noteRet || noteRet.root_note_id === 0) {
             return null;
         }
+        if (noteRet.reply_note_id !== 0) {
+            return null;
+        }
         if (notesRoot.length === 0) {
             return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
         return (
-            <Stack sx={{ width: '80%' }} direction={'column'}>
+            <Stack className={'note_in'} >
                 <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'ROOT REPLIES'}</Divider>
                 {
                     notesRoot.map((item, index) => {
@@ -129,6 +134,42 @@ const GNoteThread = () => {
         );
     }
 
+    const renderReplyNote = () => {
+        if (!noteRet || noteRet.reply_note_id === 0) {
+            return null;
+        }
+        // if (noteRet.reply_note_id === noteRet.local_note) {
+        //     return null;
+        // }
+        let targetNote = TLCache.getThreadNote(noteRet.reply_note_id);
+        if (targetNote === null) {
+            return null;
+        }
+        return (
+            <Stack className={noteRet.reply_note_id === noteRet.local_note ? 'note_in' : 'note_out'}>
+                <GCardNote note={{ ...targetNote }} />
+            </Stack>
+        );
+    }
+
+    const renderLocalNote = () => {
+        if (!noteRet || noteRet.local_note === 0) {
+            return null;
+        }
+        if (noteRet.local_note === noteRet.reply_note_id) {
+            return null;
+        }
+        let targetNote = TLCache.getThreadNote(noteRet.local_note);
+        if (targetNote === null) {
+            return null;
+        }
+        return (
+            <Stack className={'note_in'} >
+                <GCardNote note={{ ...note }} />
+            </Stack>
+        );
+    }
+
     const renderReplyNotes = () => {
         if (!noteRet || noteRet.reply_note_id === 0) {
             return null;
@@ -137,7 +178,7 @@ const GNoteThread = () => {
             return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
         return (
-            <Stack sx={{ width: '100%' }} direction={'column'}>
+            <Stack className={'note_out'}>
                 <Divider sx={{ width: '100%', py: '6px', color: 'white' }} light={true}>{'REPLY TO'}</Divider>
                 {
                     notesReply.map((item, index) => {
@@ -152,36 +193,6 @@ const GNoteThread = () => {
         );
     }
 
-    const renderReplyNote = () => {
-        if (!noteRet || noteRet.reply_note_id === 0) {
-            return null;
-        }
-        let targetNote = TLCache.getThreadNote(noteRet.reply_note_id);
-        if (targetNote === null) {
-            return null;
-        }
-        return (
-            <Stack sx={{ width: '100%' }} direction={'column'}>
-                <GCardNote note={{ ...targetNote }} />
-            </Stack>
-        );
-    }
-
-    const renderSelf = () => {
-        if (!noteRet || noteRet.local_note === 0) {
-            return null;
-        }
-        let targetNote = TLCache.getThreadNote(noteRet.local_note);
-        if (targetNote === null) {
-            return null;
-        }
-        return (
-            <Stack sx={{ width: '80%', border: 1, borderColor: 'white', py: '6px' }} direction={'column'}>
-                <GCardNote note={{ ...note }} />
-            </Stack>
-        );
-    }
-
     const renderContent = () => {
         console.log('GNoteThread renderContent', noteRet);
         if (!note) {
@@ -192,7 +203,7 @@ const GNoteThread = () => {
                 {renderRootNote()}
                 {renderRootNotes()}
                 {renderReplyNote()}
-                {renderSelf()}
+                {renderLocalNote()}
                 {renderReplyNotes()}
             </Stack>
         );

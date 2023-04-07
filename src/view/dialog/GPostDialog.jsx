@@ -26,29 +26,29 @@ const GPostDialog = () => {
     const textNotrPro = useTextNotePro();
 
     useEffect(() => {
-        console.log('GPostDialog', targetPost);
+        // console.log('GPostDialog', targetPost);
+        let ret = ParseNote(targetPost);
+        console.log('GPostDialog ret', targetPost, ret);
         return () => { }
     }, [targetPost])
 
     // console.log('GPostDialog', targetPost);
     const postContext = async () => {
         let ret = ParseNote(targetPost);
-        console.log('GPostDialog ret', ret);
         if (ret.root_note_id === 0) {
             let event = await textNotrPro.sendPost(text);
             System.BroadcastEvent(event, (tag, client, msg) => {
                 console.log('post tag', tag, msg);
             });
         } else {
-            if (ret.reply_note_id === 0) {
-                //reply main note
-                let event = await textNotrPro.sendReplyToRoot(text, targetPost.id, targetPost.pubkey);
+            if (ret.root_note_id !== 0 && ret.reply_note_id === 0) {
+                //reply root note
+                let event = await textNotrPro.sendReplyToRoot(text, ret.root_note_id, ret.root_note_p);
                 System.BroadcastEvent(event, (tag, client, msg) => {
                     console.log('post tag', tag, msg);
                 });
-            } else {
-                let reply_pubkey = 0;
-                let event = await textNotrPro.sendReplyToNoRoot(text, targetPost.id, targetPost.pubkey, ret.reply_note_id, reply_pubkey);
+            } else if (ret.root_note_id !== 0 && ret.reply_note_id !== 0) {
+                let event = await textNotrPro.sendReplyToNoRoot(text, ret.root_note_id, ret.root_note_p, targetPost.id, targetPost.pubkey);
                 System.BroadcastEvent(event, (tag, client, msg) => {
                     console.log('post tag', tag, msg);
                 });

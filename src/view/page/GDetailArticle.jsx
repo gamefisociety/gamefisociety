@@ -82,6 +82,7 @@ function GDetailArticle() {
             justifyContent: "flex-start",
           }}
           onClick={() => {
+            console.log("sdkfsdjkfjsdkfjds");
             navigate(-1);
           }}
         >

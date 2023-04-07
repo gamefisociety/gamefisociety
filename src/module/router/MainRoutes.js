@@ -5,14 +5,11 @@ import Loadable from "components/Loadable";
 import MainLayout from "view/layout/MainLayout";
 import KeepAlive from "react-activation";
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
-const GFTHomeMeta = Loadable(lazy(() => import("view/meta/GFTHomeMeta")));
+const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
 const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
 // const GFTNFTDetail = Loadable(lazy(() => import("view/home/GFTNFTDetail")));
-const GFTCreateProject = Loadable(
-  lazy(() => import("view/home/GFTCreateProject"))
-);
 const GFTMintNFT = Loadable(lazy(() => import("view/home/GFTMintNFT")));
 const GHall = Loadable(lazy(() => import("view/page/GHall")));
 const GUserHome = Loadable(lazy(() => import("view/page/GUserHome")));
@@ -33,23 +30,13 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <GFTGlobal />,
+    },
+    {
+      path: '/meta',
     },
     {
       path: "/home",
       element: <GFTHomeView />,
-    },
-    {
-      path: "/meta",
-      element: <GFTHomeMeta />,
-    },
-    // {
-    //   path: "/detail",
-    //   element: <GFTNFTDetail />,
-    // },
-    {
-      path: "/create_project",
-      element: <GFTCreateProject />,
     },
     {
       path: "/hall",
