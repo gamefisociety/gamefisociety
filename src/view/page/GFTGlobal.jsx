@@ -58,13 +58,11 @@ const GFTGlobal = () => {
     };
   }, [data, isMore]);
 
-  //
   useEffect(() => {
-    if (curCreateAt === 0) {
-      getNoteList();
-    }
+    gNoteCache.clear();
+    getNoteList(0);
     return () => { };
-  }, [curCreateAt]);
+  }, [curSubjectIndex]);
 
   useEffect(() => {
     if (account) {
@@ -162,38 +160,30 @@ const GFTGlobal = () => {
       window.innerHeight + document.documentElement.scrollTop >
       document.scrollingElement.scrollHeight - 50
     ) {
-      getNoteList();
+      getNoteList(gNoteCache.minTime());
     }
   };
 
-  const getNoteList = () => {
+  const getNoteList = (tim) => {
     //build sub
     const filterTextNote = textNotePro.get();
-    if (curCreateAt === 0) {
-      gNoteCache.clear();
+    if (tim === 0) {
       filterTextNote.until = Date.now();
     } else {
       setMore(true);
-      filterTextNote.until = curCreateAt;
+      filterTextNote.until = tim;
     }
     filterTextNote.limit = 50;
     //add t tag
-    // const [sbujects, setSubjects] = useState([]);
-    // const [curSubjectIndex, setCurSubjectIndex] = useState(0);
-
-    console.log('getNoteList', subjects);
-    // if (sbujects[curSubjectIndex]) {
-    //   console.log('getNoteList', sbujects[curSubjectIndex]);
-    //   // filterTextNote['#t'] = []
-    // }
-    // filterTextNote['#t'] = []
-    //request
+    if (curSubjectIndex !== -1 && subjects[curSubjectIndex]) {
+      filterTextNote['#t'] = [subjects[curSubjectIndex].name];
+    }
     let subTextNode = BuildSub("global-textnode", [filterTextNote]);
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
-    console.log("fetch_global_notes", targetAddr);
+    // console.log("fetch_global_notes", targetAddr);
     nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
-      // console.log('fetch_global_notes', data);
+      console.log('fetch_global_notes', curSubjectIndex, subTextNode, data);
       setData(data.concat());
       const pubkeys = [];
       data.map((item) => {

@@ -22,6 +22,15 @@ export const BuildSub = (subname, filters) => {
         if (f['#p']) {
             newF['#p'] = f['#p'];
         }
+        if (f['#t']) {
+            newF['#t'] = f['#t'];
+        }
+        if (f['#g']) {
+            newF['#g'] = f['#g'];
+        }
+        if (f['#r']) {
+            newF['#r'] = f['#r'];
+        }
         if (f['since']) {
             newF['since'] = f['since'];
         }
