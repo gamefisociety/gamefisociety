@@ -55,14 +55,7 @@ function GDetailArticle() {
 
   return (
     <Box
-      sx={{
-        width: "960px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        marginTop: "24px",
-      }}
+      className={"container"}
     >
       <Box
         sx={{

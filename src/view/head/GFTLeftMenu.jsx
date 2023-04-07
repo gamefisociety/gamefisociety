@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { withAliveScope, useAliveController } from 'react-activation'
 import {
     isCheckIn,
     setOpenCheckIn,
@@ -132,6 +133,7 @@ const mapData = [
 ];
 
 const GFTLeftMenu = () => {
+    const { drop, dropScope, clear, refresh, getCachingNodes } = useAliveController()
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const dispatch = useDispatch();
@@ -175,13 +177,17 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'PROJECTS') {
+            // dropScope('ProjectsCache');
+            // clear();
+            // console.log(getCachingNodes());
             navigate('/projects');
-            openMainContent();
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
             navigate('/newspage');
         } else if (item.txt === 'ARTICLES') {
+            // dropScope('ArticlesCache');
+            // clear();
             navigate('/articles');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
