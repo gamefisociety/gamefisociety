@@ -169,14 +169,16 @@ const GFTGlobal = () => {
   }
 
   const renderContent = () => {
+
     return (
-      <List sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}>
+      <div className="global_content" >
+   
         {data.map((item, index) => {
           return (
             <GCardNote key={"global-note-" + index} note={{ ...item }} />
           );
         })}
-      </List>
+      </div>
     );
   };
 

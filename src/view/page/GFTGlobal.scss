@@ -3,6 +3,7 @@
     min-height: calc( 100vh - 64px ) ;
     background-color: rgba(27, 27, 27, 0.95);
     pointer-events: all;
+    box-sizing: border-box;
 
     .global_head {
         display: flex;
@@ -23,6 +24,16 @@
             margin-right: 24px;
             height: 24px;
         }
+    }
+
+    .global_content{
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-sizing: border-box;
+        background-color: transparent;
     }
 
     .global_lables {
