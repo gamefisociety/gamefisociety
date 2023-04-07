@@ -8,8 +8,6 @@ import GMetaGround from './GMetaGround';
 import GMetaCamera from './GMetaCamera';
 import GMetaFriend from './GMetaFriend';
 
-import { createFriends, updateFriends, addFriends } from 'view/meta/GMetaFriend';
-
 const GFTHomeMeta = () => {
 
     const metaLightRef = useRef(null);
@@ -51,12 +49,6 @@ const GFTHomeMeta = () => {
             metaFriendRef.current.render(dt, scene);
         }
     }
-
-    // useEffect(() => {
-    //     if (metaFriendRef.current && metaFriendRef.current.init) {
-    //         metaFriendRef.current.addFriend(follows);
-    //     }
-    // }, [follows]);
 
     return <GMetaBase
         canvasId="babylon-canvas"
