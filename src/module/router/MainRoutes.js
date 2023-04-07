@@ -3,9 +3,9 @@ import { lazy } from "react";
 // project import
 import Loadable from "components/Loadable";
 import MainLayout from "view/layout/MainLayout";
-
+import KeepAlive from "react-activation";
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
-const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
+const GFTHomeMeta = Loadable(lazy(() => import("view/meta/GFTHomeMeta")));
 const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
@@ -40,7 +40,7 @@ const MainRoutes = {
       element: <GFTHomeView />,
     },
     {
-      path: '/meta',
+      path: "/meta",
       element: <GFTHomeMeta />,
     },
     // {
@@ -65,7 +65,15 @@ const MainRoutes = {
     },
     {
       path: "/projects",
-      element: <GProjects />,
+      element: (
+        <KeepAlive
+          cacheKey="ProjectsCache_ID"
+          name="ProjectsCache"
+          when={() => true}
+        >
+          <GProjects />
+        </KeepAlive>
+      ),
     },
     {
       path: "/detailproject",
@@ -97,7 +105,15 @@ const MainRoutes = {
     },
     {
       path: "/articles",
-      element: <GArticles />,
+      element: (
+        <KeepAlive
+          cacheKey="ArticlesCache_ID"
+          name="ArticlesCache"
+          when={() => true}
+        >
+          <GArticles />
+        </KeepAlive>
+      ),
     },
     {
       path: "/detailarticle",

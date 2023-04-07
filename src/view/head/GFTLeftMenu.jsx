@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { withAliveScope, useAliveController } from 'react-activation'
 import {
     isCheckIn,
     setOpenCheckIn,
@@ -133,6 +134,7 @@ const mapData = [
 ];
 
 const GFTLeftMenu = () => {
+    const { drop, dropScope, clear, refresh } = useAliveController()
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const { isOpenMenuLeft, isMainContent } = useSelector(s => s.dialog);
@@ -178,6 +180,8 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'PROJECTS') {
+            dropScope('ProjectsCache');
+            // clear();
             navigate('/projects');
             openMainContent();
         } else if (item.txt === 'VIDEOS') {
@@ -185,7 +189,9 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'NEWS') {
             navigate('/newspage');
         } else if (item.txt === 'ARTICLES') {
+            dropScope('ArticlesCache')
             navigate('/articles');
+            openMainContent();
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
         } else if (item.txt === 'GROUP CHAT') {
