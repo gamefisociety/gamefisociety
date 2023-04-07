@@ -33,20 +33,14 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <GFTGlobal />,
+    },
+    {
+      path: '/meta',
     },
     {
       path: "/home",
       element: <GFTHomeView />,
     },
-    {
-      path: '/meta',
-      element: <GFTHomeMeta />,
-    },
-    // {
-    //   path: "/detail",
-    //   element: <GFTNFTDetail />,
-    // },
     {
       path: "/create_project",
       element: <GFTCreateProject />,

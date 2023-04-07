@@ -12,6 +12,7 @@ const GListenDM = (props) => {
   const chatPro = useChatPro();
 
   const createSub = () => {
+    //get one month dms
     const filterDM = chatPro.getDM(pubkey);
     let subListenDM = BuildSub("listen_chat_dm", [filterDM]);
     return subListenDM;
