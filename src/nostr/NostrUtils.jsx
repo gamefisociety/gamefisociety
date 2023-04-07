@@ -52,6 +52,7 @@ export const ParseNote = (note) => {
         reply_note_id: 0,
         reply_note_p: 0,
         local_note: 0,
+        local_p: 0,
         eNum: 0,
         pNum: 0,
         eArray: [],
@@ -61,31 +62,31 @@ export const ParseNote = (note) => {
         return ret;
     }
     ret.local_note = note.id;
+    ret.local_p = note.pubkey;
     if (note.tags?.length === 0) {
         ret.root_note_id = note.id;
-        ret.local_note = 0;
+        ret.root_note_p = note.pubkey;
     } else {
-        note.tags?.map(item => {
+        note.tags?.map((item, index) => {
             if (item[0] === 'e') {
                 ret.eNum = ret.eNum + 1;
-                ret.eArray.push(item[1]);
-                if (item[3] && item[3] === 'root') {
-                    ret.root_note_id = item[1];
-                }
-                if (item[3] && item[3] === 'reply') {
-                    ret.reply_note_id = item[1];
-                }
+                ret.eArray.push(item);
             } else if (item[0] === 'p') {
                 ret.pNum = ret.pNum + 1;
-                ret.pArray.push(item[1]);
+                ret.pArray.push(item);
             }
         });
         //
-        if (ret.eNum === 1 && ret.reply_note_id === 0) {
-            ret.reply_note_id = ret.eArray[0];
-        } else if (ret.eNum === 2 && ret.root_note_id === 0 && ret.reply_note_id === 0) {
-            ret.root_note_id = ret.eArray[0];
-            ret.reply_note_id = ret.eArray[1];
+        if (ret.eNum === 1) {
+            ret.root_note_id = ret.eArray[0][1];
+            ret.root_note_p = ret.pArray[0][1];
+            ret.reply_note_id = note.id;
+            ret.reply_note_p = note.pubkey;
+        } else if (ret.eNum === 2) {
+            ret.root_note_id = ret.eArray[0][1];
+            ret.root_note_p = ret.pArray[0][1];
+            ret.reply_note_id = ret.eArray[1][1];
+            ret.reply_note_p = ret.pArray[1][1];
         }
     }
     return ret;

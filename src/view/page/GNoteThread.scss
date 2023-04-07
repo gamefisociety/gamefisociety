@@ -5,6 +5,21 @@
     z-index: 0;
     padding-bottom: 64px;
 
+    .note_out {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .note_in {
+        width: 80%;
+        border: 1;
+        border-color: white;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        flex-direction: column;
+    }
+
+
     .back {
         cursor: pointer;
         position: absolute;
