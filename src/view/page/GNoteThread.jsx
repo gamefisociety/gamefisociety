@@ -55,7 +55,9 @@ const GNoteThread = () => {
             let tmpNoteIds = []
             datas.map((item) => {
                 TLCache.pushThreadNote(item);
-                tmpNoteIds.push(item.id);
+                if (item.id !== rootNodeId || item.id !== replyNoteId) {
+                    tmpNoteIds.push(item.id);
+                }
             });
             let no_re_note_ids = new Set([...tmpNoteIds]);
             setNotesRoot(Array.from(no_re_note_ids));
@@ -110,6 +112,9 @@ const GNoteThread = () => {
         if (!noteRet || noteRet.root_note_id === 0) {
             return null;
         }
+        if (noteRet.reply_note_id !== 0) {
+            return null;
+        }
         if (notesRoot.length === 0) {
             return <Typography sx={{ width: '100%' }} align={"center"} color={'#656565'}>{'No Replies'}</Typography>
         }
@@ -133,12 +138,15 @@ const GNoteThread = () => {
         if (!noteRet || noteRet.reply_note_id === 0) {
             return null;
         }
+        // if (noteRet.reply_note_id === noteRet.local_note) {
+        //     return null;
+        // }
         let targetNote = TLCache.getThreadNote(noteRet.reply_note_id);
         if (targetNote === null) {
             return null;
         }
         return (
-            <Stack className={'note_out'}>
+            <Stack className={noteRet.reply_note_id === noteRet.local_note ? 'note_in' : 'note_out'}>
                 <GCardNote note={{ ...targetNote }} />
             </Stack>
         );
