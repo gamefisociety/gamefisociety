@@ -179,7 +179,7 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'PROJECTS') {
             // dropScope('ProjectsCache');
-            // clear();
+            clear();
             // console.log(getCachingNodes());
             navigate('/projects');
         } else if (item.txt === 'VIDEOS') {
@@ -188,7 +188,7 @@ const GFTLeftMenu = () => {
             navigate('/newspage');
         } else if (item.txt === 'ARTICLES') {
             // dropScope('ArticlesCache');
-            // clear();
+            clear();
             navigate('/articles');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');

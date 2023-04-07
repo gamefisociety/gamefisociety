@@ -53,6 +53,7 @@ const MainRoutes = {
           <GFTGlobal />
         </KeepAlive>
       ),
+      // element: <GFTGlobal />,
     },
     {
       path: "/post-reply",
