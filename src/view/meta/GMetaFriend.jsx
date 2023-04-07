@@ -139,8 +139,8 @@ const GMetaFriend = forwardRef((props, ref) => {
                 mat.alpha = 1.0;
                 mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
                 var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", curScene);
-                // mat.diffuseTexture = texture;
-                mat.emissiveTexture = texture;
+                mat.diffuseTexture = texture;
+                // mat.emissiveTexture = texture;
                 ent.mesh.material = mat;
                 // followers_ent_map.set(ent_name, ent);
                 createLabel(ent);
@@ -159,8 +159,8 @@ const GMetaFriend = forwardRef((props, ref) => {
         //
         if (ent.mesh && ent.mesh.material) {
             var texture = new Texture(profile.picture, curScene);
-            //ent.mesh.material.diffuseTexture = texture;
-            ent.mesh.material.emissiveTexture = texture;
+            ent.mesh.material.diffuseTexture = texture;
+            // ent.mesh.material.emissiveTexture = texture;
         }
     }
 
