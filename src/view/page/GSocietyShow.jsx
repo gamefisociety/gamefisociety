@@ -20,7 +20,6 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
-import { setMainContent } from 'module/store/features/dialogSlice';
 
 import UserDataCache from 'db/UserDataCache';
 
@@ -151,12 +150,9 @@ const GSocietyShow = (props) => {
               }
               disablePadding
             >
-              <ListItemButton
-                sx={{ my: "2px", alignItems: "start" }}
-              >
+              <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
                 <ListItemAvatar
                   onClick={() => {
-                    dispatch(setMainContent(true));
                     navigate("/userhome:" + tmp_pubkey, { state: { pubkey: tmp_pubkey } });
                     if (callback) {
                       callback();

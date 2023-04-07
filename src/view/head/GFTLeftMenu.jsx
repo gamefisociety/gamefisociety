@@ -8,7 +8,6 @@ import {
     isCheckIn,
     setOpenCheckIn,
     setIsOpen,
-    setMainContent,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
@@ -135,7 +134,6 @@ const mapData = [
 const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft, isMainContent } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -145,14 +143,13 @@ const GFTLeftMenu = () => {
     }, [])
 
     const openMainContent = () => {
-        dispatch(setMainContent(true));
+        //
     }
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
         } else if (item.txt === 'META(beta)') {
-            dispatch(setMainContent(false));
             navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {

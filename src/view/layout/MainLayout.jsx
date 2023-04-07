@@ -37,7 +37,6 @@ const MainLayout = () => {
     chatPubKey,
     chatProfile,
     isBottomDrawer,
-    isMainContent,
     bottomPage,
     isRightDrawer,
     rightPage,
