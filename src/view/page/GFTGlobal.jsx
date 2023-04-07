@@ -300,7 +300,7 @@ const GFTGlobal = () => {
     );
   };
 
-  const renderSujuectDialog = () => {
+  const renderSubjectDialog = () => {
     return (
       <Dialog open={dislogOpen} onClose={handleClose}>
         <Box
@@ -375,7 +375,7 @@ const GFTGlobal = () => {
       {renderLables()}
       {renderGlobalHead()}
       {renderContent()}
-      {renderSujuectDialog()}
+      {renderSubjectDialog()}
     </Paper>
   );
 };
