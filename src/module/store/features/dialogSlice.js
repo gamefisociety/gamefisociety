@@ -15,7 +15,6 @@ const initialState = {
   rightPage: null,
   isDrawer: false,
   isPost: false,
-  isMainContent: false,
   targetPost: null,
   //
   placeDrawer: 'right',
@@ -93,10 +92,6 @@ export const dialogSlice = createSlice({
       state.isRightDrawer = action.payload.rightDrawer;
       state.rightPage = action.payload.page;
     },
-    setMainContent: (state, action) => {
-      state.isMainContent = action.payload;
-    }
-
   },
 
   extraReducers: (builder) => {
@@ -125,7 +120,6 @@ export const {
   setChatDrawer,
   setBottomDrawer,
   setRightDrawer,
-  setMainContent
 }
   = dialogSlice.actions;
 

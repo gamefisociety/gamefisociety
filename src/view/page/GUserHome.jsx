@@ -108,8 +108,8 @@ const GUserHome = () => {
         }}
       >
         <Box
-          className={"goback"}
           sx={{
+            cursor: "pointer",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",

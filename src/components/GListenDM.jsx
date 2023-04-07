@@ -7,11 +7,12 @@ import { addDirectMessage } from 'module/store/features/societySlice';
 //
 const GListenDM = (props) => {
   const { logout, pubkey } = props;
-  const { dms } = useSelector((s) => s.society);
-  const dispatch = useDispatch();
+  // const { dms } = useSelector((s) => s.society);
+  // const dispatch = useDispatch();
   const chatPro = useChatPro();
 
   const createSub = () => {
+    //get one month dms
     const filterDM = chatPro.getDM(pubkey);
     let subListenDM = BuildSub("listen_chat_dm", [filterDM]);
     return subListenDM;
@@ -21,7 +22,7 @@ const GListenDM = (props) => {
   const listenSub = (sub) => {
     System.BroadcastSub(sub, (tag, client, msg) => {
       console.log('listenSub msg', msg);
-      dispatch(addDirectMessage(msg));
+      // dispatch(addDirectMessage(msg));
     })
   }
 

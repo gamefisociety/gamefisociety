@@ -47,7 +47,7 @@ function GDetailProject() {
     <div className="project_detail_bg">
       <Box
         sx={{
-          width: "960px",
+          width: "100%",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",

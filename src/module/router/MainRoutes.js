@@ -3,16 +3,13 @@ import { lazy } from "react";
 // project import
 import Loadable from "components/Loadable";
 import MainLayout from "view/layout/MainLayout";
-
+import KeepAlive from "react-activation";
 const GFTHomeView = Loadable(lazy(() => import("view/home/GFTHomeView")));
-const GFTHomeMeta = Loadable(lazy(() => import('view/meta/GFTHomeMeta')));
+const GFTHomeMeta = Loadable(lazy(() => import("view/meta/GFTHomeMeta")));
 const GProjects = Loadable(lazy(() => import("view/page/GProjects")));
 const GNewsPage = Loadable(lazy(() => import("view/page/GNewsPage")));
 const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
 // const GFTNFTDetail = Loadable(lazy(() => import("view/home/GFTNFTDetail")));
-const GFTCreateProject = Loadable(
-  lazy(() => import("view/home/GFTCreateProject"))
-);
 const GFTMintNFT = Loadable(lazy(() => import("view/home/GFTMintNFT")));
 const GHall = Loadable(lazy(() => import("view/page/GHall")));
 const GUserHome = Loadable(lazy(() => import("view/page/GUserHome")));
@@ -33,23 +30,13 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <GFTGlobal />,
+    },
+    {
+      path: "/meta",
     },
     {
       path: "/home",
       element: <GFTHomeView />,
-    },
-    {
-      path: '/meta',
-      element: <GFTHomeMeta />,
-    },
-    // {
-    //   path: "/detail",
-    //   element: <GFTNFTDetail />,
-    // },
-    {
-      path: "/create_project",
-      element: <GFTCreateProject />,
     },
     {
       path: "/hall",
@@ -57,7 +44,16 @@ const MainRoutes = {
     },
     {
       path: "/global",
-      element: <GFTGlobal />,
+      element: (
+        <KeepAlive
+          cacheKey="GlobalCache_ID"
+          name="GlobalCache"
+          when={() => true}
+        >
+          <GFTGlobal />
+        </KeepAlive>
+      ),
+      // element: <GFTGlobal />,
     },
     {
       path: "/post-reply",
@@ -65,7 +61,15 @@ const MainRoutes = {
     },
     {
       path: "/projects",
-      element: <GProjects />,
+      element: (
+        <KeepAlive
+          cacheKey="ProjectsCache_ID"
+          name="ProjectsCache"
+          when={() => true}
+        >
+          <GProjects />
+        </KeepAlive>
+      ),
     },
     {
       path: "/detailproject",
@@ -97,7 +101,15 @@ const MainRoutes = {
     },
     {
       path: "/articles",
-      element: <GArticles />,
+      element: (
+        <KeepAlive
+          cacheKey="ArticlesCache_ID"
+          name="ArticlesCache"
+          when={() => true}
+        >
+          <GArticles />
+        </KeepAlive>
+      ),
     },
     {
       path: "/detailarticle",

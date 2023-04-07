@@ -3,6 +3,7 @@
     width: 760px;
     background-color: rgba(27, 27, 27, 0.95);
     z-index: 0;
+    pointer-events: all;
 
     .post_menu {
         position: fixed;

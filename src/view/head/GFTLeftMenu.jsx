@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { withAliveScope, useAliveController } from 'react-activation'
 import {
     isCheckIn,
     setOpenCheckIn,
     setIsOpen,
-    setMainContent,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
 import './GFTLeftMenu.scss';
@@ -133,9 +133,9 @@ const mapData = [
 ];
 
 const GFTLeftMenu = () => {
+    const { drop, dropScope, clear, refresh, getCachingNodes } = useAliveController()
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
-    const { isOpenMenuLeft, isMainContent } = useSelector(s => s.dialog);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -145,14 +145,13 @@ const GFTLeftMenu = () => {
     }, [])
 
     const openMainContent = () => {
-        dispatch(setMainContent(true));
+        //
     }
 
     const clickMenu = (item) => {
         if (item.txt === 'HOME') {
             navigate('/home');
         } else if (item.txt === 'META(beta)') {
-            dispatch(setMainContent(false));
             navigate('/meta');
         } else if (item.txt === 'CHECK IN') {
             if (account) {
@@ -161,6 +160,7 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
+            clear();
             navigate('/global');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
@@ -178,13 +178,17 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'PROJECTS') {
+            // dropScope('ProjectsCache');
+            clear();
+            // console.log(getCachingNodes());
             navigate('/projects');
-            openMainContent();
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
             navigate('/newspage');
         } else if (item.txt === 'ARTICLES') {
+            // dropScope('ArticlesCache');
+            clear();
             navigate('/articles');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');

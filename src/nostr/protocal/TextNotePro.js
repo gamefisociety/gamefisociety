@@ -41,14 +41,23 @@ export const useTextNotePro = () => {
       return await nostrEvent.Sign(privateKey, ev);
 
     },
-    sendReply: async (cxt, targetEvId, targetPubkey) => {
+    sendReplyToRoot: async (cxt, targetEvId, targetPubkey) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.TextNote;
       ev.Content = cxt;
       ev.Tags.push(['e', targetEvId]);
       ev.Tags.push(['p', targetPubkey]);
       return await nostrEvent.Sign(privateKey, ev);
-
+    },
+    sendReplyToNoRoot: async (cxt, targetEvId, targetPubkey, replyEvId, replyPubkey) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.TextNote;
+      ev.Content = cxt;
+      ev.Tags.push(['e', targetEvId, '', 'root']);
+      ev.Tags.push(['e', replyEvId, '', 'reply']);
+      ev.Tags.push(['p', targetPubkey]);
+      ev.Tags.push(['p', replyPubkey]);
+      return await nostrEvent.Sign(privateKey, ev);
     },
   }
 }

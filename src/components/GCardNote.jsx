@@ -216,7 +216,7 @@ const GCardNote = (props) => {
             <Typography className="level2_lable" sx={{ ml: "12px" }}>
               {username()}
             </Typography>
-            <Typography className="level2_lable" sx={{ ml: "12px" }}>
+            <Typography className="level2_lable_unhover" sx={{ ml: "12px" }}>
               {xhelp.formateSinceTime(note.created_at * 1000)}
             </Typography>
           </Stack>

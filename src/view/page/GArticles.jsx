@@ -302,7 +302,7 @@ function GArticles() {
         alignItems: "flex-start",
         justifyContent: "flex-start",
         pointerEvents: "all",
-        backgroundColor: "rgba(0, 0, 0, 0.708)",
+        backgroundColor: "rgba(27, 27, 27, 0.95)",
       }}
     >
       {renderTop()}

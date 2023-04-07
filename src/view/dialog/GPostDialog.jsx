@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Upload from 'components/buttons/Upload';
-
+import { ParseNote } from 'nostr/NostrUtils';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
 
@@ -26,25 +26,45 @@ const GPostDialog = () => {
     const textNotrPro = useTextNotePro();
 
     useEffect(() => {
-        return () => {
-        }
-    }, [])
-
-    
+        // console.log('GPostDialog', targetPost);
+        let ret = ParseNote(targetPost);
+        console.log('GPostDialog ret', targetPost, ret);
+        return () => { }
+    }, [targetPost])
 
     // console.log('GPostDialog', targetPost);
     const postContext = async () => {
-        if (targetPost === null) {
+        let ret = ParseNote(targetPost);
+        if (ret.root_note_id === 0) {
             let event = await textNotrPro.sendPost(text);
             System.BroadcastEvent(event, (tag, client, msg) => {
                 console.log('post tag', tag, msg);
             });
         } else {
-            let event = await textNotrPro.sendReply(text, targetPost.id, targetPost.pubkey);
-            System.BroadcastEvent(event, (tag, client, msg) => {
-                console.log('post tag', tag, msg);
-            });
+            if (ret.root_note_id !== 0 && ret.reply_note_id === 0) {
+                //reply root note
+                let event = await textNotrPro.sendReplyToRoot(text, ret.root_note_id, ret.root_note_p);
+                System.BroadcastEvent(event, (tag, client, msg) => {
+                    console.log('post tag', tag, msg);
+                });
+            } else if (ret.root_note_id !== 0 && ret.reply_note_id !== 0) {
+                let event = await textNotrPro.sendReplyToNoRoot(text, ret.root_note_id, ret.root_note_p, targetPost.id, targetPost.pubkey);
+                System.BroadcastEvent(event, (tag, client, msg) => {
+                    console.log('post tag', tag, msg);
+                });
+            }
         }
+        // if (targetPost === null) {
+        //     let event = await textNotrPro.sendPost(text);
+        //     System.BroadcastEvent(event, (tag, client, msg) => {
+        //         console.log('post tag', tag, msg);
+        //     });
+        // } else {
+        //     let event = await textNotrPro.sendReply(text, targetPost.id, targetPost.pubkey);
+        //     System.BroadcastEvent(event, (tag, client, msg) => {
+        //         console.log('post tag', tag, msg);
+        //     });
+        // }
     }
 
     const renderHeader = () => {
@@ -60,10 +80,10 @@ const GPostDialog = () => {
         </Box>;
     }
 
-   const setProfileAttribute = (key, value) => {
+    const setProfileAttribute = (key, value) => {
         key = key.trim();
-        console.log(key,value);
-        let  content =text+"\n"+value;
+        console.log(key, value);
+        let content = text + "\n" + value;
         setText(content);
     }
 

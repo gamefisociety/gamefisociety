@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
@@ -165,7 +164,18 @@ const GProjects = () => {
 
   const renderWaittingCards = () => {
     return (
-      <Box className={"project_card_contain"}>
+      <Box
+        sx={{
+          paddingTop: "24px",
+          paddingLeft: "24px",
+          paddingRight: "24px",
+          width: "calc( 100% - 48px)",
+          display: "flex",
+          flexWrap: "wrap",
+          gridGap: "32px",
+          gap: "32px",
+        }}
+      >
         {waittingDatas.map((item, index) => {
           return (
             <Stack
@@ -174,13 +184,14 @@ const GProjects = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "flex-start",
+                width:" calc( 33% - 22.5px ) !important"
               }}
               key={"project_waitting_" + index}
               spacing={1}
             >
               <Skeleton variant="circular" width={60} height={60} />
-              <Skeleton variant="rectangular" width={214} height={60} />
-              <Skeleton variant="rounded" width={214} height={60} />
+              <Skeleton variant="rectangular" width={"100%"} height={60} />
+              <Skeleton variant="rounded" width={"100%"} height={60} />
             </Stack>
           );
         })}
@@ -198,7 +209,7 @@ const GProjects = () => {
         alignItems: "flex-start",
         justifyContent: "flex-start",
         pointerEvents: "all",
-        backgroundColor: "rgba(0, 0, 0, 0.708)",
+        backgroundColor: "rgba(27, 27, 27, 0.95)",
       }}
     >
       {renderTop()}
