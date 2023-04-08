@@ -13,6 +13,8 @@ import UserNoteCache from "db/UserNoteCache";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useFollowPro } from "nostr/protocal/FollowPro";
+import { useRepostPro } from "nostr/protocal/RepostPro";
+import { useReactionPro } from "nostr/protocal/ReactionPro";
 import { BuildSub } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
 import icon_back from "../../asset/image/social/icon_back.png";
@@ -35,6 +37,8 @@ const GUserHome = () => {
   const textNotePro = useTextNotePro();
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
+  const repostPro = useRepostPro();
+  const reactionPro = useReactionPro();
   //
   const fetchTextNote = (pub) => {
     const filterMeta = MetaPro.get(pubkey);
@@ -42,12 +46,15 @@ const GUserHome = () => {
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
+    const filterRepostPro = repostPro.get(pub);
+    const filterReactionPro = reactionPro.get(pub);
     let profileNote = BuildSub("profile_note", [
       filterMeta,
       filterTextNote,
       filterFollowPro,
+      filterRepostPro,
+      filterReactionPro,
     ]);
-    //
     let metadata_time = 0;
     let contactlist = null;
     nostrWorker.fetch_user_profile(profileNote, null, (data, client) => {
@@ -64,6 +71,16 @@ const GUserHome = () => {
         } else if (item.kind === EventKind.TextNote) {
           //push in cache
           user_note_cache.pushNote(item.pubkey, item);
+          //
+        } else if (item.kind === EventKind.Repost) {
+          //push in cache
+          console.log('fetch_user_profile Repost', item);
+          // user_note_cache.pushNote(item.pubkey, item);
+          //
+        } else if (item.kind === EventKind.Reaction) {
+          //push in cache
+          console.log('fetch_user_profile Reaction', item);
+          // user_note_cache.pushNote(item.pubkey, item);
           //
         } else if (item.kind === EventKind.ContactList) {
           if (contactlist === null || contactlist.created_at < item.created_at) {
@@ -140,7 +157,17 @@ const GUserHome = () => {
         ownRelays={ownRelays}
       />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
-        {notes.map((item, index) => (<GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />))}
+        {notes.map((item, index) => {
+          console.log('userhome-note-index', item);
+          if (item.kind === EventKind.TextNote) {
+            return <GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />;
+          } else if (item.kind === EventKind.Repost) {
+
+          } else {
+            return null;
+          }
+
+        })}
       </List>
     </Box>
   );
