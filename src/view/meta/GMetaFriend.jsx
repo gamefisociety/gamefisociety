@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import UserDataCache from 'db/UserDataCache';
+import { EventEmitter } from 'events';
 
 import {
     MeshBuilder,
@@ -20,6 +21,8 @@ let curScene = null;
 let followers_gui = null;
 let follower_main = null;
 let followers_ent = new Map();
+
+const eventBus = new EventEmitter();
 
 const GMetaFriend = forwardRef((props, ref) => {
 
@@ -171,6 +174,17 @@ const GMetaFriend = forwardRef((props, ref) => {
         }
     ));
 
+    const msg_follow_procer = (param) => {
+        console.log('msg_follow_procer', param);
+    }
+
+    useEffect(() => {
+        eventBus.addListener("msg_follow_procer", msg_follow_procer);
+        return () => {
+            eventBus.removeListener("msg_follow_procer", msg_follow_procer);
+        }
+    }, []);
+
     useEffect(() => {
         addFriend(follows);
     }, [follows]);
@@ -183,5 +197,5 @@ const GMetaFriend = forwardRef((props, ref) => {
     return null;
 });
 
-export default GMetaFriend;
+export default React.memo(GMetaFriend);
 
