@@ -173,6 +173,7 @@ const GMetaFriend = forwardRef((props, ref) => {
         if (!ent) {
             return;
         }
+        //
         if (ent.label_name) {
             ent.label_name.text = profile.name;
         }

@@ -1,28 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardNoteRepost.scss";
-
 import { useSelector, useDispatch } from "react-redux";
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
-
 import { useNavigate } from "react-router-dom";
-
 import GCardNote from "components/GCardNote";
-
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { setPost } from 'module/store/features/dialogSlice';
-import { default_avatar } from "module/utils/xdef";
-import xhelp from "module/utils/xhelp";
-import Helpers from "../../src/view/utils/Helpers";
-
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { useFollowPro } from "nostr/protocal/FollowPro";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
-import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils"
 import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
@@ -34,7 +19,6 @@ const GCardNoteRepost = (props) => {
   const { note } = props;
   const [relaNote, setRelaNote] = useState(null);
   const [meta, setMeta] = useState(null);
-  const [replyMeta, setReplyMeta] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
