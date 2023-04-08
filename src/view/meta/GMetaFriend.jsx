@@ -119,7 +119,7 @@ const GMetaFriend = forwardRef((props, ref) => {
             console.log('onPointerClickObservable', event, ent);
             if (ent.pubkey !== '0') {
                 //
-                navigate("/userhome:" + ent.pubkey, { state: { pubkey: ent.pubkey } });
+                navigate("/userhome/" + ent.pubkey);
             }
             // label.scaleX = 1.0;
             // label.scaleY = 1.0;

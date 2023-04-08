@@ -90,7 +90,7 @@ const GCardNoteRepost = (props) => {
     <Card className={'card_note_repost_bg'} elevation={0}>
       <Box className={'repost_header'}
         onClick={() => {
-          navigate("/userhome:" + meta.pubkey, { state: { pubkey: meta.pubkey } });
+          navigate("/userhome/" + meta.pubkey);
         }}>
         <Box className="icon_trans" />
         <Typography className="level2_lable" sx={{ ml: "12px" }}>

@@ -189,7 +189,7 @@ const GSocietyDM = (props) => {
               >
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/userhome:" + pubkey, { state: { pubkey: pubkey } });
+                    navigate("/userhome/" + pubkey);
                     if (callback) {
                       callback();
                     }
@@ -249,7 +249,7 @@ const GSocietyDM = (props) => {
               <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/userhome:" + item.pubkey, { state: { pubkey: item.pubkey } });
+                    navigate("/userhome/" + item.pubkey);
                     if (callback) {
                       callback();
                     }

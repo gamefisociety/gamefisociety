@@ -184,7 +184,7 @@ const GSearch = () => {
               if (searchProp.nip19 === true) {
                 pub = parseId(searchProp.value);
               }
-              navigate("/userhome:" + pub, { state: { pubkey: pub } });
+              navigate("/userhome/" + pub);
               //
               searchProp.value = "";
               searchProp.open = false;

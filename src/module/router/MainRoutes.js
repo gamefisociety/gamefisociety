@@ -88,7 +88,7 @@ const MainRoutes = {
     //     element: <GFTMintNFT />,
     // },
     {
-      path: "/userhome:pubkey",
+      path: "/userhome/:pubkey",
       element: <GUserHome />,
     },
     {

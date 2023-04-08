@@ -153,7 +153,7 @@ const GSocietyShow = (props) => {
               <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
                 <ListItemAvatar
                   onClick={() => {
-                    navigate("/userhome:" + tmp_pubkey, { state: { pubkey: tmp_pubkey } });
+                    navigate("/userhome/" + tmp_pubkey);
                     if (callback) {
                       callback();
                     }

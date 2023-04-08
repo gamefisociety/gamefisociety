@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import "./GUserHome.scss";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
 import Box from "@mui/material/Box";
@@ -22,13 +22,11 @@ import icon_back from "../../asset/image/social/icon_back.png";
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
-const GUserHome = () => {
+const GUserHome = (props) => {
 
   const nostrWorker = useWorker(createNostrWorker);
-
-  const location = useLocation();
-  const { pubkey } = location.state;
-  console.log("GUserHome enter", pubkey);
+  const { pubkey } = useParams();
+  // console.log("GUserHome enter", pubkey);
   const navigate = useNavigate();
   const user_note_cache = UserNoteCache();
   const [info, setInfo] = useState(null);

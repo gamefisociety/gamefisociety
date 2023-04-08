@@ -174,7 +174,7 @@ const GCardNote = (props) => {
         </Typography>
         <Typography className="level3_lable" sx={{ ml: "12px" }} onClick={(event) => {
           console.log('navigate userhome', replyMeta.pubkey);
-          navigate("/userhome:" + replyMeta.pubkey, { state: { pubkey: replyMeta.pubkey } });
+          navigate("/userhome/" + replyMeta.pubkey);
           event.stopPropagation();
         }}>
           {'@' + showName}
@@ -194,7 +194,7 @@ const GCardNote = (props) => {
     <Card className={'card_note_bg'} elevation={0}>
       <Box className={'base_info'}
         onClick={() => {
-          navigate("/userhome:" + note.pubkey, { state: { pubkey: note.pubkey } });
+          navigate("/userhome/" + note.pubkey);
         }}>
         <Avatar
           className="avatar"
