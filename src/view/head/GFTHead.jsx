@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
+import "./GFTHead.scss";
+
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { useFollowPro } from "nostr/protocal/FollowPro";
-//
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import GSearch from 'components/GSearch';
@@ -36,10 +35,6 @@ import {
 } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
-
-
-import "./GFTHead.scss";
-
 import ic_logo from "../../asset/image/logo/ic_logo.png";
 import ic_massage from "../../asset/image/home/ic_massage.png";
 import ic_wallet from "../../asset/image/home/ic_wallet.png";
@@ -174,6 +169,33 @@ const GFTHead = () => {
     // setNotifycationNum(dms.length);
   }, [dms]);
 
+  const getAvatarPicture = () => {
+    if (profile && profile.picture && profile.picture !== "default") {
+      return profile.picture;
+    }
+    return default_avatar;
+  }
+
+  const getDisplayName = () => {
+    if (profile && profile.display_name) {
+      return profile.display_name;
+    }
+    if (publicKey !== "") {
+      return 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length)
+    }
+    return 'gfs';
+  }
+
+  const getName = () => {
+    if (profile && profile.name) {
+      return profile.name;
+    }
+    if (publicKey !== "") {
+      return '@' + publicKey.substring(publicKey.length - 4, publicKey.length)
+    }
+    return '@gfs';
+  }
+
   const renderUserMenu = (
     <React.Fragment>
       <Box
@@ -196,16 +218,7 @@ const GFTHead = () => {
             openUserHome();
           }}
         >
-          <Avatar
-            sx={{ width: "40px", height: "40px" }}
-            // edge="end"
-            alt="GameFi Society"
-            src={
-              profile.picture && profile.picture !== "default"
-                ? profile.picture
-                : default_avatar
-            }
-          />
+          <Avatar sx={{ width: "40px", height: "40px" }} alt="GameFi Society" src={getAvatarPicture()} />
           <Box
             sx={{
               position: "absolute",
@@ -227,12 +240,7 @@ const GFTHead = () => {
               }}
               color={"text.primary"}
             >
-              {profile.display_name
-                ? profile.display_name
-                : publicKey !== ""
-                  ? "Nostr#" +
-                  publicKey.substring(publicKey.length - 4, publicKey.length)
-                  : "gfs"}
+              {getDisplayName()}
             </Typography>
             <Typography
               sx={{
@@ -243,12 +251,7 @@ const GFTHead = () => {
               }}
               color={"text.secondary"}
             >
-              {profile.name
-                ? "@" + profile.name
-                : publicKey !== ""
-                  ? "@" +
-                  publicKey.substring(publicKey.length - 4, publicKey.length)
-                  : "gfs"}
+              {getName()}
             </Typography>
           </Box>
         </Box>
