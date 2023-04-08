@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
+import GCardNoteRepost from "components/GCardNoteRepost";
 import Typography from "@mui/material/Typography";
 import UserNoteCache from "db/UserNoteCache";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -75,7 +76,7 @@ const GUserHome = () => {
         } else if (item.kind === EventKind.Repost) {
           //push in cache
           console.log('fetch_user_profile Repost', item);
-          // user_note_cache.pushNote(item.pubkey, item);
+          user_note_cache.pushNote(item.pubkey, item);
           //
         } else if (item.kind === EventKind.Reaction) {
           //push in cache
@@ -158,15 +159,14 @@ const GUserHome = () => {
       />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => {
-          console.log('userhome-note-index', item);
+          // console.log('userhome-note-index', item);
           if (item.kind === EventKind.TextNote) {
             return <GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />;
           } else if (item.kind === EventKind.Repost) {
-
+            return <GCardNoteRepost key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />;
           } else {
             return null;
           }
-
         })}
       </List>
     </Box>
