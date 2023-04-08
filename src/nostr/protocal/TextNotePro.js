@@ -59,5 +59,11 @@ export const useTextNotePro = () => {
       ev.Tags.push(['p', replyPubkey]);
       return await nostrEvent.Sign(privateKey, ev);
     },
+    getRepostTarget: (pubkey) => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.Repost];
+      filter.authors = [pubkey]
+      return filter;
+    },
   }
 }

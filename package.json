@@ -34,6 +34,7 @@
     "bech32": "^2.0.0",
     "buffer": "^6.0.3",
     "copy-to-clipboard": "^3.3.3",
+    "events": "^3.3.0",
     "fslightbox-react": "^1.6.2-2",
     "ipfs-http-client": "^60.0.0",
     "jquery": "^3.6.4",
