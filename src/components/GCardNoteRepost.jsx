@@ -89,7 +89,6 @@ const GCardNoteRepost = (props) => {
     return () => { };
   }, [note]);
 
-
   const username = () => {
     let tmp_user_name = '@anonymous';
     if (meta && meta.content !== '') {

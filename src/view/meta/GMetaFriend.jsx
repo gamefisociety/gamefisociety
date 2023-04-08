@@ -1,7 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 import { useSelector } from "react-redux";
-import UserDataCache from 'db/UserDataCache';
+import { useNavigate } from "react-router-dom";
 import { EventEmitter } from 'events';
+
+import UserDataCache from 'db/UserDataCache';
 
 import {
     MeshBuilder,
@@ -27,6 +29,8 @@ const eventBus = new EventEmitter();
 const GMetaFriend = forwardRef((props, ref) => {
 
     const { follows, profile } = useSelector((s) => s.profile);
+
+    const navigate = useNavigate();
 
     const UserCache = UserDataCache();
 
@@ -96,6 +100,7 @@ const GMetaFriend = forwardRef((props, ref) => {
         var text1 = new TextBlock();
         text1.text = ent.name;
         text1.color = "white";
+        text1.fontSize = 14;
         label.addControl(text1);
         label.onPointerEnterObservable.add((event) => {
             // console.log('aa onPointerEnterObservable', event);
@@ -108,6 +113,17 @@ const GMetaFriend = forwardRef((props, ref) => {
             label.scaleX = 1.0;
             label.scaleY = 1.0;
             label.alpha = 0.5;
+        });
+        //
+        label.onPointerClickObservable.add((event) => {
+            console.log('onPointerClickObservable', event, ent);
+            if (ent.pubkey !== '0') {
+                //
+                navigate("/userhome:" + ent.pubkey, { state: { pubkey: ent.pubkey } });
+            }
+            // label.scaleX = 1.0;
+            // label.scaleY = 1.0;
+            // label.alpha = 0.5;
         });
         //
         ent.label = label;
