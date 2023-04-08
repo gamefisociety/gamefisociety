@@ -1,6 +1,7 @@
 import React, { useEffect, useState, forwardRef } from 'react';
-import { Link } from 'react-router-dom';
+import './GFTLeftMenu.scss';
 
+import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +12,7 @@ import {
     setIsOpen,
     setOpenMintAvatar
 } from 'module/store/features/dialogSlice';
-import './GFTLeftMenu.scss';
+import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 
 import Box from '@mui/material/Box';
 import MenuList from '@mui/material/MenuList';
@@ -166,7 +167,17 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'POST & REPLY') {
             navigate('/post-reply');
             openMainContent();
-        } else if (item.txt === 'FOLLOW') {
+        } else if (item.txt === 'DM') {
+            dispatch(
+                setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "society-dm",
+                })
+            );
+        }
+
+        else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'CREATE') {
             navigate('/create_project');
