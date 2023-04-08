@@ -19,12 +19,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DoneIcon from '@mui/icons-material/Done';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-//
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-//
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 //
 import { hexToBech32, bech32ToHex, parseId } from 'nostr/Util';
@@ -556,7 +553,7 @@ const GLoginDialog = () => {
     return (
         <Dialog
             className={'dialog_login'}
-            open={loggedOut ? loggedOut : true}
+            open={loggedOut ? loggedOut : false}
             fullWidth={true}
             PaperProps={{
                 style: {

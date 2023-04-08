@@ -190,7 +190,8 @@ const MainLayout = () => {
         }}
       >
       </Drawer>
-      {loggedOut === true && <GLoginDialog />}
+      <GLoginDialog />
+      {/* {loggedOut === true && <GLoginDialog />} */}
     </Box>
   );
 };
