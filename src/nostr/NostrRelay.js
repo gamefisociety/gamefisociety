@@ -175,7 +175,6 @@ const NostrRelay = () => {
   }
 
   const SendPending = (client) => {
-    // console.log('SendPending', client);
     if (client.PendingList.length <= 0) {
       return;
     }
@@ -184,7 +183,6 @@ const NostrRelay = () => {
       return;
     }
     client.PendingList.map(req => {
-      // console.log('pendding msg', req);
       const json = JSON.stringify(req);
       client.Socket.send(json);
     });
@@ -197,13 +195,10 @@ const NostrRelay = () => {
     }
     let tmpkey = buildKey(client.addr, ev.Id);
     addListen(tmpkey, client, callback);
-    //
     const req = ["EVENT", NostrFactory.formateEvent(ev)];
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      // console.log('SendEvent direction', req);
       _SendReal(client, req);
     } else {
-      // console.log('SendEvent cache', ev);
       client.PendingList.push(req);
     }
     client.Stats.EventsSend++;
@@ -218,10 +213,8 @@ const NostrRelay = () => {
     addListen(tmpkey, client, callback);
     //
     if (client.Socket?.readyState === WebSocket.OPEN) {
-      // console.log('SendSub direction', sub);
       _SendReal(client, sub);
     } else {
-      // console.log('SendSub cache', sub);
       client.PendingList.push(sub);
     }
   }
@@ -234,10 +227,7 @@ const NostrRelay = () => {
     } else {
       client.PendingList.push(req);
     }
-    // let tmpkey = buildKey(client.addr, subId);
-    // addListen(tmpkey, client, callback);
   }
-
 
   const SendAuth = (client, auth) => {
     if (!client.Settings.read) {

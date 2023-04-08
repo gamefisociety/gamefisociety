@@ -9,6 +9,8 @@ export class NostrSystem {
 
   constructor() {
     this.Clients = new Map();
+    this.readQuene = [];
+    this.writeQuene = [];
   }
 
   initRelays() {
@@ -31,9 +33,8 @@ export class NostrSystem {
         const client = NostrFactory.createRelay(address, read, write);
         this.Clients.set(address, client);
         Relay.Connect(client).then(ret => {
-          //check cache msg and send
+          this.readQuene.push(address);
         });
-
       } else {
         unwrap(this.Clients.get(address)).Settings = {
           read: read,
@@ -66,36 +67,40 @@ export class NostrSystem {
   }
 
   //broadcast sub
-  BroadcastSub(sub, callback, relay) {
+  BroadcastSub(sub, callback, relayaddr) {
     if (!sub) {
       return;
     }
-    for (let [addr, tmpRelay] of this.Clients.entries()) {
-      // console.log('BroadcastSub relay', addr);
-      if (relay) {
-        // console.log('BroadcastSub relay', relay, addr, tmpRelay);
-        if (relay === addr && relay.canSub) {
-          Relay.SendSub(tmpRelay, sub, callback);
-        }
+    if (relayaddr) {
+      let tmp_relay = this.Clients.get(relayaddr);
+      if (tmp_relay) {
+        Relay.SendSub(tmp_relay, sub, callback);
       } else {
-        if (tmpRelay.canSub) {
-          Relay.SendSub(tmpRelay, sub, callback);
-        }
+        // reture error
       }
+    } else {
+      this.readQuene.map((tmpaddr) => {
+        let tmp_relay = this.Clients.get(tmpaddr);
+        if (tmp_relay) {
+          Relay.SendSub(tmp_relay, sub, callback);
+        } else {
+          // reture error
+        }
+      });
     }
   }
 
   //broadcast close
-  BroadcastClose(subid, client, callback) {
+  BroadcastClose(subid, relayaddr, callback) {
     if (!subid[1]) {
       return;
     }
-    if (client === null && !client) {
+    if (relayaddr) {
+      Relay.SendClose(relayaddr, subid[1], callback);
+    } else {
       for (const [, tmpRelay] of this.Clients) {
         Relay.SendClose(tmpRelay, subid[1], callback);
       }
-    } else {
-      Relay.SendClose(client, subid[1], callback);
     }
   }
 }
