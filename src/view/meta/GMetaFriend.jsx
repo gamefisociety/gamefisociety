@@ -132,7 +132,8 @@ const GMetaFriend = forwardRef((props, ref) => {
                 ent.pubkey = pubkey;
                 ent.dirty = true;
                 ent.name = ent_name;
-                ent.mesh = MeshBuilder.CreateSphere(ent_name + '-mesh', { diameter: 10 }, curScene);
+                // ent.mesh = MeshBuilder.CreateSphere(ent_name + '-mesh', { diameter: 10 }, curScene);
+                ent.mesh = MeshBuilder.CreateBox(ent_name + '-mesh', { size: 10 }, curScene);
                 let rad = 300;
                 ent.mesh.position.y = 200 + (Math.random() - 0.5) * rad;
                 ent.mesh.position.x = (Math.random() - 0.5) * rad;
