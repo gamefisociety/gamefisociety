@@ -13,6 +13,7 @@ import GFTHead from "view/head/GFTHead";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
 import GFTHomeMeta from 'view/meta/GFTHomeMeta';
 import GSociety from "view/page/GSociety";
+import GSocietyDM from "view/page/GSocietyDM";
 import GRelays from "view/page/GRelays";
 import GRelaysShow from "view/page/GRelaysShow";
 import GSocietyShow from "view/page/GSocietyShow";
@@ -86,6 +87,7 @@ const MainLayout = () => {
             }}
           />
         )}
+        {cardDrawer === "society-dm" && <GSocietyDM />}
         {cardDrawer === "relays" && <GRelays />}
         {cardDrawer === "relay-show" && <GRelaysShow />}
         {cardDrawer === "follower-show" && <GSocietyShow />}

@@ -71,18 +71,11 @@ const GFTHead = () => {
   const { loggedOut, publicKey } = useSelector((s) => s.login);
   const { profile, relays } = useSelector((s) => s.profile);
   const { dms } = useSelector((s) => s.society);
-  const { isOpenMenuLeft } = useSelector((s) => s.dialog);
   const [profileOpen, setProfileOPen] = React.useState(false);
   const [noticeNum, setNoticeNum] = React.useState(0);
   const [dmNum, setDmNum] = React.useState(0);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const [searchProp, setSearchProp] = React.useState({
-    value: "",
-    nip19: false,
-    open: false,
-    anchorEl: null,
-  });
 
   const handleTooltipClose = () => {
     setProfileOPen(false);
@@ -147,6 +140,17 @@ const GFTHead = () => {
     handleMenuClose();
   };
 
+  const openSocietyDM = () => {
+    dispatch(
+      setDrawer({
+        isDrawer: true,
+        placeDrawer: "right",
+        cardDrawer: "society-dm",
+      })
+    );
+    handleMenuClose();
+  };
+
   const openRelays = () => {
     dispatch(
       setDrawer({
@@ -167,7 +171,7 @@ const GFTHead = () => {
   };
 
   useEffect(() => {
-    setDmNum(dms.length);
+    // setDmNum(dms.length);
     // setNotifycationNum(dms.length);
   }, [dms]);
 
@@ -562,6 +566,7 @@ const GFTHead = () => {
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
+              onClick={openSocietyDM}
             >
               <Badge badgeContent={dmNum} color="error">
                 <MailIcon />
