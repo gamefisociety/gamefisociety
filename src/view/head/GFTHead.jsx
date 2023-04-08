@@ -8,7 +8,6 @@ import { useFollowPro } from "nostr/protocal/FollowPro";
 //
 import { styled, alpha, useColorScheme } from "@mui/material/styles";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AppBar from "@mui/material/AppBar";
 import GSearch from 'components/GSearch';
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -513,6 +512,117 @@ const GFTHead = () => {
     </Menu>
   );
 
+  const renderLogout = () => {
+    return (
+      <Box
+        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+      >
+        <IconButton
+          sx={{ mr: "12px" }}
+          size="large"
+          aria-label="relay icon"
+          color="inherit"
+          onClick={openRelays}
+        >
+          <PublicIcon />
+        </IconButton>
+        <Button
+          className={"btLogin"}
+          endIcon={<AccountCircle />}
+          onClick={() => {
+            dispatch(setOpenLogin(true));
+          }}
+        >
+          {'Login'}
+        </Button>
+      </Box>
+    );
+  }
+
+  const renderLogin = () => {
+    return (
+      <Box
+        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+      >
+        <Box className="wallet_layout" onClick={openDialog}>
+          <Button
+            className={"btConnect"}
+            startIcon={<img src={ic_wallet} width="28px" />}
+          >
+            {account ? getChainLows() : "CONNECT"}
+          </Button>
+        </Box>
+        <IconButton
+          sx={{ mr: "12px" }}
+          size="large"
+          aria-label="relay icon"
+          color="inherit"
+          onClick={openRelays}
+        >
+          <PublicIcon />
+        </IconButton>
+        <IconButton
+          size="large"
+          aria-label="show 4 new mails"
+          color="inherit"
+          onClick={openSocietyDM}
+        >
+          <Badge badgeContent={dmNum} color="error">
+            <MailIcon />
+          </Badge>
+        </IconButton>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+        >
+          <Badge badgeContent={noticeNum} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <ClickAwayListener onClickAway={handleTooltipClose}>
+          <Button className="button">
+            <ProfileTooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              title={renderUserMenu}
+              onClose={handleTooltipClose}
+              open={profileOpen}
+              placement="top-end"
+            >
+              <Stack
+                sx={{
+                  //   backgroundColor: "background.default",
+                  px: "12px",
+                  py: "6px",
+                  borderRadius: "24px",
+                }}
+                direction="row"
+                alignItems="center"
+                onClick={handleTooltipOpen}
+              >
+                <Avatar
+                  sx={{ width: 32, height: 32 }}
+                  edge="end"
+                  alt="GameFi Society"
+                  src={
+                    profile.picture && profile.picture !== "default"
+                      ? profile.picture
+                      : default_avatar
+                  }
+                />
+                <Typography sx={{ ml: "6px" }} color={"text.primary"}>
+                  {profile.display_name}
+                </Typography>
+              </Stack>
+            </ProfileTooltip>
+          </Button>
+        </ClickAwayListener>
+      </Box>
+    );
+  }
+
   // loggedOut, publicKey 
   return (
     <Box className="head_bg">
@@ -527,101 +637,7 @@ const GFTHead = () => {
           onClick={clickLogo}
         />
         <GSearch />
-        {loggedOut === true ? (
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-          >
-            <Button
-              className={"btLogin"}
-              endIcon={<AccountCircle />}
-              onClick={() => {
-                dispatch(setOpenLogin(true));
-              }}
-            >
-              {'Login'}
-            </Button>
-          </Box>
-        ) : (
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-          >
-            <Box className="wallet_layout" onClick={openDialog}>
-              <Button
-                className={"btConnect"}
-                startIcon={<img src={ic_wallet} width="28px" />}
-              >
-                {account ? getChainLows() : "CONNECT"}
-              </Button>
-            </Box>
-            <IconButton
-              sx={{ mr: "12px" }}
-              size="large"
-              aria-label="relay icon"
-              color="inherit"
-              onClick={openRelays}
-            >
-              <PublicIcon />
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-              onClick={openSocietyDM}
-            >
-              <Badge badgeContent={dmNum} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={noticeNum} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <ClickAwayListener onClickAway={handleTooltipClose}>
-              <Button className="button">
-                <ProfileTooltip
-                  PopperProps={{
-                    disablePortal: true,
-                  }}
-                  title={renderUserMenu}
-                  onClose={handleTooltipClose}
-                  open={profileOpen}
-                  placement="top-end"
-                >
-                  <Stack
-                    sx={{
-                      //   backgroundColor: "background.default",
-                      px: "12px",
-                      py: "6px",
-                      borderRadius: "24px",
-                    }}
-                    direction="row"
-                    alignItems="center"
-                    onClick={handleTooltipOpen}
-                  >
-                    <Avatar
-                      sx={{ width: 32, height: 32 }}
-                      edge="end"
-                      alt="GameFi Society"
-                      src={
-                        profile.picture && profile.picture !== "default"
-                          ? profile.picture
-                          : default_avatar
-                      }
-                    />
-                    <Typography sx={{ ml: "6px" }} color={"text.primary"}>
-                      {profile.display_name}
-                    </Typography>
-                  </Stack>
-                </ProfileTooltip>
-              </Button>
-            </ClickAwayListener>
-          </Box>
-        )}
+        {loggedOut === true ? renderLogout() : renderLogin()}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
@@ -634,9 +650,9 @@ const GFTHead = () => {
             <MoreIcon />
           </IconButton>
         </Box>
-      </Toolbar>
+      </Toolbar >
       {renderMobileMenu}
-    </Box>
+    </Box >
   );
 };
 
