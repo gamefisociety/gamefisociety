@@ -98,7 +98,7 @@ const GFTHead = () => {
     return "CONNECT";
   };
   const clickLogo = () => {
-    navigate("/home");
+    navigate('/meta');
   };
 
   const handleProfileMenuOpen = (event) => { };
