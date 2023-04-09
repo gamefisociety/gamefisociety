@@ -16,19 +16,39 @@ export const useRepostPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
-    // create: async (pubKey, priKey, obj) => {
-    //   if (pubKey) {
-    //     const ev = NostrFactory.createEvent(pubKey);
-    //     ev.Kind = EventKind.SetMetadata;
-    //     ev.Content = JSON.stringify(obj);
-    //     return await nostrEvent.Sign(priKey, ev);
-    //   }
-    // },
-    // modify: async (obj) => {
-    //   const ev = NostrFactory.createEvent(publicKey);
-    //   ev.Kind = EventKind.SetMetadata;
-    //   ev.Content = JSON.stringify(obj);
-    //   return await nostrEvent.Sign(privateKey, ev);
-    // },
+    repost: async (targetNote) => {
+      if (publicKey) {
+        const ev = NostrFactory.createEvent(publicKey);
+        ev.Kind = EventKind.Repost;
+        ev.Content = JSON.stringify(targetNote);
+        //
+        const hasTag = (tags, tag, v) => {
+          for (let i = 0; i < tags.length; i++) {
+            let item = tags[i];
+            if (item[0] && item[0] === tag && item[1] && item[1] === v) {
+              return true;
+            }
+          }
+          return false;
+        }
+        //
+        let newTags = [];
+        targetNote.tags.map((tag) => {
+          if (tag[0]) {
+            if (tag[0] === 'p' && tag[1] && hasTag(newTags, tag[0], tag[1]) === false) {
+              newTags.push(['p', tag[1]]);
+            } else if (tag[0] === 'e' && tag[1] && hasTag(newTags, tag[0], tag[1]) === false) {
+              newTags.push(['e', tag[1]]);
+            }
+          }
+        });
+        newTags.push(['e', targetNote.id, '', 'root']);
+        if (hasTag(newTags, 'p', targetNote.pubkey) === false) {
+          newTags.push(['p', targetNote.pubkey]);
+        }
+        ev.Tags = newTags.concat();
+        return await nostrEvent.Sign(privateKey, ev);
+      }
+    },
   }
 }

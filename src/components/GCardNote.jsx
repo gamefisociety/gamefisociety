@@ -15,9 +15,11 @@ import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
+import { useRepostPro } from "nostr/protocal/RepostPro";
 import { BuildSub } from "nostr/NostrUtils"
 import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
+import { System } from 'nostr/NostrSystem';
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
@@ -30,6 +32,7 @@ const GCardNote = (props) => {
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
   const MetaPro = useMetadataPro();
+  const repostPro = useRepostPro();
 
   const fetch_relative_info = () => {
 
@@ -110,13 +113,21 @@ const GCardNote = (props) => {
     })
   }
 
+  const repostNote = async (targetNote) => {
+    
+    let ev = await repostPro.repost(targetNote);
+    // console.log('repostNote ev', ev);
+    System.BroadcastEvent(ev, (tag, client, msg) => {
+      console.log('repostNote tag', tag, msg);
+    });
+  }
+
   useEffect(() => {
     fetch_relative_info();
     return () => { };
   }, [note]);
 
   const renderContent = (str) => {
-    const strArray = str.split("\n");
     return (
       <Box
         className={'content'}
@@ -238,7 +249,10 @@ const GCardNote = (props) => {
         }} />
         <Box className="icon_chain_push" />
         <Box className="icon_pay" />
-        <Box className="icon_trans" />
+        <Box className="icon_trans" onClick={(event) => {
+          event.stopPropagation();
+          repostNote(note);
+        }} />
         <Box className="icon_right" />
       </Box>
     </Card>
