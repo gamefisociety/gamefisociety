@@ -96,12 +96,12 @@ const GPostReply = () => {
     };
   }, [follows, curLabel]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", loadMore);
-    return () => {
-      window.removeEventListener("scroll", loadMore);
-    };
-  }, [moreTimes, data, curCreateAt]);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", loadMore);
+  //   return () => {
+  //     window.removeEventListener("scroll", loadMore);
+  //   };
+  // }, [moreTimes, data, curCreateAt]);
 
   const renderMenu = () => {
     return (

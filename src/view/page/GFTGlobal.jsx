@@ -51,12 +51,12 @@ const GFTGlobal = () => {
 
   const gNoteCache = GlobalNoteCache();
   let fetching = false;
-  useEffect(() => {
-    window.addEventListener("scroll", loadMore);
-    return () => {
-      window.removeEventListener("scroll", loadMore);
-    };
-  }, [data, isMore]);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", loadMore);
+  //   return () => {
+  //     window.removeEventListener("scroll", loadMore);
+  //   };
+  // }, [data, isMore]);
 
   useEffect(() => {
     gNoteCache.clear();
@@ -375,6 +375,11 @@ const GFTGlobal = () => {
       {renderLables()}
       {renderGlobalHead()}
       {renderContent()}
+      <Typography className={'global_loadmore'} onClick={() => {
+        loadMore();
+      }}>
+        {"LOAD MORE"}
+      </Typography>
       {renderSubjectDialog()}
     </Paper>
   );
