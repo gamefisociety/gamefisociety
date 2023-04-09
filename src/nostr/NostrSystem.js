@@ -70,7 +70,7 @@ export class NostrSystem {
         this.Clients.set(address, client);
         Relay.Connect(client).then(ret => {
           console.log('ConnectRelay', address);
-          if (this.readQuene.length === 0) {
+          if (this.readQuene.length < 3) {
             this.readQuene.push(address);
           }
           this.writeQuene.push(address);

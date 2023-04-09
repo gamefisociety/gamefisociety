@@ -61,7 +61,7 @@ const GRelaysShow = () => {
                   <Typography className={'lable_relay'}>
                     {cfg.addr}
                   </Typography>
-                  <Box className={'circle_button'}
+                  {/* <Box className={'circle_button'}
                     sx={{
                       backgroundColor: cfg.read ? "#4B8B1F" : "#D9D9D9",
                     }}
@@ -70,7 +70,7 @@ const GRelaysShow = () => {
                     sx={{
                       backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
                     }}
-                  />
+                  /> */}
                   <Box sx={{ flexGrow: 1 }} />
                   {hasRelay(cfg.addr) === false && <Button className={'add_button'} variant="contained"
                     onClick={(event) => {
