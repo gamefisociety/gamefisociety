@@ -22,25 +22,12 @@ const GSearch = () => {
 
   const navigate = useNavigate();
   const [value, setValue] = React.useState(null);
-  // const TextNotePro = useTextNotePro();
-  // const fetchNoteEvent = (eventId, callback) => {
-  //   let filterTextNote = TextNotePro.getEvents([eventId]);
-  //   let subMeta = BuildSub("textnote_search", [filterTextNote]);
-  //   System.BroadcastSub(subMeta, (tag, client, msg) => {
-  //     if (!msg) return;
-  //     if (tag === "EOSE") {
-  //       System.BroadcastClose(subMeta, client, null);
-  //     } else if (tag === "EVENT") {
-  //       console.log('event textnote', msg);
-  //       if (msg.id !== eventId || msg.kind !== EventKind.TextNote) {
-  //         return;
-  //       }
-  //       if (callback) {
-  //         callback(msg);
-  //       }
-  //     }
-  //   });
-  // };
+
+  let top100Films = [
+    { title: '#BTC' },
+    { title: '#18Ban' },
+    { title: '#nostr' },
+  ];
 
   const handleSearch = (v) => {
     console.log('handleSearch', v);
@@ -68,11 +55,6 @@ const GSearch = () => {
     handleSearch(value);
   }, [value]);
 
-  let top100Films = [
-    { title: '#BTC' },
-    { title: '#18Ban' },
-    { title: '#nostr' },
-  ];
   // loggedOut, publicKey 
   return (
     <Stack className={'search_bg'} flexDirection="row" alignItems={'center'}>
@@ -118,7 +100,7 @@ const GSearch = () => {
           return option.title;
         }}
         renderOption={(props, option) => <li {...props}>{option.title}</li>}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => <TextField {...params} placeholder={'search'} />}
       />
     </Stack>
   );
