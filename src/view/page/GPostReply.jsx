@@ -46,7 +46,7 @@ const GPostReply = () => {
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 10;
+    filterTextNote.limit = 50;
     let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
     return subTextNode;
   }
