@@ -11,6 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemIcon from '@mui/material/ListItemIcon';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -28,26 +29,52 @@ import icon_back_white from "../../asset/image/social/icon_back_white.png";
 
 import { System } from "nostr/NostrSystem";
 
-const RSwitch = styled(Switch)(({ theme }) => ({
-  "& .MuiSwitch-switchBase.Mui-checked": {
-    color: "#4B8B1F",
-    "&:hover": {
-      backgroundColor: alpha("#4B8B1F", theme.palette.action.hoverOpacity),
+const IOSSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 36,
+  height: 18,
+  padding: 0,
+  marginRight: 10,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466',
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
     },
   },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-    backgroundColor: "#565656",
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 16,
+    height: 16,
   },
-}));
-const WSwitch = styled(Switch)(({ theme }) => ({
-  "& .MuiSwitch-switchBase.Mui-checked": {
-    color: "#F5A900",
-    "&:hover": {
-      backgroundColor: alpha("#F5A900", theme.palette.action.hoverOpacity),
-    },
-  },
-  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-    backgroundColor: "#565656",
+  '& .MuiSwitch-track': {
+    borderRadius: 16 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
   },
 }));
 
@@ -142,16 +169,31 @@ const GRelays = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={openMenu}>
-                  <MenuItem onClick={() => {
-
-                  }}>{'Read'}</MenuItem>
-                  <MenuItem onClick={() => {
-
-                  }}>{'Write'}</MenuItem>
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    opRelay.read = !opRelay.read;
+                    setOpRelay({ ...opRelay });
+                  }}>
+                    <IOSSwitch checked={opRelay && opRelay.read === true ? true : false} />
+                    {'Read'}
+                  </MenuItem>
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    opRelay.write = !opRelay.write;
+                    setOpRelay({ ...opRelay });
+                  }} >
+                    <IOSSwitch checked={opRelay && opRelay.write === true ? true : false} />
+                    {'Write'}
+                  </MenuItem>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
                     handleClickDialogOpen();
-                  }}>{'Delete'}</MenuItem>
+                  }}>
+                    <ListItemIcon>
+                      <Box className="icon_del" />
+                    </ListItemIcon>
+                    {'Delete'}
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
