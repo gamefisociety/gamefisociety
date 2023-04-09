@@ -33,6 +33,7 @@ export class NostrSystem {
         const client = NostrFactory.createRelay(address, read, write);
         this.Clients.set(address, client);
         Relay.Connect(client).then(ret => {
+          console.log('ConnectRelay', address);
           this.readQuene.push(address);
         });
       } else {

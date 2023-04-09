@@ -3,7 +3,6 @@ import "./GRelays.scss";
 
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -12,22 +11,22 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 
 import { alpha, styled } from "@mui/material/styles";
-import { setRelays, setFollows } from "module/store/features/profileSlice";
+import { setRelays } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
 import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
 
-import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
-
-let deletingRealy = "";
 
 const RSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -58,6 +57,7 @@ const GRelays = () => {
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
   const [newRelay, setNewRelay] = useState(null);
+  const [opRelay, setOpRelay] = useState(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [module, setModule] = useState({ isDetail: false, curRelay: {} });
 
@@ -107,6 +107,60 @@ const GRelays = () => {
     return null;
   };
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openMenu, setOpenMenu] = React.useState(false);
+
+  const handleOpen = (event, cfg) => {
+    // console.log('handleOpen', event, cfg);
+    event.stopPropagation();
+    setOpRelay({ ...cfg });
+    setAnchorEl(event.currentTarget);
+    setOpenMenu(true);
+  };
+
+  const handleClose = (event) => {
+    setAnchorEl(null);
+    setOpenMenu(false);
+  };
+
+  const renderRelayMenu = () => {
+    return (
+      <Popper
+        open={openMenu}
+        anchorEl={anchorEl}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow {...TransitionProps}
+            style={{
+              transformOrigin: placement === 'bottom-start' ? 'right bottom' : 'right top',
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={openMenu}>
+                  <MenuItem onClick={() => {
+
+                  }}>{'Read'}</MenuItem>
+                  <MenuItem onClick={() => {
+
+                  }}>{'Write'}</MenuItem>
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    handleClickDialogOpen();
+                  }}>{'Delete'}</MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    );
+  }
+
   const renderCacheRelays = () => {
     return (
       <List className="list_bg">
@@ -145,22 +199,10 @@ const GRelays = () => {
                     }}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <Button
-                    className="button"
-                    variant="contained"
-                    sx={{
-                      width: "40px",
-                      backgroundColor: "transparent",
-                    }}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      //
-                      deletingRealy = cfg.addr;
-                      handleClickDialogOpen();
-                    }}
-                  >
-                    <img src={logo_delete} width="40px" alt="logo_delete" />
-                  </Button>
+                  <Box className="icon_more" onClick={(event) => {
+                    handleOpen(event, cfg);
+                  }} />
+                  {renderRelayMenu()}
                 </Box>
               </ListItem>
             )
@@ -168,12 +210,6 @@ const GRelays = () => {
         }
       </List>
     );
-    // relays.map((cfg, index) => {
-    //   // console.log("relay", item);
-    //   return (
-
-    //   );
-    // });
   };
 
   //
@@ -666,7 +702,7 @@ const GRelays = () => {
             }}
             onClick={(event) => {
               event.stopPropagation();
-              deleteRelays(deletingRealy);
+              deleteRelays(opRelay.addr);
               handleDialogClose();
             }}
           >
