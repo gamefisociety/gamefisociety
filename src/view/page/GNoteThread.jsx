@@ -41,9 +41,7 @@ const GNoteThread = () => {
     filterArray.push(filterRoot);
     const subThread = BuildSub("thread_note_target", filterArray);
     threadWorker.fetch_thread_note(subThread, null, (datas, client) => {
-      // console.log('fetchTarget note', datas);
       if (datas.length === 1) {
-        // TLCache.pushThreadNote(datas[0]);
         setCurNote({ ...datas[0] });
       }
     });
@@ -102,6 +100,17 @@ const GNoteThread = () => {
     });
   };
 
+  //fetch target note rela
+  useEffect(() => {
+    if (!noteRet) {
+      return;
+    }
+    fetchMainNotes(noteRet.root_note_id, noteRet.reply_note_id);
+    fetchReplyNotesToLocal(noteRet.local_note);
+    return () => { };
+  }, [noteRet]);
+
+  //parse target note
   useEffect(() => {
     if (!curNote) {
       return;
@@ -109,13 +118,11 @@ const GNoteThread = () => {
     TLCache.clear();
     TLCache.pushThreadNote(curNote);
     let ret = ParseNote(curNote);
-    console.log("GNoteThread note", ret);
     setNoteRet({ ...ret });
-    fetchMainNotes(ret.root_note_id, ret.reply_note_id);
-    fetchReplyNotesToLocal(ret.local_note);
     return () => { };
   }, [curNote]);
 
+  //fetch target note
   useEffect(() => {
     let globalNoteCache = GlobalNoteCache();
     let note = globalNoteCache.getNote(noteid);
@@ -123,9 +130,7 @@ const GNoteThread = () => {
       setCurNote({ ...note });
     } else {
       fetchTarget(noteid);
-      //fetch target note
     }
-    // console.log('GNoteThread noteid', noteid);
     return () => { };
   }, [noteid]);
 
