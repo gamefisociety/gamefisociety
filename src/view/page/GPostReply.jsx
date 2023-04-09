@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import GCardNote from "components/GCardNote";
+import GCardNoteRepost from "components/GCardNoteRepost";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 
@@ -15,6 +16,7 @@ import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
 import { setPost } from 'module/store/features/dialogSlice';
+import { EventKind } from "nostr/def";
 
 import GlobalNoteCache from 'db/GlobalNoteCache';
 
@@ -30,14 +32,13 @@ const GPostReply = () => {
   const [curLabel, setCurLabel] = useState('Post');
   const [curCreateAt, setCurCreateAt] = useState(0);
   const [data, setData] = useState([]);
-  const [moreTimes, setMoreTimes] = useState(0);
   const [inforData, setInforData] = useState(new Map());
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
   const gNoteCache = GlobalNoteCache();
 
   const getSubNote = (tim) => {
-    const filterTextNote = textNotePro.get();
+    const filterTextNote = textNotePro.getNoteAndRepost();
     let tmpAuthors = follows.concat([publicKey]);
     filterTextNote.authors = tmpAuthors;
     if (tim === 0) {
@@ -167,7 +168,13 @@ const GPostReply = () => {
               return null;
             }
           }
-          return <GCardNote key={"post-reply-note-" + index} note={{ ...item }} />;
+          if (item.kind === EventKind.TextNote) {
+            return <GCardNote key={"post-reply-note" + index + '-' + item.pubkey} note={{ ...item }} />;
+          } else if (item.kind === EventKind.Repost) {
+            return <GCardNoteRepost key={"post-reply-repost" + index + '-' + item.pubkey} note={{ ...item }} />;
+          } else {
+            return null;
+          }
         })}
       </List>
     );

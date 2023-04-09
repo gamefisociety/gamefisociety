@@ -15,6 +15,11 @@ export const useTextNotePro = () => {
       filter.kinds = [EventKind.TextNote];
       return filter;
     },
+    getNoteAndRepost: () => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.TextNote, EventKind.Repost];
+      return filter;
+    },
     getTarget: (pubkey) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.TextNote];

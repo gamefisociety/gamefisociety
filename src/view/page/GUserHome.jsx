@@ -41,17 +41,15 @@ const GUserHome = (props) => {
   //
   const fetchTextNote = (pub) => {
     const filterMeta = MetaPro.get(pubkey);
-    const filterTextNote = textNotePro.get();
+    const filterTextNote = textNotePro.getNoteAndRepost();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
     const filterFollowPro = followPro.getFollows(pub);
-    const filterRepostPro = repostPro.get(pub);
     const filterReactionPro = reactionPro.get(pub);
     let profileNote = BuildSub("profile_note", [
       filterMeta,
       filterTextNote,
       filterFollowPro,
-      filterRepostPro,
       filterReactionPro,
     ]);
     let metadata_time = 0;
