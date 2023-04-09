@@ -114,7 +114,7 @@ export class NostrSystem {
   }
 
   //broadcast event
-  BroadcastEvent(ev, callback) {
+  async BroadcastEvent(ev, callback) {
     if (!ev) {
       return;
     }
@@ -126,7 +126,7 @@ export class NostrSystem {
   }
 
   //broadcast sub
-  BroadcastSub(sub, callback, relayaddr) {
+  async BroadcastSub(sub, callback, relayaddr) {
     if (!sub) {
       return;
     }
@@ -150,7 +150,7 @@ export class NostrSystem {
   }
 
   //broadcast close
-  BroadcastClose(subid, relayaddr, callback) {
+  async BroadcastClose(subid, relayaddr, callback) {
     if (!subid[1]) {
       return;
     }
