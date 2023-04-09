@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./GFTGlobal.scss";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
 import { setCurRelay } from "module/store/features/profileSlice";
 import { useWeb3React } from "@web3-react/core";
@@ -35,14 +36,14 @@ const GFTGlobal = () => {
   const nostrWorker = useWorker(createNostrWorker);
   //
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { relays, curRelay } = useSelector((s) => s.profile);
   const [curCreateAt, setCurCreateAt] = useState(0);
+  const { label } = useParams();
   //
   const [data, setData] = useState([]);
-  const [isMore, setMore] = useState(false);
   const [inforData, setInforData] = useState(new Map());
   const [subjects, setSubjects] = useState([]);
-  const [curSubjectIndex, setCurSubjectIndex] = useState(-1);
   const [newSujbect, setNewSubject] = React.useState("");
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
@@ -58,11 +59,13 @@ const GFTGlobal = () => {
   //   };
   // }, [data, isMore]);
 
+  console.log('global label', label);
+
   useEffect(() => {
     gNoteCache.clear();
     getNoteList(0);
     return () => { };
-  }, [curSubjectIndex]);
+  }, [label]);
 
   useEffect(() => {
     if (account) {
@@ -170,20 +173,19 @@ const GFTGlobal = () => {
     if (tim === 0) {
       filterTextNote.until = Date.now();
     } else {
-      setMore(true);
       filterTextNote.until = tim;
     }
     filterTextNote.limit = 50;
     //add t tag
-    if (curSubjectIndex !== -1 && subjects[curSubjectIndex]) {
-      filterTextNote['#t'] = [subjects[curSubjectIndex].name];
+    if (label != 'all') {
+      filterTextNote['#t'] = [label];
     }
     let subTextNode = BuildSub("global-textnode", [filterTextNote]);
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
     // console.log("fetch_global_notes", targetAddr);
     nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
-      console.log('fetch_global_notes', curSubjectIndex, subTextNode, data);
+      // console.log('fetch_global_notes', label, subTextNode, data);
       setData(data.concat());
       const pubkeys = [];
       data.map((item) => {
@@ -228,31 +230,26 @@ const GFTGlobal = () => {
         }} onClick={handleClickOpen}>
           {"Create"}
         </Button>
-        <Button
-          className={
-            curSubjectIndex === -1 ? "lable_btn_selected" : "lable_btn"
-          }
+        <Button className={label == 'all' ? "lable_btn_selected" : "lable_btn"}
           onClick={() => {
-            setCurSubjectIndex(-1);
+            navigate('/global/all');
           }}>
           {"#ALL"}
         </Button>
-        {subjects.map((item, index) => (
-          <Button
-            key={"label-index-" + index}
-            className={
-              curSubjectIndex === index ? "lable_btn_selected" : "lable_btn"
-            }
-            onClick={() => {
-              if (curSubjectIndex === index) {
-                return;
-              }
-              setCurSubjectIndex(index);
-            }}
-          >
-            {"#" + item.name}
-          </Button>
-        ))}
+        {subjects.map((item, index) => {
+          let isSelect = (item.name == label);
+          return (
+            <Button
+              key={"label-index-" + index}
+              className={isSelect ? "lable_btn_selected" : "lable_btn"}
+              onClick={() => {
+                navigate('/global/' + item.name);
+              }}
+            >
+              {"#" + item.name}
+            </Button>
+          );
+        })}
       </Box>
     );
   };

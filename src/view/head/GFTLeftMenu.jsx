@@ -162,7 +162,7 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'GLOBAL') {
             clear();
-            navigate('/global');
+            navigate('/global/all');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
             navigate('/post-reply');

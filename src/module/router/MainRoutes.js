@@ -43,7 +43,7 @@ const MainRoutes = {
       element: <GHall />,
     },
     {
-      path: "/global",
+      path: "/global/:label",
       element: (
         <KeepAlive
           cacheKey="GlobalCache_ID"

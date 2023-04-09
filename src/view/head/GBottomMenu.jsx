@@ -151,7 +151,7 @@ const GBottomMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
-            navigate('/global');
+            navigate('/global/all');
         } else if (item.txt === 'POST & REPLY') {
             navigate('/post-reply');
         } else if (item.txt === 'FOLLOW') {
