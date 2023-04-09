@@ -145,6 +145,7 @@ const GRelays = () => {
   };
 
   const handleMenuClose = (event) => {
+    event.stopPropagation();
     setAnchorEl(null);
     setOpenMenu(false);
   };
@@ -242,7 +243,11 @@ const GRelays = () => {
                   />
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
-                    handleMenuOpen(event, cfg);
+                    if (openMenu === false) {
+                      handleMenuOpen(event, cfg);
+                    } else {
+                      handleMenuClose(event);
+                    }
                   }} />
                   {renderRelayMenu()}
                 </Box>
