@@ -8,210 +8,118 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { parseId } from "nostr/Util";
-import { EventKind } from "nostr/def";
+
+const filterOp = createFilterOptions();
 
 const GSearch = () => {
-  //
-  const [tips, setTips] = useState({
-    showUser: false,
-    showEvent: false,
-    showTag: false,
-  });
-  //
+
   const navigate = useNavigate();
-  const [searchProp, setSearchProp] = React.useState({
-    value: "",
-    nip19: false,
-    open: false,
-    anchorEl: null,
-  });
+  const [value, setValue] = React.useState(null);
+  // const TextNotePro = useTextNotePro();
+  // const fetchNoteEvent = (eventId, callback) => {
+  //   let filterTextNote = TextNotePro.getEvents([eventId]);
+  //   let subMeta = BuildSub("textnote_search", [filterTextNote]);
+  //   System.BroadcastSub(subMeta, (tag, client, msg) => {
+  //     if (!msg) return;
+  //     if (tag === "EOSE") {
+  //       System.BroadcastClose(subMeta, client, null);
+  //     } else if (tag === "EVENT") {
+  //       console.log('event textnote', msg);
+  //       if (msg.id !== eventId || msg.kind !== EventKind.TextNote) {
+  //         return;
+  //       }
+  //       if (callback) {
+  //         callback(msg);
+  //       }
+  //     }
+  //   });
+  // };
 
-  const TextNotePro = useTextNotePro();
-  const fetchNoteEvent = (eventId, callback) => {
-    let filterTextNote = TextNotePro.getEvents([eventId]);
-    let subMeta = BuildSub("textnote_search", [filterTextNote]);
-    System.BroadcastSub(subMeta, (tag, client, msg) => {
-      if (!msg) return;
-      if (tag === "EOSE") {
-        System.BroadcastClose(subMeta, client, null);
-      } else if (tag === "EVENT") {
-        console.log('event textnote', msg);
-        if (msg.id !== eventId || msg.kind !== EventKind.TextNote) {
-          return;
-        }
-        if (callback) {
-          callback(msg);
-        }
-      }
-    });
-  };
-
-  const searchNote = (msg) => {
-    if (msg.kind === EventKind.TextNote) {
+  const handleSearch = (v) => {
+    console.log('handleSearch', v);
+    if (!v) {
+      return;
+    }
+    if (v.title.startsWith("npub") && v.title.length === 63) {
+      let pub = parseId(v.title);
+      navigate("/userhome/" + pub);
+    } else if (v.title.length === 64) {
       // navigate("/notethread", {
       //   state: {
       //     note: { ...msg },
       //     info: null,
       //   },
       // });
+    } else if (v.title.startsWith("#")) {
+      let tmp_tag = v.title.substring(1);
+      navigate('/global/' + tmp_tag);
+      // setValue(null);
     }
   };
 
-  const handleSearch = (e, value) => {
-    searchProp.value = value;
-    if (value.startsWith("npub") && value.length === 63) {
-      searchProp.nip19 = true;
-      searchProp.open = true;
-      searchProp.anchorEl = e.currentTarget;
-      tips.showTag = false;
-      tips.showEvent = false;
-      tips.showUser = true;
-      setTips({ ...tips });
-    } else if (value.length === 64) {
-      searchProp.nip19 = false;
-      searchProp.open = true;
-      searchProp.anchorEl = e.currentTarget;
-      tips.showEvent = true;
-      tips.showUser = true;
-      tips.showTag = false;
-      setTips({ ...tips });
-    } else if (value.startsWith("#")) {
-      searchProp.nip19 = false;
-      searchProp.open = true;
-      searchProp.anchorEl = e.currentTarget;
-      tips.showEvent = false;
-      tips.showUser = false;
-      tips.showTag = true;
-      setTips({ ...tips });
-    }
-    setSearchProp({ ...searchProp });
-  };
+  useEffect(() => {
+    handleSearch(value);
+  }, [value]);
 
+  let top100Films = [
+    { title: '#BTC' },
+    { title: '#18Ban' },
+    { title: '#nostr' },
+  ];
   // loggedOut, publicKey 
   return (
-    <Stack flexDirection="row" alignItems={'center'}>
-      <TextField
-        sx={{
-          width: "450px",
-          // borderColor: 'white',
-        }}
-        placeholder="Search input"
-        value={searchProp.value}
-        onChange={(e) => {
-          if (e.target) {
-            handleSearch(e, e.target.value);
+    <Stack className={'search_bg'} flexDirection="row" alignItems={'center'}>
+      <Autocomplete className={'search'}
+        value={value}
+        onChange={(event, newValue) => {
+          if (typeof newValue === 'string') {
+            setValue({ title: newValue, });
+          } else if (newValue && newValue.inputValue) {
+            setValue({ title: newValue.inputValue, });
+          } else {
+            setValue(newValue);
           }
+          console.log('onChange', newValue);
         }}
-        InputProps={{
-          sx: {
-            height: "42px",
-            borderRadius: "24px",
-            backgroundColor: 'rgba(0,0,0,0.65)'
-          },
-          type: "search",
+        filterOptions={(options, params) => {
+          const filtered = filterOp(options, params);
+          const { inputValue } = params;
+          const isExisting = options.some((option) => inputValue === option.title);
+          if (inputValue !== '' && !isExisting) {
+            filtered.push({
+              inputValue,
+              title: `Add "${inputValue}"`,
+            });
+          }
+          return filtered;
         }}
-        SelectProps={{
-          sx: { borderColor: "red" },
+        selectOnFocus
+        clearOnBlur
+        freeSolo
+        // handleHomeEndKeys
+        options={top100Films}
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          if (typeof option === 'string') {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.title;
         }}
+        renderOption={(props, option) => <li {...props}>{option.title}</li>}
+        renderInput={(params) => <TextField {...params} />}
       />
-      <Popover
-        open={searchProp.open}
-        anchorEl={searchProp.anchorEl}
-        onClose={() => {
-          searchProp.open = false;
-          searchProp.anchorEl = null;
-          setSearchProp({ ...searchProp });
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        {
-          tips.showUser && <Typography
-            sx={{
-              p: "18px",
-              cursor: "pointer",
-            }}
-            color={"text.primary"}
-            onClick={() => {
-              tips.showEvent = false;
-              tips.showUser = false;
-              tips.showTag = false;
-              setTips({ ...tips });
-              //
-              let pub = searchProp.value;
-              if (searchProp.nip19 === true) {
-                pub = parseId(searchProp.value);
-              }
-              navigate("/userhome/" + pub);
-              //
-              searchProp.value = "";
-              searchProp.open = false;
-              searchProp.anchorEl = null;
-              setSearchProp({ ...searchProp });
-            }}
-          >
-            {"Get Profile: " + searchProp.value}
-          </Typography>
-        }
-        {
-          tips.showEvent && <Typography
-            sx={{
-              p: "18px",
-              cursor: "pointer",
-            }}
-            color={"text.primary"}
-            onClick={() => {
-              //
-              tips.showEvent = false;
-              tips.showUser = false;
-              tips.showTag = false;
-              setTips({ ...tips });
-              //
-              fetchNoteEvent(searchProp.value, searchNote);
-              //
-              searchProp.value = "";
-              searchProp.open = false;
-              searchProp.anchorEl = null;
-              setSearchProp({ ...searchProp });
-            }}
-          >
-            {"Get Event: " + searchProp.value}
-          </Typography>
-        }
-        {
-          tips.showTag && <Typography
-            sx={{
-              p: "18px",
-              cursor: "pointer",
-            }}
-            color={"text.primary"}
-            onClick={() => {
-              //
-              tips.showEvent = false;
-              tips.showUser = false;
-              tips.showTag = false;
-              setTips({ ...tips });
-              //
-              // fetchNoteEvent(searchProp.value, searchNote);
-              let tmp_tag = searchProp.value.substring(1);
-              navigate('/global/' + tmp_tag);
-              //
-              searchProp.value = "";
-              searchProp.open = false;
-              searchProp.anchorEl = null;
-              setSearchProp({ ...searchProp });
-            }}
-          >
-            {"Get Note Tag: " + searchProp.value}
-          </Typography>
-        }
-      </Popover>
     </Stack>
   );
 };
