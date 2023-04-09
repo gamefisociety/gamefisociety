@@ -139,7 +139,10 @@ const GRelays = () => {
   const handleMenuOpen = (event, cfg) => {
     // console.log('handleOpen', event, cfg);
     event.stopPropagation();
-    setOpRelay({ ...cfg });
+    let tmpCfg = { ...cfg };
+    tmpCfg.canRead = System.isRead(cfg.addr);
+    tmpCfg.canWrite = System.isWrite(cfg.addr);
+    setOpRelay({ ...tmpCfg });
     setAnchorEl(event.currentTarget);
     setOpenMenu(true);
   };
@@ -171,18 +174,30 @@ const GRelays = () => {
                 <MenuList autoFocusItem={openMenu}>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
-                    opRelay.read = !opRelay.read;
+                    opRelay.canRead = !opRelay.canRead;
                     setOpRelay({ ...opRelay });
                   }}>
-                    <IOSSwitch checked={opRelay && opRelay.read === true ? true : false} />
+                    <IOSSwitch checked={opRelay ? opRelay.canRead : false} onChange={(ev) => {
+                      if (ev.target.checked) {
+                        System.addRead(opRelay.addr);
+                      } else {
+                        System.rmRead(opRelay.addr);
+                      }
+                    }} />
                     {'Read'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
-                    opRelay.write = !opRelay.write;
+                    opRelay.canWrite = !opRelay.canWrite;
                     setOpRelay({ ...opRelay });
                   }} >
-                    <IOSSwitch checked={opRelay && opRelay.write === true ? true : false} />
+                    <IOSSwitch checked={opRelay ? opRelay.canWrite : false} onChange={(ev) => {
+                      if (ev.target.checked) {
+                        System.addWrite(opRelay.addr);
+                      } else {
+                        System.rmWrite(opRelay.addr);
+                      }
+                    }} />
                     {'Write'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
@@ -229,7 +244,7 @@ const GRelays = () => {
                       width: "16px",
                       height: "16px",
                       borderRadius: "8px",
-                      backgroundColor: cfg.read ? "#4B8B1F" : "#D9D9D9",
+                      backgroundColor: System.isRead(cfg.addr) === true ? "#4B8B1F" : "#D9D9D9",
                     }}
                   />
                   <Box
@@ -238,7 +253,7 @@ const GRelays = () => {
                       width: "16px",
                       height: "16px",
                       borderRadius: "8px",
-                      backgroundColor: cfg.write ? "#F5A900" : "#D9D9D9",
+                      backgroundColor: System.isWrite(cfg.addr) === true ? "#F5A900" : "#D9D9D9",
                     }}
                   />
                   <Box sx={{ flexGrow: 1 }} />

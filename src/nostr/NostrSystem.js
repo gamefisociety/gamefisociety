@@ -27,6 +27,42 @@ export class NostrSystem {
     return null;
   }
 
+  isRead(addr) {
+    return this.readQuene.includes(addr);
+  }
+
+  isWrite(addr) {
+    return this.writeQuene.includes(addr);
+  }
+
+  addRead(addr) {
+    if (this.isRead(addr)) {
+      return;
+    }
+    this.readQuene.push(addr);
+  }
+
+  rmRead(addr) {
+    let ret = this.readQuene.indexOf(addr);
+    if (ret >= 0) {
+      this.readQuene.splice(ret, 1);
+    }
+  }
+
+  addWrite(addr) {
+    if (this.isWrite(addr)) {
+      return;
+    }
+    this.writeQuene.push(addr);
+  }
+
+  rmWrite(addr) {
+    let ret = this.writeQuene.indexOf(addr);
+    if (ret >= 0) {
+      this.writeQuene.splice(ret, 1);
+    }
+  }
+
   ConnectRelay(address, read, write) {
     try {
       if (!this.Clients.has(address)) {
@@ -34,7 +70,10 @@ export class NostrSystem {
         this.Clients.set(address, client);
         Relay.Connect(client).then(ret => {
           console.log('ConnectRelay', address);
-          this.readQuene.push(address);
+          if (this.readQuene.length === 0) {
+            this.readQuene.push(address);
+          }
+          this.writeQuene.push(address);
         });
       } else {
         unwrap(this.Clients.get(address)).Settings = {
