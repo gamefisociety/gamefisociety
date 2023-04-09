@@ -25,11 +25,14 @@ const GCardNoteRepost = (props) => {
   const MetaPro = useMetadataPro();
 
   const fetch_relative_info = (target) => {
-    if (target.content && target.content !== '') {
-      let t_note = JSON.parse(target.content);
-      setRelaNote({ ...t_note });
+    try {
+      if (target.content && target.content !== '') {
+        let t_note = JSON.parse(target.content);
+        setRelaNote({ ...t_note });
+      }
+    } catch (e) {
+      console.log('err fetch_relative_info', target);
     }
-
     let metaKeys = [];
     let metaInfo = UserCache.getMetadata(target.pubkey);
     if (!metaInfo) {
