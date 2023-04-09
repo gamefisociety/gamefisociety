@@ -8,6 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { setPost } from 'module/store/features/dialogSlice';
 import { default_avatar } from "module/utils/xdef";
@@ -28,6 +30,10 @@ const GCardNote = (props) => {
   const { note } = props;
   const [meta, setMeta] = useState(null);
   const [replyMeta, setReplyMeta] = useState(null);
+  const [repostOpen, setRepostOpen] = useState({
+    open: false,
+    note: null,
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
@@ -114,9 +120,10 @@ const GCardNote = (props) => {
   }
 
   const repostNote = async (targetNote) => {
-    
+    if (targetNote === null) {
+      return;
+    }
     let ev = await repostPro.repost(targetNote);
-    // console.log('repostNote ev', ev);
     System.BroadcastEvent(ev, (tag, client, msg) => {
       console.log('repostNote tag', tag, msg);
     });
@@ -197,6 +204,81 @@ const GCardNote = (props) => {
     pictrue = metaCxt.picture;
   }
 
+  const renderRepostDlg = () => {
+    // onClose={handleDialogClose}
+    return (
+      <Dialog open={repostOpen.open}>
+        <Box
+          sx={{
+            width: "400px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            backgroundColor: "#656565",
+            padding: '24px',
+          }}
+        >
+          <Typography
+            color={"#919191"}
+            sx={{
+              mt: '24px',
+              fontSize: "24px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              textAlign: "center",
+            }}
+          >
+            {"Are you want to repost this?"}
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "42px",
+              width: "100%",
+              height: "48px",
+              fontSize: "16px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              // backgroundColor: "#FF0000",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              repostNote(repostOpen.note);
+              repostOpen.open = false;
+              repostOpen.note = null;
+              setRepostOpen({ ...repostOpen });
+            }}
+          >
+            {"Confirm"}
+          </Button>
+          <Button
+            variant="text"
+            sx={{
+              marginTop: "32px",
+              width: "100%",
+              height: "48px",
+              fontSize: "16px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              repostOpen.open = false;
+              repostOpen.note = null;
+              setRepostOpen({ ...repostOpen });
+            }}
+          >
+            {"Cancel"}
+          </Button>
+        </Box>
+      </Dialog>
+    );
+  }
+
   return (
     <Card className={'card_note_bg'} elevation={0}>
       <Box className={'base_info'}
@@ -251,10 +333,13 @@ const GCardNote = (props) => {
         <Box className="icon_pay" />
         <Box className="icon_trans" onClick={(event) => {
           event.stopPropagation();
-          repostNote(note);
+          repostOpen.open = true;
+          repostOpen.note = { ...note }
+          setRepostOpen({ ...repostOpen });
         }} />
         <Box className="icon_right" />
       </Box>
+      {renderRepostDlg()}
     </Card>
   );
 };
