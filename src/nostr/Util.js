@@ -153,15 +153,3 @@ export function unwrap(v) {
   return v;
 }
 
-export function randomSample(coll, size) {
-  const random = [...coll];
-  return random.sort(() => (Math.random() >= 0.5 ? 1 : -1)).slice(0, size);
-}
-
-export function getNewest(rawNotes) {
-  const notes = [...rawNotes];
-  notes.sort((a, b) => a.created_at - b.created_at);
-  if (notes.length > 0) {
-    return notes[0];
-  }
-}

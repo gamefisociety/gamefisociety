@@ -3,14 +3,29 @@ import NostrFactory from "nostr/NostrFactory";
 import { unwrap } from "nostr/Util";
 import { DefaultRelays } from 'nostr/Const';
 
+let key_read_relay = 'key_read_relay';
+let key_write_relay = 'key_write_relay';
+
 let Relay = NostrRelay();
 
 export class NostrSystem {
 
   constructor() {
     this.Clients = new Map();
-    this.readQuene = [];
-    this.writeQuene = [];
+    // this.readQuene = [];
+    // this.writeQuene = [];
+    let default_relay_read_str = window.localStorage.getItem(key_read_relay);
+    if (default_relay_read_str) {
+      this.readQuene = JSON.parse(default_relay_read_str);
+    } else {
+      this.readQuene = [];
+    }
+    let default_relay_write_str = window.localStorage.getItem(key_write_relay);
+    if (default_relay_write_str) {
+      this.writeQuene = JSON.parse(default_relay_write_str);
+    } else {
+      this.writeQuene = [];
+    }
   }
 
   initRelays() {
@@ -40,6 +55,7 @@ export class NostrSystem {
       return;
     }
     this.readQuene.push(addr);
+    window.localStorage.setItem(key_read_relay, JSON.stringify(this.readQuene));
   }
 
   rmRead(addr) {
@@ -47,6 +63,7 @@ export class NostrSystem {
     if (ret >= 0) {
       this.readQuene.splice(ret, 1);
     }
+    window.localStorage.setItem(key_read_relay, JSON.stringify(this.readQuene));
   }
 
   addWrite(addr) {
@@ -54,6 +71,7 @@ export class NostrSystem {
       return;
     }
     this.writeQuene.push(addr);
+    window.localStorage.setItem(key_write_relay, JSON.stringify(this.writeQuene));
   }
 
   rmWrite(addr) {
@@ -61,6 +79,7 @@ export class NostrSystem {
     if (ret >= 0) {
       this.writeQuene.splice(ret, 1);
     }
+    window.localStorage.setItem(key_write_relay, JSON.stringify(this.writeQuene));
   }
 
   ConnectRelay(address, read, write) {
