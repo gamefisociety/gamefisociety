@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import GCardNote from "components/GCardNote";
+import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
@@ -177,6 +178,11 @@ const GPostReply = () => {
       {renderMenu()}
       <Button className={'post_button'} onClick={() => { postNote(null); }} />
       {renderContent()}
+      <Typography className={'post_loadmore'} onClick={() => {
+        loadMore();
+      }}>
+        {"LOAD MORE"}
+      </Typography>
     </Paper>
   );
 };
