@@ -202,7 +202,7 @@ const GCardNote = (props) => {
           src={pictrue}
         />
         <Box className={'base_ext'}>
-          <Stack direction='row'>
+          <Stack sx={{ width: '100%' }} direction='row' alignItems={'center'}>
             <Typography className="level1_lable"
               sx={{
                 ml: "8px",
@@ -222,6 +222,15 @@ const GCardNote = (props) => {
           </Stack>
           {renderReplyLable()}
         </Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
+        <Box className="icon_more" onClick={(event) => {
+          event.stopPropagation();
+          // if (openMenu === false) {
+          //   handleMenuOpen(event, cfg);
+          // } else {
+          //   handleMenuClose(event);
+          // }
+        }} />
       </Box>
       {renderContent(note.content)}
       <Box className={'bottom'}>
