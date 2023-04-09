@@ -19,6 +19,7 @@ const GSearch = () => {
   const [tips, setTips] = useState({
     showUser: false,
     showEvent: false,
+    showTag: false,
   });
   //
   const navigate = useNavigate();
@@ -28,52 +29,6 @@ const GSearch = () => {
     open: false,
     anchorEl: null,
   });
-
-  // const dispatch = useDispatch();
-  // const { profile, relays } = useSelector((s) => s.profile);
-  // const MetaPro = useMetadataPro();
-  // const followPro = useFollowPro();
-  // const fetchMeta = (pubkey, callback) => {
-  //   let filterMeta = MetaPro.get(pubkey);
-  //   let filterFollow = followPro.getFollows(pubkey);
-  //   let subMeta = BuildSub("profile_contact_search", [filterMeta, filterFollow]);
-  //   let SetMetadata_create_at = 0;
-  //   let ContactList_create_at = 0;
-  //   System.BroadcastSub(subMeta, (tag, client, msg) => {
-  //     if (!msg) return;
-  //     if (tag === "EOSE") {
-  //       System.BroadcastClose(subMeta, client, null);
-  //     } else if (tag === "EVENT") {
-  //       if (msg.pubkey !== pubkey) {
-  //         return;
-  //       }
-  //       if (
-  //         msg.kind === EventKind.SetMetadata &&
-  //         msg.created_at > SetMetadata_create_at
-  //       ) {
-  //         SetMetadata_create_at = msg.created_at;
-  //         if (callback) {
-  //           callback(msg);
-  //         }
-  //       } else if (
-  //         msg.kind === EventKind.ContactList &&
-  //         msg.created_at > ContactList_create_at
-  //       ) {
-  //         ContactList_create_at = msg.created_at;
-  //         if (callback) {
-  //           callback(msg);
-  //         }
-  //       }
-  //     }
-  //   });
-  // };
-
-  // const searchMetadata = (msg) => {
-  //   if (msg.kind === EventKind.SetMetadata && msg.content !== "") {
-  //     let tmpInfo = JSON.parse(msg.content);
-  //     navigate("/userhome", { state: { pubkey: msg.pubkey } });
-  //   }
-  // };
 
   const TextNotePro = useTextNotePro();
   const fetchNoteEvent = (eventId, callback) => {
@@ -112,7 +67,7 @@ const GSearch = () => {
       searchProp.nip19 = true;
       searchProp.open = true;
       searchProp.anchorEl = e.currentTarget;
-      //
+      tips.showTag = false;
       tips.showEvent = false;
       tips.showUser = true;
       setTips({ ...tips });
@@ -120,9 +75,17 @@ const GSearch = () => {
       searchProp.nip19 = false;
       searchProp.open = true;
       searchProp.anchorEl = e.currentTarget;
-      //
       tips.showEvent = true;
       tips.showUser = true;
+      tips.showTag = false;
+      setTips({ ...tips });
+    } else if (value.startsWith("#")) {
+      searchProp.nip19 = false;
+      searchProp.open = true;
+      searchProp.anchorEl = e.currentTarget;
+      tips.showEvent = false;
+      tips.showUser = false;
+      tips.showTag = true;
       setTips({ ...tips });
     }
     setSearchProp({ ...searchProp });
@@ -178,6 +141,7 @@ const GSearch = () => {
             onClick={() => {
               tips.showEvent = false;
               tips.showUser = false;
+              tips.showTag = false;
               setTips({ ...tips });
               //
               let pub = searchProp.value;
@@ -206,6 +170,7 @@ const GSearch = () => {
               //
               tips.showEvent = false;
               tips.showUser = false;
+              tips.showTag = false;
               setTips({ ...tips });
               //
               fetchNoteEvent(searchProp.value, searchNote);
@@ -217,6 +182,33 @@ const GSearch = () => {
             }}
           >
             {"Get Event: " + searchProp.value}
+          </Typography>
+        }
+        {
+          tips.showTag && <Typography
+            sx={{
+              p: "18px",
+              cursor: "pointer",
+            }}
+            color={"text.primary"}
+            onClick={() => {
+              //
+              tips.showEvent = false;
+              tips.showUser = false;
+              tips.showTag = false;
+              setTips({ ...tips });
+              //
+              // fetchNoteEvent(searchProp.value, searchNote);
+              let tmp_tag = searchProp.value.substring(1);
+              navigate('/global/' + tmp_tag);
+              //
+              searchProp.value = "";
+              searchProp.open = false;
+              searchProp.anchorEl = null;
+              setSearchProp({ ...searchProp });
+            }}
+          >
+            {"Get Note Tag: " + searchProp.value}
           </Typography>
         }
       </Popover>
