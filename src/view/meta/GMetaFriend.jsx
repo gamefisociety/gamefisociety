@@ -29,34 +29,16 @@ const eventBus = new EventEmitter();
 const GMetaFriend = forwardRef((props, ref) => {
 
     const { follows, profile } = useSelector((s) => s.profile);
+    const { publicKey } = useSelector((s) => s.login);
 
     const navigate = useNavigate();
 
     const UserCache = UserDataCache();
 
     const createFriends = (scene) => {
-        //
+        curScene = scene;
         console.log('createFriends', scene, profile);
         followers_gui = AdvancedDynamicTexture.CreateFullscreenUI('ui_followers');
-
-        if (!follower_main) {
-            follower_main = {
-                pubkey: '0',
-            };
-        }
-        // console.log('createFriends', scene, profile);
-        follower_main.mesh = MeshBuilder.CreateBox('box', { size: 10 }, scene);
-        follower_main.mesh.position.y = 200;
-        curScene = scene;
-
-        var mat = new StandardMaterial("mat1", scene);
-        mat.alpha = 1.0;
-        mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
-        var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", scene);
-        mat.diffuseTexture = texture;
-        follower_main.name = 'follower_main';
-        follower_main.mesh.material = mat;
-        createLabel(follower_main);
     };
 
     const updateFriends = (dt, scene) => {
@@ -118,12 +100,11 @@ const GMetaFriend = forwardRef((props, ref) => {
         label.onPointerClickObservable.add((event) => {
             console.log('onPointerClickObservable', event, ent);
             if (ent.pubkey !== '0') {
-                //
                 navigate("/userhome/" + ent.pubkey);
             }
-            // label.scaleX = 1.0;
-            // label.scaleY = 1.0;
-            // label.alpha = 0.5;
+            label.scaleX = 1.0;
+            label.scaleY = 1.0;
+            label.alpha = 0.5;
         });
         //
         ent.label = label;
@@ -208,8 +189,24 @@ const GMetaFriend = forwardRef((props, ref) => {
     }, [follows]);
 
     useEffect(() => {
-        console.log('follower main', profile);
-        updateTarget(follower_main, profile);
+        console.log('follower main', publicKey);
+        if (!follower_main && curScene && publicKey !== '') {
+            follower_main = {};
+            follower_main.pubkey = publicKey;
+            follower_main.mesh = MeshBuilder.CreateBox('box', { size: 10 }, curScene);
+            follower_main.mesh.position.y = 200;
+            var mat = new StandardMaterial("mat1", curScene);
+            mat.alpha = 1.0;
+            mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
+            var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", curScene);
+            mat.diffuseTexture = texture;
+            follower_main.name = 'follower_main';
+            follower_main.mesh.material = mat;
+            createLabel(follower_main);
+            updateTarget(follower_main, profile);
+        } else {
+            updateTarget(follower_main, profile);
+        }
     }, [profile]);
 
     return null;
