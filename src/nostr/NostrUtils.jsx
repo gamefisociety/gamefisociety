@@ -77,7 +77,10 @@ export const ParseNote = (note) => {
             }
         });
         //
-        if (ret.eNum === 1) {
+        if (ret.eNum === 0) {
+            ret.root_note_id = note.id;
+            ret.root_note_p = note.pubkey;
+        } else if (ret.eNum === 1) {
             if (ret.eArray[0]) {
                 ret.root_note_id = ret.eArray[0][1];
             }

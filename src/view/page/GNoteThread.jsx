@@ -185,9 +185,9 @@ const GNoteThread = () => {
     if (!noteRet || noteRet.reply_note_id === 0) {
       return null;
     }
-    // if (noteRet.reply_note_id === noteRet.local_note) {
-    //     return null;
-    // }
+    if (noteRet.reply_note_id === noteRet.root_note_id) {
+      return null;
+    }
     let targetNote = TLCache.getThreadNote(noteRet.reply_note_id);
     if (targetNote === null) {
       return null;
@@ -205,6 +205,9 @@ const GNoteThread = () => {
 
   const renderLocalNote = () => {
     if (!noteRet || noteRet.local_note === 0) {
+      return null;
+    }
+    if (noteRet.local_note === noteRet.root_note_id) {
       return null;
     }
     if (noteRet.local_note === noteRet.reply_note_id) {
@@ -251,7 +254,7 @@ const GNoteThread = () => {
   };
 
   const renderContent = () => {
-    console.log("GNoteThread renderContent", noteRet);
+    console.log("GNoteThread renderContent", curNote, noteRet);
     if (!curNote) {
       return null;
     }
