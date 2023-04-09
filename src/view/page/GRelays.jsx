@@ -97,7 +97,6 @@ const GRelays = () => {
   };
 
   const saveRelays = async (tmpRelays) => {
-    //sync to users
     let event = await relayPro.syncRelayKind3(tmpRelays);
     System.BroadcastEvent(event, (tags, client, msg) => {
       if (tags === "OK" && msg.ret === true) {
@@ -137,7 +136,7 @@ const GRelays = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
 
-  const handleOpen = (event, cfg) => {
+  const handleMenuOpen = (event, cfg) => {
     // console.log('handleOpen', event, cfg);
     event.stopPropagation();
     setOpRelay({ ...cfg });
@@ -145,7 +144,7 @@ const GRelays = () => {
     setOpenMenu(true);
   };
 
-  const handleClose = (event) => {
+  const handleMenuClose = (event) => {
     setAnchorEl(null);
     setOpenMenu(false);
   };
@@ -167,7 +166,7 @@ const GRelays = () => {
             }}
           >
             <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
+              <ClickAwayListener onClickAway={handleMenuClose}>
                 <MenuList autoFocusItem={openMenu}>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
@@ -187,6 +186,7 @@ const GRelays = () => {
                   </MenuItem>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
+                    handleMenuClose();
                     handleClickDialogOpen();
                   }}>
                     <ListItemIcon>
@@ -242,7 +242,7 @@ const GRelays = () => {
                   />
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
-                    handleOpen(event, cfg);
+                    handleMenuOpen(event, cfg);
                   }} />
                   {renderRelayMenu()}
                 </Box>
