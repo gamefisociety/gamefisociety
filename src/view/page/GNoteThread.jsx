@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./GNoteThread.scss";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
 
 import { BuildSub, ParseNote } from "nostr/NostrUtils";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import TimelineCache from "db/TimelineCache";
+import GlobalNoteCache from 'db/GlobalNoteCache';
 import UserDataCache from "db/UserDataCache";
 
 import Paper from "@mui/material/Paper";
@@ -17,6 +18,7 @@ import Box from "@mui/material/Box";
 
 import GCardNote from "components/GCardNote";
 import icon_back from "../../asset/image/social/icon_back.png";
+
 const createThreadWorker = createWorkerFactory(() =>
   import("worker/threadRequest")
 );
@@ -24,13 +26,28 @@ const createThreadWorker = createWorkerFactory(() =>
 const GNoteThread = () => {
   const threadWorker = useWorker(createThreadWorker);
   const navigate = useNavigate();
-  let location = useLocation();
-  const { note } = location.state;
+  const { noteid } = useParams();
+  const [curNote, setCurNote] = useState(null);
   const [noteRet, setNoteRet] = useState(null);
   const [notesRoot, setNotesRoot] = useState([]);
   const [notesReply, setNotesReply] = useState([]);
   const textnotePro = useTextNotePro();
   const TLCache = TimelineCache();
+
+  const fetchTarget = (targetId) => {
+    //
+    let filterArray = [];
+    let filterRoot = textnotePro.getEventsByIds([targetId]);
+    filterArray.push(filterRoot);
+    const subThread = BuildSub("thread_note_target", filterArray);
+    threadWorker.fetch_thread_note(subThread, null, (datas, client) => {
+      // console.log('fetchTarget note', datas);
+      if (datas.length === 1) {
+        // TLCache.pushThreadNote(datas[0]);
+        setCurNote({ ...datas[0] });
+      }
+    });
+  }
 
   const fetchMainNotes = (rootNodeId, replyNoteId) => {
     let filterArray = [];
@@ -86,15 +103,31 @@ const GNoteThread = () => {
   };
 
   useEffect(() => {
+    if (!curNote) {
+      return;
+    }
     TLCache.clear();
-    TLCache.pushThreadNote(note);
-    let ret = ParseNote(note);
-    console.log("GNoteThread", ret);
+    TLCache.pushThreadNote(curNote);
+    let ret = ParseNote(curNote);
+    console.log("GNoteThread note", ret);
     setNoteRet({ ...ret });
     fetchMainNotes(ret.root_note_id, ret.reply_note_id);
     fetchReplyNotesToLocal(ret.local_note);
-    return () => {};
-  }, [note]);
+    return () => { };
+  }, [curNote]);
+
+  useEffect(() => {
+    let globalNoteCache = GlobalNoteCache();
+    let note = globalNoteCache.getNote(noteid);
+    if (note) {
+      setCurNote({ ...note });
+    } else {
+      fetchTarget(noteid);
+      //fetch target note
+    }
+    // console.log('GNoteThread noteid', noteid);
+    return () => { };
+  }, [noteid]);
 
   const renderRootNote = () => {
     if (!noteRet || noteRet.root_note_id === 0) {
@@ -178,7 +211,7 @@ const GNoteThread = () => {
     }
     return (
       <Stack className={"note_in"}>
-        <GCardNote note={{ ...note }} />
+        <GCardNote note={{ ...curNote }} />
       </Stack>
     );
   };
@@ -214,7 +247,7 @@ const GNoteThread = () => {
 
   const renderContent = () => {
     console.log("GNoteThread renderContent", noteRet);
-    if (!note) {
+    if (!curNote) {
       return null;
     }
     return (
@@ -229,7 +262,6 @@ const GNoteThread = () => {
   };
 
   // console.log('GNoteThread', note, rootNote, replyNote, notesRoot, notesReply);
-
   return (
     <Paper className="node_thread_bg" elevation={1}>
       <Box

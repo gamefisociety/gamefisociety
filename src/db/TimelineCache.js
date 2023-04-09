@@ -34,6 +34,9 @@ const TimelineCache = () => {
   }
 
   const pushThreadNote = (note) => {
+    if (!note) {
+      return false;
+    }
     if (hasThreadNote(note.id) === true) {
       return false;
     }

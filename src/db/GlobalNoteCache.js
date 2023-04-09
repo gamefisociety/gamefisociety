@@ -32,6 +32,15 @@ const GlobalNoteCache = () => {
     return false;
   }
 
+  const getNote = (noteid) => {
+    for (let i = 0; i < g_note_cache.length; i++) {
+      if (g_note_cache[i].id === noteid) {
+        return g_note_cache[i];
+      }
+    }
+    return null;
+  }
+
   const pushNote = (msg) => {
     if (hasNote(msg) === true) {
       return false;
@@ -59,6 +68,7 @@ const GlobalNoteCache = () => {
     maxTime: maxTime,
     minTime: minTime,
     hasNote: hasNote,
+    getNote: getNote,
     pushNote: pushNote,
   }
 }

@@ -138,7 +138,7 @@ const GCardNote = (props) => {
     return (
       <Box
         className={'content'}
-        onClick={() => { navigate("/notethread", { state: { note: { ...note } }, }) }}
+        onClick={() => { navigate("/notethread/" + note.id) }}
       >
         {Helpers.highlightEverything(str.trim(), null, { showMentionedMessages: true })}
       </Box>

@@ -120,7 +120,7 @@ const MainRoutes = {
       element: <GGroupChat />,
     },
     {
-      path: "/notethread",
+      path: "/notethread/:noteid",
       element: <GNoteThread />,
     },
     {
