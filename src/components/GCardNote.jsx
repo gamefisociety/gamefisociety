@@ -55,7 +55,7 @@ const GCardNote = (props) => {
     } else {
       setMeta({ ...metaInfo });
     }
-    if (ret.reply_note_p !== null) {
+    if (ret.reply_note_p !== null && ret.reply_note_p !== 0) {
       let replyInfo = UserCache.getMetadata(ret.reply_note_p);
       if (!replyInfo) {
         metaKeys.push(ret.reply_note_p);
@@ -80,9 +80,9 @@ const GCardNote = (props) => {
     }
     let tmp_repost_arr = [];
     let tmp_react_arr = [];
-    let subMeta = BuildSub('note_relat_info_' + note.id, filter.concat());
-    console.log('fetch_relative_info', ret, subMeta);
-    nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {
+    let subMeta = BuildSub('note_relat_' + note.id.substr(0, 4), filter.concat());
+    // console.log('fetch_relative_info', subMeta);
+    nostrWorker.fetch_textnote_rela(subMeta, null, (datas, client) => {
       console.log('fetch_relative_info back', datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
