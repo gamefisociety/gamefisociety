@@ -1,6 +1,6 @@
 .global_bg {
     width: 760px;
-    min-height: calc( 100vh - 64px ) ;
+    min-height: calc(100vh - 64px);
     background-color: rgba(27, 27, 27, 0.95);
     pointer-events: all;
     box-sizing: border-box;
@@ -26,7 +26,7 @@
         }
     }
 
-    .global_content{
+    .global_content {
         width: 100%;
         height: auto;
         display: flex;
@@ -39,9 +39,9 @@
     .global_lables {
         position: fixed;
         top: 64px;
-        left: calc( 50vw - 400px );
+        left: calc(50vw - 400px);
         width: 120px;
-        height: calc( 100vh - 24px );
+        height: calc(100vh - 24px);
         padding-top: 24px;
         display: flex;
         flex-direction: column;
@@ -50,31 +50,39 @@
         background-color: rgba(36, 36, 36, 0.75);
 
         .lable_btn {
+            display: block;
             width: 100%;
             font-family: Saira;
             font-size: 14px;
             color: #FFFFFF;
             text-align: left;
-            &:hover{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
                 background-color: #3c3d3d;
             }
         }
 
         .lable_btn_selected {
+            display: block;
             width: 100%;
             font-family: Saira;
             font-size: 14px;
             color: #259eea;
             text-align: left;
-            border: 1;
-            border-color: #cd1a1a;
-            &:hover{
-                background-color: transparent;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #3c3d3d;
             }
         }
     }
 
-    .global_loadmore{
+    .global_loadmore {
         width: 100%;
         font-size: 16px;
         font-family: Saira;
@@ -98,4 +106,3 @@
         cursor: pointer;
     }
 }
-

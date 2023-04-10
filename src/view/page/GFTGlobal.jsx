@@ -19,8 +19,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from "@mui/material/Backdrop";
+import Tooltip from "@mui/material/Tooltip";
+import CircularProgress from "@mui/material/CircularProgress";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -54,14 +55,14 @@ const GFTGlobal = () => {
   useEffect(() => {
     gNoteCache.clear();
     getNoteList(0);
-    return () => { };
+    return () => {};
   }, [label]);
 
   useEffect(() => {
     if (account) {
       getAllSubjects();
     }
-    return () => { };
+    return () => {};
   }, [account, createSubjectState]);
 
   //get subjects
@@ -162,10 +163,12 @@ const GFTGlobal = () => {
     }
     filterTextNote.limit = 15;
     //add t tag
-    if (label != 'all') {
-      filterTextNote['#t'] = [label];
+    if (label != "all") {
+      filterTextNote["#t"] = [label];
     }
-    let subTextNode = BuildSub("global-textnode-" + Date.now(), [filterTextNote])
+    let subTextNode = BuildSub("global-textnode-" + Date.now(), [
+      filterTextNote,
+    ]);
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
     setLoadOpen(true);
@@ -177,6 +180,8 @@ const GFTGlobal = () => {
 
   const handleClickOpen = () => {
     if (account) {
+      setCreateSubjectState(0);
+      setNewSubject("");
       setDialogOpen(true);
     } else {
       dispatch(setIsOpen(true));
@@ -191,32 +196,41 @@ const GFTGlobal = () => {
   };
 
   const renderLables = () => {
-    console.log('renderLables', subjects);
+    console.log("renderLables", subjects);
     return (
       <Box className={"global_lables"}>
-        <Button variant="contained" sx={{
-          width: "80%"
-        }} onClick={handleClickOpen}>
+        <Button
+          variant="contained"
+          sx={{
+            width: "80%",
+            marginBottom: "10px",
+          }}
+          onClick={handleClickOpen}
+        >
           {"Create"}
         </Button>
-        <Button className={label == 'all' ? "lable_btn_selected" : "lable_btn"}
+        <Button
+          className={label == "all" ? "lable_btn_selected" : "lable_btn"}
           onClick={() => {
-            navigate('/global/all');
-          }}>
+            navigate("/global/all");
+          }}
+        >
           {"#ALL"}
         </Button>
         {subjects.map((item, index) => {
-          let isSelect = (item.name == label);
+          let isSelect = item.name == label;
+          const title = "#" + item.name;
           return (
-            <Button
-              key={"label-index-" + index}
-              className={isSelect ? "lable_btn_selected" : "lable_btn"}
-              onClick={() => {
-                navigate('/global/' + item.name);
-              }}
-            >
-              {"#" + item.name}
-            </Button>
+            <Tooltip title={title} placement="right" key={"label-index-" + index}>
+              <Button
+                className={isSelect ? "lable_btn_selected" : "lable_btn"}
+                onClick={() => {
+                  navigate("/global/" + item.name);
+                }}
+              >
+                {title}
+              </Button>
+            </Tooltip>
           );
         })}
       </Box>
@@ -272,7 +286,6 @@ const GFTGlobal = () => {
         <Box
           sx={{
             width: "400px",
-            // height: "463px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -293,27 +306,53 @@ const GFTGlobal = () => {
           >
             {"Create A Subject"}
           </Typography>
-          <TextField
-            disabled={createSubjectState === 1}
+          <Box
             sx={{
-              marginTop: "40px",
+              marginTop: "30px",
               width: "80%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
-            length={30}
-            value={newSujbect}
-            variant="outlined"
-            onChange={(event) => {
-              let name = event.target.value.trim();
-              setNewSubject(name);
-            }}
-          />
+          >
+            <Typography
+              sx={{
+                height: "28px",
+                fontSize: "24px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                lineHeight: "28px",
+                textAlign: "center",
+                color: "#FFFFFF",
+              }}
+            >
+              {"#"}
+            </Typography>
+            <TextField
+              disabled={createSubjectState === 1}
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              length={20}
+              value={newSujbect}
+              variant="outlined"
+              onChange={(event) => {
+                let name = event.target.value.trim();
+                const scReg = /[!@#$%^&*()_+\{\}:“<>?,.\/;'\[\]\\|`~]+/g;
+                const newName = name.replace(scReg, "");
+                setNewSubject(newName);
+              }}
+            />
+          </Box>
+
           <LoadingButton
             variant="contained"
             loading={createSubjectState === 1}
@@ -341,14 +380,17 @@ const GFTGlobal = () => {
       {renderLables()}
       {renderGlobalHead()}
       {renderContent()}
-      <Typography className={'global_loadmore'} onClick={() => {
-        loadMore();
-      }}>
+      <Typography
+        className={"global_loadmore"}
+        onClick={() => {
+          loadMore();
+        }}
+      >
         {"LOAD MORE"}
       </Typography>
       {renderSubjectDialog()}
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loadOpen}
         onClick={() => {
           setLoadOpen(false);
