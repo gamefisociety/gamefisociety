@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./GSearch.scss";
 
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
-import { System } from "nostr/NostrSystem";
-import { BuildSub } from "nostr/NostrUtils";
-//
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Popover from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { parseId } from "nostr/Util";
@@ -25,8 +16,11 @@ const GSearch = () => {
 
   let top100Films = [
     { title: '#BTC' },
-    { title: '#18Ban' },
+    { title: '#ETH' },
     { title: '#nostr' },
+    { title: '#gfs' },
+    { title: '#gamefi' },
+    { title: '#porn' },
   ];
 
   const handleSearch = (v) => {
