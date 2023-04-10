@@ -176,7 +176,7 @@ const GFTGlobal = () => {
     if (label != 'all') {
       filterTextNote['#t'] = [label];
     }
-    let subTextNode = BuildSub("global-textnode-" + tim, [filterTextNote])
+    let subTextNode = BuildSub("global-textnode-" + Date.now(), [filterTextNote])
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
     console.log("fetch_global_notes post", tim,);
