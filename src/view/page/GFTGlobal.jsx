@@ -19,6 +19,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { setIsOpen } from "module/store/features/dialogSlice";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -39,6 +41,7 @@ const GFTGlobal = () => {
   const navigate = useNavigate();
   const { relays, curRelay } = useSelector((s) => s.profile);
   const { label } = useParams();
+  const [loadOpen, setLoadOpen] = React.useState(false);
   const [data, setData] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [newSujbect, setNewSubject] = React.useState("");
@@ -168,7 +171,7 @@ const GFTGlobal = () => {
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 20;
+    filterTextNote.limit = 15;
     //add t tag
     if (label != 'all') {
       filterTextNote['#t'] = [label];
@@ -177,9 +180,11 @@ const GFTGlobal = () => {
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
     console.log("fetch_global_notes post", tim,);
+    setLoadOpen(true);
     nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
       console.log("fetch_global_notes back", tim, data);
       setData(data.concat());
+      setLoadOpen(false);
       // const pubkeys = [];
       // data.map((item) => {
       //   pubkeys.push(item.pubkey);
@@ -367,6 +372,15 @@ const GFTGlobal = () => {
         {"LOAD MORE"}
       </Typography>
       {renderSubjectDialog()}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadOpen}
+        onClick={() => {
+          setLoadOpen(false);
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Paper>
   );
 };
