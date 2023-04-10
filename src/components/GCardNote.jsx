@@ -105,11 +105,19 @@ const GCardNote = (props) => {
         } else if (msg.kind === EventKind.TextNote) {
           //
         } else if (msg.kind === EventKind.Repost) {
-          tmp_repost_arr.push(msg);
-          // console.log('GCardNote fetch_user_info repost', msg);
+          let ret = tmp_repost_arr.some((item) => {
+            return item.pubkey === msg.pubkey;
+          });
+          if (ret === false) {
+            tmp_repost_arr.push(msg);
+          }
         } else if (msg.kind === EventKind.Reaction) {
-          tmp_react_arr.push(msg);
-          // console.log('GCardNote fetch_user_info reaction', msg);
+          let ret = tmp_react_arr.some((item) => {
+            return item.pubkey === msg.pubkey;
+          });
+          if (ret === false) {
+            tmp_react_arr.push(msg);
+          }
         }
       });
       setRepostData(tmp_repost_arr.concat());
@@ -137,6 +145,18 @@ const GCardNote = (props) => {
     let ev = await repostPro.repost(targetNote);
     System.BroadcastEvent(ev, (tag, client, msg) => {
       console.log('repostNote tag', tag, msg);
+    });
+  }
+
+  const likeNote = async (targetNote) => {
+    if (targetNote === null) {
+      return;
+    }
+    let ev = await reactionPro.like(targetNote);
+    console.log('reactionPro like', ev);
+    System.BroadcastEvent(ev, (tag, client, msg) => {
+      // console.log('reactionPro tag', tag, msg);
+      fetch_relative_info();
     });
   }
 
@@ -354,11 +374,8 @@ const GCardNote = (props) => {
         <Box className={isYourReact() ? 'icon_right_1' : 'icon_right'} onClick={(event) => {
           event.stopPropagation();
           if (isYourReact() === false) {
-            //you can like
+            likeNote(note);
           }
-          // repostOpen.open = true;
-          // repostOpen.note = { ...note }
-          // setRepostOpen({ ...repostOpen });
         }} />
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {reactData.length}
