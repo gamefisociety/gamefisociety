@@ -31,7 +31,7 @@ const GCardProject = (props) => {
     fetching = true;
     catIPFSContent(tokenInfo.cid)
       .then((res) => {
-        console.log("catContent", res);
+        console.log("catIPFSContent", res);
         fetching = false;
         let t_res = "";
         if (typeof res === "string" || res instanceof String) {
@@ -40,8 +40,10 @@ const GCardProject = (props) => {
           t_res = res.content;
         }
         //
-        t_res = t_res.replaceAll("gamefisociety/temp/image", def_ipfs_public_gateway)
-        let t_item = JSON.parse(t_res);
+        console.log("project info string", t_res);
+        t_res = t_res.replace("gamefi society projects ", "");
+        const itemStr = t_res.replaceAll("gamefisociety/temp/image", def_ipfs_public_gateway)
+        let t_item = JSON.parse(itemStr);
         if(t_item){
           setProjectInfo(t_item);
         }
@@ -77,7 +79,7 @@ const GCardProject = (props) => {
         variant="contained"
         onClick={() => {
           console.log(projectInfo);
-          navigate("/detailproject", {
+          navigate("/game/"+projectInfo.name, {
             state: {
               projectInfo: projectInfo,
               tokenInfo: tokenInfo,

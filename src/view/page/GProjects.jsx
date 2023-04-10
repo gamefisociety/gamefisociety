@@ -113,7 +113,7 @@ const GProjects = () => {
             marginLeft: "24px",
           }}
         >
-          {"Projects"}
+          {"Games"}
         </Typography>
         <Button
           variant="contained"
@@ -129,7 +129,7 @@ const GProjects = () => {
           }}
           onClick={handleClickDialogOpen}
         >
-          {"Create Project"}
+          {"Create Game"}
         </Button>
       </Box>
     );
@@ -242,7 +242,11 @@ const GProjects = () => {
           >
             <img src={closeImg} width="60px" alt="close" />
           </Button>
-          <GProjectEditor />
+          <GProjectEditor callback={(msg)=>{
+            if(msg === "SUCCESS"){
+              getAllProjects();
+            }
+          }} />
         </Box>
       </Drawer>
     </Box>
