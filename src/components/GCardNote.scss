@@ -110,8 +110,7 @@
         background-size: 100% 100%;
         border-radius: 4px;
         &:hover {
-            background-image: url(../asset/image/logo/icon-more.png);
-            background-color: #2c2c2c;
+            filter: brightness(180%);
         }
     }
 
@@ -123,7 +122,19 @@
         background-size: 100% 100%;
         // pointer-events: none;
         &:hover {
-            background-image: url(../asset/image/logo/icon_chat.png);
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_chain_push {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_chain_push.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
         }
     }
 
@@ -136,7 +147,7 @@
         background-size: 100% 100%;
         // pointer-events: none;
         &:hover {
-            background-image: url(../asset/image/logo/icon_pay.png);
+            filter: brightness(180%);
         }
     }
 
@@ -149,7 +160,7 @@
         background-size: 100% 100%;
         // background-color: transparent;
         &:hover {
-            background-image: url(../asset/image/logo/icon_trans.png);
+            filter: brightness(180%);
         }
     }
 
@@ -158,10 +169,9 @@
         width: 28px;
         height: 28px;
         margin-left: 26px;
-        background-color: #00B7FF;
+        filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_trans.png);
         background-size: 100% 100%;
-        // background-color: transparent;
         &:hover {
             background-image: url(../asset/image/logo/icon_trans.png);
         }
@@ -175,7 +185,7 @@
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
         &:hover {
-            background-image: url(../asset/image/logo/icon_praise.png);
+            filter: brightness(180%);
         }
     }
 
@@ -184,7 +194,7 @@
         width: 28px;
         height: 28px;
         margin-left: 26px;
-        background-color: #00B7FF;
+        filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
         &:hover {
@@ -192,17 +202,6 @@
         }
     }
 
-    .icon_chain_push {
-        cursor: pointer;
-        width: 28px;
-        height: 28px;
-        margin-left: 26px;
-        background-image: url(../asset/image/logo/icon_chain_push.png);
-        background-size: 100% 100%;
-        &:hover {
-            background-image: url(../asset/image/logo/icon_chain_push.png);
-        }
-    }
 
 }
 
