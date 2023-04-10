@@ -127,18 +127,6 @@
         }
     }
 
-    .icon_right {
-        cursor: pointer;
-        width: 28px;
-        height: 28px;
-        margin-left: 26px;
-        background-image: url(../asset/image/logo/icon_praise.png);
-        background-size: 100% 100%;
-        &:hover {
-            background-image: url(../asset/image/logo/icon_praise.png);
-        }
-    }
-
     .icon_pay {
         cursor: pointer;
         width: 28px;
@@ -162,6 +150,45 @@
         // background-color: transparent;
         &:hover {
             background-image: url(../asset/image/logo/icon_trans.png);
+        }
+    }
+
+    .icon_trans_1 {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-color: #00B7FF;
+        background-image: url(../asset/image/logo/icon_trans.png);
+        background-size: 100% 100%;
+        // background-color: transparent;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_trans.png);
+        }
+    }
+
+    .icon_right {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_praise.png);
+        background-size: 100% 100%;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_praise.png);
+        }
+    }
+
+    .icon_right_1 {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-color: #00B7FF;
+        background-image: url(../asset/image/logo/icon_praise.png);
+        background-size: 100% 100%;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_praise.png);
         }
     }
 

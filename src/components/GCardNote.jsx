@@ -29,6 +29,7 @@ const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'
 const GCardNote = (props) => {
   const nostrWorker = useWorker(createNostrWorker);
   const { note } = props;
+  const { loggedOut, publicKey } = useSelector((s) => s.login);
   const [meta, setMeta] = useState(null);
   const [replyMeta, setReplyMeta] = useState(null);
   const [repostOpen, setRepostOpen] = useState({
@@ -113,7 +114,20 @@ const GCardNote = (props) => {
       });
       setRepostData(tmp_repost_arr.concat());
       setReactData(tmp_react_arr.concat());
+      console.log('GCardNote repost & react', tmp_repost_arr, tmp_react_arr);
     })
+  }
+
+  const isYourReact = () => {
+    return reactData.some((item) => {
+      return item.pubkey === publicKey;
+    });
+  }
+
+  const isYourRepost = () => {
+    return repostData.some((item) => {
+      return item.pubkey === publicKey;
+    });
   }
 
   const repostNote = async (targetNote) => {
@@ -328,7 +342,7 @@ const GCardNote = (props) => {
         }} />
         <Box className="icon_chain_push" />
         <Box className="icon_pay" />
-        <Box className="icon_trans" onClick={(event) => {
+        <Box className={isYourRepost() ? 'icon_trans_1' : 'icon_trans'} onClick={(event) => {
           event.stopPropagation();
           repostOpen.open = true;
           repostOpen.note = { ...note }
@@ -337,7 +351,15 @@ const GCardNote = (props) => {
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {repostData.length}
         </Typography>
-        <Box className="icon_right" />
+        <Box className={isYourReact() ? 'icon_right_1' : 'icon_right'} onClick={(event) => {
+          event.stopPropagation();
+          if (isYourReact() === false) {
+            //you can like
+          }
+          // repostOpen.open = true;
+          // repostOpen.note = { ...note }
+          // setRepostOpen({ ...repostOpen });
+        }} />
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {reactData.length}
         </Typography>
