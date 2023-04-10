@@ -1,15 +1,13 @@
 .store_bg {
-
-    // flexGrow: 1,
-    // position: "relative",
-    // backgroundColor: "#0F0F0F",
-    // display: "flex",
-    // flexDirection: "column",
-    // alignItems: "center",
-    // justifyContent: "center",
     width: 100%;
+    margin: 0 auto;
     min-height: 100vh;
     background-color: rgb(210, 244, 179);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 10;
 
     // cursor: pointer;
     // transition: all .3s cubic-bezier(.17,.67,.83,.67);
@@ -17,16 +15,30 @@
     // &:hover{
     //     transform: scale(1.05);
     // }
+
+    .store_hot_bg {
+        width: 100%;
+        min-height: 100px;
+        background-color: rgb(40, 162, 202);
+    }
+
+    .store_market_bg {
+        width: 100%;
+        min-height: 100px;
+        background-color: rgb(129, 40, 202);
+    }
+
+    .ad {
+        cursor: pointer;
+    }
+    
+    .bg{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        // transform: scale(0.8);
+        z-index: 0;
+    }
+    
 }
 
-.ad {
-    cursor: pointer;
-}
-
-.bg{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    // transform: scale(0.8);
-    z-index: 0;
-}

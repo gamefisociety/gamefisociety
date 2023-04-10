@@ -13,10 +13,10 @@ import GFTLeftMenu from "view/head/GFTLeftMenu";
 
 const StoreLayout = () => {
   return (
-    <Box className="store_bg">
+    <Box className="store_layout">
       <GFTHead />
       <GFTLeftMenu />
-      <Box className="store_content">
+      <Box className="store_layout_content">
         <Outlet />
       </Box>
     </Box>

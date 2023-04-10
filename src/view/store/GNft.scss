@@ -1,0 +1,32 @@
+.nft_bg {
+
+    // flexGrow: 1,
+    // position: "relative",
+    // backgroundColor: "#0F0F0F",
+    // display: "flex",
+    // flexDirection: "column",
+    // alignItems: "center",
+    // justifyContent: "center",
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgb(210, 244, 179);
+
+    // cursor: pointer;
+    // transition: all .3s cubic-bezier(.17,.67,.83,.67);
+    // overflow: hidden;
+    // &:hover{
+    //     transform: scale(1.05);
+    // }
+}
+
+.ad {
+    cursor: pointer;
+}
+
+.bg{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    // transform: scale(0.8);
+    z-index: 0;
+}
