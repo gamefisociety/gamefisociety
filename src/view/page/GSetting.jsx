@@ -215,7 +215,6 @@ const GSetting = () => {
           {'Delete Account'}
         </Button>
       </Stack>
-
     </Paper>
   );
 };

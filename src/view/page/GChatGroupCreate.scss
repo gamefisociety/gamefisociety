@@ -1,0 +1,92 @@
+.chat_group_create_bg {
+    width: 400px;
+    min-height: calc( 100vh - 64px );
+    background-color: rgba(27, 27, 27, 0.95);
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    pointer-events: all;
+
+    .lable_part {
+        width: 100%;
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .lable_flag {
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        color: #919191;
+    }
+
+    .label_text {
+        margin-top: 12px;
+        width: 80%;
+        border-radius: 5px;
+        border-color: #323232;
+        background-color: #202122;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+    }
+
+    .bt_add {
+        width: 80px;
+        height: 36px;
+        margin-top: 12px;
+        background-color: #1d44f1;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #6782f7;
+        }
+    }
+
+    .bt_back {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 80px;
+        height: 36px;
+        background-color: #1d44f1;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #6782f7;
+        }
+    }
+
+    
+
+    .bt_create {
+        width: 200px;
+        height: 36px;
+        margin-top: 24px;
+        background-color: #1d44f1;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #6782f7;
+        }
+    }
+
+}
+
