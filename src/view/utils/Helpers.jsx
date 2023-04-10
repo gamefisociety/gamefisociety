@@ -110,12 +110,12 @@ export default {
           style={{width:"450px"}}
           width={450}
           muted
-          autoPlay={true}
+          autoPlay={false}
           playsInline
           controls
           loop
           onLoadedData={(e) => {
-            e.target.play();
+            // e.target.play();
           }}
         />
       );
@@ -384,7 +384,7 @@ export default {
 
     // highlight hashtags, link to /search/${encodeUriComponent(hashtag)}
     s = reactStringReplace(s, hashtagRegex, (match) => {
-      return <a style={{color:"#00B7FF"}} href={`/search/${encodeURIComponent(match)}`}>{match}</a>;
+      return <a style={{color:"#00B7FF"}} href={`/#/global/${match.replaceAll("#","")}`}>{match}</a>;
     });
 
     return s;

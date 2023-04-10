@@ -1,11 +1,18 @@
-import { System } from "nostr/NostrSystem";
+import {
+  System
+} from "nostr/NostrSystem";
 import GlobalNoteCache from 'db/GlobalNoteCache';
 import UserDataCache from 'db/UserDataCache';
-import { EventKind } from "nostr/def";
+import DMCache from 'db/DMCache';
+import useNostrEvent from "nostr/NostrEvent";
+import {
+  EventKind
+} from "nostr/def";
 
 export const fetch_user_profile = (sub, curRelay, callback) => {
   // console.log('fetch_user_profile', sub);
   let userDataCache = UserDataCache();
+
   const newMsg = [];
   System.BroadcastSub(sub, (tag, client, msg) => {
     if (tag === 'EOSE') {
@@ -19,9 +26,7 @@ export const fetch_user_profile = (sub, curRelay, callback) => {
         userDataCache.pushMetadata(msg);
       }
     }
-  }, curRelay
-  );
-
+  }, curRelay);
   return null;
 }
 
@@ -40,12 +45,10 @@ export const fetch_user_info = (sub, curRelay, callback) => {
       }
       msgs.push(msg);
     }
-  }, curRelay
-  );
+  }, curRelay);
 
   return null;
 }
-
 
 export const fetch_user_metadata = (sub, curRelay, callback) => {
   let userDataCache = UserDataCache();
@@ -66,8 +69,7 @@ export const fetch_user_metadata = (sub, curRelay, callback) => {
         newInfo.set(msg.pubkey, info);
       }
     }
-  }, curRelay
-  );
+  }, curRelay);
   return null;
 }
 
@@ -75,16 +77,16 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
   // console.log('fetch_global_notes111', curRelay);
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
-    if (tag === 'EOSE') {
-      System.BroadcastClose(sub, client, null);
-      if (callback) {
-        let cache = globalNoteCache.get();
-        callback(cache, client);
+      if (tag === 'EOSE') {
+        System.BroadcastClose(sub, client, null);
+        if (callback) {
+          let cache = globalNoteCache.get();
+          callback(cache, client);
+        }
+      } else if (tag === 'EVENT') {
+        globalNoteCache.pushNote(msg)
       }
-    } else if (tag === 'EVENT') {
-      globalNoteCache.pushNote(msg)
-    }
-  },
+    },
     curRelay
   );
 }
@@ -93,18 +95,54 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
 export const listen_follow_notes = (sub, curRelay, goon, callback) => {
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
-    if (tag === 'EOSE') {
-      if (goon === false) {
-        System.BroadcastClose(sub, curRelay, null);
+      if (tag === 'EOSE') {
+        if (goon === false) {
+          System.BroadcastClose(sub, curRelay, null);
+        }
+      } else if (tag === 'EVENT') {
+        globalNoteCache.pushNote(msg);
+        if (callback) {
+          let cache = globalNoteCache.get();
+          callback(cache, client);
+        }
       }
-    } else if (tag === 'EVENT') {
-      globalNoteCache.pushNote(msg);
-      if (callback) {
-        let cache = globalNoteCache.get();
-        callback(cache, client);
+    },
+    curRelay
+  );
+}
+
+export const fetch_chatCache_notes = (privateKey, pubkey, sub, curRelay, callback) => {
+  let chatCache = DMCache();
+
+  System.BroadcastSub(sub, (tag, client, msg) => {
+      if (tag === 'EOSE') {
+        System.BroadcastClose(sub, client, null);
+        if (callback) {
+          let cache = chatCache.get();
+          // callback(cache, client);
+        }
+      } else if (tag === 'EVENT') {
+        // globalNoteCache.pushNote(msg)
+        let nostrEvent = useNostrEvent();
+        try {
+          nostrEvent
+            .DecryptData(msg.content, privateKey, msg.pubkey)
+            .then((dmsg) => {
+              console.log(dmsg);
+              if (dmsg) {
+                let flag = chatCache.pushChat(pubkey, msg.id, msg.pubkey, msg.created_at, dmsg);
+                let msgObj = {
+                  msg: msg,
+                  dmsg: dmsg
+                };
+                callback(msgObj, client);
+              }
+            });
+        } catch (e) {
+          //
+        }
       }
-    }
-  },
+    },
     curRelay
   );
 }
@@ -113,4 +151,3 @@ export const listen_follow_notes = (sub, curRelay, goon, callback) => {
 export const unlisten_follow_notes = (sub, curRelay, callback) => {
   System.BroadcastClose(sub, curRelay, null);
 }
-
