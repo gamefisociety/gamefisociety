@@ -53,6 +53,7 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
           fontSize: "12px",
           color: "#FFFFFF",
           whiteSpace: "pre-line",
+          wordWrap:"break-word",
         }}
         align={"left"}
       >
@@ -169,18 +170,6 @@ const GFTChat = (props) => {
       <Box className={'dm_header'}>
         <Icon
           className="goback"
-          sx={{
-            width: "100px",
-            height: "38px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            color: "#FFFFFF",
-            fontSize: "18px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          }}
           onClick={() => {
             props.closeHandle();
           }}

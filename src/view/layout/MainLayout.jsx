@@ -11,7 +11,7 @@ import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
 import GFTHead from "view/head/GFTHead";
 // import GBottomMenu from "view/head/GBottomMenu";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
-import GFTHomeMeta from 'view/meta/GFTHomeMeta';
+import GFTHomeMeta from "view/meta/GFTHomeMeta";
 import GSociety from "view/page/GSociety";
 import GSocietyDM from "view/page/GSocietyDM";
 import GRelays from "view/page/GRelays";
@@ -98,6 +98,10 @@ const MainLayout = () => {
             marginTop: "64px",
             backgroundColor: "transparent",
             borderWidth: 0,
+            // display: "flex",
+            // flexDirection: "column",
+            // alignItems: "flex-start",
+            // justifyContent: "center",
           },
         }}
         variant="persistent"
@@ -161,7 +165,7 @@ const MainLayout = () => {
       >
       </Drawer> */}
       <Drawer
-        className='main_bottom_drawer'
+        className="main_bottom_drawer"
         // swipeAreaWidth='80%'
         // PaperProps={{
         //   className: 'main_bottom_drawer_inner',
@@ -190,8 +194,7 @@ const MainLayout = () => {
           //   })
           // );
         }}
-      >
-      </Drawer>
+      ></Drawer>
       <GLoginDialog />
       {/* {loggedOut === true && <GLoginDialog />} */}
     </Box>

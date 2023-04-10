@@ -122,14 +122,14 @@ const GPostReply = () => {
         </Button>
         <Button className={'post_menu_item'}
           sx={{
-            backgroundColor: curLabel === 'Post & Replay' ? '#006CF9' : '#272727'
+            backgroundColor: curLabel === 'Post & Reply' ? '#006CF9' : '#272727'
           }}
           variant="contained"
           onClick={() => {
-            setCurLabel('Post & Replay');
+            setCurLabel('Post & Reply');
           }}
         >
-          {"Post & Replay"}
+          {"Post & Reply"}
         </Button>
       </Box>
     );
