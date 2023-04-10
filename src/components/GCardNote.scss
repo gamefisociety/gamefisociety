@@ -26,59 +26,6 @@
             align-items: flex-start;
             justify-content: center;
         }
-
-        .icon_more {
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            background-image: url(../asset/image/logo/icon-more.png);
-            background-size: 100% 100%;
-            border-radius: 4px;
-            &:hover {
-                background-image: url(../asset/image/logo/icon-more.png);
-                background-color: #2c2c2c;
-            }
-        }
-
-        .level1_lable {
-            color: #FFFFFF;
-            font-size: 14px;
-            font-family: Saira;
-            font-weight: 500;
-            cursor: pointer;
-            &:hover {
-                text-decoration:underline
-            }
-        }
-
-        .level2_lable {
-            color: #666666;
-            font-size: 14px;
-            font-family: Saira;
-            font-weight: 500;
-            cursor: pointer;
-            &:hover {
-                text-decoration:underline
-            }
-        }
-
-        .level2_lable_unhover {
-            color: #666666;
-            font-size: 14px;
-            font-family: Saira;
-            font-weight: 500;
-        }
-
-        .level3_lable {
-            color: #00B7FF;
-            font-size: 14px;
-            font-family: Saira;
-            font-weight: 500;
-            cursor: pointer;
-            &:hover {
-                text-decoration:underline
-            }
-        }
     }
     
     .content {
@@ -113,67 +60,120 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
+    }
 
-        .icon_chat {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
+    .level1_lable {
+        color: #FFFFFF;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .level2_lable {
+        color: #666666;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .level2_lable_unhover {
+        color: #666666;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+    }
+
+    .level3_lable {
+        color: #00B7FF;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .icon_more {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        background-image: url(../asset/image/logo/icon-more.png);
+        background-size: 100% 100%;
+        border-radius: 4px;
+        &:hover {
+            background-image: url(../asset/image/logo/icon-more.png);
+            background-color: #2c2c2c;
+        }
+    }
+
+    .icon_chat {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../asset/image/logo/icon_chat.png);
+        background-size: 100% 100%;
+        // pointer-events: none;
+        &:hover {
             background-image: url(../asset/image/logo/icon_chat.png);
-            background-size: 100% 100%;
-            // pointer-events: none;
-            &:hover {
-                background-image: url(../asset/image/logo/icon_chat.png);
-            }
         }
-    
-        .icon_right {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            margin-left: 26px;
-            background-image: url(../asset/image/logo/icon_praise.png);
-            background-size: 100% 100%;
-            &:hover {
-                background-image: url(../asset/image/logo/icon_praise.png);
-            }
-        }
-    
-        .icon_pay {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            margin-left: 26px;
-            background-image: url(../asset/image/logo/icon_pay.png);
-            background-size: 100% 100%;
-            // pointer-events: none;
-            &:hover {
-                background-image: url(../asset/image/logo/icon_pay.png);
-            }
-        }
-    
-        .icon_trans {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            margin-left: 26px;
-            background-image: url(../asset/image/logo/icon_trans.png);
-            background-size: 100% 100%;
-            // background-color: transparent;
-            &:hover {
-                background-image: url(../asset/image/logo/icon_trans.png);
-            }
-        }
+    }
 
-        .icon_chain_push {
-            cursor: pointer;
-            width: 28px;
-            height: 28px;
-            margin-left: 26px;
+    .icon_right {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_praise.png);
+        background-size: 100% 100%;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_praise.png);
+        }
+    }
+
+    .icon_pay {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_pay.png);
+        background-size: 100% 100%;
+        // pointer-events: none;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_pay.png);
+        }
+    }
+
+    .icon_trans {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_trans.png);
+        background-size: 100% 100%;
+        // background-color: transparent;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_trans.png);
+        }
+    }
+
+    .icon_chain_push {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_chain_push.png);
+        background-size: 100% 100%;
+        &:hover {
             background-image: url(../asset/image/logo/icon_chain_push.png);
-            background-size: 100% 100%;
-            &:hover {
-                background-image: url(../asset/image/logo/icon_chain_push.png);
-            }
         }
     }
 

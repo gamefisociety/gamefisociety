@@ -38,16 +38,14 @@ const GFTGlobal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { relays, curRelay } = useSelector((s) => s.profile);
-  const [curCreateAt, setCurCreateAt] = useState(0);
   const { label } = useParams();
-  //
   const [data, setData] = useState([]);
-  const [inforData, setInforData] = useState(new Map());
   const [subjects, setSubjects] = useState([]);
   const [newSujbect, setNewSubject] = React.useState("");
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
   const textNotePro = useTextNotePro();
+  // const [inforData, setInforData] = useState(new Map());
   const metadataPro = useMetadataPro();
 
   const gNoteCache = GlobalNoteCache();
@@ -159,12 +157,7 @@ const GFTGlobal = () => {
   };
 
   const loadMore = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >
-      document.scrollingElement.scrollHeight - 50
-    ) {
-      getNoteList(gNoteCache.minTime());
-    }
+    getNoteList(gNoteCache.minTime());
   };
 
   const getNoteList = (tim) => {
@@ -175,36 +168,32 @@ const GFTGlobal = () => {
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 50;
+    filterTextNote.limit = 20;
     //add t tag
     if (label != 'all') {
       filterTextNote['#t'] = [label];
     }
-    let subTextNode = BuildSub("global-textnode", [filterTextNote]);
+    let subTextNode = BuildSub("global-textnode-" + tim, [filterTextNote])
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
-    // console.log("fetch_global_notes", targetAddr);
+    console.log("fetch_global_notes post", tim,);
     nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
-      // console.log('fetch_global_notes', label, subTextNode, data);
+      console.log("fetch_global_notes back", tim, data);
       setData(data.concat());
-      const pubkeys = [];
-      data.map((item) => {
-        pubkeys.push(item.pubkey);
-      });
-      const pubkyes_filter = new Set(pubkeys);
-      getInfor(pubkyes_filter, targetAddr);
-      //
-      setCurCreateAt(gNoteCache.minTime());
+      // const pubkeys = [];
+      // data.map((item) => {
+      //   pubkeys.push(item.pubkey);
+      // });
     });
   };
 
-  const getInfor = (pkeys, addr) => {
-    const filterMetaData = metadataPro.get(Array.from(pkeys));
-    let subTextNode = BuildSub("metadata", [filterMetaData]);
-    nostrWorker.fetch_user_metadata(subTextNode, addr, (data, client) => {
-      setInforData(data);
-    });
-  };
+  // const getInfor = (pkeys, addr) => {
+  //   const filterMetaData = metadataPro.get(Array.from(pkeys));
+  //   let subTextNode = BuildSub("metadata", [filterMetaData]);
+  //   nostrWorker.fetch_user_metadata(subTextNode, addr, (data, client) => {
+  //     setInforData(data);
+  //   });
+  // };
 
   const handleClickOpen = () => {
     if (account) {

@@ -16,19 +16,11 @@ export const useReactionPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
-    // create: async (pubKey, priKey, obj) => {
-    //   if (pubKey) {
-    //     const ev = NostrFactory.createEvent(pubKey);
-    //     ev.Kind = EventKind.SetMetadata;
-    //     ev.Content = JSON.stringify(obj);
-    //     return await nostrEvent.Sign(priKey, ev);
-    //   }
-    // },
-    // modify: async (obj) => {
-    //   const ev = NostrFactory.createEvent(publicKey);
-    //   ev.Kind = EventKind.SetMetadata;
-    //   ev.Content = JSON.stringify(obj);
-    //   return await nostrEvent.Sign(privateKey, ev);
-    // },
+    getByIds: async (eventIds) => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.Reaction];
+      filter['#e'] = eventIds?.concat();
+      return filter;
+    },
   }
 }

@@ -18,7 +18,8 @@ import Helpers from "../../src/view/utils/Helpers";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
-import { BuildSub } from "nostr/NostrUtils"
+import { useReactionPro } from "nostr/protocal/ReactionPro";
+import { BuildSub, ParseNote } from "nostr/NostrUtils"
 import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
 import { System } from 'nostr/NostrSystem';
@@ -34,76 +35,70 @@ const GCardNote = (props) => {
     open: false,
     note: null,
   });
+  const [repostData, setRepostData] = useState([]);
+  const [reactData, setReactData] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
   const MetaPro = useMetadataPro();
   const repostPro = useRepostPro();
+  const reactionPro = useReactionPro();
 
   const fetch_relative_info = () => {
 
-    let reply_pubkey = null;
-    let self_pubkey = note.pubkey;
-    let eNum = 0;
-    let pNum = 0;
-    let eArray = [];
-    let pArray = [];
-    note.tags.map(item => {
-      if (item[0] === 'e') {
-        eNum = eNum + 1;
-        eArray.push(item[1]);
-      } else if (item[0] === 'p') {
-        pNum = pNum + 1;
-        pArray.push(item[1]);
-      }
-    });
-    if (eNum === 1 && pNum === 1 && pArray.length > 0) {
-      reply_pubkey = pArray[0];
-    } else if (eNum === 2 && pNum === 2 && pArray.length > 1) {
-      reply_pubkey = pArray[1];
-    }
-    //
+    let ret = ParseNote(note);
     let filter = [];
     let metaKeys = [];
-    let metaInfo = UserCache.getMetadata(self_pubkey);
+    let metaInfo = UserCache.getMetadata(ret.local_p);
     if (!metaInfo) {
-      metaKeys.push(self_pubkey);
+      metaKeys.push(ret.local_p);
     } else {
       setMeta({ ...metaInfo });
     }
-    if (reply_pubkey !== null) {
-      let replyInfo = UserCache.getMetadata(reply_pubkey);
+    if (ret.reply_note_p !== null) {
+      let replyInfo = UserCache.getMetadata(ret.reply_note_p);
       if (!replyInfo) {
-        metaKeys.push(reply_pubkey);
+        metaKeys.push(ret.reply_note_p);
       } else {
         setReplyMeta({ ...replyInfo });
       }
     }
     if (metaKeys.length > 0) {
       let filterMeta = MetaPro.get(metaKeys);
-      filter.push(filterMeta)
+      filter.push(filterMeta);
     }
+
     //get reaction
+    let filterReact = reactionPro.getByIds([ret.local_note]);
+    filter.push(filterReact);
+
+    //get repost
+    let filterRepost = repostPro.getByIds([ret.local_note]);
+    filter.push(filterRepost);
 
     //get relative
+    let filterMeta = MetaPro.get(metaKeys);
+    filter.push(filterMeta)
 
     //request
     if (filter.length === 0) {
       return;
     }
+    let tmp_repost_arr = [];
+    let tmp_react_arr = [];
     let subMeta = BuildSub("note_relat_info", filter.concat());
     nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {
       // console.log('GCardNote fetch_user_info', datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
-          if (msg.pubkey === self_pubkey) {
+          if (msg.pubkey === ret.local_p) {
             //process reply meta
             if (meta === null || meta.created_at < msg.created_at) {
               setMeta({ ...msg });
             }
           }
           // console.log('GCardNote fetch_user_info', msg, reply_pubkey);
-          if (msg.pubkey === reply_pubkey) {
+          if (msg.pubkey === ret.reply_note_p) {
             if (replyMeta === null || replyMeta.created_at < msg.created_at) {
               setReplyMeta({ ...msg });
             }
@@ -114,8 +109,16 @@ const GCardNote = (props) => {
           //
         } else if (msg.kind === EventKind.TextNote) {
           //
+        } else if (msg.kind === EventKind.Repost) {
+          tmp_repost_arr.push(msg);
+          // console.log('GCardNote fetch_user_info repost', msg);
+        } else if (msg.kind === EventKind.Reaction) {
+          tmp_react_arr.push(msg);
+          // console.log('GCardNote fetch_user_info reaction', msg);
         }
       });
+      setRepostData(tmp_repost_arr.concat());
+      setReactData(tmp_react_arr.concat());
     })
   }
 
@@ -180,7 +183,7 @@ const GCardNote = (props) => {
       let replyMetaCxt = JSON.parse(replyMeta.content);
       showName = replyMetaCxt.name;
     }
-    console.log('renderReplyLable', showName);
+    // console.log('renderReplyLable', showName);
     return (
       <Stack direction={'row'} alignItems={'center'}>
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
@@ -337,7 +340,13 @@ const GCardNote = (props) => {
           repostOpen.note = { ...note }
           setRepostOpen({ ...repostOpen });
         }} />
+        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+          {repostData.length}
+        </Typography>
         <Box className="icon_right" />
+        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+          {reactData.length}
+        </Typography>
       </Box>
       {renderRepostDlg()}
     </Card>

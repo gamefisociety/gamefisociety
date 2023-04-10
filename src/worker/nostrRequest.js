@@ -81,7 +81,7 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
         let cache = globalNoteCache.get();
         callback(cache, client);
       }
-    } else if (tag === 'EVENT') {
+    } else if (tag === 'EVENT' && msg.kind === EventKind.TextNote) {
       globalNoteCache.pushNote(msg)
     }
   },
