@@ -221,7 +221,11 @@ const GFTGlobal = () => {
           let isSelect = item.name == label;
           const title = "#" + item.name;
           return (
-            <Tooltip title={title} placement="right" key={"label-index-" + index}>
+            <Tooltip
+              title={title}
+              placement="right"
+              key={"label-index-" + index}
+            >
               <Button
                 className={isSelect ? "lable_btn_selected" : "lable_btn"}
                 onClick={() => {
@@ -367,7 +371,16 @@ const GFTGlobal = () => {
               fontWeight: "500",
               color: "#FFFFFF",
             }}
-            onClick={createSubject}
+            onClick={() => {
+              if (createSubjectState === 1) {
+                return;
+              }
+              if (createSubjectState === 0) {
+                createSubject();
+              } else {
+                handleClose();
+              }
+            }}
           >
             {createSubjectMsg()}
           </LoadingButton>
