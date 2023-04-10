@@ -1,25 +1,70 @@
 import React, { useEffect, useState } from "react";
+import "./GSetting.scss";
+
 import { useSelector, useDispatch } from "react-redux";
-import Avatar from "@mui/material/Avatar";
+import { styled } from '@mui/material/styles';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import FormGroup from '@mui/material/FormGroup';
+import Switch from '@mui/material/Switch';
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
-import "./GSetting.scss";
 import Helpers from "view/utils/Helpers";
 import { logout } from "module/store/features/loginSlice";
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { System } from "nostr/NostrSystem";
-import { setProfile } from "module/store/features/profileSlice";
+import { hexToBech32 } from 'nostr/Util';
 
-import icon_praise from "asset/image/social/icon_praise.png";
+const IOSSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 22,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(20px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466', //'#2ECA45',#65C466
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 18,
+    height: 18,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 22 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
 
 const GSetting = () => {
-  const profile = useSelector((s) => s.profile);
   const { publicKey, privateKey } = useSelector((s) => s.login);
-
-  const [localProfile, setLocalProfile] = useState({});
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
+  const [isNip19, setNip19] = useState(true);
 
   useEffect(() => {
     return () => { };
@@ -39,10 +84,11 @@ const GSetting = () => {
           width: '100%'
         }}>
         <Typography className={'setting_context'}>
-          {publicKey}
+          {isNip19 ? hexToBech32('npub', publicKey) : publicKey}
         </Typography>
-        <img className={'icon_copy'} onClick={()=>{
-          Helpers.copyToClipboard(publicKey);
+        <Box className={'icon_copy'} onClick={() => {
+          let tmp_pub_key = isNip19 ? hexToBech32('npub', publicKey) : publicKey;
+          Helpers.copyToClipboard(tmp_pub_key);
         }} />
       </Stack>
       <Typography className={'setting_title'} sx={{ mt: '36px' }}>
@@ -56,17 +102,29 @@ const GSetting = () => {
           width: '100%'
         }}>
         <Typography className={'setting_context'} type="password">
-          {show?privateKey:"*********************************************************************"}
+          {show ? (isNip19 ? hexToBech32('nsec', privateKey) : privateKey) : "*********************************************************************"}
         </Typography>
         <Box sx={{ flexGrow: 1 }}></Box>
-        <img className={'icon_show'}  onClick={()=>{
-            setShow(!show);
-        }}/>
-        <img className={'icon_copy'} onClick={()=>{
-          Helpers.copyToClipboard(privateKey);
-        }}/>
+        <Box className={'icon_show'} onClick={() => {
+          setShow(!show);
+        }} />
+        <Box className={'icon_copy'} onClick={() => {
+          let tmp_pri_key = isNip19 ? hexToBech32('nsec', privateKey) : privateKey;
+          Helpers.copyToClipboard(tmp_pri_key);
+        }} />
       </Stack>
+      <FormGroup sx={{ width: '100%', mt: '36px' }}>
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ px: '24px' }}>
+          <IOSSwitch checked={isNip19}
+            onChange={(ev) => {
+              setNip19(ev.target.checked);
+            }} />
+          <Typography>{'NIP19'}</Typography>
+        </Stack>
+        {/* <FormControlLabel control={ } /> */}
+      </FormGroup>
       <Divider sx={{
+        width: '100%',
         my: '24px',
       }} />
       <Typography className={'setting_title'}>
@@ -130,10 +188,10 @@ const GSetting = () => {
         <Button
           variant="contained"
           className={'bt_out'}
-        // onClick={saveProfile}
-        onClick={()=>{
-          dispatch(logout());
-        }}
+          // onClick={saveProfile}
+          onClick={() => {
+            dispatch(logout());
+          }}
         >
           {'Sign Out'}
         </Button>
