@@ -16,7 +16,7 @@ export const useRepostPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
-    getByIds: async (eventIds) => {
+    getByIds: (eventIds) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.Repost];
       filter['#e'] = eventIds?.concat();

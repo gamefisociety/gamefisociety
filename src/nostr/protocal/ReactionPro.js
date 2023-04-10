@@ -16,7 +16,7 @@ export const useReactionPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
-    getByIds: async (eventIds) => {
+    getByIds: (eventIds) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.Reaction];
       filter['#e'] = eventIds?.concat();

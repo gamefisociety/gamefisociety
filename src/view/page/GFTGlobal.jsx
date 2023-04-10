@@ -48,7 +48,8 @@ const GFTGlobal = () => {
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
   const textNotePro = useTextNotePro();
-  // const [inforData, setInforData] = useState(new Map());
+  //
+  const [inforData, setInforData] = useState(new Map());
   const metadataPro = useMetadataPro();
 
   const gNoteCache = GlobalNoteCache();
@@ -179,26 +180,28 @@ const GFTGlobal = () => {
     let subTextNode = BuildSub("global-textnode-" + Date.now(), [filterTextNote])
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
-    console.log("fetch_global_notes post", tim,);
+    // console.log("fetch_global_notes post", tim,);
     setLoadOpen(true);
     nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
-      console.log("fetch_global_notes back", tim, data);
+      // console.log("fetch_global_notes back", tim, data);
       setData(data.concat());
       setLoadOpen(false);
+      // //
       // const pubkeys = [];
       // data.map((item) => {
       //   pubkeys.push(item.pubkey);
       // });
+      // getInfor(pubkeys, targetAddr);
     });
   };
 
-  // const getInfor = (pkeys, addr) => {
-  //   const filterMetaData = metadataPro.get(Array.from(pkeys));
-  //   let subTextNode = BuildSub("metadata", [filterMetaData]);
-  //   nostrWorker.fetch_user_metadata(subTextNode, addr, (data, client) => {
-  //     setInforData(data);
-  //   });
-  // };
+  const getInfor = (pkeys, addr) => {
+    const filterMetaData = metadataPro.get(Array.from(pkeys));
+    let subTextNode = BuildSub("metadata", [filterMetaData]);
+    nostrWorker.fetch_user_metadata(subTextNode, addr, (data, client) => {
+      setInforData(data);
+    });
+  };
 
   const handleClickOpen = () => {
     if (account) {

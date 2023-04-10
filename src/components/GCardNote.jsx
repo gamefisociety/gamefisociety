@@ -64,42 +64,36 @@ const GCardNote = (props) => {
       }
     }
     if (metaKeys.length > 0) {
-      let filterMeta = MetaPro.get(metaKeys);
+      let tt_metakeys = new Set(metaKeys);
+      let filterMeta = MetaPro.get(Array.from(tt_metakeys));
       filter.push(filterMeta);
     }
-
     //get reaction
     let filterReact = reactionPro.getByIds([ret.local_note]);
     filter.push(filterReact);
-
     //get repost
     let filterRepost = repostPro.getByIds([ret.local_note]);
     filter.push(filterRepost);
-
-    //get relative
-    let filterMeta = MetaPro.get(metaKeys);
-    filter.push(filterMeta)
-
     //request
     if (filter.length === 0) {
       return;
     }
     let tmp_repost_arr = [];
     let tmp_react_arr = [];
-    let subMeta = BuildSub("note_relat_info", filter.concat());
+    let subMeta = BuildSub('note_relat_info_' + note.id, filter.concat());
+    console.log('fetch_relative_info', ret, subMeta);
     nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {
-      // console.log('GCardNote fetch_user_info', datas);
+      console.log('fetch_relative_info back', datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
           if (msg.pubkey === ret.local_p) {
-            //process reply meta
             if (meta === null || meta.created_at < msg.created_at) {
               setMeta({ ...msg });
             }
           }
-          // console.log('GCardNote fetch_user_info', msg, reply_pubkey);
           if (msg.pubkey === ret.reply_note_p) {
             if (replyMeta === null || replyMeta.created_at < msg.created_at) {
+              console.log('GCardNote fetch_user_info meta reply', msg);
               setReplyMeta({ ...msg });
             }
           }
