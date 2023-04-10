@@ -57,7 +57,14 @@ const MainRoutes = {
     },
     {
       path: "/post-reply",
-      element: <GPostReply />,
+      element: <KeepAlive
+      cacheKey="PostReplyCache_ID"
+      name="PostReplyCache"
+      when={() => true}
+    >
+      <GPostReply />
+    </KeepAlive>,
+      
     },
     {
       path: "/game",

@@ -164,6 +164,7 @@ const GFTLeftMenu = () => {
             navigate('/global/all');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
+            clear();
             navigate('/post-reply');
             openMainContent();
         } else if (item.txt === 'DM') {
@@ -184,8 +185,6 @@ const GFTLeftMenu = () => {
             );
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
-        } else if (item.txt === 'CREATE') {
-            navigate('/create_project');
         } else if (item.txt === 'MINT AVATAR') {
             // navigate('/mint');
             if (account) {
