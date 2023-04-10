@@ -28,7 +28,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardActions from '@mui/material/CardActions';
 
 import GFTNewsView from './GFTNewsView'
-import GBanner from 'view/head/GBanner';
+import GBanner from 'view/store/GBanner';
 
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
 

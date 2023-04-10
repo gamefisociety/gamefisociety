@@ -1,14 +1,15 @@
-.store_bg {
+.store_layout {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: azure;
 
-    .store_content {
-        width: auto;
+    .store_layout_content {
+        width: 100%;
         min-height: calc( 100vh - 64px );
+        // margin-top: 64px;
         position: relative;
-        margin-left: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
