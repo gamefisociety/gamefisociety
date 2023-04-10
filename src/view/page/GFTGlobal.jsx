@@ -22,6 +22,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Backdrop from "@mui/material/Backdrop";
 import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
@@ -45,12 +47,13 @@ const GFTGlobal = () => {
   const [loadOpen, setLoadOpen] = React.useState(false);
   const [data, setData] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [fetchingSubjects, setFetchingSubjects] = useState(false);
   const [newSujbect, setNewSubject] = React.useState("");
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
   const textNotePro = useTextNotePro();
   const gNoteCache = GlobalNoteCache();
-  let fetching = false;
+  const waittingSubjects = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12];
   // console.log('global label', label);
   useEffect(() => {
     gNoteCache.clear();
@@ -68,21 +71,21 @@ const GFTGlobal = () => {
   //get subjects
   const getAllSubjects = () => {
     if (account) {
-      if (fetching) {
+      if (fetchingSubjects) {
         return;
       }
-      fetching = true;
+      setFetchingSubjects(true);
       GSTSubjectsBase.totalSupply(library)
         .then((res) => {
           console.log("totalSupply", res);
           if (res > 0) {
             fetchSubjects(0, Number(res));
           } else {
-            fetching = false;
+            setFetchingSubjects(false);
           }
         })
         .catch((err) => {
-          fetching = false;
+          setFetchingSubjects(false);
           console.log(err, "err");
         });
     } else {
@@ -96,7 +99,7 @@ const GFTGlobal = () => {
       let subjectCache = [];
       GSTSubjectsBase.getSubjects(library, index, count)
         .then((res) => {
-          fetching = false;
+          setFetchingSubjects(false);
           if (res && res.length > 0) {
             subjectCache = subjectCache.concat(res);
             subjectCache.reverse();
@@ -105,11 +108,11 @@ const GFTGlobal = () => {
           }
         })
         .catch((err) => {
-          fetching = false;
+          setFetchingSubjects(false);
           console.log(err, "err");
         });
     } else {
-      fetching = false;
+      setFetchingSubjects(false);
     }
   };
 
@@ -195,6 +198,36 @@ const GFTGlobal = () => {
     setDialogOpen(false);
   };
 
+  const renderSujbects = () => {
+    return fetchingSubjects ? renderWaittingLables() : renderLables();
+  };
+
+  const renderWaittingLables = () => {
+    return (
+      <Box className={"global_lables"}>
+        {waittingSubjects.map((index) => {
+          return (
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "100%",
+                marginTop: "20px",
+              }}
+              key={"label_waitting_" + index}
+              spacing={1}
+            >
+              <Skeleton variant="rectangular" width={"80%"} height={8} />
+              <Skeleton variant="rectangular" width={"90%"} height={12} />
+            </Stack>
+          );
+        })}
+      </Box>
+    );
+  };
+
   const renderLables = () => {
     console.log("renderLables", subjects);
     return (
@@ -237,6 +270,25 @@ const GFTGlobal = () => {
             </Tooltip>
           );
         })}
+      </Box>
+    );
+  };
+
+  const renderLoadSubjects = () => {
+    return (
+      <Box className={"global_lables"}>
+        <Button
+          variant="contained"
+          sx={{
+            width: "80%",
+            marginBottom: "10px",
+          }}
+          onClick={() => {
+            dispatch(setIsOpen(true));
+          }}
+        >
+          {"Load Subjects"}
+        </Button>
       </Box>
     );
   };
@@ -388,9 +440,10 @@ const GFTGlobal = () => {
       </Dialog>
     );
   };
+
   return (
     <Paper className={"global_bg"} elevation={0}>
-      {renderLables()}
+      {account ? renderSujbects() : renderLoadSubjects()}
       {renderGlobalHead()}
       {renderContent()}
       <Typography
