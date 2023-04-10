@@ -21,15 +21,13 @@ import MenuList from '@mui/material/MenuList';
 
 import GChatGroupCreate from 'view/page/GChatGroupCreate';
 
-import { alpha, styled } from "@mui/material/styles";
-import { setRelays } from "module/store/features/profileSlice";
+import { styled } from "@mui/material/styles";
 import { useRelayPro } from "nostr/protocal/RelayPro";
-import logo_delete from "asset/image/social/icon_delete.png";
-import icon_detail from "asset/image/social/icon_detail.png";
-import icon_save from "asset/image/social/icon_save.png";
-import icon_back_white from "../../asset/image/social/icon_back_white.png";
+import { useChatPro } from "nostr/protocal/ChatPro";
 
+import { BuildSub } from "nostr/NostrUtils"
 import { System } from "nostr/NostrSystem";
+import { EventKind } from "nostr/def";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -81,51 +79,60 @@ const IOSSwitch = styled((props) => (
 }));
 
 const GChatGroup = () => {
-  const { relays, curRelay } = useSelector((s) => s.profile);
   const { loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
+  const chatPro = useChatPro();
+
   const [groupState, setGroupState] = React.useState(0);
-  const [newRelay, setNewRelay] = useState(null);
+  const [channels, setChannels] = useState([]);
   const [opRelay, setOpRelay] = useState(null);
-  const [module, setModule] = useState({ isDetail: false, curRelay: {} });
 
-  const saveRelays = async (tmpRelays) => {
-    let event = await relayPro.syncRelayKind3(tmpRelays);
-    System.BroadcastEvent(event, (tags, client, msg) => {
-      if (tags === "OK" && msg.ret === true) {
-        console.log('remove relay', event, msg);
+  const fetchChatGroup = async () => {
+    let filterCreateChannel = chatPro.getChannel();
+    let subCreateChannel = BuildSub("create_channel", [filterCreateChannel]);
+    let tmp_channles = [];
+    System.BroadcastSub(subCreateChannel, (tags, client, msg) => {
+      console.log('fetchChatGroup', msg);
+      if (tags === 'EOSE') {
+        System.BroadcastClose(subCreateChannel, client, null);
+        setChannels(tmp_channles.concat());
+      } else if (tags === 'EVENT') {
+        if (msg.kind && msg.kind === EventKind.ChannelCreate) {
+          tmp_channles.push(msg);
+        }
       }
-    });
+    }, null);
+
   };
 
-  const addRelays = async (addr) => {
-    let tmps = relays.concat();
-    let flagIndex = tmps.findIndex((item) => {
-      return item.addr === addr;
-    });
-    if (flagIndex < 0) {
-      tmps.push({ addr: addr, read: true, write: false });
-    }
-    dispatch(setRelays(tmps));
-    if (loggedOut === false) {
-      saveRelays(tmps);
-    }
-    return null;
-  };
+  // const addRelays = async (addr) => {
+  //   let tmps = relays.concat();
+  //   let flagIndex = tmps.findIndex((item) => {
+  //     return item.addr === addr;
+  //   });
+  //   if (flagIndex < 0) {
+  //     tmps.push({ addr: addr, read: true, write: false });
+  //   }
+  //   dispatch(setRelays(tmps));
+  //   if (loggedOut === false) {
+  //     saveRelays(tmps);
+  //   }
+  //   return null;
+  // };
 
-  const deleteRelays = async (addr) => {
-    let tmps = relays.concat();
-    let flagIndex = tmps.findIndex((item) => {
-      return item.addr === addr;
-    });
-    tmps.splice(flagIndex, 1);
-    dispatch(setRelays(tmps));
-    if (loggedOut === false) {
-      saveRelays(tmps);
-    }
-    return null;
-  };
+  // const deleteRelays = async (addr) => {
+  //   let tmps = relays.concat();
+  //   let flagIndex = tmps.findIndex((item) => {
+  //     return item.addr === addr;
+  //   });
+  //   tmps.splice(flagIndex, 1);
+  //   dispatch(setRelays(tmps));
+  //   if (loggedOut === false) {
+  //     saveRelays(tmps);
+  //   }
+  //   return null;
+  // };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
@@ -148,7 +155,7 @@ const GChatGroup = () => {
   };
 
   useEffect(() => {
-
+    fetchChatGroup();
   }, [groupState]);
 
   const renderRelayMenu = () => {
@@ -216,26 +223,32 @@ const GChatGroup = () => {
     );
   }
 
-  const renderCacheRelays = () => {
+  const renderChannelList = () => {
     return (
       <List className="list_bg">
         {
-          relays.map((cfg, index) => {
+          channels.map((item, index) => {
+            console.log('renderCacheRelays', item);
+            if (!item.content || item.content === '') {
+              return null;
+            }
+            let profile = JSON.parse(item.content);
             return (
-              <ListItem key={'relay-' + index}>
+              <ListItem key={'channel-' + index}>
                 <Box
-                  className={'relay_item'}
+                  className={'channel_item'}
                   onClick={(event) => {
-                    console.log('new event', event);
-                    module.isDetail = true;
-                    module.curRelay = cfg;
-                    setModule({ ...module });
+                    setGroupState(2)
+                    // console.log('new event', event);
+                    // module.isDetail = true;
+                    // module.curRelay = cfg;
+                    // setModule({ ...module });
                   }}
                 >
                   <Typography className={'lable_relay'}>
-                    {cfg.addr}
+                    {profile.name}
                   </Typography>
-                  <Box
+                  {/* <Box
                     sx={{
                       ml: "10px",
                       width: "16px",
@@ -252,14 +265,14 @@ const GChatGroup = () => {
                       borderRadius: "8px",
                       backgroundColor: System.isWrite(cfg.addr) === true ? "#F5A900" : "#D9D9D9",
                     }}
-                  />
+                  /> */}
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
-                    if (openMenu === false) {
-                      handleMenuOpen(event, cfg);
-                    } else {
-                      handleMenuClose(event);
-                    }
+                    // if (openMenu === false) {
+                    //   handleMenuOpen(event, cfg);
+                    // } else {
+                    //   handleMenuClose(event);
+                    // }
                   }} />
                   {renderRelayMenu()}
                 </Box>
@@ -281,7 +294,7 @@ const GChatGroup = () => {
         >
           {"+"}
         </Button>
-        {renderCacheRelays()}
+        {renderChannelList()}
       </Box>
     );
   };
@@ -291,6 +304,9 @@ const GChatGroup = () => {
     <Box className={'chat_group_bg'}>
       {groupState === 0 && renderChatGroup()}
       {groupState === 1 && <GChatGroupCreate callback={() => {
+        setGroupState(0);
+      }} />}
+      {groupState === 2 && <GChatGroupCreate callback={() => {
         setGroupState(0);
       }} />}
     </Box>

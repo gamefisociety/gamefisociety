@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import "./GChatGroupCreate.scss";
+import "./GChatGroupInner.scss";
 
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
@@ -10,7 +10,7 @@ import { useChatPro } from "nostr/protocal/ChatPro";
 
 import { System } from "nostr/NostrSystem";
 
-const GChatGroupCreate = (props) => {
+const GChatGroupInner = (props) => {
   const { callback } = props;
   const [localProfile, setLocalProfile] = useState({
     name: '',
@@ -98,4 +98,4 @@ const GChatGroupCreate = (props) => {
   );
 };
 
-export default GChatGroupCreate;
+export default GChatGroupInner;

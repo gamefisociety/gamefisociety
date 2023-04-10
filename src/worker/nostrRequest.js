@@ -5,9 +5,7 @@ import GlobalNoteCache from 'db/GlobalNoteCache';
 import UserDataCache from 'db/UserDataCache';
 import DMCache from 'db/DMCache';
 import useNostrEvent from "nostr/NostrEvent";
-import {
-  EventKind
-} from "nostr/def";
+import { EventKind } from "nostr/def";
 
 export const fetch_user_profile = (sub, curRelay, callback) => {
   // console.log('fetch_user_profile', sub);
