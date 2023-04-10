@@ -63,7 +63,7 @@ const mapData = [
         out: true
     },
     {
-        txt: 'ARTICLES',
+        txt: 'ARTICLE',
         img: ic_create
     },
     // {
@@ -91,7 +91,7 @@ const mapData = [
     //     img: ic_menu_wallet
     // },
     {
-        txt: 'GAMES',
+        txt: 'GAME',
         img: ic_polgon
     },
     // {
@@ -165,14 +165,14 @@ const GBottomMenu = () => {
             } else {
                 dispatch(setIsOpen(true));
             }
-        } else if (item.txt === 'GAMES') {
-            navigate('/projects');
+        } else if (item.txt === 'GAME') {
+            navigate('/game');
         } else if (item.txt === 'VIDEOS') {
             navigate('/videopage');
         } else if (item.txt === 'NEWS') {
             navigate('/newspage');
-        } else if (item.txt === 'ARTICLES') {
-            navigate('/articles');
+        } else if (item.txt === 'ARTICLE') {
+            navigate('/article');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
         } else if (item.txt === 'GROUP CHAT') {

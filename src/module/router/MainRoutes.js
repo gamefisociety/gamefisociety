@@ -60,7 +60,7 @@ const MainRoutes = {
       element: <GPostReply />,
     },
     {
-      path: "/projects",
+      path: "/game",
       element: (
         <KeepAlive
           cacheKey="ProjectsCache_ID"
@@ -72,7 +72,7 @@ const MainRoutes = {
       ),
     },
     {
-      path: "/detailproject",
+      path: "/game/:gamename",
       element: <GDetailProject />,
     },
     {
@@ -100,7 +100,7 @@ const MainRoutes = {
       element: <GSetting />,
     },
     {
-      path: "/articles",
+      path: "/article",
       element: (
         <KeepAlive
           cacheKey="ArticlesCache_ID"
@@ -112,7 +112,7 @@ const MainRoutes = {
       ),
     },
     {
-      path: "/detailarticle",
+      path: "/article/:cid",
       element: <GDetailArticle />,
     },
     {
