@@ -19,6 +19,8 @@ import Helpers from "../../src/view/utils/Helpers";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
 import { useReactionPro } from "nostr/protocal/ReactionPro";
+import { useRelayPro } from "nostr/protocal/RelayPro";
+
 import { BuildSub, ParseNote } from "nostr/NostrUtils"
 import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
@@ -44,6 +46,7 @@ const GCardNote = (props) => {
   const MetaPro = useMetadataPro();
   const repostPro = useRepostPro();
   const reactionPro = useReactionPro();
+  const relayPro = useRelayPro();
 
   const fetch_relative_info = () => {
 
@@ -69,6 +72,9 @@ const GCardNote = (props) => {
       let filterMeta = MetaPro.get(Array.from(tt_metakeys));
       filter.push(filterMeta);
     }
+    //get relay
+    let filterRelay = relayPro.get(ret.local_note);
+    filter.push(filterRelay);
     //get reaction
     let filterReact = reactionPro.getByIds([ret.local_note]);
     filter.push(filterReact);
@@ -101,7 +107,7 @@ const GCardNote = (props) => {
         } else if (msg.kind === EventKind.ContactList) {
           //
         } else if (msg.kind === EventKind.Relays) {
-          //
+          console.log('GCardNote fetch_user_info relay', msg);
         } else if (msg.kind === EventKind.TextNote) {
           //
         } else if (msg.kind === EventKind.Repost) {
@@ -162,10 +168,12 @@ const GCardNote = (props) => {
 
   useEffect(() => {
     fetch_relative_info();
+    // console.log('renderContent111', note);
     return () => { };
   }, [note]);
 
   const renderContent = (str) => {
+    // console.log('renderContent111', str.trim());
     return (
       <Box
         className={'content'}

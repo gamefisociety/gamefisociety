@@ -16,10 +16,13 @@ import { ParseNote } from 'nostr/NostrUtils';
 import { useTextNotePro } from 'nostr/protocal/TextNotePro';
 import { System } from 'nostr/NostrSystem';
 
+import reactStringReplace from 'react-string-replace';
+
 
 const GPostDialog = () => {
 
     const [text, setText] = useState('');
+    const [lables, setLables] = useState([]);
     const { isPost, targetPost } = useSelector(s => s.dialog);
 
     const dispatch = useDispatch();
@@ -35,36 +38,31 @@ const GPostDialog = () => {
     // console.log('GPostDialog', targetPost);
     const postContext = async () => {
         let ret = ParseNote(targetPost);
-        if (ret.root_note_id === 0) {
-            let event = await textNotrPro.sendPost(text);
+        let event = null;
+        let tmpTags = [];
+        //add e,p tag
+        if (ret.root_note_id !== 0 && ret.reply_note_id === 0) {
+            tmpTags.push(['e', ret.root_note_id]);
+            tmpTags.push(['p', ret.root_note_p]);
+        } else if (ret.root_note_id !== 0 && ret.reply_note_id !== 0) {
+            tmpTags.push(['e', ret.root_note_id, '', 'root']);
+            tmpTags.push(['e', ret.root_note_p, '', 'reply']);
+            tmpTags.push(['p', targetPost.id]);
+            tmpTags.push(['p', targetPost.pubkey]);
+        }
+        //add t tag
+        lables.map((item) => {
+            if (item && item.startsWith('#')) {
+                tmpTags.push(['t', item.substr(1)]);
+            }
+        });
+        event = await textNotrPro.sendPost(text, tmpTags);
+        if (event !== null) {
+            console.log('post event', event);
             System.BroadcastEvent(event, (tag, client, msg) => {
                 console.log('post tag', tag, msg);
             });
-        } else {
-            if (ret.root_note_id !== 0 && ret.reply_note_id === 0) {
-                //reply root note
-                let event = await textNotrPro.sendReplyToRoot(text, ret.root_note_id, ret.root_note_p);
-                System.BroadcastEvent(event, (tag, client, msg) => {
-                    console.log('post tag', tag, msg);
-                });
-            } else if (ret.root_note_id !== 0 && ret.reply_note_id !== 0) {
-                let event = await textNotrPro.sendReplyToNoRoot(text, ret.root_note_id, ret.root_note_p, targetPost.id, targetPost.pubkey);
-                System.BroadcastEvent(event, (tag, client, msg) => {
-                    console.log('post tag', tag, msg);
-                });
-            }
         }
-        // if (targetPost === null) {
-        //     let event = await textNotrPro.sendPost(text);
-        //     System.BroadcastEvent(event, (tag, client, msg) => {
-        //         console.log('post tag', tag, msg);
-        //     });
-        // } else {
-        //     let event = await textNotrPro.sendReply(text, targetPost.id, targetPost.pubkey);
-        //     System.BroadcastEvent(event, (tag, client, msg) => {
-        //         console.log('post tag', tag, msg);
-        //     });
-        // }
     }
 
     const renderHeader = () => {
@@ -116,8 +114,19 @@ const GPostDialog = () => {
                     value={text}
                     onChange={(e) => {
                         setText(e.target.value);
+                        //match label
+                        let tmp_label = [];
+                        const hashtagRegex = /(#\w+)/g;
+                        let s = e.target.value.trim()
+                        reactStringReplace(s, hashtagRegex, (match) => {
+                            tmp_label.push(match);
+                        });
+                        setLables(tmp_label.concat());
                     }}
                 />
+                <Box className={'labels'}>
+                    {lables.map((item, index) => (<Typography key={'label_tag_' + index} className={'lable_tag'}>{item}</Typography>))}
+                </Box>
             </DialogContent>
             <DialogActions className={'post_op'}>
                 <Button sx={{
