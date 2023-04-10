@@ -16,6 +16,12 @@ export const useRepostPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
+    getByIds: (eventIds) => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.Repost];
+      filter['#e'] = eventIds?.concat();
+      return filter;
+    },
     repost: async (targetNote) => {
       if (publicKey) {
         const ev = NostrFactory.createEvent(publicKey);

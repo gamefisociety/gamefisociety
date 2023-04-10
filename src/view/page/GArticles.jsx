@@ -211,7 +211,7 @@ function GArticles() {
                   justifyContent: "flex-start",
                 }}
                 onClick={() => {
-                  navigate("/detailarticle", {
+                  navigate("/article/"+item.cid, {
                     state: {
                       name: item.name,
                       cid: item.cid,

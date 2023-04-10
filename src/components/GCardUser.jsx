@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardUser.scss";
 
+import { hexToBech32 } from 'nostr/Util';
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -253,7 +254,7 @@ const GCardUser = (props) => {
                   color="#919191"
                   align={"left"}
                 >
-                  {pubkey}
+                  {hexToBech32('npub', pubkey)}
                 </Typography>
               </Box>
               <Button
@@ -262,7 +263,7 @@ const GCardUser = (props) => {
                   height: "36px",
                 }}
                 onClick={() => {
-                  if (copy(pubkey)) {
+                  if (copy(hexToBech32('npub', pubkey))) {
                     console.log("copy success");
                   } else {
                     console.log("copy failed");

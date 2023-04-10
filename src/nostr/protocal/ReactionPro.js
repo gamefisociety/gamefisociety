@@ -16,19 +16,23 @@ export const useReactionPro = () => {
       filter.authors = [pubkey]
       return filter;
     },
-    // create: async (pubKey, priKey, obj) => {
-    //   if (pubKey) {
-    //     const ev = NostrFactory.createEvent(pubKey);
-    //     ev.Kind = EventKind.SetMetadata;
-    //     ev.Content = JSON.stringify(obj);
-    //     return await nostrEvent.Sign(priKey, ev);
-    //   }
-    // },
-    // modify: async (obj) => {
-    //   const ev = NostrFactory.createEvent(publicKey);
-    //   ev.Kind = EventKind.SetMetadata;
-    //   ev.Content = JSON.stringify(obj);
-    //   return await nostrEvent.Sign(privateKey, ev);
-    // },
+    getByIds: (eventIds) => {
+      const filter = NostrFactory.createFilter();
+      filter.kinds = [EventKind.Reaction];
+      filter['#e'] = eventIds?.concat();
+      return filter;
+    },
+    like: async (targetNote) => {
+      if (publicKey) {
+        const ev = NostrFactory.createEvent(publicKey);
+        ev.Kind = EventKind.Reaction;
+        ev.Content = '+';
+        let newTags = [];
+        newTags.push(['e', targetNote.id]);
+        newTags.push(['p', targetNote.pubkey]);
+        ev.Tags = newTags.concat();
+        return await nostrEvent.Sign(privateKey, ev);
+      }
+    },
   }
 }

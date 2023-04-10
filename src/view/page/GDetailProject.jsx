@@ -76,7 +76,7 @@ function GDetailProject() {
               color: "#666666",
             }}
           >
-            {"Projects"}
+            {"Games"}
           </Typography>
         </Box>
       </Box>

@@ -38,32 +38,17 @@ export const useTextNotePro = () => {
       filter['#e'] = eventIds?.concat();
       return filter;
     },
-    sendPost: async (cxt) => {
+    sendPost: async (cxt, tags) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.TextNote;
       ev.Content = cxt;
+      if (tags && Array.isArray(tags) && tags.length !== 0) {
+        ev.Tags = tags.concat();
+      }
       console.log('send post env', ev);
       return await nostrEvent.Sign(privateKey, ev);
+    },
 
-    },
-    sendReplyToRoot: async (cxt, targetEvId, targetPubkey) => {
-      const ev = NostrFactory.createEvent(publicKey);
-      ev.Kind = EventKind.TextNote;
-      ev.Content = cxt;
-      ev.Tags.push(['e', targetEvId]);
-      ev.Tags.push(['p', targetPubkey]);
-      return await nostrEvent.Sign(privateKey, ev);
-    },
-    sendReplyToNoRoot: async (cxt, targetEvId, targetPubkey, replyEvId, replyPubkey) => {
-      const ev = NostrFactory.createEvent(publicKey);
-      ev.Kind = EventKind.TextNote;
-      ev.Content = cxt;
-      ev.Tags.push(['e', targetEvId, '', 'root']);
-      ev.Tags.push(['e', replyEvId, '', 'reply']);
-      ev.Tags.push(['p', targetPubkey]);
-      ev.Tags.push(['p', replyPubkey]);
-      return await nostrEvent.Sign(privateKey, ev);
-    },
     getRepostTarget: (pubkey) => {
       const filter = NostrFactory.createFilter();
       filter.kinds = [EventKind.Repost];

@@ -14,6 +14,25 @@
         color: #9d9c9c;
     }
 
+    .labels {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .lable_tag {
+        margin-left: 2px;
+        margin-right: 2px;
+        padding: 0px 4px;
+        border-radius: 4px;
+        background-color: rgb(28, 28, 28);
+        color: rgb(121, 253, 255);
+    }
+
     .target_note {
         width: 100%;
         height: 24px;

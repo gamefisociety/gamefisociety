@@ -40,6 +40,28 @@ export const fetch_user_info = (sub, curRelay, callback) => {
         callback(msgs, client);
       }
     } else if (tag === 'EVENT') {
+      console.log('fetch_user_info msg', msg);
+      if (msg.kind === EventKind.SetMetadata) {
+        userDataCache.pushMetadata(msg);
+      }
+      msgs.push(msg);
+    }
+  }, curRelay
+  );
+
+  return null;
+}
+
+export const fetch_textnote_rela = (sub, curRelay, callback) => {
+  let userDataCache = UserDataCache();
+  const msgs = [];
+  System.BroadcastSub(sub, (tag, client, msg) => {
+    if (tag === 'EOSE') {
+      System.BroadcastClose(sub, client, null);
+      if (callback) {
+        callback(msgs, client);
+      }
+    } else if (tag === 'EVENT') {
       if (msg.kind === EventKind.SetMetadata) {
         userDataCache.pushMetadata(msg);
       }
@@ -83,7 +105,7 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
           let cache = globalNoteCache.get();
           callback(cache, client);
         }
-      } else if (tag === 'EVENT') {
+      } else if (tag === 'EVENT'&& msg.kind === EventKind.TextNote) {
         globalNoteCache.pushNote(msg)
       }
     },

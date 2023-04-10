@@ -92,6 +92,7 @@ const GProjectEditor = (props) => {
           console.log("createProject", res);
           if (res) {
             setPublishState(3);
+            props.callback("SUCCESS");
           }
         })
         .catch((err) => {
@@ -142,7 +143,9 @@ const GProjectEditor = (props) => {
     } else if (publishState === 2) {
       return "saving...";
     } else if (publishState === 3) {
-      return "saved";
+      return "success";
+    } else if (publishState === 4) {
+      return "error";
     }
   };
 
@@ -594,9 +597,13 @@ const GProjectEditor = (props) => {
               if (publishState === 1 || publishState === 2) {
                 return;
               }
-              const projectStr = JSON.stringify(project);
-              publishOnIPFS(projectStr);
-              console.log(projectStr);
+              if (publishState === 0) {
+                let projectStr = JSON.stringify(project);
+                projectStr = "gamefi society projects " + projectStr;
+                publishOnIPFS(projectStr);
+                console.log(projectStr);
+              } else {
+              }
             }}
           >
             {saveMsg()}

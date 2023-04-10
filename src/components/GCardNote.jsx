@@ -18,7 +18,10 @@ import Helpers from "../../src/view/utils/Helpers";
 
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
-import { BuildSub } from "nostr/NostrUtils"
+import { useReactionPro } from "nostr/protocal/ReactionPro";
+import { useRelayPro } from "nostr/protocal/RelayPro";
+
+import { BuildSub, ParseNote } from "nostr/NostrUtils"
 import { EventKind } from "nostr/def";
 import UserDataCache from 'db/UserDataCache';
 import { System } from 'nostr/NostrSystem';
@@ -28,95 +31,117 @@ const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'
 const GCardNote = (props) => {
   const nostrWorker = useWorker(createNostrWorker);
   const { note } = props;
+  const { loggedOut, publicKey } = useSelector((s) => s.login);
   const [meta, setMeta] = useState(null);
   const [replyMeta, setReplyMeta] = useState(null);
   const [repostOpen, setRepostOpen] = useState({
     open: false,
     note: null,
   });
+  const [repostData, setRepostData] = useState([]);
+  const [reactData, setReactData] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
   const MetaPro = useMetadataPro();
   const repostPro = useRepostPro();
+  const reactionPro = useReactionPro();
+  const relayPro = useRelayPro();
 
   const fetch_relative_info = () => {
 
-    let reply_pubkey = null;
-    let self_pubkey = note.pubkey;
-    let eNum = 0;
-    let pNum = 0;
-    let eArray = [];
-    let pArray = [];
-    note.tags.map(item => {
-      if (item[0] === 'e') {
-        eNum = eNum + 1;
-        eArray.push(item[1]);
-      } else if (item[0] === 'p') {
-        pNum = pNum + 1;
-        pArray.push(item[1]);
-      }
-    });
-    if (eNum === 1 && pNum === 1 && pArray.length > 0) {
-      reply_pubkey = pArray[0];
-    } else if (eNum === 2 && pNum === 2 && pArray.length > 1) {
-      reply_pubkey = pArray[1];
-    }
-    //
+    let ret = ParseNote(note);
     let filter = [];
     let metaKeys = [];
-    let metaInfo = UserCache.getMetadata(self_pubkey);
+    let metaInfo = UserCache.getMetadata(ret.local_p);
     if (!metaInfo) {
-      metaKeys.push(self_pubkey);
+      metaKeys.push(ret.local_p);
     } else {
       setMeta({ ...metaInfo });
     }
-    if (reply_pubkey !== null) {
-      let replyInfo = UserCache.getMetadata(reply_pubkey);
+    if (ret.reply_note_p !== null && ret.reply_note_p !== 0 && ret.root_note_p !== null && ret.root_note_p !== 0) {
+      let replyInfo = UserCache.getMetadata(ret.root_note_p);
       if (!replyInfo) {
-        metaKeys.push(reply_pubkey);
+        metaKeys.push(ret.root_note_p);
       } else {
         setReplyMeta({ ...replyInfo });
       }
     }
     if (metaKeys.length > 0) {
-      let filterMeta = MetaPro.get(metaKeys);
-      filter.push(filterMeta)
+      let tt_metakeys = new Set(metaKeys);
+      let filterMeta = MetaPro.get(Array.from(tt_metakeys));
+      filter.push(filterMeta);
     }
+    //get relay
+    let filterRelay = relayPro.get(ret.local_note);
+    filter.push(filterRelay);
     //get reaction
-
-    //get relative
-
+    let filterReact = reactionPro.getByIds([ret.local_note]);
+    filter.push(filterReact);
+    //get repost
+    let filterRepost = repostPro.getByIds([ret.local_note]);
+    filter.push(filterRepost);
     //request
     if (filter.length === 0) {
       return;
     }
-    let subMeta = BuildSub("note_relat_info", filter.concat());
-    nostrWorker.fetch_user_info(subMeta, null, (datas, client) => {
-      // console.log('GCardNote fetch_user_info', datas);
+    let tmp_repost_arr = [];
+    let tmp_react_arr = [];
+    let subMeta = BuildSub('note_relat_' + note.id.substr(0, 4), filter.concat());
+    // console.log('fetch_relative_info', subMeta);
+    nostrWorker.fetch_textnote_rela(subMeta, null, (datas, client) => {
+      console.log('fetch_relative_info back', datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
-          if (msg.pubkey === self_pubkey) {
-            //process reply meta
+          if (msg.pubkey === ret.local_p) {
             if (meta === null || meta.created_at < msg.created_at) {
               setMeta({ ...msg });
             }
           }
-          // console.log('GCardNote fetch_user_info', msg, reply_pubkey);
-          if (msg.pubkey === reply_pubkey) {
+          if (msg.pubkey === ret.reply_note_p) {
             if (replyMeta === null || replyMeta.created_at < msg.created_at) {
+              console.log('GCardNote fetch_user_info meta reply', msg);
               setReplyMeta({ ...msg });
             }
           }
         } else if (msg.kind === EventKind.ContactList) {
           //
         } else if (msg.kind === EventKind.Relays) {
-          //
+          console.log('GCardNote fetch_user_info relay', msg);
         } else if (msg.kind === EventKind.TextNote) {
           //
+        } else if (msg.kind === EventKind.Repost) {
+          let ret = tmp_repost_arr.some((item) => {
+            return item.pubkey === msg.pubkey;
+          });
+          if (ret === false) {
+            tmp_repost_arr.push(msg);
+          }
+        } else if (msg.kind === EventKind.Reaction) {
+          let ret = tmp_react_arr.some((item) => {
+            return item.pubkey === msg.pubkey;
+          });
+          if (ret === false) {
+            tmp_react_arr.push(msg);
+          }
         }
       });
+      setRepostData(tmp_repost_arr.concat());
+      setReactData(tmp_react_arr.concat());
+      console.log('GCardNote repost & react', tmp_repost_arr, tmp_react_arr);
     })
+  }
+
+  const isYourReact = () => {
+    return reactData.some((item) => {
+      return item.pubkey === publicKey;
+    });
+  }
+
+  const isYourRepost = () => {
+    return repostData.some((item) => {
+      return item.pubkey === publicKey;
+    });
   }
 
   const repostNote = async (targetNote) => {
@@ -129,12 +154,26 @@ const GCardNote = (props) => {
     });
   }
 
+  const likeNote = async (targetNote) => {
+    if (targetNote === null) {
+      return;
+    }
+    let ev = await reactionPro.like(targetNote);
+    console.log('reactionPro like', ev);
+    System.BroadcastEvent(ev, (tag, client, msg) => {
+      // console.log('reactionPro tag', tag, msg);
+      fetch_relative_info();
+    });
+  }
+
   useEffect(() => {
     fetch_relative_info();
+    // console.log('renderContent111', note);
     return () => { };
   }, [note]);
 
   const renderContent = (str) => {
+    // console.log('renderContent111', str.trim());
     return (
       <Box
         className={'content'}
@@ -180,7 +219,7 @@ const GCardNote = (props) => {
       let replyMetaCxt = JSON.parse(replyMeta.content);
       showName = replyMetaCxt.name;
     }
-    console.log('renderReplyLable', showName);
+    // console.log('renderReplyLable', showName);
     return (
       <Stack direction={'row'} alignItems={'center'}>
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
@@ -331,13 +370,24 @@ const GCardNote = (props) => {
         }} />
         <Box className="icon_chain_push" />
         <Box className="icon_pay" />
-        <Box className="icon_trans" onClick={(event) => {
+        <Box className={isYourRepost() ? 'icon_trans_1' : 'icon_trans'} onClick={(event) => {
           event.stopPropagation();
           repostOpen.open = true;
           repostOpen.note = { ...note }
           setRepostOpen({ ...repostOpen });
         }} />
-        <Box className="icon_right" />
+        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+          {repostData.length}
+        </Typography>
+        <Box className={isYourReact() ? 'icon_right_1' : 'icon_right'} onClick={(event) => {
+          event.stopPropagation();
+          if (isYourReact() === false) {
+            likeNote(note);
+          }
+        }} />
+        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+          {reactData.length}
+        </Typography>
       </Box>
       {renderRepostDlg()}
     </Card>
