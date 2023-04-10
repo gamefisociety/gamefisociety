@@ -16,7 +16,7 @@ export const useRelayPro = () => {
         const filter = NostrFactory.createFilter();
         filter['kinds'] = [EventKind.Relays];
         // filter['#p'] = [pubkey];
-        // filter['authors'] = [pubkey];
+        filter['authors'] = [pubkey];
         return filter;
       }
     },
