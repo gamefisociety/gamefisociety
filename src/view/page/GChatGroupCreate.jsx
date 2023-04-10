@@ -17,15 +17,6 @@ const GChatGroupCreate = (props) => {
     picture: ''
   });
 
-  const { loggedOut } = useSelector((s) => s.login);
-  const dispatch = useDispatch();
-  const relayPro = useRelayPro();
-  const [groupState, setGroupState] = React.useState(0);
-  const [newRelay, setNewRelay] = useState(null);
-  const [opRelay, setOpRelay] = useState(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [module, setModule] = useState({ isDetail: false, curRelay: {} });
-
   return (
     <Paper className={'chat_group_create_bg'} >
       <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CREATE GROUP'}</Typography>

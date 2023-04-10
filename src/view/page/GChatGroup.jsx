@@ -88,12 +88,7 @@ const GChatGroup = () => {
   const [groupState, setGroupState] = React.useState(0);
   const [newRelay, setNewRelay] = useState(null);
   const [opRelay, setOpRelay] = useState(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [module, setModule] = useState({ isDetail: false, curRelay: {} });
-
-  const handleClickDialogOpen = () => {
-    setDialogOpen(true);
-  };
 
   const saveRelays = async (tmpRelays) => {
     let event = await relayPro.syncRelayKind3(tmpRelays);
@@ -152,6 +147,10 @@ const GChatGroup = () => {
     setOpenMenu(false);
   };
 
+  useEffect(() => {
+
+  }, [groupState]);
+
   const renderRelayMenu = () => {
     return (
       <Popper
@@ -202,7 +201,6 @@ const GChatGroup = () => {
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
                     handleMenuClose();
-                    handleClickDialogOpen();
                   }}>
                     <ListItemIcon>
                       <Box className="icon_del" />
@@ -270,67 +268,6 @@ const GChatGroup = () => {
           })
         }
       </List>
-    );
-  };
-
-  //
-  const renderNewRelay = () => {
-    if (newRelay === null) {
-      return null;
-    }
-    return (
-      <Box key={"add-new-relay-"}
-        sx={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
-        <TextField
-          sx={{ width: "60%" }}
-          value={newRelay}
-          margin="dense"
-          size="small"
-          // focus={true}
-          onChange={(event) => {
-            setNewRelay(event.target.value);
-          }}
-        />
-        <Box
-          sx={{
-            position: "absolute",
-            right: "-20px",
-          }}
-        >
-          <Button
-            variant="contained"
-            sx={{
-              width: "30px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {
-              addRelays(newRelay);
-            }}
-          >
-            <img src={icon_save} width="30px" alt="icon_save" />
-          </Button>
-
-          <Button
-            variant="contained"
-            sx={{
-              width: "40px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {
-              setNewRelay(null);
-            }}
-          >
-            <img src={logo_delete} width="40px" alt="logo_delete" />
-          </Button>
-        </Box>
-      </Box>
     );
   };
 
