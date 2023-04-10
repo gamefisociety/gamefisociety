@@ -20,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Backdrop from "@mui/material/Backdrop";
+import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
@@ -202,6 +203,7 @@ const GFTGlobal = () => {
           variant="contained"
           sx={{
             width: "80%",
+            marginBottom: "10px",
           }}
           onClick={handleClickOpen}
         >
@@ -217,16 +219,18 @@ const GFTGlobal = () => {
         </Button>
         {subjects.map((item, index) => {
           let isSelect = item.name == label;
+          const title = "#" + item.name;
           return (
-            <Button
-              key={"label-index-" + index}
-              className={isSelect ? "lable_btn_selected" : "lable_btn"}
-              onClick={() => {
-                navigate("/global/" + item.name);
-              }}
-            >
-              {"#" + item.name}
-            </Button>
+            <Tooltip title={title} placement="right" key={"label-index-" + index}>
+              <Button
+                className={isSelect ? "lable_btn_selected" : "lable_btn"}
+                onClick={() => {
+                  navigate("/global/" + item.name);
+                }}
+              >
+                {title}
+              </Button>
+            </Tooltip>
           );
         })}
       </Box>
@@ -282,7 +286,6 @@ const GFTGlobal = () => {
         <Box
           sx={{
             width: "400px",
-            // height: "463px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -310,12 +313,12 @@ const GFTGlobal = () => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <Typography
               sx={{
-                height:"28px",
+                height: "28px",
                 fontSize: "24px",
                 fontFamily: "Saira",
                 fontWeight: "500",
@@ -338,13 +341,13 @@ const GFTGlobal = () => {
                 fontWeight: "500",
                 color: "#FFFFFF",
               }}
-              length={50}
+              length={20}
               value={newSujbect}
               variant="outlined"
               onChange={(event) => {
                 let name = event.target.value.trim();
-                const scReg = /[!@#$%^&*()_+\{\}:“<>?,.\/;'\[\]\\|`~]+/g;;
-                const newName = name.replace(scReg, '');
+                const scReg = /[!@#$%^&*()_+\{\}:“<>?,.\/;'\[\]\\|`~]+/g;
+                const newName = name.replace(scReg, "");
                 setNewSubject(newName);
               }}
             />
