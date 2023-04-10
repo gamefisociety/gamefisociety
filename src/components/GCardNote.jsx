@@ -59,7 +59,7 @@ const GCardNote = (props) => {
     } else {
       setMeta({ ...metaInfo });
     }
-    if (ret.root_note_p !== null && ret.root_note_p !== 0) {
+    if (ret.reply_note_p !== null && ret.reply_note_p !== 0 && ret.root_note_p !== null && ret.root_note_p !== 0) {
       let replyInfo = UserCache.getMetadata(ret.root_note_p);
       if (!replyInfo) {
         metaKeys.push(ret.root_note_p);
