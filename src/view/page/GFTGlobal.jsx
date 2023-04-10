@@ -62,7 +62,7 @@ const GFTGlobal = () => {
       getAllSubjects();
     }
     return () => { };
-  }, [account]);
+  }, [account, createSubjectState]);
 
   //get subjects
   const getAllSubjects = () => {
@@ -141,7 +141,6 @@ const GFTGlobal = () => {
     } else if (createSubjectState === 1) {
       return "Creating";
     } else if (createSubjectState === 2) {
-      getAllSubjects();
       return "Success";
     } else if (createSubjectState === 3) {
       return "Error";
