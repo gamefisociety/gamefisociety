@@ -84,14 +84,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"YOUR NAME"}
           </Typography>
           <TextField
@@ -124,14 +117,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"USER NAME"}
           </Typography>
           <TextField
@@ -164,14 +150,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"PROFILE AVATAR"}
           </Typography>
           <TextField
@@ -204,14 +183,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"BANNER PICTURE"}
           </Typography>
           <TextField
@@ -244,14 +216,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"WEBSITE"}
           </Typography>
           <TextField
@@ -284,14 +249,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"ABOUT ME"}
           </Typography>
           <TextField
@@ -324,14 +282,7 @@ const GProfile = () => {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-            }}
-          >
+          <Typography className={'lable_flag'}>
             {"NIP-05"}
           </Typography>
           <TextField
@@ -350,6 +301,39 @@ const GProfile = () => {
             variant="outlined"
             onChange={(event) => {
               localProfile.nip05 = event.target.value;
+              setLocalProfile({ ...localProfile });
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography className={'lable_flag'}>
+            {"BITCON LIGHTNING TIPS"}
+          </Typography>
+          <TextField
+            sx={{
+              marginTop: "12px",
+              width: "80%",
+              borderRadius: "5px",
+              borderColor: "#323232",
+              backgroundColor: "#202122",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#FFFFFF",
+            }}
+            value={localProfile.lud16}
+            variant="outlined"
+            onChange={(event) => {
+              localProfile.lud16 = event.target.value;
               setLocalProfile({ ...localProfile });
             }}
           />
