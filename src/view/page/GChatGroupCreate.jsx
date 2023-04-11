@@ -25,6 +25,9 @@ const GChatGroupCreate = (props) => {
     System.BroadcastEvent(event, (tags, client, msg) => {
       if (tags === "OK" && msg.ret === true) {
         console.log('creatChatGroup', event, msg);
+        if (callback) {
+          callback();
+        }
       }
     });
   };

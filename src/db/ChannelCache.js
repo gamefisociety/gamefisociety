@@ -1,19 +1,49 @@
+import { Info } from "../../node_modules/@mui/icons-material/index";
 
+const channel_info = new Map();
 const channel_cache = new Map();
 
 const ChannelCache = () => {
 
-  const create = (channelId) => {
+  const createInfo = (info) => {
+    channel_info.set(info.id, info);
+  }
+
+  const getInfo = (channelId) => {
+    return channel_info.get(channelId);
+  }
+
+  const addInfo = (info, modify) => {
+    let ret = channel_info.has(info.id);
+    if (ret) {
+      if (modify === true) {
+        channel_info.set(info.id, { ...info });
+        return true;
+      }
+      return false;
+    }
+    createInfo(info);
+  }
+
+  const getInfoList = () => {
+    let ret_arr = [];
+    for (let [, info] of channel_info) {
+      ret_arr.push(info);
+    }
+    return ret_arr;
+  }
+
+  const createMsg = (channelId) => {
     let cache = [];
     channel_cache.set(channelId, cache);
     return cache;
   }
 
-  const clear = (channelId) => {
+  const clearMsg = (channelId) => {
     channel_cache.delete(channelId);
   }
 
-  const get = (channelId) => {
+  const getMsg = (channelId) => {
     return channel_cache.get(channelId);
   }
 
@@ -55,7 +85,7 @@ const ChannelCache = () => {
   const pushChannelMsg = (channelId, channelMsg) => {
     let cache = channel_cache.get(channelId);
     if (!cache) {
-      cache = create(channelId);
+      cache = createMsg(channelId);
     }
     if (hasChannelMsg(channelId, channelMsg.id) === true) {
       return false;
@@ -68,9 +98,13 @@ const ChannelCache = () => {
   }
 
   return {
-    create: create,
-    clear: clear,
-    get: get,
+    createInfo: createInfo,
+    getInfo: getInfo,
+    addInfo: addInfo,
+    getInfoList: getInfoList,
+    createMsg: createMsg,
+    clearMsg: clearMsg,
+    getMsg: getMsg,
     minTime: minTime,
     maxTime: maxTime,
     hasChannelMsg: hasChannelMsg,

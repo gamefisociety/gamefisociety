@@ -15,10 +15,10 @@ export const listen_chatgroup = (sub, channelId, curRelay, goon, callback) => {
       if (goon === false) {
         System.BroadcastClose(sub, curRelay, null);
       }
-    } else if (tag === 'EVENT') {
+    } else if (tag === 'EVENT' && msg.kind === EventKind.ChannelMessage) {
       channelCache.pushChannelMsg(channelId, msg);
       if (callback) {
-        let cache = channelCache.get(channelId);
+        let cache = channelCache.getMsg(channelId);
         callback(cache, client);
       }
     }

@@ -3,11 +3,8 @@ import "./GChatGroup.scss";
 
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -29,6 +26,8 @@ import { useChatPro } from "nostr/protocal/ChatPro";
 import { BuildSub } from "nostr/NostrUtils"
 import { System } from "nostr/NostrSystem";
 import { EventKind } from "nostr/def";
+
+import ChannelCache from 'db/ChannelCache';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -88,17 +87,20 @@ const GChatGroup = () => {
   const [groupInfo, setGroupInfo] = React.useState(null);
   const [groupState, setGroupState] = React.useState(0);
   const [channels, setChannels] = useState([]);
-  const [opRelay, setOpRelay] = useState(null);
 
   const fetchChatGroup = async () => {
     let filterCreateChannel = chatPro.getChannel();
     let subCreateChannel = BuildSub("create_channel", [filterCreateChannel]);
     let tmp_channles = [];
     System.BroadcastSub(subCreateChannel, (tags, client, msg) => {
-      console.log('fetchChatGroup', msg);
+      let channelCache = ChannelCache();
       if (tags === 'EOSE') {
         System.BroadcastClose(subCreateChannel, client, null);
-        setChannels(tmp_channles.concat());
+        tmp_channles.map((item) => {
+          console.log('fetchChatGroup', item);
+          channelCache.addInfo({ ...item });
+        });
+        setChannels(channelCache.getInfoList().concat());
       } else if (tags === 'EVENT') {
         if (msg.kind && msg.kind === EventKind.ChannelCreate) {
           tmp_channles.push(msg);
@@ -108,44 +110,12 @@ const GChatGroup = () => {
 
   };
 
-  // const addRelays = async (addr) => {
-  //   let tmps = relays.concat();
-  //   let flagIndex = tmps.findIndex((item) => {
-  //     return item.addr === addr;
-  //   });
-  //   if (flagIndex < 0) {
-  //     tmps.push({ addr: addr, read: true, write: false });
-  //   }
-  //   dispatch(setRelays(tmps));
-  //   if (loggedOut === false) {
-  //     saveRelays(tmps);
-  //   }
-  //   return null;
-  // };
-
-  // const deleteRelays = async (addr) => {
-  //   let tmps = relays.concat();
-  //   let flagIndex = tmps.findIndex((item) => {
-  //     return item.addr === addr;
-  //   });
-  //   tmps.splice(flagIndex, 1);
-  //   dispatch(setRelays(tmps));
-  //   if (loggedOut === false) {
-  //     saveRelays(tmps);
-  //   }
-  //   return null;
-  // };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
 
-  const handleMenuOpen = (event, cfg) => {
-    // console.log('handleOpen', event, cfg);
+  const handleMenuOpen = (event) => {
     event.stopPropagation();
-    let tmpCfg = { ...cfg };
-    tmpCfg.canRead = System.isRead(cfg.addr);
-    tmpCfg.canWrite = System.isWrite(cfg.addr);
-    setOpRelay({ ...tmpCfg });
     setAnchorEl(event.currentTarget);
     setOpenMenu(true);
   };
@@ -160,7 +130,7 @@ const GChatGroup = () => {
     fetchChatGroup();
   }, [groupState]);
 
-  const renderRelayMenu = () => {
+  const renderChannelMenu = () => {
     return (
       <Popper
         open={openMenu}
@@ -181,39 +151,20 @@ const GChatGroup = () => {
                 <MenuList autoFocusItem={openMenu}>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
-                    opRelay.canRead = !opRelay.canRead;
-                    setOpRelay({ ...opRelay });
+                    handleMenuClose();
                   }}>
-                    <IOSSwitch checked={opRelay ? opRelay.canRead : false} onChange={(ev) => {
-                      if (ev.target.checked) {
-                        System.addRead(opRelay.addr);
-                      } else {
-                        System.rmRead(opRelay.addr);
-                      }
-                    }} />
-                    {'Read'}
+                    {'Information'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
-                    opRelay.canWrite = !opRelay.canWrite;
-                    setOpRelay({ ...opRelay });
+                    handleMenuClose();
                   }} >
-                    <IOSSwitch checked={opRelay ? opRelay.canWrite : false} onChange={(ev) => {
-                      if (ev.target.checked) {
-                        System.addWrite(opRelay.addr);
-                      } else {
-                        System.rmWrite(opRelay.addr);
-                      }
-                    }} />
-                    {'Write'}
+                    {'Share To'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
                     event.stopPropagation();
                     handleMenuClose();
                   }}>
-                    <ListItemIcon>
-                      <Box className="icon_del" />
-                    </ListItemIcon>
                     {'Delete'}
                   </MenuItem>
                 </MenuList>
@@ -271,13 +222,12 @@ const GChatGroup = () => {
                   /> */}
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
-                    // if (openMenu === false) {
-                    //   handleMenuOpen(event, cfg);
-                    // } else {
-                    //   handleMenuClose(event);
-                    // }
+                    if (openMenu === false) {
+                      handleMenuOpen(event);
+                    } else {
+                      handleMenuClose(event);
+                    }
                   }} />
-                  {renderRelayMenu()}
                 </Box>
               </ListItem>
             )
@@ -311,6 +261,7 @@ const GChatGroup = () => {
       {groupState === 2 && <GChatGroupInner ginfo={{ ...groupInfo }} callback={() => {
         setGroupState(0);
       }} />}
+      {renderChannelMenu()}
     </Box>
   );
 };
