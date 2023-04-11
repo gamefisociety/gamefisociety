@@ -6,9 +6,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
 import { VariableSizeList as List } from "react-window";
 
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 
 import GChatItem from "components/GChatItem";
 
@@ -99,6 +103,69 @@ const GChatGroupInner = (props) => {
     return profile.name;
   }
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openMenu, setOpenMenu] = React.useState(false);
+
+  const handleMenuOpen = (event) => {
+    // console.log('handleOpen', event, cfg);
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setOpenMenu(true);
+  };
+
+  const handleMenuClose = (event) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+    setOpenMenu(false);
+  };
+
+  const renderChannelMenu = () => {
+    return (
+      <Popper
+        open={openMenu}
+        anchorEl={anchorEl}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow {...TransitionProps}
+            style={{
+              transformOrigin: placement === 'bottom-start' ? 'right bottom' : 'right top',
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleMenuClose}>
+                <MenuList autoFocusItem={openMenu}>
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    handleMenuClose(event);
+                  }}>
+                    {'Information'}
+                  </MenuItem>
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    handleMenuClose(event);
+                  }} >
+                    {'Share To'}
+                  </MenuItem>
+                  <Divider sx={{ width: '100%' }} />
+                  <MenuItem onClick={(event) => {
+                    event.stopPropagation();
+                    handleMenuClose(event);
+                  }}>
+                    {'Remove'}
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    );
+  }
+
   const renderHeader = () => {
     return (
       <Box className={'chat_group_header'}>
@@ -113,11 +180,11 @@ const GChatGroupInner = (props) => {
           {getGroupName()}
         </Typography>
         <Box className="icon_more" onClick={(event) => {
-          // if (openMenu === false) {
-          //   handleMenuOpen(event, cfg);
-          // } else {
-          //   handleMenuClose(event);
-          // }
+          if (openMenu === false) {
+            handleMenuOpen(event);
+          } else {
+            handleMenuClose(event);
+          }
         }} />
       </Box>
     );
@@ -221,6 +288,7 @@ const GChatGroupInner = (props) => {
       {renderContent()}
       <Divider sx={{ width: '100%', py: '4px' }} />
       {renderInput()}
+      {renderChannelMenu()}
     </Paper>
   );
 };

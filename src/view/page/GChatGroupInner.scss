@@ -106,6 +106,18 @@
         }
     }
 
+    .icon_del {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        background-image: url(../../asset/image/logo/icon_delete.png);
+        background-size: 100% 100%;
+        border-radius: 4px;
+        &:hover {
+            background-image: url(../../asset/image/logo/icon_delete.png);
+        }
+    }
+
     .chat_group_input {
         width: 100%;
         display: flex;
