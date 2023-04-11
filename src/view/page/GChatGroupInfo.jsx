@@ -104,7 +104,7 @@ const GChatGroupInfo = (props) => {
       </Box>
       <Button className={'bt_modify'}
         onClick={() => {
-          creatChatGroup();
+          // creatChatGroup();
         }}
       >
         {'MODIFY'}
