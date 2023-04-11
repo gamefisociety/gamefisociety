@@ -57,7 +57,7 @@ const mapData = [
         // out: true
     },
     {
-        txt: 'CHAT GROUP',
+        txt: 'CHANNEL',
         img: ic_dm,
         // out: true
     },
@@ -175,7 +175,7 @@ const GFTLeftMenu = () => {
                     cardDrawer: "society-dm",
                 })
             );
-        } else if (item.txt === 'CHAT GROUP') {
+        } else if (item.txt === 'CHANNEL') {
             dispatch(
                 setDrawer({
                     isDrawer: true,
