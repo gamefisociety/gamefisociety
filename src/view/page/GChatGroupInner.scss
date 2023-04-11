@@ -18,40 +18,6 @@
         align-items: flex-start;
     }
 
-    .lable_flag {
-        font-size: 14px;
-        font-family: Saira;
-        font-weight: 500;
-        color: #919191;
-    }
-
-    .label_text {
-        margin-top: 12px;
-        width: 80%;
-        border-radius: 5px;
-        border-color: #323232;
-        background-color: #202122;
-        font-size: 14px;
-        font-family: Saira;
-        font-weight: 500;
-    }
-
-    .bt_add {
-        width: 80px;
-        height: 36px;
-        margin-top: 12px;
-        background-color: #1d44f1;
-        border-radius: 5px;
-        font-size: 0.6rem;
-        font-family: Saira;
-        font-weight: 500;
-        color: #FFFFFF;
-
-        &:hover {
-            background-color: #6782f7;
-        }
-    }
-
     .chat_group_header {
         width: 100%;
         margin-top: 4px;
@@ -59,51 +25,57 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+
+        .bt_back {
+            width: 36px;
+            height: 36px;
+            border-radius: 5px;
+            font-size: 0.6rem;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            filter: brightness(50%);
+    
+            background-image: url(../../asset/image/social/dm_left.png);
+            background-size: 100% 100%;
+    
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+    
+        .label_head {
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+
+            cursor: pointer;
+
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+    
+        .icon_more {
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            background-image: url(../../asset/image/logo/icon-more.png);
+            background-size: 100% 100%;
+            border-radius: 4px;
+    
+            &:hover {
+                background-image: url(../../asset/image/logo/icon-more.png);
+                filter: brightness(180%);
+            }
+        }
     }
 
     .chat_group_content {
         width: 100%;
         flex-grow: 1;
         margin-top: 16px;
-    }
-
-    .bt_back {
-        width: 36px;
-        height: 36px;
-        border-radius: 5px;
-        font-size: 0.6rem;
-        font-family: Saira;
-        font-weight: 500;
-        color: #FFFFFF;
-        filter: brightness(50%);
-
-        background-image: url(../../asset/image/social/dm_left.png);
-        background-size: 100% 100%;
-
-        &:hover {
-            filter: brightness(180%);
-        }
-    }
-
-    .label_head {
-        font-size: 14px;
-        font-family: Saira;
-        font-weight: 500;
-        color: #FFFFFF;
-    }
-
-    .icon_more {
-        cursor: pointer;
-        width: 32px;
-        height: 32px;
-        background-image: url(../../asset/image/logo/icon-more.png);
-        background-size: 100% 100%;
-        border-radius: 4px;
-
-        &:hover {
-            background-image: url(../../asset/image/logo/icon-more.png);
-            filter: brightness(180%);
-        }
     }
 
     .icon_del {

@@ -1,0 +1,22 @@
+.search_channel_bg {
+
+    width: 80%;
+    
+    .search_in {
+        width: 100%;
+        border-radius: 12px;
+
+        .MuiInputBase-root{
+            height: 42px;
+            border-radius: 50px !important;
+        }
+        // .MuiAutocomplete-input {
+        //     height: 32px;
+        // }
+    
+        .MuiOutlinedInput-root {
+            padding: 0px 9px !important;
+        }
+    }
+
+}

@@ -14,10 +14,12 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
+import GSearchChannel from 'components/GSearchChannel';
 import GChatGroupCreate from 'view/page/GChatGroupCreate';
 import GChatGroupInner from 'view/page/GChatGroupInner';
+import GChatGroupInfo from 'view/page/GChatGroupInfo';
 
-import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
+import { setDrawer } from "module/store/features/dialogSlice";
 import { useChatPro } from "nostr/protocal/ChatPro";
 
 import { BuildSub } from "nostr/NostrUtils"
@@ -97,19 +99,20 @@ const GChatGroup = () => {
               <ClickAwayListener onClickAway={handleMenuClose}>
                 <MenuList autoFocusItem={openMenu}>
                   <MenuItem onClick={(event) => {
-                    event.stopPropagation();
+                    // event.stopPropagation();
                     handleMenuClose();
+                    setGroupState(3);
                   }}>
                     {'Information'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
-                    event.stopPropagation();
+                    // event.stopPropagation();
                     handleMenuClose();
                   }} >
                     {'Share To'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
-                    event.stopPropagation();
+                    // event.stopPropagation();
                     handleMenuClose();
                   }}>
                     {'Delete'}
@@ -139,34 +142,12 @@ const GChatGroup = () => {
                   className={'channel_item'}
                   onClick={(event) => {
                     setGroupInfo({ ...item });
-                    setGroupState(2)
-                    // console.log('new event', event);
-                    // module.isDetail = true;
-                    // module.curRelay = cfg;
-                    // setModule({ ...module });
+                    setGroupState(2);
                   }}
                 >
                   <Typography className={'lable_relay'}>
                     {profile.name}
                   </Typography>
-                  {/* <Box
-                    sx={{
-                      ml: "10px",
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "8px",
-                      backgroundColor: System.isRead(cfg.addr) === true ? "#4B8B1F" : "#D9D9D9",
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      ml: "10px",
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "8px",
-                      backgroundColor: System.isWrite(cfg.addr) === true ? "#F5A900" : "#D9D9D9",
-                    }}
-                  /> */}
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
                     if (openMenu === false) {
@@ -188,6 +169,11 @@ const GChatGroup = () => {
     return (
       <Box className={'inner_chat_group'}>
         <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CHANNEL LIST'}</Typography>
+        <GSearchChannel callback={(msg, channelId) => {
+          if (msg === 'msg-channel-id') {
+            console.log('msg-channel-id', channelId);
+          }
+        }} />
         <Button className={'create_group_bt'}
           onClick={() => {
             setGroupState(1);
@@ -221,6 +207,9 @@ const GChatGroup = () => {
         setGroupState(0);
       }} />}
       {groupState === 2 && <GChatGroupInner ginfo={{ ...groupInfo }} callback={() => {
+        setGroupState(0);
+      }} />}
+      {groupState === 3 && <GChatGroupInfo ginfo={{ ...groupInfo }} callback={() => {
         setGroupState(0);
       }} />}
       {renderChannelMenu()}
