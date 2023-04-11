@@ -22,7 +22,7 @@ const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'
 
 const GChatItem = forwardRef((props, ref) => {
   const bgRef = useRef(null);
-  const { content, pubkey } = props;
+  const { content, pubkey, callback } = props;
   const nostrWorker = useWorker(createNostrWorker);
 
   const { publicKey } = useSelector((s) => s.login);
@@ -94,9 +94,9 @@ const GChatItem = forwardRef((props, ref) => {
   return (
     <Box sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: isSelf(pubkey) ? 'row-reverse' : 'row',
       alignItems: 'flex-start',
-      justifyContent: isSelf(pubkey) ? 'flex-end' : 'flex-start'
+      justifyContent: 'flex-start',
     }}
       className={'chatitem_bg'}
       ref={bgRef}
@@ -105,8 +105,16 @@ const GChatItem = forwardRef((props, ref) => {
         sx={{ width: "40px", height: "40px", cursor: 'pointer' }}
         alt="GameFi Society"
         src={metaInfo ? tmpInfo.picture : default_avatar}
+        onClick={(event) => {
+          event.stopPropagation();
+          if (callback) {
+            callback('msg-user', pubkey, metaInfo);
+          }
+        }}
       />
-      <Box className={'cxt_bg'}>
+      <Box className={'cxt_bg'} sx={{
+        alignItems: isSelf(pubkey) ? 'flex-end' : 'flex-start',
+      }}>
         <Typography className={'label_name'}>
           {metaInfo ? tmpInfo.name : 'default'}
         </Typography>

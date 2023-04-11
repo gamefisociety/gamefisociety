@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, memo } from "react";
 import "./GChatGroupInner.scss";
 
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
@@ -57,15 +57,6 @@ const GChatGroupInner = (props) => {
       }
     });
   };
-  // const creatChatGroup = async () => {
-  //   let cxt = JSON.stringify(localProfile);
-  //   let event = await chatPro.createChannel(cxt);
-  //   System.BroadcastEvent(event, (tags, client, msg) => {
-  //     if (tags === "OK" && msg.ret === true) {
-  //       console.log('creatChatGroup', event, msg);
-  //     }
-  //   });
-  // };
 
   const listenChatGroupSub = (ids) => {
     // console.log('listenChatGroupSub', ids);
@@ -154,7 +145,23 @@ const GChatGroupInner = (props) => {
       setSize(index, rowRef.current.getHeight());
     }, [setSize, index]);
 
-    return <GChatItem ref={rowRef} key={index} content={item.content} pubkey={item.pubkey} />
+    return <GChatItem
+      ref={rowRef}
+      key={'chatitem-' + index}
+      content={item.content}
+      pubkey={item.pubkey}
+      callback={(msg, pubkey, info) => {
+        if (msg === 'msg-user') {
+          if (info && info.content) {
+            let tmp_info = JSON.parse(info.content);
+            let tmp_at = inValue + '@' + tmp_info.name + ' ';
+            setInValue(tmp_at);
+          } else {
+            //
+          }
+        }
+      }}
+    />
   };
 
   const renderContent = () => {
