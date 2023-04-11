@@ -4,15 +4,13 @@ import "./GChatItem.scss";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Button, Link } from "@mui/material";
-import copy from "copy-to-clipboard";
-import { setChatDrawer } from "module/store/features/dialogSlice";
 import { default_banner, default_avatar } from "module/utils/xdef";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setRelays, setFollows } from "module/store/features/profileSlice";
+import UserDataCache from 'db/UserDataCache';
 //
 const GChatItem = forwardRef((props, ref) => {
   const bgRef = useRef(null);
@@ -20,7 +18,9 @@ const GChatItem = forwardRef((props, ref) => {
   const { publicKey } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const followPro = useFollowPro();
-  const [meta, setMeta] = useState(null);
+  const [metaInfo, setMetaInfo] = useState(null);
+
+  const userCache = UserDataCache();
 
   useImperativeHandle(ref, () => (
     {
@@ -40,7 +40,11 @@ const GChatItem = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    // console.log("GCardUser", ownRelays);
+    let metaInfo = userCache.getMetadata(pubkey);
+    if (metaInfo) {
+      console.log("GCardUser", metaInfo);
+      setMetaInfo({ ...metaInfo });
+    }
     return () => { };
   }, [props]);
 
@@ -52,7 +56,11 @@ const GChatItem = forwardRef((props, ref) => {
     </Box>);
   }
 
-  //#1F1F1F
+  let tmpInfo = null;
+  if (metaInfo && metaInfo.content !== '') {
+    tmpInfo = JSON.parse(metaInfo.content);
+  }
+
   return (
     <Box sx={{
       display: 'flex',
@@ -66,11 +74,11 @@ const GChatItem = forwardRef((props, ref) => {
       <Avatar
         sx={{ width: "40px", height: "40px" }}
         alt="GameFi Society"
-        src={meta ? meta.picture : default_avatar}
+        src={metaInfo ? tmpInfo.picture : default_avatar}
       />
       <Box className={'cxt_bg'}>
         <Typography className={'label_name'}>
-          {meta ? meta.name : 'default'}
+          {metaInfo ? tmpInfo.name : 'default'}
         </Typography>
         {renderContent()}
       </Box>
