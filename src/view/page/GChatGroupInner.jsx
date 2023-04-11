@@ -92,6 +92,14 @@ const GChatGroupInner = (props) => {
     }
   }, [ginfo]);
 
+  //
+  useEffect(() => {
+    if (msgs.length > 0 && listRef.current) {
+      listRef.current.scrollToItem(msgs.length, "smart");
+    }
+    return () => { };
+  }, [msgs]);
+
   const getGroupName = () => {
     if (ginfo === null || !ginfo.content || ginfo.content === '') {
       return 'default';
