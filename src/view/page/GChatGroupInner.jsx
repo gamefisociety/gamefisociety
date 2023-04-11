@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GChatGroupInner.scss";
 
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
+
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -11,8 +13,12 @@ import { useChatPro } from "nostr/protocal/ChatPro";
 
 import { System } from "nostr/NostrSystem";
 
+const createChatWorker = createWorkerFactory(() => import('worker/chatRequest'));
+
 const GChatGroupInner = (props) => {
   const { callback, ginfo } = props;
+  const chatWorker = useWorker(createChatWorker);
+
   const [inValue, setInValue] = useState("");
   const [localProfile, setLocalProfile] = useState({
     name: '',
@@ -50,9 +56,26 @@ const GChatGroupInner = (props) => {
   //   });
   // };
 
+  const listenChatGroupSub = (ids) => {
+    console.log('listenChatGroupSub', ids);
+    return chatPro.getChannelMessage(ids);
+  }
+
   useEffect(() => {
-    //
-  }, []);
+    if (!ginfo) {
+      return;
+    }
+    let sub = listenChatGroupSub([ginfo.id]);
+    chatWorker.listen_chatgroup(sub, null, true, (cache, client) => {
+      console.log('listen_chatgroup cache', cache);
+    });
+    return () => {
+      if (!ginfo) {
+        return;
+      }
+      chatWorker.unlisten_chatgroup(sub, null, null);
+    }
+  }, [ginfo]);
 
   const getGroupName = () => {
     if (ginfo === null || !ginfo.content || ginfo.content === '') {
@@ -159,4 +182,4 @@ const GChatGroupInner = (props) => {
   );
 };
 
-export default GChatGroupInner;
+export default React.memo(GChatGroupInner);

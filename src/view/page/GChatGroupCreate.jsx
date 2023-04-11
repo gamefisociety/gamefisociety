@@ -96,4 +96,4 @@ const GChatGroupCreate = (props) => {
   );
 };
 
-export default GChatGroupCreate;
+export default React.memo(GChatGroupCreate);
