@@ -56,17 +56,20 @@
         position: absolute;
         top: 12px;
         left: 12px;
-        width: 80px;
+        width: 36px;
         height: 36px;
-        background-color: #1d44f1;
         border-radius: 5px;
         font-size: 0.6rem;
         font-family: Saira;
         font-weight: 500;
         color: #FFFFFF;
+        filter: brightness(50%);
+
+        background-image: url(../../asset/image/social/dm_left.png);
+        background-size: 100% 100%;
 
         &:hover {
-            background-color: #6782f7;
+            filter: brightness(180%);
         }
     }
 

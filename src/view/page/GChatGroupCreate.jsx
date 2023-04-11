@@ -85,15 +85,13 @@ const GChatGroupCreate = (props) => {
       >
         {'CREATE'}
       </Button>
-      <Button className={'bt_back'}
+      <Box className={'bt_back'}
         onClick={() => {
           if (callback) {
             callback();
           }
         }}
-      >
-        {'BACK'}
-      </Button>
+      />
     </Paper>
   );
 };

@@ -20,6 +20,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
 import GChatGroupCreate from 'view/page/GChatGroupCreate';
+import GChatGroupInner from 'view/page/GChatGroupInner';
 
 import { styled } from "@mui/material/styles";
 import { useRelayPro } from "nostr/protocal/RelayPro";
@@ -84,6 +85,7 @@ const GChatGroup = () => {
   const relayPro = useRelayPro();
   const chatPro = useChatPro();
 
+  const [groupInfo, setGroupInfo] = React.useState(null);
   const [groupState, setGroupState] = React.useState(0);
   const [channels, setChannels] = useState([]);
   const [opRelay, setOpRelay] = useState(null);
@@ -238,6 +240,7 @@ const GChatGroup = () => {
                 <Box
                   className={'channel_item'}
                   onClick={(event) => {
+                    setGroupInfo({ ...item });
                     setGroupState(2)
                     // console.log('new event', event);
                     // module.isDetail = true;
@@ -299,14 +302,13 @@ const GChatGroup = () => {
     );
   };
 
-
   return (
     <Box className={'chat_group_bg'}>
       {groupState === 0 && renderChatGroup()}
       {groupState === 1 && <GChatGroupCreate callback={() => {
         setGroupState(0);
       }} />}
-      {groupState === 2 && <GChatGroupCreate callback={() => {
+      {groupState === 2 && <GChatGroupInner ginfo={{ ...groupInfo }} callback={() => {
         setGroupState(0);
       }} />}
     </Box>
