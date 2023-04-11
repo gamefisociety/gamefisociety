@@ -25,7 +25,7 @@ import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setFollows } from "module/store/features/profileSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { BuildSub } from "nostr/NostrUtils";
+import { BuildSub, BuildCount } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
 //
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
@@ -36,13 +36,12 @@ const GCardUser = (props) => {
   const { follows } = useSelector((s) => s.profile);
   const { publicKey } = useSelector((s) => s.login);
   const { pubkey } = props;
-  const [ownFollowings, setOwnFollowings] = useState(null);
   const dispatch = useDispatch();
   //
   const [metadata, SetMetadata] = useState(null);
   const [contact, setContact] = useState(null);
   const [profile, setProfile] = useState(null);
-  // profile, ownFollows, ownRelays
+  const [ownFollowings, setOwnFollowings] = useState(null);
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
   //
@@ -53,30 +52,27 @@ const GCardUser = (props) => {
     let tmp_contactlist = null;
     let tmp_meta = null;
     nostrWorker.fetch_user_info(userInfoNote, null, (data, client) => {
-      // console.log('fetch_user_info data', data);
       data.map((item) => {
         if (item.kind === EventKind.SetMetadata && (tmp_meta === null || tmp_meta.created_at < item.created_at)) {
           tmp_meta = { ...item };
           SetMetadata({ ...item });
-          console.log('11fetch_user_info meta', tmp_meta);
-          // if (info === null || item.created_at > metadata_time) {
-          //   metadata_time = item.created_at;
-          //   if (item.content !== "") {
-          //     setInfo(JSON.parse(item.content));
-          //   }
-          // }
         } else if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
           tmp_contactlist = { ...item };
           setContact({ ...item });
-          console.log('11fetch_user_info contactlist', tmp_contactlist);
-          // if (item.content && item.content !== "") {
-          //   let relays = JSON.parse(item.content);
-          //   setOwnRelays({ ...relays });
-          // }
-          // if (item.tags && item.tags.length > 0) {
-          //   setOwnFollows(item.tags.concat());
-          // }
         }
+      });
+    });
+  };
+  //
+  const fetchFollowingCount = (pub) => {
+    const filterFollowingPro = followPro.getFollowings(pub);
+    let userFollowing = BuildCount("userinfo", [filterFollowingPro]);
+    nostrWorker.fetch_user_info(userFollowing, null, (data, client) => {
+      console.log('data count', data);
+      data.map((item) => {
+        // if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
+        //   setContact({ ...item });
+        // }
       });
     });
   };
@@ -125,6 +121,7 @@ const GCardUser = (props) => {
 
   useEffect(() => {
     fetchUserInfo(pubkey);
+    // fetchFollowingCount(pubkey);
     return () => { };
   }, [props]);
 

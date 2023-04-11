@@ -40,6 +40,8 @@ export const fetch_user_info = (sub, curRelay, callback) => {
         userDataCache.pushMetadata(msg);
       }
       msgs.push(msg);
+    } else if (tag === 'COUNT') {
+      msgs.push(msg);
     }
   }, curRelay
   );
