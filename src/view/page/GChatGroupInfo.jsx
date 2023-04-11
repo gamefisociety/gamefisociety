@@ -40,7 +40,7 @@ const GChatGroupInfo = (props) => {
 
   return (
     <Paper className={'chat_group_info_bg'} >
-      <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CREATE GROUP'}</Typography>
+      <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CHANNEL INFO.'}</Typography>
       <Box className={'lable_part'}>
         <Typography className={'lable_flag'}>
           {"CHANNEL ID"}
@@ -56,10 +56,10 @@ const GChatGroupInfo = (props) => {
       </Box>
       <Box className={'lable_part'}>
         <Typography className={'lable_flag'}>
-          {"GROUP NAME"}
+          {"CHANNEL NAME"}
         </Typography>
         <TextField className={'label_text'}
-          placeholder={'group name'}
+          placeholder={'channel name'}
           value={localProfile.name}
           onChange={(event) => {
             localProfile.name = event.target.value;
@@ -92,7 +92,7 @@ const GChatGroupInfo = (props) => {
           {"ABOUT"}
         </Typography>
         <TextField className={'label_text'}
-          placeholder={'group about'}
+          placeholder={'channel about'}
           value={localProfile.about}
           onChange={(event) => {
             localProfile.about = event.target.value;
