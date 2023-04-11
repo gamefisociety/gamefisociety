@@ -10,7 +10,7 @@ export const useChatPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
-    getMyDM:()=>{
+    getMyDM: () => {
       const filter = NostrFactory.createFilter();
       filter['kinds'] = [EventKind.DirectMessage];
       filter['#p'] = [publicKey];
@@ -50,7 +50,7 @@ export const useChatPro = () => {
       ev.Content = content;
       return await nostrEvent.Sign(privateKey, ev);
     },
-    setChannelMetadata: async (content, rootEv) => {
+    sendChannelMetadata: async (content, rootEv) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ChannelCreate;
       ev.PubKey = publicKey;
@@ -58,14 +58,24 @@ export const useChatPro = () => {
       ev.Content = content;
       return await nostrEvent.Sign(privateKey, ev);
     },
-    setChannelMessge: async (content, rootEv) => {
+    sendChannelMessge: async (content, rootEv) => {
       const ev = NostrFactory.createEvent(publicKey);
       ev.Kind = EventKind.ChannelMessage;
       ev.PubKey = publicKey;
       ev.Content = content;
       ev.Tags.push(['e', rootEv.id, '', 'root']);
-      ev.Tags.push(['e', ev.Id, '', 'reply']);
-      ev.Tags.push(['p', publicKey]);
+      // ev.Tags.push(['e', ev.Id, '', 'reply']);
+      // ev.Tags.push(['p', publicKey]);
+      return await nostrEvent.Sign(privateKey, ev);
+    },
+    sendReplyChannelMessge: async (content, rootEv, targetEv) => {
+      const ev = NostrFactory.createEvent(publicKey);
+      ev.Kind = EventKind.ChannelMessage;
+      ev.PubKey = publicKey;
+      ev.Content = content;
+      ev.Tags.push(['e', rootEv.id, '', 'root']);
+      ev.Tags.push(['e', targetEv.Id, '', 'reply']);
+      ev.Tags.push(['p', targetEv.publicKey]);
       return await nostrEvent.Sign(privateKey, ev);
     },
     hideChannelMessge: async (reason, evId) => {

@@ -1,0 +1,62 @@
+.chatitem_bg {
+    width: 100%;
+    // background-color: transparent;
+    // display: flex;
+    // flex-direction: row;
+    // align-items: flex-start;
+    padding-bottom: 12px;
+
+    .cxt_bg {
+        width: calc( 100% - 40px );
+        padding: 0 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        box-sizing: border-box;
+    }
+
+    .label_name {
+        // backgroundColor: pubkey !== publicKey ? "#191A1B" : "#454FBF",
+        color: #676767;
+        font-family: Saira;
+        font-weight: 500;
+        font-size: 12px;
+    }
+
+    .msg_bg {
+        max-width: 100%;
+        padding: 4px 8px;
+        background-color: rgb(59, 59, 59);
+        border-radius: 4px;
+        // background-color: red;
+    }
+
+    .label_cxt {
+        // backgroundColor: pubkey !== publicKey ? "#191A1B" : "#454FBF",
+        width: 100%;
+        font-family: Saira;
+        font-weight: 500;
+        font-size: 16px;
+        color: #FFFFFF;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    // .lable_1 {
+    //     cursor: pointer;
+    //     color: #FFFFFF;
+    //     &:hover{
+    //         text-decoration:underline
+    //     }
+    // }
+
+    // .lable_2 {
+    //     margin-left: 8px;
+    //     // cursor: pointer;
+    //     color: #666666;
+    //     // &:hover{
+    //     //     // background-color: #3c3d3d00;
+    //     // }
+    // }
+}

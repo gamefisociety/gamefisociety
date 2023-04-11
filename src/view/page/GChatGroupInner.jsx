@@ -1,15 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./GChatGroupInner.scss";
 
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
+import { VariableSizeList as List } from "react-window";
 
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
+import GChatItem from "components/GChatItem";
+
 import { useChatPro } from "nostr/protocal/ChatPro";
+import { BuildSub } from "nostr/NostrUtils"
 
 import { System } from "nostr/NostrSystem";
 
@@ -18,33 +22,40 @@ const createChatWorker = createWorkerFactory(() => import('worker/chatRequest'))
 const GChatGroupInner = (props) => {
   const { callback, ginfo } = props;
   const chatWorker = useWorker(createChatWorker);
+  const { loggedOut, publicKey } = useSelector((s) => s.login);
 
   const [inValue, setInValue] = useState("");
-  const [localProfile, setLocalProfile] = useState({
-    name: '',
-    about: '',
-    picture: ''
-  });
   const chatPro = useChatPro();
+  const [msgs, setMsgs] = useState([]);
 
+  const listRef = useRef();
+  const sizeMap = useRef({});
+  const setSize = useCallback((index, size) => {
+    sizeMap.current = { ...sizeMap.current, [index]: size };
+    listRef.current.resetAfterIndex(index);
+  }, []);
+  const getSize = (index) => sizeMap.current[index] || 50;
+
+  //
   const sendMsg = async () => {
     if (inValue.length === 0) {
       return;
     }
-    // const chatEv = await chatPro.sendDM(chatPK, inValue);
-    // System.BroadcastEvent(chatEv, (tag, client, msg) => {
-    //   if (tag === "OK" && msg.ret && msg.ret === true) {
-    //     let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.PubKey, chatEv.CreatedAt, inValue);
-    //     if (flag === false) {
-    //       return;
-    //     }
-    //     let chat_datas = dm_cache.get(chatPK);
-    //     if (chat_datas) {
-    //       setChatData(chat_datas.concat());
-    //       setInValue("");
-    //     }
-    //   }
-    // });
+    const chatEv = await chatPro.sendChannelMessge(inValue, ginfo);
+    System.BroadcastEvent(chatEv, (tag, client, msg) => {
+      if (tag === "OK" && msg.ret && msg.ret === true) {
+        setInValue("");
+        // let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.PubKey, chatEv.CreatedAt, inValue);
+        // if (flag === false) {
+        //   return;
+        // }
+        // let chat_datas = dm_cache.get(chatPK);
+        // if (chat_datas) {
+        //   setChatData(chat_datas.concat());
+        //   setInValue("");
+        // }
+      }
+    });
   };
   // const creatChatGroup = async () => {
   //   let cxt = JSON.stringify(localProfile);
@@ -57,7 +68,7 @@ const GChatGroupInner = (props) => {
   // };
 
   const listenChatGroupSub = (ids) => {
-    console.log('listenChatGroupSub', ids);
+    // console.log('listenChatGroupSub', ids);
     return chatPro.getChannelMessage(ids);
   }
 
@@ -65,15 +76,19 @@ const GChatGroupInner = (props) => {
     if (!ginfo) {
       return;
     }
-    let sub = listenChatGroupSub([ginfo.id]);
-    chatWorker.listen_chatgroup(sub, null, true, (cache, client) => {
+    let filter = listenChatGroupSub([ginfo.id]);
+    let subChannelMsg = BuildSub("create_channel", [filter]);
+    chatWorker.listen_chatgroup(subChannelMsg, ginfo.id, null, true, (cache, client) => {
       console.log('listen_chatgroup cache', cache);
+      if (cache) {
+        setMsgs(cache.concat());
+      }
     });
     return () => {
       if (!ginfo) {
         return;
       }
-      chatWorker.unlisten_chatgroup(sub, null, null);
+      chatWorker.unlisten_chatgroup(subChannelMsg, null, null);
     }
   }, [ginfo]);
 
@@ -105,32 +120,45 @@ const GChatGroupInner = (props) => {
           //   handleMenuClose(event);
           // }
         }} />
-        {/* <Button
-        className="button"
-        sx={{
-          width: "38px",
-          height: "38px",
-        }}
-        onClick={() => {
-          props.closeHandle();
-        }}
-      >
-        <img src={closeImg} width="38px" alt="close" />
-      </Button> */}
       </Box>
     );
   }
 
+  const ListRow = (props) => {
+    const { data, index, setSize, pk } = props;
+    const rowRef = useRef(null);
+    const item = data[index];
+
+    const fetchMeta = (targetPubkey) => {
+      //targetPubkey
+    }
+
+    useEffect(() => {
+      // console.log('ListRow item', item);
+      // console.log('ListRow item', rowRef);
+      fetchMeta(item.pubkey);
+    }, [item.pubkey]);
+
+    // console.log('ListRow item', rowRef);
+
+    useEffect(() => {
+      console.log('ListRow item1111', rowRef);
+      setSize(index, rowRef.current.getHeight());
+    }, [setSize, index]);
+
+    return <GChatItem ref={rowRef} key={index} content={item.content} pubkey={item.pubkey} />
+  };
+
   const renderContent = () => {
     return (
       <Box className={'chat_group_content'}>
-        {/* <List
+        <List
           ref={listRef}
           height={500}
           width={"100%"}
           itemSize={getSize}
-          itemCount={chatData.length}
-          itemData={chatData}
+          itemCount={msgs.length}
+          itemData={msgs}
         >
           {({ data, index, style }) => (
             <div style={style}>
@@ -138,11 +166,11 @@ const GChatGroupInner = (props) => {
                 data={data}
                 index={index}
                 setSize={setSize}
-                chatPK={chatPK}
+                pk={publicKey}
               />
             </div>
           )}
-        </List> */}
+        </List>
       </Box>
     );
   }

@@ -1,27 +1,28 @@
 import {
   System
 } from "nostr/NostrSystem";
-import GlobalNoteCache from 'db/GlobalNoteCache';
+import ChannelCache from 'db/ChannelCache';
 import UserDataCache from 'db/UserDataCache';
 import DMCache from 'db/DMCache';
 import useNostrEvent from "nostr/NostrEvent";
 import { EventKind } from "nostr/def";
 
-export const listen_chatgroup = (sub, curRelay, goon, callback) => {
-  let globalNoteCache = GlobalNoteCache();
+export const listen_chatgroup = (sub, channelId, curRelay, goon, callback) => {
+  let channelCache = ChannelCache();
+  // console.log('listen_chatgroup', channelId);
   System.BroadcastSub(sub, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        if (goon === false) {
-          System.BroadcastClose(sub, curRelay, null);
-        }
-      } else if (tag === 'EVENT') {
-        globalNoteCache.pushNote(msg);
-        if (callback) {
-          let cache = globalNoteCache.get();
-          callback(cache, client);
-        }
+    if (tag === 'EOSE') {
+      if (goon === false) {
+        System.BroadcastClose(sub, curRelay, null);
       }
-    },
+    } else if (tag === 'EVENT') {
+      channelCache.pushChannelMsg(channelId, msg);
+      if (callback) {
+        let cache = channelCache.get(channelId);
+        callback(cache, client);
+      }
+    }
+  },
     curRelay
   );
 }
