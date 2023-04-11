@@ -52,7 +52,7 @@ export const useChatPro = () => {
     },
     sendChannelMetadata: async (content, rootEv) => {
       const ev = NostrFactory.createEvent(publicKey);
-      ev.Kind = EventKind.ChannelCreate;
+      ev.Kind = EventKind.ChannelSet;
       ev.PubKey = publicKey;
       ev.Tags.push(['e', rootEv.id, '']);
       ev.Content = content;

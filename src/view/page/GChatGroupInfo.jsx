@@ -4,11 +4,9 @@ import "./GChatGroupInfo.scss";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { Button, Box, Paper, Stack, Divider } from "@mui/material";
+import { Button, Box, Paper } from "@mui/material";
 import Helpers from "view/utils/Helpers";
-
 import { useChatPro } from "nostr/protocal/ChatPro";
-
 import { System } from "nostr/NostrSystem";
 
 const GChatGroupInfo = (props) => {
@@ -20,12 +18,12 @@ const GChatGroupInfo = (props) => {
   });
   const chatPro = useChatPro();
 
-  const creatChatGroup = async () => {
+  const modifyChatGroup = async () => {
     let cxt = JSON.stringify(localProfile);
-    let event = await chatPro.createChannel(cxt);
+    let event = await chatPro.sendChannelMetadata(cxt, ginfo);
     System.BroadcastEvent(event, (tags, client, msg) => {
       if (tags === "OK" && msg.ret === true) {
-        console.log('creatChatGroup', event, msg);
+        console.log('sendChannelMetadata', event, msg);
         if (callback) {
           callback();
         }
@@ -104,7 +102,7 @@ const GChatGroupInfo = (props) => {
       </Box>
       <Button className={'bt_modify'}
         onClick={() => {
-          // creatChatGroup();
+          modifyChatGroup();
         }}
       >
         {'MODIFY'}
