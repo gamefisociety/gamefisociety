@@ -120,8 +120,25 @@
         }
     }
     
-    .goback{
-        cursor: pointer;
+    .bt_back {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+        filter: brightness(50%);
+
+        background-image: url(../../asset/image/social/dm_left.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            filter: brightness(180%);
+        }
     }
 }
 

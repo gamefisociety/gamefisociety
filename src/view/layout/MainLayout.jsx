@@ -44,6 +44,15 @@ const MainLayout = () => {
     rightPage,
   } = useSelector((s) => s.dialog);
 
+  const getRightDrawVarient = () => {
+    let right_draw_method = 'temporary';
+    if (cardDrawer === "society-chat-group") {
+      right_draw_method = 'persistent';
+    }
+    return right_draw_method;
+  }
+
+  //
   return (
     <Box className="main_bg">
       <GFTHead />
@@ -60,9 +69,9 @@ const MainLayout = () => {
             marginTop: "64px",
             borderRadius: "12px",
             backgroundColor: "rgba(17,17,17,0.95)",
-            // backgroundColor: "rgba(17,17,17,0.95)",
           },
         }}
+        variant={getRightDrawVarient()}
         anchor={placeDrawer}
         open={isDrawer}
         onClose={() => {
@@ -100,13 +109,9 @@ const MainLayout = () => {
             marginTop: "64px",
             backgroundColor: "transparent",
             borderWidth: 0,
-            // display: "flex",
-            // flexDirection: "column",
-            // alignItems: "flex-start",
-            // justifyContent: "center",
           },
         }}
-        variant="persistent"
+        variant={'persistent'}
         anchor={"right"}
         open={chatDrawer}
         onClose={() => {
