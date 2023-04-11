@@ -36,60 +36,22 @@ const GUserHome = (props) => {
   const textNotePro = useTextNotePro();
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
-  const repostPro = useRepostPro();
   const reactionPro = useReactionPro();
   //
   const fetchTextNote = (pub) => {
-    const filterMeta = MetaPro.get(pubkey);
     const filterTextNote = textNotePro.getNoteAndRepost();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
-    const filterFollowPro = followPro.getFollows(pub);
     const filterReactionPro = reactionPro.get(pub);
-    let profileNote = BuildSub("profile_note", [
-      filterMeta,
-      filterTextNote,
-      filterFollowPro,
-      filterReactionPro,
-    ]);
-    let metadata_time = 0;
-    let contactlist = null;
-    nostrWorker.fetch_user_profile(profileNote, null, (data, client) => {
-      console.log('fetch_user_profile data', data);
+    let profileTextNote = BuildSub("profile_textnote", [filterTextNote, filterReactionPro,]);
+    nostrWorker.fetch_user_profile(profileTextNote, null, (data, client) => {
+      // console.log('fetch_user_textnote data', data);
       data.map((item) => {
-        if (item.kind === EventKind.SetMetadata) {
-          console.log('fetch_user_profile data', item);
-          if (info === null || item.created_at > metadata_time) {
-            metadata_time = item.created_at;
-            if (item.content !== "") {
-              setInfo(JSON.parse(item.content));
-            }
-          }
-        } else if (item.kind === EventKind.TextNote) {
-          //push in cache
+        if (item.kind === EventKind.TextNote) {
           user_note_cache.pushNote(item.pubkey, item);
-          //
         } else if (item.kind === EventKind.Repost) {
-          //push in cache
-          console.log('fetch_user_profile Repost', item);
+          // console.log('fetch_user_profile Repost', item);
           user_note_cache.pushNote(item.pubkey, item);
-          //
-        } else if (item.kind === EventKind.Reaction) {
-          //push in cache
-          console.log('fetch_user_profile Reaction', item);
-          // user_note_cache.pushNote(item.pubkey, item);
-          //
-        } else if (item.kind === EventKind.ContactList) {
-          if (contactlist === null || contactlist.created_at < item.created_at) {
-            contactlist = { ...item };
-            if (item.content && item.content !== "") {
-              let relays = JSON.parse(item.content);
-              setOwnRelays({ ...relays });
-            }
-            if (item.tags && item.tags.length > 0) {
-              setOwnFollows(item.tags.concat());
-            }
-          }
         }
       });
       //user_note_cache
@@ -97,7 +59,7 @@ const GUserHome = (props) => {
       if (target_note_cache) {
         setNotes(target_note_cache.concat());
       }
-      console.log('user home', target_note_cache);
+      // console.log('user home', target_note_cache);
     });
   };
 
@@ -147,12 +109,10 @@ const GUserHome = (props) => {
           </Typography>
         </Box>
       </Box>
-      <GCardUser
-        profile={{ ...info }}
-        pubkey={pubkey}
-        ownFollows={ownFollows.concat()}
-        ownRelays={ownRelays}
-      />
+      {/* //  profile={{ ...info }}
+        // ownFollows={ownFollows.concat()}
+        // ownRelays={ownRelays} */}
+      <GCardUser pubkey={pubkey} />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => {
           // console.log('userhome-note-index', item);

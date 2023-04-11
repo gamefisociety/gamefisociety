@@ -8,9 +8,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind } from "nostr/def";
 
 export const fetch_user_profile = (sub, curRelay, callback) => {
-  // console.log('fetch_user_profile', sub);
   let userDataCache = UserDataCache();
-
   const newMsg = [];
   System.BroadcastSub(sub, (tag, client, msg) => {
     if (tag === 'EOSE') {
@@ -38,7 +36,6 @@ export const fetch_user_info = (sub, curRelay, callback) => {
         callback(msgs, client);
       }
     } else if (tag === 'EVENT') {
-      console.log('fetch_user_info msg', msg);
       if (msg.kind === EventKind.SetMetadata) {
         userDataCache.pushMetadata(msg);
       }
@@ -97,16 +94,16 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
   // console.log('fetch_global_notes111', curRelay);
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        System.BroadcastClose(sub, client, null);
-        if (callback) {
-          let cache = globalNoteCache.get();
-          callback(cache, client);
-        }
-      } else if (tag === 'EVENT'&& msg.kind === EventKind.TextNote) {
-        globalNoteCache.pushNote(msg)
+    if (tag === 'EOSE') {
+      System.BroadcastClose(sub, client, null);
+      if (callback) {
+        let cache = globalNoteCache.get();
+        callback(cache, client);
       }
-    },
+    } else if (tag === 'EVENT' && msg.kind === EventKind.TextNote) {
+      globalNoteCache.pushNote(msg)
+    }
+  },
     curRelay
   );
 }
@@ -115,18 +112,18 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
 export const listen_follow_notes = (sub, curRelay, goon, callback) => {
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        if (goon === false) {
-          System.BroadcastClose(sub, curRelay, null);
-        }
-      } else if (tag === 'EVENT') {
-        globalNoteCache.pushNote(msg);
-        if (callback) {
-          let cache = globalNoteCache.get();
-          callback(cache, client);
-        }
+    if (tag === 'EOSE') {
+      if (goon === false) {
+        System.BroadcastClose(sub, curRelay, null);
       }
-    },
+    } else if (tag === 'EVENT') {
+      globalNoteCache.pushNote(msg);
+      if (callback) {
+        let cache = globalNoteCache.get();
+        callback(cache, client);
+      }
+    }
+  },
     curRelay
   );
 }
@@ -135,34 +132,34 @@ export const fetch_chatCache_notes = (privateKey, pubkey, sub, curRelay, callbac
   let chatCache = DMCache();
 
   System.BroadcastSub(sub, (tag, client, msg) => {
-      if (tag === 'EOSE') {
-        System.BroadcastClose(sub, client, null);
-        if (callback) {
-          let cache = chatCache.get();
-          // callback(cache, client);
-        }
-      } else if (tag === 'EVENT') {
-        // globalNoteCache.pushNote(msg)
-        let nostrEvent = useNostrEvent();
-        try {
-          nostrEvent
-            .DecryptData(msg.content, privateKey, msg.pubkey)
-            .then((dmsg) => {
-              console.log(dmsg);
-              if (dmsg) {
-                let flag = chatCache.pushChat(pubkey, msg.id, msg.pubkey, msg.created_at, dmsg);
-                let msgObj = {
-                  msg: msg,
-                  dmsg: dmsg
-                };
-                callback(msgObj, client);
-              }
-            });
-        } catch (e) {
-          //
-        }
+    if (tag === 'EOSE') {
+      System.BroadcastClose(sub, client, null);
+      if (callback) {
+        let cache = chatCache.get();
+        // callback(cache, client);
       }
-    },
+    } else if (tag === 'EVENT') {
+      // globalNoteCache.pushNote(msg)
+      let nostrEvent = useNostrEvent();
+      try {
+        nostrEvent
+          .DecryptData(msg.content, privateKey, msg.pubkey)
+          .then((dmsg) => {
+            console.log(dmsg);
+            if (dmsg) {
+              let flag = chatCache.pushChat(pubkey, msg.id, msg.pubkey, msg.created_at, dmsg);
+              let msgObj = {
+                msg: msg,
+                dmsg: dmsg
+              };
+              callback(msgObj, client);
+            }
+          });
+      } catch (e) {
+        //
+      }
+    }
+  },
     curRelay
   );
 }
