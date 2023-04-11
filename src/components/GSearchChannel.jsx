@@ -84,7 +84,7 @@ const GSearchChannel = (props) => {
           return option.title;
         }}
         renderOption={(props, option) => <li {...props}>{option.title}</li>}
-        renderInput={(params) => <TextField {...params} placeholder={'search'} />}
+        renderInput={(params) => <TextField {...params} placeholder={'enter channel ID'} />}
       />
     </Stack>
   );
