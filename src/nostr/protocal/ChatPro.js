@@ -37,6 +37,12 @@ export const useChatPro = () => {
       filter['authors'] = [publicKey];
       return filter;
     },
+    getChannelById: (channelId) => {
+      const filter = NostrFactory.createFilter();
+      filter['ids'] = [channelId];
+      filter['kinds'] = [EventKind.ChannelCreate];
+      return filter;
+    },
     getChannelMessage: (chanIds) => {
       const filter = NostrFactory.createFilter();
       filter['kinds'] = [EventKind.ChannelMessage];

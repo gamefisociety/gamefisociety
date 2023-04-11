@@ -56,7 +56,6 @@ const GChatGroup = () => {
         }
       }
     }, null);
-
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,6 +76,28 @@ const GChatGroup = () => {
   useEffect(() => {
     fetchChatGroup();
   }, [groupState]);
+
+  const enterChannel = (channelId) => {
+    //
+    let filterChannel = chatPro.getChannelById(channelId);
+    let subChannel = BuildSub("enter_channel", [filterChannel]);
+    System.BroadcastSub(subChannel, (tags, client, msg) => {
+      let channelCache = ChannelCache();
+      if (tags === 'EOSE') {
+        System.BroadcastClose(subChannel, client, null);
+        let tmp_info = channelCache.getInfo(channelId);
+        if (tmp_info && groupState === 0) {
+          setGroupInfo({ ...tmp_info });
+          setGroupState(2);
+        }
+      } else if (tags === 'EVENT') {
+        console.log('enter_channel', msg);
+        if (msg.kind && msg.kind === EventKind.ChannelCreate) {
+          channelCache.addInfo({ ...msg });
+        }
+      }
+    }, null);
+  }
 
   const renderChannelMenu = () => {
     return (
@@ -127,7 +148,7 @@ const GChatGroup = () => {
       <List className="list_bg">
         {
           channels.map((item, index) => {
-            console.log('renderCacheRelays', item);
+            // console.log('renderChannelList', item);
             if (!item.content || item.content === '') {
               return null;
             }
@@ -170,7 +191,7 @@ const GChatGroup = () => {
         <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CHANNEL LIST'}</Typography>
         <GSearchChannel callback={(msg, channelId) => {
           if (msg === 'msg-channel-id') {
-            console.log('msg-channel-id', channelId);
+            enterChannel(channelId);
           }
         }} />
         <Button className={'create_group_bt'}

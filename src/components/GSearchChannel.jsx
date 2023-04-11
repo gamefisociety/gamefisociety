@@ -61,7 +61,7 @@ const GSearchChannel = (props) => {
           if (inputValue !== '' && !isExisting) {
             filtered.push({
               inputValue,
-              title: `Add "${inputValue}"`,
+              title: `CHANNEL: "${inputValue}"`,
             });
           }
           return filtered;
