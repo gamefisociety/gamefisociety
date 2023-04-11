@@ -5,13 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Button, Box, Paper, Stack, Divider } from "@mui/material";
+import Helpers from "view/utils/Helpers";
 
 import { useChatPro } from "nostr/protocal/ChatPro";
 
 import { System } from "nostr/NostrSystem";
 
 const GChatGroupInfo = (props) => {
-  const { callback } = props;
+  const { ginfo, callback } = props;
   const [localProfile, setLocalProfile] = useState({
     name: '',
     about: '',
@@ -32,9 +33,29 @@ const GChatGroupInfo = (props) => {
     });
   };
 
+  useEffect(() => {
+    if (ginfo && ginfo.content !== '') {
+      let tmp_info = JSON.parse(ginfo.content);
+      setLocalProfile({ ...tmp_info });
+    }
+  }, [ginfo]);
+
   return (
     <Paper className={'chat_group_info_bg'} >
       <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CREATE GROUP'}</Typography>
+      <Box className={'lable_part'}>
+        <Typography className={'lable_flag'}>
+          {"CHANNEL ID"}
+        </Typography>
+        <Box className={'id_bg'}>
+          <Typography className={'lable_id'}>
+            {ginfo.id}
+          </Typography>
+          <Box className={'icon_copy'} onClick={() => {
+            Helpers.copyToClipboard(ginfo.id);
+          }} />
+        </Box>
+      </Box>
       <Box className={'lable_part'}>
         <Typography className={'lable_flag'}>
           {"GROUP NAME"}

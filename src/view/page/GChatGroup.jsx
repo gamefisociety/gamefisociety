@@ -59,7 +59,6 @@ const GChatGroup = () => {
 
   };
 
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
 
@@ -99,21 +98,18 @@ const GChatGroup = () => {
               <ClickAwayListener onClickAway={handleMenuClose}>
                 <MenuList autoFocusItem={openMenu}>
                   <MenuItem onClick={(event) => {
-                    // event.stopPropagation();
-                    handleMenuClose();
+                    handleMenuClose(event);
                     setGroupState(3);
                   }}>
                     {'Information'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
-                    // event.stopPropagation();
-                    handleMenuClose();
+                    handleMenuClose(event);
                   }} >
                     {'Share To'}
                   </MenuItem>
                   <MenuItem onClick={(event) => {
-                    // event.stopPropagation();
-                    handleMenuClose();
+                    handleMenuClose(event);
                   }}>
                     {'Delete'}
                   </MenuItem>
@@ -141,6 +137,7 @@ const GChatGroup = () => {
                 <Box
                   className={'channel_item'}
                   onClick={(event) => {
+                    event.stopPropagation();
                     setGroupInfo({ ...item });
                     setGroupState(2);
                   }}
@@ -151,8 +148,10 @@ const GChatGroup = () => {
                   <Box sx={{ flexGrow: 1 }} />
                   <Box className="icon_more" onClick={(event) => {
                     if (openMenu === false) {
+                      setGroupInfo({ ...item });
                       handleMenuOpen(event);
                     } else {
+                      setGroupInfo(null);
                       handleMenuClose(event);
                     }
                   }} />

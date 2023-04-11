@@ -19,10 +19,42 @@
     }
 
     .lable_flag {
+        width: 100%;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         color: #919191;
+    }
+
+    .id_bg {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .lable_id {
+        width: 80%;
+        margin-top: 12px;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        color: #d1d1d1;
+    }
+
+    .icon_copy {
+        cursor: pointer;
+        margin-left: 12px;
+        width: 36px;
+        height: 36px;
+        background-image: url(../../asset/image/logo/ic_copy.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
     }
 
     .label_text {
@@ -73,7 +105,7 @@
         }
     }
 
-    .bt_create {
+    .bt_modify {
         width: 200px;
         height: 36px;
         margin-top: 24px;

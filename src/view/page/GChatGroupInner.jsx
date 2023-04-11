@@ -169,7 +169,7 @@ const GChatGroupInner = (props) => {
   const renderHeader = () => {
     return (
       <Box className={'chat_group_header'}>
-        <Box className={'bt_back'}
+        <Box className={'bt_back_inner'}
           onClick={() => {
             if (callback) {
               callback();
