@@ -4,7 +4,7 @@
     background-color: rgba(27, 27, 27, 0.95);
     z-index: 0;
     pointer-events: all;
-
+    position: relative;
     .post_menu {
         position: fixed;
         top: 64px;
@@ -20,6 +20,49 @@
         margin-top: 6px;
         width: 140px;
         height: 36px;
+    }
+
+    .post_new_data {
+        width: 160px;
+        height: 38px;
+        position: fixed;
+        top: 70px;
+        right: calc( 50vw - 136px );
+        cursor: pointer;
+        border-radius: 29px;
+        background-color: rgba(0, 108, 249, 1);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        z-index: 10;
+
+        .new_data_avatars{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+
+            .avatar{
+                margin-left: -6px;
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        .new_data_num {
+            position: absolute;
+            right: 15px;
+            font-family: Saira;
+            font-size: 14px;
+            font-weight: 500;
+            color: #FFFFFF;
+        }
     }
 
     .post_button {

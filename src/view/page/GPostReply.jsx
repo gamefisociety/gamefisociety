@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./GPostReply.scss";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+import { useSelector, useDispatch } from "react-redux";
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
 
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import GCardNote from "components/GCardNote";
 import GCardNoteRepost from "components/GCardNoteRepost";
+import GCardAvatar from "components/GCardAvatar";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
-import { setPost } from 'module/store/features/dialogSlice';
+import { setPost } from "module/store/features/dialogSlice";
 import { EventKind } from "nostr/def";
 
-import GlobalNoteCache from 'db/GlobalNoteCache';
+import GlobalNoteCache from "db/GlobalNoteCache";
 
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 const GPostReply = () => {
   //
@@ -29,14 +32,16 @@ const GPostReply = () => {
   //
   const dispatch = useDispatch();
   const { follows } = useSelector((s) => s.profile);
-  const [curLabel, setCurLabel] = useState('Post');
+  const [curLabel, setCurLabel] = useState("Post");
   const [curCreateAt, setCurCreateAt] = useState(0);
   const [data, setData] = useState([]);
+  const [newData, setNewData] = useState([]);
   const [inforData, setInforData] = useState(new Map());
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
   const gNoteCache = GlobalNoteCache();
-
+  let tempData = [];
+  let tempNewData = [];
   const getSubNote = (tim) => {
     const filterTextNote = textNotePro.getNoteAndRepost();
     let tmpAuthors = follows.concat([publicKey]);
@@ -48,25 +53,49 @@ const GPostReply = () => {
       filterTextNote.until = tim;
     }
     filterTextNote.limit = 50;
-    let subTextNode = BuildSub('textnode-follows', [filterTextNote]);
+    let subTextNode = BuildSub("textnode-follows", [filterTextNote]);
     return subTextNode;
-  }
+  };
 
   const getNoteList = (subTextNode, goon) => {
-    nostrWorker.listen_follow_notes(subTextNode, null, goon, (data, client) => {
-      setData(data.concat());
-      const pubkeys = [];
-      data.map((item) => {
-        pubkeys.push(item.pubkey);
-      });
-      const pubkyes_filter = new Set(pubkeys);
-      getInfor(pubkyes_filter, null);
-    });
+    nostrWorker.listen_follow_notes(
+      subTextNode,
+      null,
+      goon,
+      (cacheData, client) => {
+        console.log("getNoteList", goon, data.length);
+        if (goon) {
+          if (tempData.length < 50) {
+            // let t_data = [];
+            // t_data = t_data.concat(cacheData);
+            // test = cacheData.concat();
+            //load data firstly
+            tempData = cacheData.concat();
+            setData(tempData);
+            // console.log("getNoteList load data firstly", goon, data.length, cacheData.length);
+          } else {
+            //have new data
+            tempNewData = cacheData.concat();
+            setNewData(tempNewData);
+            // console.log("getNoteList have new data", goon, newData.length);
+          }
+        } else {
+          //load more
+          setData(cacheData);
+        }
+        const pubkeys = [];
+        cacheData.map((item) => {
+          pubkeys.push(item.pubkey);
+        });
+        const pubkyes_filter = new Set(pubkeys);
+        getInfor(pubkyes_filter, null);
+      }
+    );
   };
 
   const getInfor = (pkeys, curRelay) => {
     const filterMetaData = metadataPro.get(Array.from(pkeys));
-    let subTextNode = BuildSub('metadata', [filterMetaData]);
+    let subTextNode = BuildSub("metadata", [filterMetaData]);
     nostrWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
       setInforData(data);
     });
@@ -86,8 +115,8 @@ const GPostReply = () => {
   };
 
   const postNote = (note) => {
-    dispatch(setPost({ post: true, target: note, }));
-  }
+    dispatch(setPost({ post: true, target: note }));
+  };
 
   useEffect(() => {
     setData([]);
@@ -107,26 +136,30 @@ const GPostReply = () => {
 
   const renderMenu = () => {
     return (
-      <Box className={'post_menu'}>
+      <Box className={"post_menu"}>
         <Button
-          className={'post_menu_item'}
+          className={"post_menu_item"}
           sx={{
-            backgroundColor: curLabel === 'Post' ? '#006CF9' : '#272727'
+            backgroundColor: curLabel === "Post" ? "#006CF9" : "#272727",
           }}
           variant="contained"
           onClick={() => {
-            setCurLabel('Post');
+            setNewData([]);
+            setCurLabel("Post");
           }}
         >
           {"Post"}
         </Button>
-        <Button className={'post_menu_item'}
+        <Button
+          className={"post_menu_item"}
           sx={{
-            backgroundColor: curLabel === 'Post & Reply' ? '#006CF9' : '#272727'
+            backgroundColor:
+              curLabel === "Post & Reply" ? "#006CF9" : "#272727",
           }}
           variant="contained"
           onClick={() => {
-            setCurLabel('Post & Reply');
+            setNewData([]);
+            setCurLabel("Post & Reply");
           }}
         >
           {"Post & Reply"}
@@ -141,11 +174,11 @@ const GPostReply = () => {
     let eArray = [];
     let pArray = [];
 
-    target.tags.map(item => {
-      if (item[0] === 'e') {
+    target.tags.map((item) => {
+      if (item[0] === "e") {
         eNum = eNum + 1;
         eArray.push(item[1]);
-      } else if (item[0] === 'p') {
+      } else if (item[0] === "p") {
         pNum = pNum + 1;
         pArray.push(item[1]);
       }
@@ -154,24 +187,72 @@ const GPostReply = () => {
       eNum: eNum,
       pNum: pNum,
       eArray: eArray.concat(),
-      pArray: pArray.concat()
+      pArray: pArray.concat(),
+    };
+  };
+
+  const renderNewAvatar = () => {
+    if (newData.length < 3) {
+      return null;
     }
-  }
+    let avatars = [];
+    for (var i = 0; i < 3; i++) {
+      const item = newData[i];
+      avatars.push(
+        <GCardAvatar
+          className={"avatar"}
+          key={i}
+          note={{ ...item }}
+        ></GCardAvatar>
+      );
+    }
+    return <Box className={"new_data_avatars"}>{avatars}</Box>;
+  };
+
+  const renderNewData = () => {
+    if (newData.length < 10) {
+      return null;
+    }
+    return (
+      <Box
+        className={"post_new_data"}
+        onClick={() => {
+          // data.unshift(newData[0]);
+          // setData({ ...data });
+          setData(newData.concat(data));
+          setNewData([]);
+        }}
+      >
+        {renderNewAvatar()}
+        <Typography className={"new_data_num"}>{newData.length}</Typography>
+      </Box>
+    );
+  };
 
   const renderContent = () => {
     return (
-      <List className={'list_bg'}>
+      <List className={"list_bg"}>
         {data.map((item, index) => {
-          if (curLabel === 'Post') {
+          if (curLabel === "Post") {
             let retInfo = parseNote(item);
             if (retInfo.eNum > 0) {
               return null;
             }
           }
           if (item.kind === EventKind.TextNote) {
-            return <GCardNote key={"post-reply-note" + index + '-' + item.pubkey} note={{ ...item }} />;
+            return (
+              <GCardNote
+                key={"post-reply-note" + index + "-" + item.pubkey}
+                note={{ ...item }}
+              />
+            );
           } else if (item.kind === EventKind.Repost) {
-            return <GCardNoteRepost key={"post-reply-repost" + index + '-' + item.pubkey} note={{ ...item }} />;
+            return (
+              <GCardNoteRepost
+                key={"post-reply-repost" + index + "-" + item.pubkey}
+                note={{ ...item }}
+              />
+            );
           } else {
             return null;
           }
@@ -181,13 +262,22 @@ const GPostReply = () => {
   };
 
   return (
-    <Paper className={'post_reply_bg'} elevation={0}>
+    <Paper className={"post_reply_bg"} elevation={0}>
       {renderMenu()}
-      <Button className={'post_button'} onClick={() => { postNote(null); }} />
+      <Button
+        className={"post_button"}
+        onClick={() => {
+          postNote(null);
+        }}
+      />
+      {renderNewData()}
       {renderContent()}
-      <Typography className={'post_loadmore'} onClick={() => {
-        loadMore();
-      }}>
+      <Typography
+        className={"post_loadmore"}
+        onClick={() => {
+          loadMore();
+        }}
+      >
         {"LOAD MORE"}
       </Typography>
     </Paper>
