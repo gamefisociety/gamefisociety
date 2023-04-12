@@ -11,13 +11,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
 
 import { alpha, styled } from "@mui/material/styles";
 import { setRelays } from "module/store/features/profileSlice";
@@ -36,47 +36,175 @@ const IOSSwitch = styled((props) => (
   height: 18,
   padding: 0,
   marginRight: 10,
-  '& .MuiSwitch-switchBase': {
+  "& .MuiSwitch-switchBase": {
     padding: 0,
     margin: 2,
-    transitionDuration: '300ms',
-    '&.Mui-checked': {
-      transform: 'translateX(16px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466',
+    transitionDuration: "300ms",
+    "&.Mui-checked": {
+      transform: "translateX(16px)",
+      color: "#fff",
+      "& + .MuiSwitch-track": {
+        backgroundColor: theme.palette.mode === "dark" ? "#32dce8" : "#65C466",
         opacity: 1,
         border: 0,
       },
-      '&.Mui-disabled + .MuiSwitch-track': {
+      "&.Mui-disabled + .MuiSwitch-track": {
         opacity: 0.5,
       },
     },
-    '&.Mui-focusVisible .MuiSwitch-thumb': {
-      color: '#33cf4d',
-      border: '6px solid #fff',
+    "&.Mui-focusVisible .MuiSwitch-thumb": {
+      color: "#33cf4d",
+      border: "6px solid #fff",
     },
-    '&.Mui-disabled .MuiSwitch-thumb': {
-      color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+    "&.Mui-disabled .MuiSwitch-thumb": {
+      color:
+        theme.palette.mode === "light"
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
     },
-    '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    "&.Mui-disabled + .MuiSwitch-track": {
+      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
     },
   },
-  '& .MuiSwitch-thumb': {
-    boxSizing: 'border-box',
+  "& .MuiSwitch-thumb": {
+    boxSizing: "border-box",
     width: 16,
     height: 16,
   },
-  '& .MuiSwitch-track': {
+  "& .MuiSwitch-track": {
     borderRadius: 16 / 2,
-    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
     opacity: 1,
-    transition: theme.transitions.create(['background-color'], {
+    transition: theme.transitions.create(["background-color"], {
       duration: 500,
     }),
   },
 }));
+
+const ReadSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#4B8B1F",
+    "&:hover": {
+      backgroundColor: alpha("#4B8B1F", theme.palette.action.hoverOpacity),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "#4B8B1F",
+  },
+}));
+
+const WriteSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#F5A900",
+    "&:hover": {
+      backgroundColor: alpha("#F5A900", theme.palette.action.hoverOpacity),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "#F5A900",
+  },
+}));
+
+const GRelayItem = (props) => {
+  const relay = props.relay;
+  const [relayInfo, setRelayInfo] = useState(null);
+  useEffect(() => {
+    if (relay) {
+      let t_relay = { ...relay };
+      t_relay.canRead = System.isRead(relay.addr);
+      t_relay.canWrite = System.isWrite(relay.addr);
+      setRelayInfo(t_relay);
+    }
+  }, [relay]);
+
+  const renderItem = () => {
+    if (!relayInfo) return null;
+    return (
+      <Box className={"relay_item"}>
+        <Typography
+          className={"lable_relay"}
+          onClick={(event) => {
+            props.openDetail();
+          }}
+        >
+          {relayInfo.addr}
+        </Typography>
+        <Typography
+          sx={{
+            marginLeft: "8px",
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: relayInfo.canRead ? "#4B8B1F" : "#D9D9D9",
+          }}
+        >
+          {"R"}
+        </Typography>
+        <ReadSwitch
+          checked={relayInfo.canRead}
+          size="small"
+          inputProps={{ "aria-label": "controlled" }}
+          onChange={(ev) => {
+            if (ev.target.checked) {
+              System.addRead(relayInfo.addr);
+              relayInfo.canRead = true;
+              setRelayInfo({ ...relayInfo });
+            } else {
+              System.rmRead(relayInfo.addr);
+              relayInfo.canRead = false;
+              setRelayInfo({ ...relayInfo });
+            }
+          }}
+        />
+        <Typography
+          sx={{
+            marginLeft: "15px",
+            fontSize: "16px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            color: relayInfo.canWrite ? "#F5A900" : "#D9D9D9",
+          }}
+        >
+          {"W"}
+        </Typography>
+        <WriteSwitch
+          checked={relayInfo.canWrite}
+          size="small"
+          inputProps={{ "aria-label": "controlled" }}
+          onChange={(ev) => {
+            if (ev.target.checked) {
+              System.addWrite(relayInfo.addr);
+              relayInfo.canWrite = true;
+              setRelayInfo({ ...relayInfo });
+            } else {
+              System.rmWrite(relayInfo.addr);
+              relayInfo.canWrite = false;
+              setRelayInfo({ ...relayInfo });
+            }
+            console.log(
+              "onChange",
+              relayInfo.canWrite,
+              System.isWrite(relay.addr)
+            );
+          }}
+        />
+        <Button
+            variant="contained"
+            sx={{
+              width: "40px",
+              backgroundColor: "transparent",
+            }}
+            onClick={() => {
+              props.openDel();
+            }}
+          >
+            <img src={logo_delete} width="40px" alt="logo_delete" />
+          </Button>
+      </Box>
+    );
+  };
+  return renderItem();
+};
 
 const GRelays = () => {
   const { relays, curRelay } = useSelector((s) => s.profile);
@@ -85,22 +213,19 @@ const GRelays = () => {
   const relayPro = useRelayPro();
   const [newRelay, setNewRelay] = useState(null);
   const [opRelay, setOpRelay] = useState(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [module, setModule] = useState({ isDetail: false, curRelay: {} });
-
-  const handleClickDialogOpen = () => {
-    setDialogOpen(true);
-  };
+  const [detailInfo, setDetailInfo] = useState({ open: false, relay: {} });
+  const [delInfo, setDelInfo] = useState({ open: false, relay: {} });
 
   const handleDialogClose = () => {
-    setDialogOpen(false);
+    delInfo.open = false;
+    setDelInfo({...delInfo});
   };
 
   const saveRelays = async (tmpRelays) => {
     let event = await relayPro.syncRelayKind3(tmpRelays);
     System.BroadcastEvent(event, (tags, client, msg) => {
       if (tags === "OK" && msg.ret === true) {
-        console.log('remove relay', event, msg);
+        console.log("remove relay", event, msg);
       }
     });
   };
@@ -136,140 +261,28 @@ const GRelays = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
 
-  const handleMenuOpen = (event, cfg) => {
-    // console.log('handleOpen', event, cfg);
-    event.stopPropagation();
-    let tmpCfg = { ...cfg };
-    tmpCfg.canRead = System.isRead(cfg.addr);
-    tmpCfg.canWrite = System.isWrite(cfg.addr);
-    setOpRelay({ ...tmpCfg });
-    setAnchorEl(event.currentTarget);
-    setOpenMenu(true);
-  };
-
-  const handleMenuClose = (event) => {
-    event.stopPropagation();
-    setAnchorEl(null);
-    setOpenMenu(false);
-  };
-
-  const renderRelayMenu = () => {
-    return (
-      <Popper
-        open={openMenu}
-        anchorEl={anchorEl}
-        role={undefined}
-        placement="bottom-start"
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow {...TransitionProps}
-            style={{
-              transformOrigin: placement === 'bottom-start' ? 'right bottom' : 'right top',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleMenuClose}>
-                <MenuList autoFocusItem={openMenu}>
-                  <MenuItem onClick={(event) => {
-                    event.stopPropagation();
-                    opRelay.canRead = !opRelay.canRead;
-                    setOpRelay({ ...opRelay });
-                  }}>
-                    <IOSSwitch checked={opRelay ? opRelay.canRead : false} onChange={(ev) => {
-                      if (ev.target.checked) {
-                        System.addRead(opRelay.addr);
-                      } else {
-                        System.rmRead(opRelay.addr);
-                      }
-                    }} />
-                    {'Read'}
-                  </MenuItem>
-                  <MenuItem onClick={(event) => {
-                    event.stopPropagation();
-                    opRelay.canWrite = !opRelay.canWrite;
-                    setOpRelay({ ...opRelay });
-                  }} >
-                    <IOSSwitch checked={opRelay ? opRelay.canWrite : false} onChange={(ev) => {
-                      if (ev.target.checked) {
-                        System.addWrite(opRelay.addr);
-                      } else {
-                        System.rmWrite(opRelay.addr);
-                      }
-                    }} />
-                    {'Write'}
-                  </MenuItem>
-                  <MenuItem onClick={(event) => {
-                    event.stopPropagation();
-                    handleMenuClose();
-                    handleClickDialogOpen();
-                  }}>
-                    <ListItemIcon>
-                      <Box className="icon_del" />
-                    </ListItemIcon>
-                    {'Delete'}
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    );
-  }
-
   const renderCacheRelays = () => {
     return (
       <List className="list_bg">
-        {
-          relays.map((cfg, index) => {
-            return (
-              <ListItem key={'relay-' + index}>
-                <Box
-                  className={'relay_item'}
-                  onClick={(event) => {
-                    console.log('new event', event);
-                    module.isDetail = true;
-                    module.curRelay = cfg;
-                    setModule({ ...module });
-                  }}
-                >
-                  <Typography className={'lable_relay'}>
-                    {cfg.addr}
-                  </Typography>
-                  <Box
-                    sx={{
-                      ml: "10px",
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "8px",
-                      backgroundColor: System.isRead(cfg.addr) === true ? "#4B8B1F" : "#D9D9D9",
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      ml: "10px",
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "8px",
-                      backgroundColor: System.isWrite(cfg.addr) === true ? "#F5A900" : "#D9D9D9",
-                    }}
-                  />
-                  <Box sx={{ flexGrow: 1 }} />
-                  <Box className="icon_more" onClick={(event) => {
-                    if (openMenu === false) {
-                      handleMenuOpen(event, cfg);
-                    } else {
-                      handleMenuClose(event);
-                    }
-                  }} />
-                  {renderRelayMenu()}
-                </Box>
-              </ListItem>
-            )
-          })
-        }
+        {relays.map((cfg, index) => {
+          return (
+            <ListItem key={"relay-" + index}>
+              <GRelayItem
+                relay={cfg}
+                openDetail={() => {
+                  detailInfo.open = true;
+                  detailInfo.relay = cfg;
+                  setDetailInfo({ ...detailInfo });
+                }}
+                openDel={()=>{
+                  delInfo.open = true;
+                  delInfo.relay = cfg;
+                  setDelInfo({...delInfo});
+                }}
+              />
+            </ListItem>
+          );
+        })}
       </List>
     );
   };
@@ -280,7 +293,8 @@ const GRelays = () => {
       return null;
     }
     return (
-      <Box key={"add-new-relay-"}
+      <Box
+        key={"add-new-relay-"}
         sx={{
           position: "relative",
           display: "flex",
@@ -337,8 +351,8 @@ const GRelays = () => {
 
   const renderRelays = () => {
     return (
-      <Box className={'inner_relays'}>
-        <Typography className={'tips_relay'}>
+      <Box className={"inner_relays"}>
+        <Typography className={"tips_relay"}>
           {"Your Relays " + relays.length}
         </Typography>
         <Button
@@ -346,8 +360,8 @@ const GRelays = () => {
           sx={{
             width: "80%",
             height: "36px",
-            marginLeft: '10%',
-            my: '12px',
+            marginLeft: "10%",
+            my: "12px",
             backgroundColor: "#454FBF",
             borderRadius: "6px",
             fontSize: "28px",
@@ -358,7 +372,7 @@ const GRelays = () => {
           disabled={newRelay !== null}
           onClick={() => {
             if (newRelay === null) {
-              setNewRelay('');
+              setNewRelay("");
             }
           }}
         >
@@ -372,8 +386,8 @@ const GRelays = () => {
 
   const renderCurRelay = () => {
     return (
-      <Box className={'relay_detail_bg'}>
-        <Box className={'relay_detail_header'}>
+      <Box className={"relay_detail_bg"}>
+        <Box className={"relay_detail_header"}>
           <Box
             className={"goback"}
             sx={{
@@ -383,8 +397,8 @@ const GRelays = () => {
               justifyContent: "flex-start",
             }}
             onClick={() => {
-              module.isDetail = false;
-              setModule({ ...module });
+              detailInfo.open = false;
+              setDetailInfo({ ...detailInfo });
             }}
           >
             <img src={icon_back_white} width="38px" alt="icon_back_white" />
@@ -437,7 +451,7 @@ const GRelays = () => {
               sx={{ width: "48px", height: "48px" }}
               edge="end"
               alt="GameFi Society"
-            // src={}
+              // src={}
             />
             <Typography
               sx={{
@@ -458,7 +472,7 @@ const GRelays = () => {
               width: "36px",
               backgroundColor: "transparent",
             }}
-            onClick={() => { }}
+            onClick={() => {}}
           >
             <img src={icon_detail} width="36px" alt="icon_detail" />
           </Button>
@@ -499,8 +513,7 @@ const GRelays = () => {
             }}
             value={"Repeater Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
         <Box
@@ -539,8 +552,7 @@ const GRelays = () => {
             }}
             value={"Describe Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
         <Box
@@ -579,8 +591,7 @@ const GRelays = () => {
             }}
             value={"Contact Person Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
         <Box
@@ -619,8 +630,7 @@ const GRelays = () => {
             }}
             value={"Software Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
         <Box
@@ -659,8 +669,7 @@ const GRelays = () => {
             }}
             value={"Version Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
         <Box
@@ -699,8 +708,7 @@ const GRelays = () => {
             }}
             value={"Supported NIPs Content"}
             variant="outlined"
-            onChange={(event) => {
-            }}
+            onChange={(event) => {}}
           />
         </Box>
       </Box>
@@ -709,7 +717,7 @@ const GRelays = () => {
 
   const renderDlg = () => {
     return (
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+      <Dialog open={delInfo.open} onClose={handleDialogClose}>
         <Box
           sx={{
             width: "400px",
@@ -791,10 +799,10 @@ const GRelays = () => {
         </Box>
       </Dialog>
     );
-  }
+  };
   return (
-    <Box className={'relay_bg'}>
-      {module.isDetail ? renderCurRelay() : renderRelays()}
+    <Box className={"relay_bg"}>
+      {detailInfo.open ? renderCurRelay() : renderRelays()}
       {renderDlg()}
     </Box>
   );

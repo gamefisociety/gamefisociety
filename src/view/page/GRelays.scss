@@ -15,7 +15,7 @@
     .tips_relay {
         width: 100%;
         margin-top: 12px;
-        margin-left: 12px;
+        padding-left: 12px;
         font-size: 20px;
         font-family: Saira;
         font-weight: 500;
@@ -36,17 +36,20 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-        cursor: pointer;
     }
 
     .lable_relay {
-        width: 60%;
+        width: 50%;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         color: #FFFFFF;
+        cursor: pointer;
         white-space: pre-wrap;
         word-wrap: break-word;
+        &:hover {
+            text-decoration:underline
+        }
     }
 
     .relay_detail_bg {

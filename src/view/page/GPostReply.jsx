@@ -63,12 +63,10 @@ const GPostReply = () => {
       null,
       goon,
       (cacheData, client) => {
-        // console.log("getNoteList", goon, data.length);
         if (goon) {
           if (tempData.length < 50) {
             // let t_data = [];
             // t_data = t_data.concat(cacheData);
-            // test = cacheData.concat();
             //load data firstly
             tempData = cacheData.concat();
             setData(tempData);
