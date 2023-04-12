@@ -1,0 +1,114 @@
+.chat_group_inner_bg {
+    width: 400px;
+    min-height: calc( 100vh - 64px );
+    background-color: rgba(27, 27, 27, 0.95);
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    pointer-events: all;
+
+    .lable_part {
+        width: 100%;
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .chat_group_header {
+        width: 100%;
+        margin-top: 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .bt_back_inner {
+            width: 36px;
+            height: 36px;
+            border-radius: 5px;
+            font-size: 0.6rem;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            filter: brightness(50%);
+    
+            background-image: url(../../asset/image/social/dm_left.png);
+            background-size: 100% 100%;
+    
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+    
+        .label_head {
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            color: #FFFFFF;
+            cursor: pointer;
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+    
+        .icon_more {
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            background-image: url(../../asset/image/logo/icon-more.png);
+            background-size: 100% 100%;
+            border-radius: 4px;
+    
+            &:hover {
+                background-image: url(../../asset/image/logo/icon-more.png);
+                filter: brightness(180%);
+            }
+        }
+    }
+
+    .chat_group_content {
+        width: 100%;
+        flex-grow: 1;
+        margin-top: 16px;
+    }
+
+    .icon_del {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        background-image: url(../../asset/image/logo/icon_delete.png);
+        background-size: 100% 100%;
+        border-radius: 4px;
+        &:hover {
+            background-image: url(../../asset/image/logo/icon_delete.png);
+        }
+    }
+
+    .chat_group_input {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 16px;
+        margin-bottom: 24px;
+
+        .input_text {
+            margin-left: 12px;
+        }
+
+        .MuiInputBase-root {
+            color: white;
+            width: 250px;
+            font-size: 18px;
+            font-family: Saira;
+            font-weight: 500;
+        }
+    }
+
+}
+

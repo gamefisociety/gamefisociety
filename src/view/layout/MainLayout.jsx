@@ -14,6 +14,7 @@ import GFTLeftMenu from "view/head/GFTLeftMenu";
 import GFTHomeMeta from "view/meta/GFTHomeMeta";
 import GSociety from "view/page/GSociety";
 import GSocietyDM from "view/page/GSocietyDM";
+import GChatGroup from "view/page/GChatGroup";
 import GRelays from "view/page/GRelays";
 import GRelaysShow from "view/page/GRelaysShow";
 import GSocietyShow from "view/page/GSocietyShow";
@@ -43,6 +44,15 @@ const MainLayout = () => {
     rightPage,
   } = useSelector((s) => s.dialog);
 
+  const getRightDrawVarient = () => {
+    let right_draw_method = 'temporary';
+    if (cardDrawer === "society-chat-group") {
+      right_draw_method = 'persistent';
+    }
+    return right_draw_method;
+  }
+
+  //
   return (
     <Box className="main_bg">
       <GFTHead />
@@ -59,9 +69,9 @@ const MainLayout = () => {
             marginTop: "64px",
             borderRadius: "12px",
             backgroundColor: "rgba(17,17,17,0.95)",
-            // backgroundColor: "rgba(17,17,17,0.95)",
           },
         }}
+        variant={getRightDrawVarient()}
         anchor={placeDrawer}
         open={isDrawer}
         onClose={() => {
@@ -88,6 +98,7 @@ const MainLayout = () => {
           />
         )}
         {cardDrawer === "society-dm" && <GSocietyDM />}
+        {cardDrawer === "society-chat-group" && <GChatGroup />}
         {cardDrawer === "relays" && <GRelays />}
         {cardDrawer === "relay-show" && <GRelaysShow />}
         {cardDrawer === "follower-show" && <GSocietyShow />}
@@ -98,13 +109,9 @@ const MainLayout = () => {
             marginTop: "64px",
             backgroundColor: "transparent",
             borderWidth: 0,
-            // display: "flex",
-            // flexDirection: "column",
-            // alignItems: "flex-start",
-            // justifyContent: "center",
           },
         }}
-        variant="persistent"
+        variant={'persistent'}
         anchor={"right"}
         open={chatDrawer}
         onClose={() => {

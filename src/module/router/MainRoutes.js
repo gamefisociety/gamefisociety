@@ -18,7 +18,6 @@ const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
 const GPostReply = Loadable(lazy(() => import("view/page/GPostReply")));
 const GArticles = Loadable(lazy(() => import("view/page/GArticles")));
-const GGroupChat = Loadable(lazy(() => import("view/page/GGroupChat")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
 const GFTWallet = Loadable(lazy(() => import("view/page/GFTWallet")));
 const GDetailArticle = Loadable(lazy(() => import("view/page/GDetailArticle")));
@@ -121,10 +120,6 @@ const MainRoutes = {
     {
       path: "/article/:cid",
       element: <GDetailArticle />,
-    },
-    {
-      path: "/groupchat",
-      element: <GGroupChat />,
     },
     {
       path: "/notethread/:noteid",

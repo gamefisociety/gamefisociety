@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardUser.scss";
 
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import { hexToBech32 } from 'nostr/Util';
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
@@ -22,16 +23,60 @@ import logo_link from "../asset/image/social/logo_link.png";
 import { setDrawer } from "module/store/features/dialogSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
-import { setRelays, setFollows } from "module/store/features/profileSlice";
+import { setFollows } from "module/store/features/profileSlice";
+import { useMetadataPro } from "nostr/protocal/MetadataPro";
+import { BuildSub, BuildCount } from "nostr/NostrUtils";
+import { EventKind } from "nostr/def";
 //
+const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+
 const GCardUser = (props) => {
+
+  const nostrWorker = useWorker(createNostrWorker);
   const { follows } = useSelector((s) => s.profile);
   const { publicKey } = useSelector((s) => s.login);
-  const { profile, pubkey, ownFollows, ownRelays } = props;
-  const [ownFollowings, setOwnFollowings] = useState(null);
+  const { pubkey } = props;
   const dispatch = useDispatch();
   //
+  const [metadata, SetMetadata] = useState(null);
+  const [contact, setContact] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [ownFollowings, setOwnFollowings] = useState(null);
+  const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
+  //
+  const fetchUserInfo = (pub) => {
+    const filterMeta = MetaPro.get(pubkey);
+    const filterFollowPro = followPro.getFollows(pub);
+    let userInfoNote = BuildSub("userinfo", [filterMeta, filterFollowPro]);
+    let tmp_contactlist = null;
+    let tmp_meta = null;
+    nostrWorker.fetch_user_info(userInfoNote, null, (data, client) => {
+      data.map((item) => {
+        if (item.kind === EventKind.SetMetadata && (tmp_meta === null || tmp_meta.created_at < item.created_at)) {
+          tmp_meta = { ...item };
+          SetMetadata({ ...item });
+        } else if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
+          tmp_contactlist = { ...item };
+          setContact({ ...item });
+        }
+      });
+    });
+  };
+  //
+  const fetchFollowingCount = (pub) => {
+    const filterFollowingPro = followPro.getFollowings(pub);
+    let userFollowing = BuildCount("userinfo", [filterFollowingPro]);
+    nostrWorker.fetch_user_info(userFollowing, null, (data, client) => {
+      console.log('data count', data);
+      data.map((item) => {
+        // if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
+        //   setContact({ ...item });
+        // }
+      });
+    });
+  };
+
   const addFollow = async (pubkey) => {
     let event = await followPro.addFollow(pubkey);
     let newFollows = follows.concat();
@@ -62,29 +107,118 @@ const GCardUser = (props) => {
     });
   };
 
+  useEffect(() => {
+    if (metadata && metadata.content !== '') {
+      try {
+        let tmp_profile = JSON.parse(metadata.content);
+        setProfile({ ...tmp_profile });
+      } catch (e) {
+        console.log('parse user profile error!', metadata.content);
+      }
+    }
+    return () => { };
+  }, [metadata]);
+
+  useEffect(() => {
+    fetchUserInfo(pubkey);
+    // fetchFollowingCount(pubkey);
+    return () => { };
+  }, [props]);
+
+  const getBanner = () => {
+    if (profile && profile.banner && profile.banner !== '') {
+      return profile.banner;
+    }
+    return default_banner;
+  }
+
+  const getPictrue = () => {
+    if (profile && profile.picture && profile.picture !== '') {
+      return profile.picture;
+    }
+    return default_avatar;
+  }
+
+  const getName = () => {
+    if (profile && profile.name && profile.name !== '') {
+      return '@' + profile.name;
+    }
+    if (profile && profile.username && profile.username !== '') {
+      return '@' + profile.username;
+    }
+    return '@default';
+  }
+
+  const getDisplayName = () => {
+    if (profile && profile.displayName && profile.displayName !== '') {
+      return profile.displayName;
+    }
+    if (profile && profile.display_name && profile.display_name !== '') {
+      return profile.display_name;
+    }
+    if (metadata) {
+      return "Nostr#" + metadata.pubkey.substring(metadata.pubkey.length - 4, metadata.pubkey.length);
+    }
+    return 'default';
+  }
+
+  const getAbout = () => {
+    if (profile && profile.about && profile.about !== '') {
+      return profile.about;
+    }
+    return 'no about';
+  }
+
+  const getWebsite = () => {
+    if (profile && profile.website && profile.website !== '') {
+      return profile.website;
+    }
+    return 'no website';
+  }
+
+  const getFollowers = () => {
+    if (contact) {
+      return contact.tags.length;
+    }
+    return 0;
+  }
+
+  const getFollowings = () => {
+    return 0;
+  }
+
+  const getRelayNum = () => {
+    if (contact && contact.content && contact.content !== '') {
+      try {
+        let tmp_relays = JSON.parse(contact.content);
+        let num = 0;
+        for (let key in tmp_relays) {
+          num = num + 1;
+          // let target = { addr: key, read: content[key].read, write: content[key].write };
+          // let flag = tmp_relays.find((item) => {
+          //   return item.addr === key;
+          // });
+          // if (!flag) {
+          //   tmp_relays.push(target);
+          // }
+        }
+        return num;
+      } catch (e) {
+        console.log('parse user relay num error!', contact.content);
+        return 0;
+      }
+    }
+    return 0;
+  }
+
   const isSelf = (key) => {
     return publicKey === key;
   };
-
 
   const isFollow = (key) => {
     return follows.includes(key);
   };
 
-  const relayNum = () => {
-    let num = 0;
-    if (ownRelays !== null) {
-      for (let key in ownRelays) {
-        num = num + 1;
-      }
-    }
-    return num;
-  }
-
-  useEffect(() => {
-    console.log("GCardUser", ownRelays);
-    return () => { };
-  }, [props]);
 
   //#1F1F1F
   return (
@@ -98,11 +232,7 @@ const GCardUser = (props) => {
           component="img"
           sx={{ height: "140px", borderRadius: "6px" }}
           src="localProfile.banner"
-          image={
-            profile.banner && profile.banner !== "default"
-              ? profile.banner
-              : default_banner
-          }
+          image={getBanner()}
           alt="no banner"
         />
         <Box
@@ -127,11 +257,7 @@ const GCardUser = (props) => {
               sx={{ width: "86px", height: "86px", mt: "-43px" }}
               edge="end"
               alt="GameFi Society"
-              src={
-                profile.picture && profile.picture !== "default"
-                  ? profile.picture
-                  : default_avatar
-              }
+              src={getPictrue()}
             />
             <Button
               className="button"
@@ -149,14 +275,17 @@ const GCardUser = (props) => {
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => {
-                dispatch(
-                  setChatDrawer({
-                    chatDrawer: true,
-                    chatPubKey: pubkey,
-                    chatProfile: profile,
-                  })
-                );
+              onClick={(event) => {
+                event.stopPropagation();
+                if (profile) {
+                  dispatch(
+                    setChatDrawer({
+                      chatDrawer: true,
+                      chatPubKey: pubkey,
+                      chatProfile: profile,
+                    })
+                  );
+                }
               }}
             >
               <img src={logo_chat} width="40px" alt="chat" />
@@ -203,23 +332,19 @@ const GCardUser = (props) => {
               color="#FFFFFF"
               align={"left"}
             >
-              {profile.display_name
-                ? profile.display_name
-                : "Nostr#" + pubkey.substring(pubkey.length - 4, pubkey.length)}
+              {getDisplayName()}
             </Typography>
-            {profile.name ? (
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                }}
-                color="#919191"
-                align={"left"}
-              >
-                {"@" + profile.name}
-              </Typography>
-            ) : null}
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+              }}
+              color="#919191"
+              align={"left"}
+            >
+              {getName()}
+            </Typography>
             <Box
               sx={{
                 marginTop: "30px",
@@ -274,48 +399,44 @@ const GCardUser = (props) => {
               </Button>
             </Box>
           </Box>
-          {profile.about ? (
-            <Typography
+          <Typography
+            sx={{
+              marginTop: "24px",
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              wordWrap: "break-word",
+            }}
+            color="#FFFFFF"
+            align={"left"}
+          >
+            {getAbout()}
+          </Typography>
+          <Box
+            sx={{
+              marginTop: "12px",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <img src={logo_link} width="20px" alt="link" />
+            <Link
+              href={getWebsite()}
+              underline="always"
               sx={{
-                marginTop: "24px",
-                width: "100%",
+                marginLeft: "4px",
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
-                wordWrap: "break-word",
-              }}
-              color="#FFFFFF"
-              align={"left"}
-            >
-              {profile.about}
-            </Typography>
-          ) : null}
-          {profile.website && profile.website !== "default" ? (
-            <Box
-              sx={{
-                marginTop: "12px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
+                fontColor: "#00B7FF",
               }}
             >
-              <img src={logo_link} width="20px" alt="link" />
-              <Link
-                href={profile.website}
-                underline="always"
-                sx={{
-                  marginLeft: "4px",
-                  fontSize: "14px",
-                  fontFamily: "Saira",
-                  fontWeight: "500",
-                  fontColor: "#00B7FF",
-                }}
-              >
-                {profile.website}
-              </Link>
-            </Box>
-          ) : null}
+              {getWebsite()}
+            </Link>
+          </Box>
           <Box
             sx={{
               paddingTop: "25px",
@@ -340,16 +461,18 @@ const GCardUser = (props) => {
             >
               <Typography className={'lable_1'} onClick={(event) => {
                 event.stopPropagation();
-                dispatch(
-                  setDrawer({
-                    isDrawer: true,
-                    placeDrawer: "right",
-                    cardDrawer: "follower-show",
-                    followerDrawer: ownFollows.concat()
-                  })
-                );
+                if (contact && Array.isArray(contact.tags)) {
+                  dispatch(
+                    setDrawer({
+                      isDrawer: true,
+                      placeDrawer: "right",
+                      cardDrawer: "follower-show",
+                      followerDrawer: contact.tags.concat()
+                    })
+                  );
+                }
               }}>
-                {ownFollows.length}
+                {getFollowers()}
               </Typography>
               <Typography className={'lable_2'}>
                 {"Following"}
@@ -375,7 +498,7 @@ const GCardUser = (props) => {
                   })
                 );
               }}>
-                {'...'}
+                {getFollowings()}
               </Typography>
               <Typography className={'lable_2'}>
                 {"Followers"}
@@ -392,16 +515,23 @@ const GCardUser = (props) => {
             >
               <Typography className={'lable_1'} onClick={(event) => {
                 event.stopPropagation();
-                dispatch(
-                  setDrawer({
-                    isDrawer: true,
-                    placeDrawer: "right",
-                    cardDrawer: "relay-show",
-                    relayDrawer: { ...ownRelays }
-                  })
-                );
+                if (contact && contact.content && contact.content !== '') {
+                  try {
+                    let tmp_relays = JSON.parse(contact.content);
+                    dispatch(
+                      setDrawer({
+                        isDrawer: true,
+                        placeDrawer: "right",
+                        cardDrawer: "relay-show",
+                        relayDrawer: { ...tmp_relays }
+                      })
+                    );
+                  } catch (e) {
+                    console.log('parse user relay num error!', contact.content);
+                  }
+                }
               }}>
-                {relayNum()}
+                {getRelayNum()}
               </Typography>
               <Typography className={'lable_2'}>
                 {"Relays"}

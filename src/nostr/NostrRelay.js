@@ -75,6 +75,10 @@ const NostrRelay = () => {
         if (procer && procer.callback) {
           procer.callback(tag, client, msg[2]);
         }
+      } else if (tag === 'COUNT') {
+        if (procer && procer.callback) {
+          procer.callback(tag, client, msg[2]);
+        }
       } else if (tag === 'EOSE') {
         if (procer) {
           if (procer && procer.callback) {

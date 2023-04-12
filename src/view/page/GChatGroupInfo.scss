@@ -1,0 +1,125 @@
+.chat_group_info_bg {
+    width: 400px;
+    min-height: calc( 100vh - 64px );
+    background-color: rgba(27, 27, 27, 0.95);
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    pointer-events: all;
+
+    .lable_part {
+        width: 100%;
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .lable_flag {
+        width: 100%;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        color: #919191;
+    }
+
+    .id_bg {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .lable_id {
+        width: 80%;
+        margin-top: 12px;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        color: #d1d1d1;
+    }
+
+    .icon_copy {
+        cursor: pointer;
+        margin-left: 12px;
+        width: 36px;
+        height: 36px;
+        background-image: url(../../asset/image/logo/ic_copy.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .label_text {
+        margin-top: 12px;
+        width: 80%;
+        border-radius: 5px;
+        border-color: #323232;
+        background-color: #202122;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+    }
+
+    .bt_add {
+        width: 80px;
+        height: 36px;
+        margin-top: 12px;
+        background-color: #1d44f1;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #6782f7;
+        }
+    }
+
+    .bt_back {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+        filter: brightness(50%);
+
+        background-image: url(../../asset/image/social/dm_left.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .bt_modify {
+        width: 200px;
+        height: 36px;
+        margin-top: 24px;
+        background-color: #1d44f1;
+        border-radius: 5px;
+        font-size: 0.6rem;
+        font-family: Saira;
+        font-weight: 500;
+        color: #FFFFFF;
+
+        &:hover {
+            background-color: #6782f7;
+        }
+    }
+
+}
+

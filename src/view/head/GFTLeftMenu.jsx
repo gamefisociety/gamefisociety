@@ -57,6 +57,11 @@ const mapData = [
         // out: true
     },
     {
+        txt: 'CHANNEL',
+        img: ic_dm,
+        // out: true
+    },
+    {
         txt: 'INTRODUCE',
         img: ic_sub,
         out: true
@@ -170,9 +175,15 @@ const GFTLeftMenu = () => {
                     cardDrawer: "society-dm",
                 })
             );
-        }
-
-        else if (item.txt === 'FOLLOW') {
+        } else if (item.txt === 'CHANNEL') {
+            dispatch(
+                setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "society-chat-group",
+                })
+            );
+        } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'MINT AVATAR') {
             // navigate('/mint');
