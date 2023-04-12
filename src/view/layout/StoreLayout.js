@@ -15,7 +15,7 @@ const StoreLayout = () => {
   return (
     <Box className="store_layout">
       <GFTHead />
-      <GFTLeftMenu />
+      {/* <GFTLeftMenu /> */}
       <Box className="store_layout_content">
         <Outlet />
       </Box>

@@ -38,6 +38,8 @@ export var EventKind = {
   ChannelMessage: 42, //NIP-28
   ChannelHideMessage: 43, //NIP-28
   ChannelMuteUser: 44, //NIP-28
+  MuteList: 10000, // NIP-51
+  PinList: 10001, // NIP-51
   Relays: 10002, // NIP-65
   Auth: 22242, // NIP-42
   PubkeyLists: 30000, // NIP-51a
