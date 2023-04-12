@@ -54,7 +54,6 @@ const NostrFactory = {
     return filter;
   },
 
-
   formateEvent: (ev) => {
     // console.log('formate event', ev);
     return {
@@ -68,62 +67,7 @@ const NostrFactory = {
     };
   },
 
-  formateSub: (sub) => {
-    // console.log('formate sub', sub);
-    const ret = {};
-    if (sub.Ids) {
-      ret.ids = Array.from(sub.Ids);
-    }
-    if (sub.Authors) {
-      ret.authors = Array.from(sub.Authors);
-    }
-    if (sub.Kinds) {
-      ret.kinds = Array.from(sub.Kinds);
-    }
-    if (sub.ETags) {
-      ret["#e"] = Array.from(sub.ETags);
-    }
-    if (sub.PTags) {
-      ret["#p"] = Array.from(sub.PTags);
-    }
-    if (sub.HashTags) {
-      ret["#t"] = Array.from(sub.HashTags);
-    }
-    if (sub.DTags) {
-      ret["#d"] = Array.from(sub.DTags);
-    }
-    if (sub.Search) {
-      ret.search = sub.Search;
-    }
-    if (sub.Since !== null) {
-      ret.since = sub.Since;
-    }
-    if (sub.Until !== null) {
-      ret.until = sub.Until;
-    }
-    if (sub.Limit !== null) {
-      ret.limit = sub.Limit;
-    }
-    let rets = [];
-    rets.push(ret);
-    return ret;
-  },
-
-  formateAuth: (ev) => {
-    let ret = {
-      id: ev.Id,
-      pubkey: ev.PubKey,
-      created_at: ev.CreatedAt,
-      kind: ev.Kind,
-      tags: ev.Tags.sort((a, b) => a.Index - b.Index)
-        .map(a => a.ToObject())
-        .filter(a => a !== null),
-      content: ev.Content,
-      sig: ev.Signature,
-    }
-    return ret;
-  },
-
+  
 }
 
 export default NostrFactory;

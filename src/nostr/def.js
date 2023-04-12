@@ -45,6 +45,7 @@ export var EventKind = {
   PubkeyLists: 30000, // NIP-51a
   NoteLists: 30001, // NIP-51b
   TagLists: 30002, // NIP-51c
+  LongForm: 30023, //NIP-23
   ZapRequest: 9734, // NIP 57
   ZapReceipt: 9735, // NIP 57
 };

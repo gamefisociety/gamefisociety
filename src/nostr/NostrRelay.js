@@ -237,14 +237,14 @@ const NostrRelay = () => {
     if (!client.Settings.read) {
       return;
     }
-    let req = ["AUTH", NostrFactory.formateSub(auth)];
-    if (client.Socket?.readyState === WebSocket.OPEN) {
-      console.log('SendAuth direction', req);
-      _SendReal(client, req);
-    } else {
-      console.log('SendAuth cache', req);
-      client.PendingList.push(req);
-    }
+    // let req = ["AUTH", NostrFactory.formateSub(auth)];
+    // if (client.Socket?.readyState === WebSocket.OPEN) {
+    //   console.log('SendAuth direction', req);
+    //   _SendReal(client, req);
+    // } else {
+    //   console.log('SendAuth cache', req);
+    //   client.PendingList.push(req);
+    // }
   }
 
   const SupportsNip = (client, n) => {
