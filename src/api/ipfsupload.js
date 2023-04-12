@@ -1,4 +1,4 @@
-import { create } from "ipfs-http-client";
+// import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { infuraAdd, pinataPinJSON, pinataPinFile } from "./requestData";
@@ -10,7 +10,7 @@ const uploadInner = (key, secret, curService, data, name, onsucess, onerror) => 
     return;
   }
   if (curService === "infura") {
-    infuraUploadInner(key, secret, data, name, onsucess, onerror);
+    // infuraUploadInner(key, secret, data, name, onsucess, onerror);
   } else if (curService === "fleek") {
     fleekUploadInner(key, secret, data, name, onsucess, onerror);
   } else if (curService === "pinata") {
@@ -19,35 +19,29 @@ const uploadInner = (key, secret, curService, data, name, onsucess, onerror) => 
 }
 
 //infura
-const infuraUploadInner = async (key, secret, data,name, onsucess, onerror) => {
-  let authorization =
-    "Basic " + Buffer.from(key + ":" + secret).toString("base64");
-  let ipfs = create({
-    host: "ipfs.infura.io",
-    port: "5001",
-    protocol: "https",
-    headers: {
-      authorization,
-    },
-  });
-  ipfs
-    .add(data)
-    .then((response) => {
-      console.log("infura publish success ", response);
-      const cid = response.cid.toString();
-      onsucess({CID: cid});
-    })
-    .catch((err) => {
-      console.log("infura publish error ", String(err));
-      onerror(err);
-    });
-  // try {
-  //   const { cid } = await ipfs.add("Hello world!");
-  // } catch (err) {
-  //       console.log("infura publish error ", String(err));
-  //   onerror(err);
-  // }
-};
+// const infuraUploadInner = async (key, secret, data,name, onsucess, onerror) => {
+//   let authorization =
+//     "Basic " + Buffer.from(key + ":" + secret).toString("base64");
+//   let ipfs = create({
+//     host: "ipfs.infura.io",
+//     port: "5001",
+//     protocol: "https",
+//     headers: {
+//       authorization,
+//     },
+//   });
+//   ipfs
+//     .add(data)
+//     .then((response) => {
+//       console.log("infura publish success ", response);
+//       const cid = response.cid.toString();
+//       onsucess({CID: cid});
+//     })
+//     .catch((err) => {
+//       console.log("infura publish error ", String(err));
+//       onerror(err);
+//     });
+// };
 // const infuraPublishInner = (key, secret, content, onsucess, onerror) => {
 //   infuraAdd(key, secret, content)
 //     .then((response) => {
@@ -164,7 +158,7 @@ const pinataUploadInner = (key, secret, data, name, onsucess, onerror) => {
 
 const ipfspublish = {
   upload: uploadInner,
-  infuraUpload: infuraUploadInner,
+  // infuraUpload: infuraUploadInner,
   fleekUpload: fleekUploadInner,
   pinataUpload: pinataUploadInner,
 };
