@@ -39,6 +39,8 @@ export var EventKind = {
   ChannelHideMessage: 43, //NIP-28
   ChannelMuteUser: 44, //NIP-28
   Reporting: 1984, //NIP-56
+  MuteList: 10000, // NIP-51
+  PinList: 10001, // NIP-51
   Relays: 10002, // NIP-65
   Auth: 22242, // NIP-42
   PubkeyLists: 30000, // NIP-51a
@@ -46,12 +48,4 @@ export var EventKind = {
   TagLists: 30002, // NIP-51c
   ZapRequest: 9734, // NIP 57
   ZapReceipt: 9735, // NIP 57
-};
-
-export var ReportingType = {
-  NUDITY: "nudity",
-  PROFANITY: "profanity",
-  ILLEGAL: "illegal",
-  SPAM: "spam",
-  IMPERSONATION: "impersonation",
 };
