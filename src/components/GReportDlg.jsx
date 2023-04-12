@@ -22,10 +22,10 @@ const GReportDlg = (props) => {
       describe: "- something which may be illegal in some jurisdiction",
     },
     { type: "spam", describe: "- spam" },
-    {
-      type: "impersonation",
-      describe: "- someone pretending to be someone else",
-    },
+    // {
+    //   type: "impersonation",
+    //   describe: "- someone pretending to be someone else",
+    // },
   ];
   let reporting = false;
   const reportPro = useReportPro();
