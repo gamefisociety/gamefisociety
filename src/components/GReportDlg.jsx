@@ -14,7 +14,19 @@ const GReportDlg = (props) => {
   const [curType, setCurType] = React.useState("nudity");
   const [content, setContent] = React.useState("");
   // const types = ["nudity", "profanity", "illegal", "spam", "impersonation"];
-  const types = ["nudity", "profanity", "illegal", "spam"];
+  const types = [
+    { type: "nudity", describe: "- depictions of nudity, porn, etc." },
+    { type: "profanity", describe: "- profanity, hateful speech, etc." },
+    {
+      type: "illegal",
+      describe: "- something which may be illegal in some jurisdiction",
+    },
+    { type: "spam", describe: "- spam" },
+    {
+      type: "impersonation",
+      describe: "- someone pretending to be someone else",
+    },
+  ];
   let reporting = false;
   const reportPro = useReportPro();
   useEffect(() => {}, []);
@@ -24,20 +36,24 @@ const GReportDlg = (props) => {
   };
 
   const report = async () => {
-    if(reporting){
+    if (reporting) {
       return;
     }
-    if(content.length === 0){
+    if (content.length === 0) {
       return;
     }
-    if(!props.note.pubkey){
+    if (!props.note.pubkey) {
       return;
     }
-    if(!props.note.id){
+    if (!props.note.id) {
       return;
     }
     reporting = true;
-    let event = await reportPro.reportNote(props.note.pubkey, props.note.id, curType);
+    let event = await reportPro.reportNote(
+      props.note.pubkey,
+      props.note.id,
+      curType
+    );
 
     System.BroadcastEvent(event, (tag, client, msg) => {
       console.log("report note", tag, msg);
@@ -53,7 +69,7 @@ const GReportDlg = (props) => {
     <Dialog open={props.open} onClose={handleDialogClose}>
       <Box
         sx={{
-          width: "400px",
+          // width: "400px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -61,7 +77,7 @@ const GReportDlg = (props) => {
           backgroundColor: "#0F0F0F",
           paddingLeft: "24px",
           paddingRight: "24px",
-          paddingBottom: "30px"
+          paddingBottom: "30px",
         }}
       >
         <Typography
@@ -94,10 +110,11 @@ const GReportDlg = (props) => {
                 }}
               >
                 <Checkbox
-                  checked={curType === item}
+                  checked={curType === item.type}
                   color="default"
                   onChange={(event) => {
-                    setCurType(item);
+                    event.stopPropagation();
+                    setCurType(item.type);
                   }}
                 />
                 <Typography
@@ -109,7 +126,19 @@ const GReportDlg = (props) => {
                     color: "#FFFFFF",
                   }}
                 >
-                  {item}
+                  {item.type}
+                </Typography>
+                <Typography
+                  sx={{
+                    // marginLeft:"5px",
+                    fontSize: "14px",
+                    fontFamily: "Saira",
+                    fontWeight: "500",
+                    textAlign: "center",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  {item.describe}
                 </Typography>
               </Box>
             );
@@ -147,9 +176,9 @@ const GReportDlg = (props) => {
             backgroundColor: "#FF0000",
             borderRadius: "5px",
             color: "#FFFFFF",
-            '&:hover': {
-              backgroundColor: '#FF0000',
-          },
+            "&:hover": {
+              backgroundColor: "#FF0000",
+            },
           }}
           onClick={(event) => {
             event.stopPropagation();
