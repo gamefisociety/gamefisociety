@@ -63,7 +63,7 @@ const GPostReply = () => {
       null,
       goon,
       (cacheData, client) => {
-        console.log("getNoteList", goon, data.length);
+        // console.log("getNoteList", goon, data.length);
         if (goon) {
           if (tempData.length < 50) {
             // let t_data = [];
@@ -217,8 +217,6 @@ const GPostReply = () => {
       <Box
         className={"post_new_data"}
         onClick={() => {
-          // data.unshift(newData[0]);
-          // setData({ ...data });
           setData(newData.concat(data));
           setNewData([]);
         }}
