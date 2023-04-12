@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardNote.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
-
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -11,7 +11,15 @@ import Card from "@mui/material/Card";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { setPost } from 'module/store/features/dialogSlice';
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import { setPost } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
@@ -21,12 +29,14 @@ import { useRepostPro } from "nostr/protocal/RepostPro";
 import { useReactionPro } from "nostr/protocal/ReactionPro";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 
-import { BuildSub, ParseNote } from "nostr/NostrUtils"
+import { BuildSub, ParseNote } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
-import UserDataCache from 'db/UserDataCache';
-import { System } from 'nostr/NostrSystem';
+import UserDataCache from "db/UserDataCache";
+import { System } from "nostr/NostrSystem";
 
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 const GCardNote = (props) => {
   const nostrWorker = useWorker(createNostrWorker);
@@ -40,6 +50,10 @@ const GCardNote = (props) => {
   });
   const [repostData, setRepostData] = useState([]);
   const [reactData, setReactData] = useState([]);
+  const [openMore, setOpenMore] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const tooltipRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
@@ -48,8 +62,42 @@ const GCardNote = (props) => {
   const reactionPro = useReactionPro();
   const relayPro = useRelayPro();
 
-  const fetch_relative_info = () => {
+  const MoreTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#191A1B",
+      //   color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: "228px",
+      //   fontSize: theme.typography.pxToRem(12),
+    },
+  }));
 
+  const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: "1px solid #dadde9",
+    },
+  }));
+
+  const handleCloseMore = (event, cfg) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+    setOpenMore(false);
+  };
+
+  const handleOpenMore = (event) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setOpenMore(true);
+  };
+
+  const fetch_relative_info = () => {
     let ret = ParseNote(note);
     let filter = [];
     let metaKeys = [];
@@ -59,7 +107,12 @@ const GCardNote = (props) => {
     } else {
       setMeta({ ...metaInfo });
     }
-    if (ret.reply_note_p !== null && ret.reply_note_p !== 0 && ret.root_note_p !== null && ret.root_note_p !== 0) {
+    if (
+      ret.reply_note_p !== null &&
+      ret.reply_note_p !== 0 &&
+      ret.root_note_p !== null &&
+      ret.root_note_p !== 0
+    ) {
       let replyInfo = UserCache.getMetadata(ret.root_note_p);
       if (!replyInfo) {
         metaKeys.push(ret.root_note_p);
@@ -87,10 +140,13 @@ const GCardNote = (props) => {
     }
     let tmp_repost_arr = [];
     let tmp_react_arr = [];
-    let subMeta = BuildSub('note_relat_' + note.id.substr(0, 4), filter.concat());
+    let subMeta = BuildSub(
+      "note_relat_" + note.id.substr(0, 4),
+      filter.concat()
+    );
     // console.log('fetch_relative_info', subMeta);
     nostrWorker.fetch_textnote_rela(subMeta, null, (datas, client) => {
-      console.log('fetch_relative_info back', datas);
+      console.log("fetch_relative_info back", datas);
       datas.map((msg) => {
         if (msg.kind === EventKind.SetMetadata) {
           if (msg.pubkey === ret.local_p) {
@@ -100,14 +156,14 @@ const GCardNote = (props) => {
           }
           if (msg.pubkey === ret.reply_note_p) {
             if (replyMeta === null || replyMeta.created_at < msg.created_at) {
-              console.log('GCardNote fetch_user_info meta reply', msg);
+              console.log("GCardNote fetch_user_info meta reply", msg);
               setReplyMeta({ ...msg });
             }
           }
         } else if (msg.kind === EventKind.ContactList) {
           //
         } else if (msg.kind === EventKind.Relays) {
-          console.log('GCardNote fetch_user_info relay', msg);
+          console.log("GCardNote fetch_user_info relay", msg);
         } else if (msg.kind === EventKind.TextNote) {
           //
         } else if (msg.kind === EventKind.Repost) {
@@ -128,21 +184,21 @@ const GCardNote = (props) => {
       });
       setRepostData(tmp_repost_arr.concat());
       setReactData(tmp_react_arr.concat());
-      console.log('GCardNote repost & react', tmp_repost_arr, tmp_react_arr);
-    })
-  }
+      console.log("GCardNote repost & react", tmp_repost_arr, tmp_react_arr);
+    });
+  };
 
   const isYourReact = () => {
     return reactData.some((item) => {
       return item.pubkey === publicKey;
     });
-  }
+  };
 
   const isYourRepost = () => {
     return repostData.some((item) => {
       return item.pubkey === publicKey;
     });
-  }
+  };
 
   const repostNote = async (targetNote) => {
     if (targetNote === null) {
@@ -150,61 +206,69 @@ const GCardNote = (props) => {
     }
     let ev = await repostPro.repost(targetNote);
     System.BroadcastEvent(ev, (tag, client, msg) => {
-      console.log('repostNote tag', tag, msg);
+      console.log("repostNote tag", tag, msg);
     });
-  }
+  };
 
   const likeNote = async (targetNote) => {
     if (targetNote === null) {
       return;
     }
     let ev = await reactionPro.like(targetNote);
-    console.log('reactionPro like', ev);
+    console.log("reactionPro like", ev);
     System.BroadcastEvent(ev, (tag, client, msg) => {
       // console.log('reactionPro tag', tag, msg);
       fetch_relative_info();
     });
-  }
+  };
 
   useEffect(() => {
     fetch_relative_info();
     // console.log('renderContent111', note);
-    return () => { };
+    return () => {};
   }, [note]);
 
   const renderContent = (str) => {
     // console.log('renderContent111', str.trim());
     return (
       <Box
-        className={'content'}
-        onClick={() => { navigate("/notethread/" + note.id) }}
+        className={"content"}
+        onClick={() => {
+          navigate("/notethread/" + note.id);
+        }}
       >
-        {Helpers.highlightEverything(str.trim(), null, { showMentionedMessages: true })}
+        {Helpers.highlightEverything(str.trim(), null, {
+          showMentionedMessages: true,
+        })}
       </Box>
     );
   };
 
   const displayname = () => {
-    let tmp_display_name = 'anonymous';
-    if (meta && meta.content !== '') {
+    let tmp_display_name = "anonymous";
+    if (meta && meta.content !== "") {
       let metaCxt = JSON.parse(meta.content);
       tmp_display_name = metaCxt.display_name;
     } else {
       if (note && note.pubkey) {
-        tmp_display_name = "Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
+        tmp_display_name =
+          "Nostr#" +
+          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
       }
     }
     return tmp_display_name;
   };
 
   const username = () => {
-    let tmp_user_name = '@anonymous';
-    if (meta && meta.content !== '') {
+    let tmp_user_name = "@anonymous";
+    if (meta && meta.content !== "") {
       let metaCxt = JSON.parse(meta.content);
-      tmp_user_name = '@' + metaCxt.name;
+      tmp_user_name = "@" + metaCxt.name;
     } else {
       if (note && note.pubkey) {
-        tmp_user_name = "@Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
+        tmp_user_name =
+          "@Nostr#" +
+          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
       }
     }
     return tmp_user_name;
@@ -214,31 +278,34 @@ const GCardNote = (props) => {
     if (replyMeta === null) {
       return null;
     }
-    let showName = 'default';
-    if (replyMeta && replyMeta.content && replyMeta.content !== '') {
+    let showName = "default";
+    if (replyMeta && replyMeta.content && replyMeta.content !== "") {
       let replyMetaCxt = JSON.parse(replyMeta.content);
       showName = replyMetaCxt.name;
     }
     // console.log('renderReplyLable', showName);
     return (
-      <Stack direction={'row'} alignItems={'center'}>
+      <Stack direction={"row"} alignItems={"center"}>
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
-          {'reply to '}
+          {"reply to "}
         </Typography>
-        <Typography className="level3_lable" sx={{ ml: "12px" }} onClick={(event) => {
-          console.log('navigate userhome', replyMeta.pubkey);
-          navigate("/userhome/" + replyMeta.pubkey);
-          event.stopPropagation();
-        }}>
-          {'@' + showName}
+        <Typography
+          className="level3_lable"
+          sx={{ ml: "12px" }}
+          onClick={(event) => {
+            console.log("navigate userhome", replyMeta.pubkey);
+            navigate("/userhome/" + replyMeta.pubkey);
+            event.stopPropagation();
+          }}
+        >
+          {"@" + showName}
         </Typography>
       </Stack>
-
     );
-  }
+  };
 
   let pictrue = default_avatar;
-  if (meta && meta.content !== '') {
+  if (meta && meta.content !== "") {
     let metaCxt = JSON.parse(meta.content);
     pictrue = metaCxt.picture;
   }
@@ -255,13 +322,13 @@ const GCardNote = (props) => {
             alignItems: "center",
             justifyContent: "flex-start",
             backgroundColor: "#656565",
-            padding: '24px',
+            padding: "24px",
           }}
         >
           <Typography
             color={"#919191"}
             sx={{
-              mt: '24px',
+              mt: "24px",
               fontSize: "24px",
               fontFamily: "Saira",
               fontWeight: "500",
@@ -316,22 +383,58 @@ const GCardNote = (props) => {
         </Box>
       </Dialog>
     );
-  }
+  };
+
+  const renderMoreMenu = () => {
+    return (
+      <Popper
+        open={openMore}
+        anchorEl={anchorEl}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom-start" ? "right bottom" : "right top",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleCloseMore}>
+                <MenuList autoFocusItem={openMore}>
+                  <MenuItem
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      // opRelay.canRead = !opRelay.canRead;
+                      // setOpRelay({ ...opRelay });
+                    }}
+                  >{"Report"}</MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    );
+  };
 
   return (
-    <Card className={'card_note_bg'} elevation={0}>
-      <Box className={'base_info'}
+    <Card className={"card_note_bg"} elevation={0}>
+      <Box
+        className={"base_info"}
         onClick={() => {
           navigate("/userhome/" + note.pubkey);
-        }}>
-        <Avatar
-          className="avatar"
-          alt="Avatar"
-          src={pictrue}
-        />
-        <Box className={'base_ext'}>
-          <Stack sx={{ width: '100%' }} direction='row' alignItems={'center'}>
-            <Typography className="level1_lable"
+        }}
+      >
+        <Avatar className="avatar" alt="Avatar" src={pictrue} />
+        <Box className={"base_ext"}>
+          <Stack sx={{ width: "100%" }} direction="row" alignItems={"center"}>
+            <Typography
+              className="level1_lable"
               sx={{
                 ml: "8px",
                 whiteSpace: "nowrap",
@@ -351,40 +454,55 @@ const GCardNote = (props) => {
           {renderReplyLable()}
         </Box>
         <Box sx={{ flexGrow: 1 }}></Box>
-        <Box className="icon_more" onClick={(event) => {
-          event.stopPropagation();
-          // if (openMenu === false) {
-          //   handleMenuOpen(event, cfg);
-          // } else {
-          //   handleMenuClose(event);
-          // }
-        }} />
+        <Box
+          className="icon_more"
+          onClick={(event) => {
+            event.stopPropagation();
+            if (openMore === false) {
+              handleOpenMore(event,null);
+            } else {
+              handleCloseMore(event);
+            }
+          }}
+        ></Box>
+        {renderMoreMenu()}
       </Box>
       {renderContent(note.content)}
-      <Box className={'bottom'}>
-        <Box className="icon_chat" onClick={() => {
-          dispatch(setPost({
-            post: true,
-            target: note,
-          }));
-        }} />
+      <Box className={"bottom"}>
+        <Box
+          className="icon_chat"
+          onClick={() => {
+            dispatch(
+              setPost({
+                post: true,
+                target: note,
+              })
+            );
+          }}
+        />
         <Box className="icon_chain_push" />
         <Box className="icon_pay" />
-        <Box className={isYourRepost() ? 'icon_trans_1' : 'icon_trans'} onClick={(event) => {
-          event.stopPropagation();
-          repostOpen.open = true;
-          repostOpen.note = { ...note }
-          setRepostOpen({ ...repostOpen });
-        }} />
+        <Box
+          className={isYourRepost() ? "icon_trans_1" : "icon_trans"}
+          onClick={(event) => {
+            event.stopPropagation();
+            repostOpen.open = true;
+            repostOpen.note = { ...note };
+            setRepostOpen({ ...repostOpen });
+          }}
+        />
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {repostData.length}
         </Typography>
-        <Box className={isYourReact() ? 'icon_right_1' : 'icon_right'} onClick={(event) => {
-          event.stopPropagation();
-          if (isYourReact() === false) {
-            likeNote(note);
-          }
-        }} />
+        <Box
+          className={isYourReact() ? "icon_right_1" : "icon_right"}
+          onClick={(event) => {
+            event.stopPropagation();
+            if (isYourReact() === false) {
+              likeNote(note);
+            }
+          }}
+        />
         <Typography className="level2_lable" sx={{ ml: "12px" }}>
           {reactData.length}
         </Typography>
