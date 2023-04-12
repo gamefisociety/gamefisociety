@@ -6,7 +6,6 @@ import NostrFactory from 'nostr/NostrFactory';
 export const useLongFormPro = () => {
 
   const { privateKey, publicKey } = useSelector(s => s.login);
-  const { follows, relays } = useSelector(s => s.profile);
   const nostrEvent = useNostrEvent();
 
   return {
@@ -34,7 +33,7 @@ export const useLongFormPro = () => {
         if (subject && subject !== '') {
           filter['#d'] = [subject];
         }
-        filter['#app'] = ['gfs-nft'];
+        filter['app'] = ['gfs-nft'];
         return filter;
       }
     },

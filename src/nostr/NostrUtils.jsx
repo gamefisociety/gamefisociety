@@ -31,6 +31,9 @@ export const BuildSub = (subname, filters) => {
         if (f['#r']) {
             newF['#r'] = f['#r'];
         }
+        if (f['#d']) {
+            newF['#d'] = f['#d'];
+        }
         if (f['since']) {
             newF['since'] = f['since'];
         }
@@ -39,6 +42,9 @@ export const BuildSub = (subname, filters) => {
         }
         if (f['limit']) {
             newF['limit'] = f['limit'];
+        }
+        if (f['app']) {
+            newF['app'] = f['app'];
         }
         ret.push(newF);
     })
