@@ -125,7 +125,7 @@ const GRelayItem = (props) => {
         <Typography
           sx={{
             marginLeft: "8px",
-            fontSize: "16px",
+            fontSize: "14px",
             fontFamily: "Saira",
             fontWeight: "500",
             color: relayInfo.canRead ? "#4B8B1F" : "#D9D9D9",
@@ -152,7 +152,7 @@ const GRelayItem = (props) => {
         <Typography
           sx={{
             marginLeft: "15px",
-            fontSize: "16px",
+            fontSize: "14px",
             fontFamily: "Saira",
             fontWeight: "500",
             color: relayInfo.canWrite ? "#F5A900" : "#D9D9D9",
@@ -181,18 +181,15 @@ const GRelayItem = (props) => {
             );
           }}
         />
-        <Button
-            variant="contained"
-            sx={{
-              width: "40px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {
-              props.openDel();
-            }}
-          >
-            <img src={logo_delete} width="40px" alt="logo_delete" />
-          </Button>
+        <Box
+          className={"icon_del"}
+          sx={{
+            marginLeft:"8px",
+          }}
+          onClick={() => {
+            props.openDel();
+          }}
+        ></Box>
       </Box>
     );
   };
@@ -210,7 +207,7 @@ const GRelays = () => {
 
   const handleDialogClose = () => {
     delInfo.open = false;
-    setDelInfo({...delInfo});
+    setDelInfo({ ...delInfo });
   };
 
   const saveRelays = async (tmpRelays) => {
@@ -263,10 +260,10 @@ const GRelays = () => {
                   detailInfo.relay = cfg;
                   setDetailInfo({ ...detailInfo });
                 }}
-                openDel={()=>{
+                openDel={() => {
                   delInfo.open = true;
                   delInfo.relay = cfg;
-                  setDelInfo({...delInfo});
+                  setDelInfo({ ...delInfo });
                 }}
               />
             </ListItem>
