@@ -149,6 +149,8 @@ const GFTLeftMenu = () => {
     }
 
     const clickMenu = (item) => {
+        //clear all cache
+        clear();
         if (item.txt === 'HOME') {
             navigate('/home');
         } else if (item.txt === 'META(beta)') {
@@ -160,11 +162,9 @@ const GFTLeftMenu = () => {
                 dispatch(setIsOpen(true));
             }
         } else if (item.txt === 'GLOBAL') {
-            clear();
             navigate('/global/all');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
-            clear();
             navigate('/post-reply');
             openMainContent();
         } else if (item.txt === 'DM') {
@@ -194,7 +194,7 @@ const GFTLeftMenu = () => {
             }
         } else if (item.txt === 'GAME') {
             // dropScope('ProjectsCache');
-            clear();
+            // clear();
             // console.log(getCachingNodes());
             navigate('/game');
         } else if (item.txt === 'VIDEOS') {
@@ -203,7 +203,7 @@ const GFTLeftMenu = () => {
             navigate('/newspage');
         } else if (item.txt === 'ARTICLE') {
             // dropScope('ArticlesCache');
-            clear();
+            // clear();
             navigate('/article');
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
