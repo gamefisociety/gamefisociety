@@ -718,20 +718,19 @@ const GRelays = () => {
           }}
         >
           <Typography
-            color={"#919191"}
             sx={{
-              marginTop: "75px",
+              marginTop: "55px",
               fontSize: "24px",
               fontFamily: "Saira",
               fontWeight: "500",
               lineHeight: "29px",
               textAlign: "center",
+              color: "#FFFFFF",
             }}
           >
             {"Are you sure to delete this repeater"}
           </Typography>
           <Typography
-            color={"#919191"}
             sx={{
               marginTop: "25px",
               fontSize: "24px",
@@ -739,6 +738,7 @@ const GRelays = () => {
               fontWeight: "500",
               lineHeight: "29px",
               textAlign: "center",
+              color: "#FFFFFF",
             }}
           >
             {"This operation cannot be undone"}

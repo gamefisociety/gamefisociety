@@ -397,7 +397,7 @@ const GFTGlobal = () => {
                 fontWeight: "500",
                 color: "#FFFFFF",
               }}
-              length={20}
+              inputProps={{ maxLength: 20 }}
               value={newSujbect}
               variant="outlined"
               onChange={(event) => {

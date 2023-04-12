@@ -3,7 +3,7 @@ import useNostrEvent from "nostr/NostrEvent";
 import { EventKind, ReportingType } from "nostr/def";
 import NostrFactory from 'nostr/NostrFactory';
 
-export const useFollowPro = () => {
+export const useReportPro = () => {
 
   const { privateKey, publicKey } = useSelector(s => s.login);
   const nostrEvent = useNostrEvent();
