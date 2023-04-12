@@ -11,13 +11,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
 
 import { alpha, styled } from "@mui/material/styles";
 import { setRelays } from "module/store/features/profileSlice";
@@ -212,7 +205,6 @@ const GRelays = () => {
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
   const [newRelay, setNewRelay] = useState(null);
-  const [opRelay, setOpRelay] = useState(null);
   const [detailInfo, setDetailInfo] = useState({ open: false, relay: {} });
   const [delInfo, setDelInfo] = useState({ open: false, relay: {} });
 
@@ -257,9 +249,6 @@ const GRelays = () => {
     }
     return null;
   };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openMenu, setOpenMenu] = React.useState(false);
 
   const renderCacheRelays = () => {
     return (
@@ -772,7 +761,7 @@ const GRelays = () => {
             }}
             onClick={(event) => {
               event.stopPropagation();
-              deleteRelays(opRelay.addr);
+              deleteRelays(delInfo.relay.addr);
               handleDialogClose();
             }}
           >
