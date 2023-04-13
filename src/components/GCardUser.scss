@@ -3,6 +3,10 @@
     width: 100%;
     background-color: transparent;
 
+    .MuiCardContent-root {
+        background-color: #0F0F0F !important;
+    }
+
     .lable_1 {
         cursor: pointer;
         color: #FFFFFF;
@@ -19,10 +23,11 @@
         //     // background-color: #3c3d3d00;
         // }
     }
-}
 
-.button{
-    &:hover{
-        background-color: #3c3d3d00;
+    .button{
+        &:hover{
+            background-color: #3c3d3d00;
+        }
     }
 }
+

@@ -2,8 +2,8 @@
     width: 100%;
     min-height: calc(100vh - 64px);
     background-color: #131313;
-    // pointer-events: all;
     box-sizing: border-box;
+    pointer-events: all;
 
     .global_head {
         display: flex;
