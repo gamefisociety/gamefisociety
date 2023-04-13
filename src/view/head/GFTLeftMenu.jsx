@@ -39,10 +39,6 @@ const mapData = [
         img: ic_home
     },
     {
-        txt: 'META(beta)',
-        img: ic_home
-    },
-    {
         txt: 'GLOBAL',
         img: ic_global
     },
@@ -74,18 +70,18 @@ const mapData = [
         txt: 'DAO',
         img: ic_sub,
     },
-    {
-        txt: 'ARTICLE',
-        img: ic_create
-    },
-    {
-        txt: 'DIVIDER',
-        img: ''
-    },
-    {
-        txt: 'CHECK IN',
-        img: ic_check_in
-    },
+    // {
+    //     txt: 'ARTICLE',
+    //     img: ic_create
+    // },
+    // {
+    //     txt: 'DIVIDER',
+    //     img: ''
+    // },
+    // {
+    //     txt: 'CHECK IN',
+    //     img: ic_check_in
+    // },
     // {
     //     txt: 'MINT AVATAR',
     //     img: ic_free_nft
@@ -99,9 +95,17 @@ const mapData = [
         img: ''
     },
     {
-        txt: 'WALLET',
-        img: ic_menu_wallet
+        txt: 'META(beta)',
+        img: ic_home
     },
+    {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    // {
+    //     txt: 'WALLET',
+    //     img: ic_menu_wallet
+    // },
     // {
     //     txt: 'NEWS',
     //     img: ic_eth
