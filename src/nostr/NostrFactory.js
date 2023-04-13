@@ -67,7 +67,19 @@ const NostrFactory = {
     };
   },
 
-  
+  BuildNFTTag: () => {
+    let ret = {};
+    return ret;
+  },
+
+  BuildLongFormTag: (subject, title) => {
+    let ret = {};
+    ret['d'] = subject;
+    ret['title'] = title;
+    ret['published_at'] = Math.floor(Date.now() / 1000).toString();
+    return ret;
+  }
+
 }
 
 export default NostrFactory;
