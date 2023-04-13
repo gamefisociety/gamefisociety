@@ -71,7 +71,7 @@ const GSetting = () => {
   }, []);
 
   return (
-    <Paper className={'user_setting_bg'} >
+    <Paper className={'user_setting_bg'} elevation={0}>
       <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'SETTING'}</Typography>
       <Typography className={'setting_title'}>
         {"PUBLIC ACCOUNT ID"}

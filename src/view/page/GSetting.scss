@@ -1,8 +1,7 @@
 .user_setting_bg{
-    min-height: calc( 100vh - 64px );
     width: 663px;
-    background-color: rgba(27, 27, 27, 0.95);
-    z-index: 0;
+    min-height: calc( 100vh - 64px );
+    background-color: #0F0F0F;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
