@@ -28,6 +28,7 @@ const MainRoutes = {
   children: [
     {
       path: "/",
+      element: <GFTHomeView />,
     },
     {
       path: "/home",

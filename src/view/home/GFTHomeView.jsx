@@ -278,15 +278,10 @@ const GFTHomeView = () => {
             // backgroundColor: '#0F0F0F'
             // backgroundColor: 'background.paper'
         }}>
-            {renderBanner()}
-            {/* <Divider light={true} sx={{
-                width: '100%',
-                color: 'blue',
-            }} /> */}
-            {/* {renderVideos()} */}
-            {/* {renderNews()} */}
-            {renderGames()}
+            {/* {renderBanner()} */}
             {renderNots()}
+            {renderVideos()}
+            {renderGames()}
             <FsLightbox
                 toggler={toggler}
                 sources={fsLightList}

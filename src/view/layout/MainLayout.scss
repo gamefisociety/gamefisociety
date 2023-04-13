@@ -3,31 +3,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: red;
 
-    .main_search {
-        position: fixed;
-        top: 12px;
-        left: calc( 50% - 225px ) ;
-        z-index: 2200;
+    .main_frame {
+        width: 100%;
+        background-color: #0F0F0F;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-items: center;
     }
 
-    .main_meta {
-        width: 100%;
-        height: 100vh;
-        position: fixed;
-        top: 0px;
-        z-index: 0;
+    .main_menu {
+        top: 64px;
+        position: sticky;
+        width: 200px;
+        height: calc( 100vh - 64px);
+        overflow-y: auto;
     }
 
     .main_content {
-        width: auto;
+        width: calc( 100% - 200px );//auto;
         min-height: calc( 100vh - 64px );
-        position: relative;
-        margin-left: 200px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        z-index: 1;
         pointer-events: none;
     }
 

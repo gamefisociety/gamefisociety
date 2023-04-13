@@ -56,13 +56,14 @@ const MainLayout = () => {
   return (
     <Box className="main_bg">
       <GFTHead />
-      {loggedOut === false && <GFTLeftMenu />}
-      {/* <GFTHomeMeta /> */}
-      {
+      <Box className={'main_frame'}>
+        <Box className={'main_menu'}>
+          <GFTLeftMenu />
+        </Box>
         <Box className="main_content">
           <Outlet />
         </Box>
-      }
+      </Box>
       <Drawer
         PaperProps={{
           style: {
