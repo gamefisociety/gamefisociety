@@ -11,7 +11,12 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
 import { alpha, styled } from "@mui/material/styles";
 import { setRelays } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
@@ -21,6 +26,7 @@ import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
 
 import { System } from "nostr/NostrSystem";
+import { event } from "jquery";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -100,6 +106,8 @@ const WriteSwitch = styled(Switch)(({ theme }) => ({
 
 const GRelayItem = (props) => {
   const relay = props.relay;
+  const [openMore, setOpenMore] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [relayInfo, setRelayInfo] = useState(null);
   useEffect(() => {
     if (relay) {
@@ -109,6 +117,140 @@ const GRelayItem = (props) => {
       setRelayInfo(t_relay);
     }
   }, [relay]);
+
+  const handleCloseMore = (event, cfg) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+    setOpenMore(false);
+  };
+
+  const handleOpenMore = (event) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setOpenMore(true);
+  };
+
+  const renderMoreMenu = () => {
+    return (
+      <Popper
+        sx={{
+          zIndex: 10,
+        }}
+        open={openMore}
+        anchorEl={anchorEl}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom-start" ? "right bottom" : "right top",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleCloseMore}>
+                <MenuList autoFocusItem={openMore}>
+                  <MenuItem
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      // "&:hover": {
+                      //   backgroundColor: "transparent",
+                      // },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontFamily: "Saira",
+                        fontWeight: "500",
+                        color: relayInfo.canRead ? "#4B8B1F" : "#D9D9D9",
+                      }}
+                    >
+                      {"R"}
+                    </Typography>
+                    <ReadSwitch
+                      checked={relayInfo.canRead}
+                      size="small"
+                      inputProps={{ "aria-label": "controlled" }}
+                      onChange={(ev) => {
+                        if (ev.target.checked) {
+                          System.addRead(relayInfo.addr);
+                          relayInfo.canRead = true;
+                          setRelayInfo({ ...relayInfo });
+                        } else {
+                          System.rmRead(relayInfo.addr);
+                          relayInfo.canRead = false;
+                          setRelayInfo({ ...relayInfo });
+                        }
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontFamily: "Saira",
+                        fontWeight: "500",
+                        color: relayInfo.canWrite ? "#F5A900" : "#D9D9D9",
+                      }}
+                    >
+                      {"W"}
+                    </Typography>
+                    <WriteSwitch
+                      checked={relayInfo.canWrite}
+                      size="small"
+                      inputProps={{ "aria-label": "controlled" }}
+                      onChange={(ev) => {
+                        if (ev.target.checked) {
+                          System.addWrite(relayInfo.addr);
+                          relayInfo.canWrite = true;
+                          setRelayInfo({ ...relayInfo });
+                        } else {
+                          System.rmWrite(relayInfo.addr);
+                          relayInfo.canWrite = false;
+                          setRelayInfo({ ...relayInfo });
+                        }
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Box
+                      className={"icon_del"}
+                      sx={{}}
+                      onClick={() => {
+                        props.openDel();
+                      }}
+                    ></Box>
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    );
+  };
 
   const renderItem = () => {
     if (!relayInfo) return null;
@@ -122,23 +264,18 @@ const GRelayItem = (props) => {
         >
           {relayInfo.addr}
         </Typography>
-        <Typography
+        <Box
           sx={{
-            marginLeft: "8px",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            color: relayInfo.canRead ? "#4B8B1F" : "#D9D9D9",
+            cursor: "pointer",
+            ml: "10px",
+            width: "16px",
+            height: "16px",
+            borderRadius: "8px",
+            backgroundColor: relayInfo.canRead === true ? "#4B8B1F" : "#D9D9D9",
           }}
-        >
-          {"R"}
-        </Typography>
-        <ReadSwitch
-          checked={relayInfo.canRead}
-          size="small"
-          inputProps={{ "aria-label": "controlled" }}
-          onChange={(ev) => {
-            if (ev.target.checked) {
+          onClick={(event) => {
+            event.stopPropagation();
+            if (!relayInfo.canRead) {
               System.addRead(relayInfo.addr);
               relayInfo.canRead = true;
               setRelayInfo({ ...relayInfo });
@@ -149,23 +286,19 @@ const GRelayItem = (props) => {
             }
           }}
         />
-        <Typography
+        <Box
           sx={{
-            marginLeft: "15px",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            color: relayInfo.canWrite ? "#F5A900" : "#D9D9D9",
+            cursor: "pointer",
+            ml: "10px",
+            width: "16px",
+            height: "16px",
+            borderRadius: "8px",
+            backgroundColor:
+              relayInfo.canWrite === true ? "#F5A900" : "#D9D9D9",
           }}
-        >
-          {"W"}
-        </Typography>
-        <WriteSwitch
-          checked={relayInfo.canWrite}
-          size="small"
-          inputProps={{ "aria-label": "controlled" }}
-          onChange={(ev) => {
-            if (ev.target.checked) {
+          onClick={(event) => {
+            event.stopPropagation();
+            if (!relayInfo.canWrite) {
               System.addWrite(relayInfo.addr);
               relayInfo.canWrite = true;
               setRelayInfo({ ...relayInfo });
@@ -174,22 +307,21 @@ const GRelayItem = (props) => {
               relayInfo.canWrite = false;
               setRelayInfo({ ...relayInfo });
             }
-            console.log(
-              "onChange",
-              relayInfo.canWrite,
-              System.isWrite(relay.addr)
-            );
           }}
         />
+
         <Box
-          className={"icon_del"}
-          sx={{
-            marginLeft:"8px",
-          }}
-          onClick={() => {
-            props.openDel();
+          className="icon_more"
+          onClick={(event) => {
+            event.stopPropagation();
+            if (openMore === false) {
+              handleOpenMore(event, null);
+            } else {
+              handleCloseMore(event);
+            }
           }}
         ></Box>
+        {renderMoreMenu()}
       </Box>
     );
   };
@@ -718,20 +850,19 @@ const GRelays = () => {
           }}
         >
           <Typography
-            color={"#919191"}
             sx={{
-              marginTop: "75px",
+              marginTop: "55px",
               fontSize: "24px",
               fontFamily: "Saira",
               fontWeight: "500",
               lineHeight: "29px",
               textAlign: "center",
+              color: "#FFFFFF",
             }}
           >
             {"Are you sure to delete this repeater"}
           </Typography>
           <Typography
-            color={"#919191"}
             sx={{
               marginTop: "25px",
               fontSize: "24px",
@@ -739,6 +870,7 @@ const GRelays = () => {
               fontWeight: "500",
               lineHeight: "29px",
               textAlign: "center",
+              color: "#FFFFFF",
             }}
           >
             {"This operation cannot be undone"}

@@ -111,6 +111,24 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
 }
 
 //
+export const fetch_follow_notes = (sub, curRelay, callback) => {
+  let globalNoteCache = GlobalNoteCache();
+  System.BroadcastSub(sub, (tag, client, msg) => {
+    if (tag === 'EOSE') {
+      System.BroadcastClose(sub, curRelay, null);
+        if (callback) {
+          let cache = globalNoteCache.get();
+          callback(cache, client);
+        }
+    } else if (tag === 'EVENT') {
+      globalNoteCache.pushNote(msg);
+    }
+  },
+    curRelay
+  );
+}
+
+//
 export const listen_follow_notes = (sub, curRelay, goon, callback) => {
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
@@ -119,8 +137,8 @@ export const listen_follow_notes = (sub, curRelay, goon, callback) => {
         System.BroadcastClose(sub, curRelay, null);
       }
     } else if (tag === 'EVENT') {
-      globalNoteCache.pushNote(msg);
-      if (callback) {
+      let result = globalNoteCache.pushNote(msg);
+      if (callback && result) {
         let cache = globalNoteCache.get();
         callback(cache, client);
       }

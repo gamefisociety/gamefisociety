@@ -33,62 +33,77 @@ const GPostReply = () => {
   const dispatch = useDispatch();
   const { follows } = useSelector((s) => s.profile);
   const [curLabel, setCurLabel] = useState("Post");
-  const [curCreateAt, setCurCreateAt] = useState(0);
   const [data, setData] = useState([]);
+  const [listenData, setListenData] = useState([]);
   const [newData, setNewData] = useState([]);
+  const [sinceTime, setSinceTime] = useState(0);
   const [inforData, setInforData] = useState(new Map());
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
   const gNoteCache = GlobalNoteCache();
-  let tempData = [];
-  let tempNewData = [];
-  const getSubNote = (tim) => {
+  let listenSubNote = null;
+
+  const fetchNotes = (time) => {
     const filterTextNote = textNotePro.getNoteAndRepost();
     let tmpAuthors = follows.concat([publicKey]);
     filterTextNote.authors = tmpAuthors;
-    if (tim === 0) {
+    if (time === 0) {
       gNoteCache.clear();
       filterTextNote.until = Date.now();
     } else {
-      filterTextNote.until = tim;
+      filterTextNote.until = time;
     }
-    filterTextNote.limit = 50;
+    filterTextNote.limit = 15;
+    let subTextNode = BuildSub("textnode-follows", [filterTextNote]);
+    nostrWorker.fetch_follow_notes(subTextNode, null, (cacheData, client) => {
+      setData(cacheData.concat());
+      console.log("addListenNotes AAAAAAÀ");
+      // fetchInfo(cacheData);
+      //
+      if (time === 0) {
+        setSinceTime(gNoteCache.maxTime());
+        addListenNotes();
+      }
+    });
+  };
+
+  const loadMore = () => {
+    fetchNotes(gNoteCache.minTime());
+  };
+
+  const getListenSubNote = (time) => {
+    const filterTextNote = textNotePro.getNoteAndRepost();
+    let tmpAuthors = follows.concat([publicKey]);
+    filterTextNote.authors = tmpAuthors;
+    filterTextNote.since = time;
+    filterTextNote.limit = 15;
     let subTextNode = BuildSub("textnode-follows", [filterTextNote]);
     return subTextNode;
   };
 
-  const getNoteList = (subTextNode, goon) => {
+  const addListenNotes = () => {
+    if (listenSubNote) {
+      nostrWorker.unlisten_follow_notes(listenSubNote, null, null);
+      listenSubNote = null;
+    }
+    listenSubNote = getListenSubNote(sinceTime);
     nostrWorker.listen_follow_notes(
-      subTextNode,
+      listenSubNote,
       null,
-      goon,
+      true,
       (cacheData, client) => {
-        if (goon) {
-          if (tempData.length < 50) {
-            // let t_data = [];
-            // t_data = t_data.concat(cacheData);
-            //load data firstly
-            tempData = cacheData.concat();
-            setData(tempData);
-            // console.log("getNoteList load data firstly", goon, data.length, cacheData.length);
-          } else {
-            //have new data
-            tempNewData = cacheData.concat();
-            setNewData(tempNewData);
-            // console.log("getNoteList have new data", goon, newData.length);
-          }
-        } else {
-          //load more
-          setData(cacheData);
-        }
-        const pubkeys = [];
-        cacheData.map((item) => {
-          pubkeys.push(item.pubkey);
-        });
-        const pubkyes_filter = new Set(pubkeys);
-        getInfor(pubkyes_filter, null);
+        setListenData(cacheData.concat());
       }
     );
+  };
+
+  const fetchInfo = (cacheData) => {
+    const pubkeys = [];
+    cacheData.map((item) => {
+      pubkeys.push(item.pubkey);
+    });
+    const pubkyes_filter = new Set(pubkeys);
+    getInfor(pubkyes_filter, null);
   };
 
   const getInfor = (pkeys, curRelay) => {
@@ -99,38 +114,36 @@ const GPostReply = () => {
     });
   };
 
-  const loadMore = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >
-      document.scrollingElement.scrollHeight - 50
-    ) {
-      let minTime = gNoteCache.minTime();
-      setCurCreateAt(minTime);
-      //
-      let moreNote = getSubNote(minTime);
-      getNoteList(moreNote, false);
-    }
-  };
-
   const postNote = (note) => {
     dispatch(setPost({ post: true, target: note }));
   };
 
   useEffect(() => {
     setData([]);
-    let textNote = getSubNote(0);
-    getNoteList(textNote, true);
+    fetchNotes(0);
     return () => {
-      nostrWorker.unlisten_follow_notes(textNote, null, null);
+      if (listenSubNote) {
+        nostrWorker.unlisten_follow_notes(listenSubNote, null, null);
+      }
     };
   }, [follows, curLabel]);
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", loadMore);
-  //   return () => {
-  //     window.removeEventListener("scroll", loadMore);
-  //   };
-  // }, [moreTimes, data, curCreateAt]);
+  useEffect(() => {
+    if (listenData.length > 0) {
+      let tempData = [];
+      let i = 0;
+      while (i < listenData.length) {
+        const t_data = listenData[i];
+        if (t_data.created_at > sinceTime) {
+          tempData.push(t_data);
+        } else {
+          break;
+        }
+        i++;
+      }
+      setNewData(tempData.concat());
+    }
+  }, [listenData]);
 
   const renderMenu = () => {
     return (
@@ -142,6 +155,7 @@ const GPostReply = () => {
           }}
           variant="contained"
           onClick={() => {
+            setListenData([]);
             setNewData([]);
             setCurLabel("Post");
           }}
@@ -156,6 +170,7 @@ const GPostReply = () => {
           }}
           variant="contained"
           onClick={() => {
+            setListenData([]);
             setNewData([]);
             setCurLabel("Post & Reply");
           }}
@@ -190,11 +205,12 @@ const GPostReply = () => {
   };
 
   const renderNewAvatar = () => {
-    if (newData.length < 3) {
+    if (newData.length === 0) {
       return null;
     }
     let avatars = [];
-    for (var i = 0; i < 3; i++) {
+    let count = Math.min(newData.length, 3);
+    for (var i = 0; i < count; i++) {
       const item = newData[i];
       avatars.push(
         <GCardAvatar
@@ -208,15 +224,18 @@ const GPostReply = () => {
   };
 
   const renderNewData = () => {
-    if (newData.length < 10) {
+    if (newData.length === 0) {
       return null;
     }
     return (
       <Box
         className={"post_new_data"}
         onClick={() => {
+          //
           setData(newData.concat(data));
+          setListenData([]);
           setNewData([]);
+          setSinceTime(gNoteCache.maxTime());
         }}
       >
         {renderNewAvatar()}

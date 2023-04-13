@@ -23,6 +23,14 @@ export var NostrList = {
   Followed: 3,
 };
 
+export var ReportingType = {
+  NUDITY: "nudity",
+  PROFANITY: "profanity",
+  ILLEGAL: "illegal",
+  SPAM: "spam",
+  IMPERSONATION: "impersonation",
+};
+
 export var EventKind = {
   Unknown: -1,
   SetMetadata: 0,
