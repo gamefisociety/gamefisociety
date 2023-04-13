@@ -160,6 +160,9 @@ const GRelayItem = (props) => {
                       flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      // "&:hover": {
+                      //   backgroundColor: "transparent",
+                      // },
                     }}
                   >
                     <Typography
