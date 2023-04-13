@@ -57,7 +57,7 @@ const MainLayout = () => {
     <Box className="main_bg">
       <GFTHead />
       {loggedOut === false && <GFTLeftMenu />}
-      <GFTHomeMeta />
+      {/* <GFTHomeMeta /> */}
       {
         <Box className="main_content">
           <Outlet />

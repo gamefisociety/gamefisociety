@@ -34,10 +34,10 @@ import ic_dm from "asset/image/logo/icon_dm.png";
 import ic_global from "asset/image/logo/icon_global.png";
 
 const mapData = [
-    // {
-    //     txt: 'HOME',
-    //     img: ic_home
-    // },
+    {
+        txt: 'HOME',
+        img: ic_home
+    },
     {
         txt: 'META(beta)',
         img: ic_home
