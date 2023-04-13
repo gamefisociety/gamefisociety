@@ -32,6 +32,9 @@ const GChatGroupInner = (props) => {
   const chatPro = useChatPro();
   const [msgs, setMsgs] = useState([]);
 
+  const contentRef = useRef(null);
+  const [listH, setListH] = useState(500);
+
   const listRef = useRef();
   const sizeMap = useRef({});
   const setSize = useCallback((index, size) => {
@@ -89,11 +92,20 @@ const GChatGroupInner = (props) => {
 
   //
   useEffect(() => {
+    console.log('listRef', listRef.current);
     if (msgs.length > 0 && listRef.current) {
       listRef.current.scrollToItem(msgs.length, "smart");
+      // listRef.current.props.height = contentRef.current.getBoundingClientRect().height;
     }
     return () => { };
   }, [msgs]);
+
+  // useEffect(() => {
+  //   console.log('contentRef', contentRef, contentRef.current, contentRef.current.getBoundingClientRect());
+  //   if (contentRef && contentRef.current && contentRef.current.getBoundingClientRect()) {
+  //     setListH(Math.floor(contentRef.current.getBoundingClientRect().height));
+  //   }
+  // }, []);
 
   const getGroupName = () => {
     if (ginfo === null || !ginfo.content || ginfo.content === '') {
@@ -233,10 +245,10 @@ const GChatGroupInner = (props) => {
 
   const renderContent = () => {
     return (
-      <Box className={'chat_group_content'}>
+      <Box className={'chat_group_content'} ref={contentRef}>
         <List
           ref={listRef}
-          height={500}
+          height={listH}
           width={"100%"}
           itemSize={getSize}
           itemCount={msgs.length}
@@ -282,7 +294,7 @@ const GChatGroupInner = (props) => {
   }
 
   return (
-    <Paper className={'chat_group_inner_bg'} >
+    <Paper className={'chat_group_inner_bg'} elevation={0}>
       {renderHeader()}
       <Divider sx={{ width: '100%', py: '4px' }} />
       {renderContent()}
