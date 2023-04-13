@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import './GFTHomeView.scss';
+
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { HashRouter, Route, Link, useNavigate } from 'react-router-dom'
@@ -28,12 +30,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CardActions from '@mui/material/CardActions';
 
 import GFTNewsView from './GFTNewsView'
-import GBanner from 'view/store/GBanner';
+import GMainBanner from 'components/GMainBanner';
+import GGlobal from 'view/page/GGlobal';
 
 import ic_play_youtube from "asset/image/logo/ic_play_youtube.png"
-
-import './GFTHomeView.scss';
-
 
 const GFTHomeView = () => {
     const [videoList, setVideoList] = useState([]);
@@ -88,7 +88,7 @@ const GFTHomeView = () => {
     }
 
     const renderBanner = () => {
-        return <GBanner />;
+        return <GMainBanner />;
     }
 
     const renderVideos = () => {
@@ -278,10 +278,11 @@ const GFTHomeView = () => {
             // backgroundColor: '#0F0F0F'
             // backgroundColor: 'background.paper'
         }}>
-            {/* {renderBanner()} */}
-            {renderNots()}
+            {renderBanner()}
+            {/* {renderNots()}
             {renderVideos()}
-            {renderGames()}
+            {renderGames()} */}
+            <GGlobal />
             <FsLightbox
                 toggler={toggler}
                 sources={fsLightList}
