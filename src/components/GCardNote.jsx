@@ -18,7 +18,6 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { setPost } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
@@ -56,7 +55,6 @@ const GCardNote = (props) => {
     open: false,
     note: null,
   });
-  const tooltipRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
@@ -64,29 +62,6 @@ const GCardNote = (props) => {
   const repostPro = useRepostPro();
   const reactionPro = useReactionPro();
   const relayPro = useRelayPro();
-
-  const MoreTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: "#191A1B",
-      //   color: 'rgba(0, 0, 0, 0.87)',
-      maxWidth: "228px",
-      //   fontSize: theme.typography.pxToRem(12),
-    },
-  }));
-
-  const HtmlTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: "#f5f5f9",
-      color: "rgba(0, 0, 0, 0.87)",
-      maxWidth: 220,
-      fontSize: theme.typography.pxToRem(12),
-      border: "1px solid #dadde9",
-    },
-  }));
 
   const handleCloseMore = (event, cfg) => {
     event.stopPropagation();
