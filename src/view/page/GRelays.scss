@@ -1,12 +1,12 @@
 .relay_bg {
     width: 400px;
-    min-height: calc( 100vh - 64px );
+    // min-height: calc( 100vh - 64px );
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-left: 8px;
     padding-right: 8px;
-    background-color: transparent;
+    background-color: #0F0F0F;
 
     .inner_relays {
         width: 100%;

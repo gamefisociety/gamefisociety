@@ -65,11 +65,12 @@ const MainLayout = () => {
         </Box>
       </Box>
       <Drawer
+        elevation={0}
         PaperProps={{
           style: {
             marginTop: "64px",
             borderRadius: "12px",
-            backgroundColor: "rgba(17,17,17,0.95)",
+            backgroundColor: "#0F0F0F",
           },
         }}
         variant={getRightDrawVarient()}
