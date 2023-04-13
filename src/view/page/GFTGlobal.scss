@@ -1,53 +1,25 @@
 .global_bg {
     width: 760px;
     min-height: calc(100vh - 64px);
-    background-color: rgba(27, 27, 27, 0.95);
-    pointer-events: all;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
     box-sizing: border-box;
-
-    .global_head {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-        padding-top: 6px;
-        padding-bottom: 6px;
-        z-index: 1000;
-
-        .tip0 {
-            color: rgb(255, 255, 255);
-            margin-right: 12px;
-        }
-
-        .select0 {
-            min-width: 240px;
-            margin-right: 24px;
-            height: 24px;
-        }
-    }
-
-    .global_content {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        box-sizing: border-box;
-        background-color: transparent;
-    }
+    pointer-events: all;
 
     .global_lables {
-        position: fixed;
+        position: sticky;
         top: 64px;
-        left: calc(50vw - 400px);
         width: 120px;
-        height: calc(100vh - 24px);
+        // height: calc(100vh - 24px);
         padding-top: 24px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        background-color: rgba(36, 36, 36, 0.75);
+        background-color: transparent;
+        // overflow: auto;
 
         .lable_btn {
             display: block;
@@ -81,6 +53,40 @@
             }
         }
     }
+
+    .global_content {
+        flex-grow: 1;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-sizing: border-box;
+        background-color: #131313;
+    }
+
+    .global_head {
+        // position: sticky;
+        // top: 64px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        // z-index: 1000;
+
+        .tip0 {
+            color: rgb(255, 255, 255);
+            margin-right: 12px;
+        }
+
+        .select0 {
+            min-width: 240px;
+            margin-right: 24px;
+            height: 24px;
+        }
+    }
+
 
     .global_loadmore {
         width: 100%;

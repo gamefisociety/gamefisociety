@@ -58,14 +58,14 @@ const GFTGlobal = () => {
   useEffect(() => {
     gNoteCache.clear();
     getNoteList(0);
-    return () => {};
+    return () => { };
   }, [label]);
 
   useEffect(() => {
     if (account) {
       getAllSubjects();
     }
-    return () => {};
+    return () => { };
   }, [account, createSubjectState]);
 
   //get subjects
@@ -326,13 +326,24 @@ const GFTGlobal = () => {
 
   const renderContent = () => {
     return (
-      <List
-        sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}
-      >
-        {data.map((item, index) => {
-          return <GCardNote key={"global-note-" + index} note={{ ...item }} />;
-        })}
-      </List>
+      <Box className={'global_content'}>
+        {renderGlobalHead()}
+        <List
+          sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}
+        >
+          {data.map((item, index) => {
+            return <GCardNote key={"global-note-" + index} note={{ ...item }} />;
+          })}
+        </List>
+        <Typography
+          className={"global_loadmore"}
+          onClick={() => {
+            loadMore();
+          }}
+        >
+          {"LOAD MORE"}
+        </Typography>
+      </Box>
     );
   };
 
@@ -444,16 +455,7 @@ const GFTGlobal = () => {
   return (
     <Paper className={"global_bg"} elevation={0}>
       {account ? renderSujbects() : renderLoadSubjects()}
-      {renderGlobalHead()}
       {renderContent()}
-      <Typography
-        className={"global_loadmore"}
-        onClick={() => {
-          loadMore();
-        }}
-      >
-        {"LOAD MORE"}
-      </Typography>
       {renderSubjectDialog()}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
