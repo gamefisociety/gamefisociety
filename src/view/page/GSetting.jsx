@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./GSetting.scss";
 
 import { useSelector, useDispatch } from "react-redux";
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import FormGroup from '@mui/material/FormGroup';
@@ -26,7 +26,7 @@ const IOSSwitch = styled((props) => (
       transform: 'translateX(20px)',
       color: '#fff',
       '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466', //'#2ECA45',#65C466
+        backgroundColor: theme.palette.mode === 'dark' ? '#1C6CF9' : '#65C466', //'#2ECA45',#65C466
         opacity: 1,
         border: 0,
       },
@@ -59,6 +59,18 @@ const IOSSwitch = styled((props) => (
     }),
   },
 }));
+
+// const ReadSwitch = styled(Switch)(({ theme }) => ({
+//   "& .MuiSwitch-switchBase.Mui-checked": {
+//     color: "#1C6CF9",
+//     "&:hover": {
+//       backgroundColor: alpha("#1C6CF9", theme.palette.action.hoverOpacity),
+//     },
+//   },
+//   "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+//     backgroundColor: "#1C6CF9",
+//   },
+// }));
 
 const GSetting = () => {
   const { publicKey, privateKey } = useSelector((s) => s.login);
@@ -116,6 +128,7 @@ const GSetting = () => {
       <FormGroup sx={{ width: '100%', mt: '36px' }}>
         <Stack direction="row" spacing={1} alignItems="center" sx={{ px: '24px' }}>
           <IOSSwitch checked={isNip19}
+          size="small"
             onChange={(ev) => {
               setNip19(ev.target.checked);
             }} />

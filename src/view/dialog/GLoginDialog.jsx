@@ -104,7 +104,7 @@ const GLoginDialog = () => {
                 transform: 'translateX(20px)',
                 color: '#fff',
                 '& + .MuiSwitch-track': {
-                    backgroundColor: theme.palette.mode === 'dark' ? '#32dce8' : '#65C466', //'#2ECA45',#65C466
+                    backgroundColor: theme.palette.mode === 'dark' ? '#1C6CF9' : '#65C466', //'#2ECA45',#65C466
                     opacity: 1,
                     border: 0,
                 },

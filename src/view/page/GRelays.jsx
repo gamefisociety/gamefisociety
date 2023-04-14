@@ -24,9 +24,7 @@ import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
 import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
-
 import { System } from "nostr/NostrSystem";
-import { event } from "jquery";
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -334,10 +332,10 @@ const GRelays = () => {
   const { loggedOut } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const relayPro = useRelayPro();
-  const [newRelay, setNewRelay] = useState(null);
-  const [detailInfo, setDetailInfo] = useState({ open: false, relay: {} });
+  const [detailRelay, setDetailRelay] = useState(null);
+  const [newRelays, setNewRelays] = useState([]);
   const [delInfo, setDelInfo] = useState({ open: false, relay: {} });
-
+  const [mode, setMode] = useState("list"); //list detail new
   const handleDialogClose = () => {
     delInfo.open = false;
     setDelInfo({ ...delInfo });
@@ -352,7 +350,7 @@ const GRelays = () => {
     });
   };
 
-  const addRelays = async (addr) => {
+  const addRelay = async (addr) => {
     let tmps = relays.concat();
     let flagIndex = tmps.findIndex((item) => {
       return item.addr === addr;
@@ -367,7 +365,7 @@ const GRelays = () => {
     return null;
   };
 
-  const deleteRelays = async (addr) => {
+  const deleteRelay = async (addr) => {
     let tmps = relays.concat();
     let flagIndex = tmps.findIndex((item) => {
       return item.addr === addr;
@@ -389,9 +387,8 @@ const GRelays = () => {
               <GRelayItem
                 relay={cfg}
                 openDetail={() => {
-                  detailInfo.open = true;
-                  detailInfo.relay = cfg;
-                  setDetailInfo({ ...detailInfo });
+                  setMode("detail");
+                  setDetailRelay(cfg);
                 }}
                 openDel={() => {
                   delInfo.open = true;
@@ -408,61 +405,144 @@ const GRelays = () => {
 
   //
   const renderNewRelay = () => {
-    if (newRelay === null) {
-      return null;
-    }
     return (
-      <Box
-        key={"add-new-relay-"}
-        sx={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
-        <TextField
-          sx={{ width: "60%" }}
-          value={newRelay}
-          margin="dense"
-          size="small"
-          // focus={true}
-          onChange={(event) => {
-            setNewRelay(event.target.value);
-          }}
-        />
+      <Box className={"relay_detail_bg"}>
+        <Box className={"relay_detail_header"}>
+          <Box
+            className={"goback"}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+            onClick={() => {
+              setMode("list");
+            }}
+          >
+            <img src={icon_back_white} width="38px" alt="icon_back_white" />
+            <Typography
+              sx={{
+                marginLeft: "5px",
+                fontSize: "18px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+            >
+              {"Relays"}
+            </Typography>
+          </Box>
+        </Box>
         <Box
           sx={{
-            position: "absolute",
-            right: "-20px",
+            width: "100%",
+            paddingLeft: "12px",
+            paddingRight: "12px",
           }}
         >
           <Button
             variant="contained"
             sx={{
-              width: "30px",
+              marginBottom: "10px",
+              width: "100%",
+              height: "48px",
+              fontSize: "40px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              color: "#A2A2A2",
               backgroundColor: "transparent",
+              "&:hover": {
+                backgroundColor: "#383838",
+              },
             }}
             onClick={() => {
-              addRelays(newRelay);
+              if (newRelays.length < 10) {
+                let t_relays = newRelays.concat();
+                t_relays.push("");
+                setNewRelays(t_relays);
+              }
             }}
           >
-            <img src={icon_save} width="30px" alt="icon_save" />
+            {"+"}
           </Button>
-
-          <Button
-            variant="contained"
-            sx={{
-              width: "40px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {
-              setNewRelay(null);
-            }}
-          >
-            <img src={logo_delete} width="40px" alt="logo_delete" />
-          </Button>
+          {newRelays.map((item, index) => {
+            return (
+              <Box
+                key={"add-new-relay-" + index}
+                sx={{
+                  marginTop: "10px",
+                  width: "100%",
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <TextField
+                  sx={{ width: "60%" }}
+                  value={item}
+                  size="small"
+                  placeholder="wss://relay.example.com"
+                  // focus={true}
+                  onChange={(event) => {
+                    let t_relays = newRelays.concat();
+                    t_relays[index] = event.target.value;
+                    setNewRelays(t_relays);
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: "40px",
+                    backgroundColor: "transparent",
+                    "&:hover": {
+                      backgroundColor: "#383838",
+                    },
+                  }}
+                  onClick={() => {
+                    let t_relays = newRelays.concat();
+                    t_relays.splice(index, 1);
+                    setNewRelays(t_relays);
+                  }}
+                >
+                  <img src={logo_delete} width="40px" alt="logo_delete" />
+                </Button>
+              </Box>
+            );
+          })}
+          {newRelays.length > 0 ? (
+            <Button
+              variant="contained"
+              sx={{
+                marginTop: "30px",
+                width: "100%",
+                height: "48px",
+                fontSize: "16px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                borderRadius: "5px",
+                color: "#FFFFFF",
+                backgroundColor: "#1C6CF9",
+                "&:hover": {
+                  backgroundColor: "#368AF9",
+                },
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                for (let index = 0; index < newRelays.length; index++) {
+                  const t_relay = newRelays[index];
+                  if(t_relay.length > 6 && (t_relay.indexOf("wss://") === 0)){
+                    addRelay(t_relay);
+                  }
+                }
+                setMode("list");
+              }}
+            >
+              {"Save"}
+            </Button>
+          ) : null}
         </Box>
       </Box>
     );
@@ -491,22 +571,22 @@ const GRelays = () => {
               backgroundColor: "#368AF9",
             },
           }}
-          disabled={newRelay !== null}
           onClick={() => {
-            if (newRelay === null) {
-              setNewRelay("");
-            }
+            setNewRelays([]);
+            setMode("new");
           }}
         >
           {"+"}
         </Button>
-        {renderNewRelay()}
         {renderCacheRelays()}
       </Box>
     );
   };
 
-  const renderCurRelay = () => {
+  const renderDetailRelay = () => {
+    if (detailRelay === null) {
+      return null;
+    }
     return (
       <Box className={"relay_detail_bg"}>
         <Box className={"relay_detail_header"}>
@@ -519,8 +599,7 @@ const GRelays = () => {
               justifyContent: "flex-start",
             }}
             onClick={() => {
-              detailInfo.open = false;
-              setDetailInfo({ ...detailInfo });
+              setMode("list");
             }}
           >
             <img src={icon_back_white} width="38px" alt="icon_back_white" />
@@ -552,7 +631,6 @@ const GRelays = () => {
         </Typography>
         <Box
           sx={{
-            marginTop: "12px",
             width: "100%",
             display: "flex",
             flexDirection: "row",
@@ -601,7 +679,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -623,7 +701,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -640,7 +717,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -662,7 +739,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -679,7 +755,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -701,7 +777,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -718,7 +793,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -740,7 +815,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -757,7 +831,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -779,7 +853,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -796,7 +869,7 @@ const GRelays = () => {
         </Box>
         <Box
           sx={{
-            marginTop: "34px",
+            marginTop: "20px",
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -818,7 +891,6 @@ const GRelays = () => {
           </Typography>
           <TextField
             sx={{
-              marginTop: "12px",
               width: "100%",
               borderRadius: "5px",
               borderColor: "#323232",
@@ -855,20 +927,20 @@ const GRelays = () => {
           <Typography
             sx={{
               marginTop: "25px",
-              fontSize: "24px",
+              fontSize: "22px",
               fontFamily: "Saira",
-              fontWeight: "500",
+              fontWeight: "800",
               lineHeight: "29px",
               textAlign: "center",
               color: "#FFFFFF",
             }}
           >
-            {"Delete This Relay"}
+            {"DELETE THIS RELAY"}
           </Typography>
           <Typography
             sx={{
               marginTop: "30px",
-              fontSize: "18px",
+              fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
               lineHeight: "29px",
@@ -895,7 +967,7 @@ const GRelays = () => {
             }}
             onClick={(event) => {
               event.stopPropagation();
-              deleteRelays(delInfo.relay.addr);
+              deleteRelay(delInfo.relay.addr);
               handleDialogClose();
             }}
           >
@@ -927,9 +999,19 @@ const GRelays = () => {
       </Dialog>
     );
   };
+  const renderContent = () => {
+    if (mode === "list") {
+      return renderRelays();
+    } else if (mode === "detail") {
+      return renderDetailRelay();
+    } else if (mode === "new") {
+      return renderNewRelay();
+    }
+    return null;
+  };
   return (
     <Box className={"relay_bg"}>
-      {detailInfo.open ? renderCurRelay() : renderRelays()}
+      {renderContent()}
       {renderDlg()}
     </Box>
   );
