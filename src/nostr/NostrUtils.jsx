@@ -157,3 +157,41 @@ export const ParseNote = (note) => {
     }
     return ret;
 }
+
+export const ParseLongForm = (note) => {
+    let ret = {
+        d: '',
+        title: '',
+        summary: '',
+        client: '',
+        image: null,
+        published_at: 0,
+        eNum: 0,
+        pNum: 0,
+        eArray: [],
+        pArray: [],
+    }
+    if (!note) {
+        return ret;
+    }
+    note.tags?.map((item, index) => {
+        if (item[0] === 'e') {
+            ret.eNum = ret.eNum + 1;
+            ret.eArray.push(item);
+        } else if (item[0] === 'p') {
+            ret.pNum = ret.pNum + 1;
+            ret.pArray.push(item);
+        } else if (item[0] === 'title') {
+            ret.title = item[1];
+        } else if (item[0] === 'image') {
+            ret.image = item[1];
+        } else if (item[0] === 'summary') {
+            ret.summary = item[1];
+        } else if (item[0] === 'published_at') {
+            ret.published_at = item[1];
+        } else if (item[0] === 'd') {
+            ret.d = item[1] ? item[1] : '';
+        }
+    });
+    return ret;
+}
