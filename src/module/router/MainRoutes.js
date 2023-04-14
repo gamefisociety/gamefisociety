@@ -13,6 +13,7 @@ const GFTMintNFT = Loadable(lazy(() => import("view/home/GFTMintNFT")));
 const GHall = Loadable(lazy(() => import("view/page/GHall")));
 const GUserHome = Loadable(lazy(() => import("view/page/GUserHome")));
 const GMyNFT = Loadable(lazy(() => import("view/page/GMyNFT")));
+const GNFTStore = Loadable(lazy(() => import("view/page/GNFTStore")));
 const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
@@ -107,6 +108,10 @@ const MainRoutes = {
     {
       path: "/userhome/:pubkey",
       element: <GUserHome />,
+    },
+    {
+      path: "/nftmarket/:label",
+      element: <GNFTStore />,
     },
     {
       path: "/mynft/:pubkey",
