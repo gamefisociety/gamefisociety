@@ -227,7 +227,7 @@ const GFTLeftMenu = () => {
         } else if (item.txt === 'INTRODUCE') {
             navigate('/introduce');
         } else if (item.txt === 'NFT') {
-            navigate('/store');
+            navigate('/nftmarket/all');
         } else if (item.txt === 'GROUP CHAT') {
             navigate('/groupchat');
         } else if (item.txt === 'WALLET') {

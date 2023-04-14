@@ -16,7 +16,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import CardMedia from "@mui/material/CardMedia";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -29,6 +28,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import GFetchMetadata from "components/GFetchMetadata";
 import GListenDM from "components/GListenDM";
+import GUserMenu from 'view/head/GUserMenu';
 import {
   setIsOpen,
   setIsOpenWallet,
@@ -36,15 +36,7 @@ import {
 import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
 import ic_logo from "../../asset/image/logo/ic_logo.png";
-import ic_massage from "../../asset/image/home/ic_massage.png";
 import ic_wallet from "../../asset/image/home/ic_wallet.png";
-import ic_man from "../../asset/image/home/ic_man.png";
-import icon_profile from "../../asset/image/login/icon_profile.png";
-import icon_society from "../../asset/image/login/icon_society.png";
-import icon_relays from "../../asset/image/login/icon_relays.png";
-import icon_setting from "../../asset/image/login/icon_setting.png";
-import icon_qr from "../../asset/image/login/icon_qr.png";
-import icon_logout from "../../asset/image/login/icon_logout.png";
 import { EventKind } from "nostr/def";
 
 const ProfileTooltip = styled(({ className, ...props }) => (
@@ -52,9 +44,9 @@ const ProfileTooltip = styled(({ className, ...props }) => (
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#191A1B",
-    //   color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: "228px",
-    //   fontSize: theme.typography.pxToRem(12),
+    // color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: "220px",
+    // fontSize: theme.typography.pxToRem(12),
   },
 }));
 
@@ -196,259 +188,7 @@ const GFTHead = () => {
     return '@gfs';
   }
 
-  const renderUserMenu = (
-    <React.Fragment>
-      <Box
-        sx={{
-          dispaly: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          width: "228px",
-          paddingLeft: "20px",
-          paddingRight: "20px",
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            marginTop: "20px",
-          }}
-          onClick={() => {
-            openUserHome();
-          }}
-        >
-          <Avatar sx={{ width: "40px", height: "40px" }} edge="end" alt={getDisplayName()} src={getAvatarPicture()} />
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: "48px",
-              dispaly: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: "40px",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                textAlign: "left",
-              }}
-              color={"text.primary"}
-            >
-              {getDisplayName()}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                textAlign: "left",
-              }}
-              color={"text.secondary"}
-            >
-              {getName()}
-            </Typography>
-          </Box>
-        </Box>
-        <Button
-          className="button"
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            height: "36px",
-          }}
-          onClick={() => {
-            openProfile();
-          }}
-        >
-          <img
-            className="iconimg"
-            src={icon_profile}
-            width="28px"
-            alt="profile"
-          />
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              align: "left",
-            }}
-            color={"#FFFFFF"}
-          >
-            {"Profile"}
-          </Typography>
-        </Button>
-        <Button
-          className="button"
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            height: "36px",
-          }}
-          onClick={() => {
-            openSociety();
-          }}
-        >
-          <img
-            className="iconimg"
-            src={icon_society}
-            width="28px"
-            alt="society"
-          />
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              align: "left",
-            }}
-            color={"#FFFFFF"}
-          >
-            {"Society"}
-          </Typography>
-        </Button>
-        <Button
-          className="button"
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            height: "36px",
-          }}
-          onClick={() => {
-            openRelays();
-          }}
-        >
-          <img
-            className="iconimg"
-            src={icon_relays}
-            width="28px"
-            alt="relays"
-          />
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              align: "left",
-            }}
-            color={"#FFFFFF"}
-          >
-            {"Relays"}
-          </Typography>
-        </Button>
-        <Button
-          className="button"
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            height: "36px",
-          }}
-          onClick={() => {
-            openSetting();
-          }}
-        >
-          <img
-            className="iconimg"
-            src={icon_setting}
-            width="28px"
-            alt="settings"
-          />
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              align: "left",
-            }}
-            color={"#FFFFFF"}
-          >
-            {"Settings"}
-          </Typography>
-        </Button>
-        {/* <Button
-                    sx={{
-                        borderTop: 1,
-                        borderColor: "#202122",
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        height: "68px",
-                    }}
-                    onClick={() => {
-                        // openProfile();
-                    }}
-                >
-                    <img className="iconimg" src={icon_qr} width="28px" alt="qr" />
-                    <Typography
-                        sx={{
-                            fontSize: "14px",
-                            fontFamily: "Saira",
-                            fontWeight: "500",
-                            align: "left",
-                        }}
-                        color={"#FFFFFF"}
-                    >
-                        {"QR Code"}
-                    </Typography>
-                </Button> */}
-        <Button
-          className="button"
-          sx={{
-            borderTop: 1,
-            borderColor: "#202122",
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            height: "68px",
-          }}
-          onClick={() => {
-            dispatch(logout());
-          }}
-        >
-          <img
-            className="iconimg"
-            src={icon_logout}
-            width="28px"
-            alt="logout"
-          />
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              align: "left",
-            }}
-            color={"#FFFFFF"}
-          >
-            {"Sign Out"}
-          </Typography>
-        </Button>
-      </Box>
-    </React.Fragment>
-  );
+  const renderUserMenu = (<GUserMenu />);
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -517,9 +257,7 @@ const GFTHead = () => {
 
   const renderLogout = () => {
     return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
+      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
         <IconButton
           sx={{ mr: "12px" }}
           size="large"
@@ -544,9 +282,7 @@ const GFTHead = () => {
 
   const renderLogin = () => {
     return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
+      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
         <Box className="wallet_layout" onClick={openDialog}>
           <Button
             className={"btConnect"}
@@ -596,7 +332,6 @@ const GFTHead = () => {
             >
               <Stack
                 sx={{
-                  //   backgroundColor: "background.default",
                   px: "12px",
                   py: "6px",
                   borderRadius: "24px",
@@ -632,13 +367,24 @@ const GFTHead = () => {
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
-        <CardMedia
-          component="img"
-          sx={{ width: 160, cursor: "pointer" }}
-          image={ic_logo}
-          alt="Paella dish"
-          onClick={clickLogo}
-        />
+        <Box className={'logo_menu'}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 0 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            component="img"
+            sx={{ width: 160, cursor: "pointer" }}
+            src={ic_logo}
+            alt="Paella dish"
+            onClick={clickLogo}
+          />
+        </Box>
         <GSearch />
         {loggedOut === true ? renderLogout() : renderLogin()}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>

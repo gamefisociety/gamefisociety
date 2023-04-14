@@ -7,12 +7,23 @@
     top: 0px;
     // border-radius: 12px;
 
+    .logo_menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-items: flex-start;
+    }
+
     .toolbar_bg {
         flex-shrink: 0;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         height: 100%;
+    }
+
+    .MuiTooltip-tooltip {
+        background-color: 0x0F0F0F;
     }
 
     .iconimg {

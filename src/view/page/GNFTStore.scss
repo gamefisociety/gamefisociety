@@ -1,0 +1,12 @@
+.nft_store_bg{
+    width: 100%;
+    min-height: calc( 100vh - 64px );
+    background-color: #131313;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    pointer-events: all;
+
+}
+

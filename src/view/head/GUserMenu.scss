@@ -1,0 +1,128 @@
+.user_menu_bg {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: flex-start;
+    background-color: 191A1B;
+    
+    .menu_first {
+        width: 100%;
+        padding-left: 8px;
+        padding-right: 8px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-items: flex-start;
+        padding-top: 12px;
+        padding-bottom: 12px;
+
+        .menu_first_name {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            height: 40px;
+        }
+
+        &:hover {
+            background-color: #3c3d3d;
+        }
+    }
+
+    .menu_item {
+        width: 100%;
+        height: 36px;
+        padding-left: 8px;
+        padding-right: 8px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        
+        &:hover {
+            background-color: #3c3d3d;
+        }
+    }
+
+
+    .menu_label {
+        margin-left: 6px;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        text-align: left;
+        color:#FFFFFF;
+        white-space: nowrap;
+    }
+
+    .menu_label2 {
+        margin-left: 6px;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        text-align: left;
+        color:#666666;
+    }
+
+    .icon_profil {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../../asset/image/login/icon_profile.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_society {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../../asset/image/login/icon_society.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_relays {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../../asset/image/login/icon_relays.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_settings {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../../asset/image/login/icon_setting.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_sign_out {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../../asset/image/login/icon_logout.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+}
+
