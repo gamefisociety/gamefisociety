@@ -71,7 +71,6 @@ const GReportDlg = (props) => {
       className={'report_dlg_bg'}
       PaperProps={{
         style: {
-          // width: '500px',
           boxShadow: 'none',
           backgroundColor: '#0F0F0F',
         },
@@ -168,17 +167,17 @@ const GReportDlg = (props) => {
         <Button
           variant="contained"
           sx={{
-            marginTop: "30px",
-            width: "300px",
+            marginTop: "20px",
+            width: "80%",
             height: "48px",
             fontSize: "16px",
             fontFamily: "Saira",
             fontWeight: "500",
-            backgroundColor: "#FF0000",
             borderRadius: "5px",
             color: "#FFFFFF",
+            backgroundColor: "#FF0000",
             "&:hover": {
-              backgroundColor: "#FF0000",
+              backgroundColor: "#FF6262",
             },
           }}
           onClick={(event) => {
@@ -192,12 +191,16 @@ const GReportDlg = (props) => {
           variant="contained"
           sx={{
             marginTop: "10px",
-            width: "300px",
+            width: "80%",
             height: "48px",
             fontSize: "16px",
             fontFamily: "Saira",
             fontWeight: "500",
             color: "#FFFFFF",
+            backgroundColor: "#272727",
+              "&:hover": {
+                backgroundColor: "#383838",
+              },
           }}
           onClick={(event) => {
             event.stopPropagation();

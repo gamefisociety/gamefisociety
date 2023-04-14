@@ -481,12 +481,15 @@ const GRelays = () => {
             height: "36px",
             marginLeft: "10%",
             my: "12px",
-            backgroundColor: "#454FBF",
             borderRadius: "6px",
             fontSize: "28px",
             fontFamily: "Saira",
             fontWeight: "500",
             color: "white",
+            backgroundColor: "#1C6CF9",
+            "&:hover": {
+              backgroundColor: "#368AF9",
+            },
           }}
           disabled={newRelay !== null}
           onClick={() => {
@@ -839,8 +842,6 @@ const GRelays = () => {
       <Dialog open={delInfo.open} onClose={handleDialogClose}>
         <Box
           sx={{
-            width: "400px",
-            height: "463px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -848,21 +849,9 @@ const GRelays = () => {
             backgroundColor: "#0F0F0F",
             paddingLeft: "24px",
             paddingRight: "24px",
+            paddingBottom: " 30px",
           }}
         >
-          <Typography
-            sx={{
-              marginTop: "55px",
-              fontSize: "24px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              lineHeight: "29px",
-              textAlign: "center",
-              color: "#FFFFFF",
-            }}
-          >
-            {"Are you sure to delete this repeater"}
-          </Typography>
           <Typography
             sx={{
               marginTop: "25px",
@@ -874,20 +863,35 @@ const GRelays = () => {
               color: "#FFFFFF",
             }}
           >
-            {"This operation cannot be undone"}
+            {"Delete This Relay"}
+          </Typography>
+          <Typography
+            sx={{
+              marginTop: "30px",
+              fontSize: "18px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              lineHeight: "29px",
+              textAlign: "center",
+              color: "#FFFFFF",
+            }}
+          >
+            {"Are you sure to delete this relay?"}
           </Typography>
           <Button
             variant="contained"
             sx={{
-              marginTop: "69px",
-              width: "100%",
+              marginTop: "40px",
+              width: "80%",
               height: "48px",
               fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
               backgroundColor: "#FF0000",
-              borderRadius: "5px",
               color: "#FFFFFF",
+              "&:hover": {
+                backgroundColor: "#FF6262",
+              },
             }}
             onClick={(event) => {
               event.stopPropagation();
@@ -895,18 +899,22 @@ const GRelays = () => {
               handleDialogClose();
             }}
           >
-            {"Confirm"}
+            {"Delete"}
           </Button>
           <Button
-            variant="text"
+            variant="contained"
             sx={{
-              marginTop: "35px",
-              width: "100%",
+              marginTop: "10px",
+              width: "80%",
               height: "48px",
               fontSize: "16px",
               fontFamily: "Saira",
               fontWeight: "500",
               color: "#FFFFFF",
+              backgroundColor: "#272727",
+              "&:hover": {
+                backgroundColor: "#383838",
+              },
             }}
             onClick={(event) => {
               event.stopPropagation();

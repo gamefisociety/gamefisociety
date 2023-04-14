@@ -411,7 +411,7 @@ const GCardNote = (props) => {
                         openReport.open = true;
                         openReport.note = { ...note };
                         setOpenReport({ ...openReport });
-                        console.log(note);
+                        setOpenMore(false);
                       }
                     }}
                   >{"Report"}</MenuItem>
