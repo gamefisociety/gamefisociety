@@ -71,7 +71,7 @@ const GPostReply = () => {
   }, [listenData]);
 
   const fetchNotes = (time) => {
-    if(fetching){
+    if (fetching) {
       return;
     }
     setFetching(true);
@@ -184,10 +184,11 @@ const GPostReply = () => {
     return (
       <Box className={"post_menu"}>
         <Button
-          className={"post_menu_item"}
-          sx={{
-            backgroundColor: curLabel === "Post" ? "#006CF9" : "#272727",
-          }}
+          className={
+            "post_menu_item" + (curLabel === "Post"
+              ? " post_menu_item_selected"
+              : " post_menu_item_unselected")
+          }
           variant="contained"
           onClick={() => {
             setListenData([]);
@@ -198,11 +199,9 @@ const GPostReply = () => {
           {"Post"}
         </Button>
         <Button
-          className={"post_menu_item"}
-          sx={{
-            backgroundColor:
-              curLabel === "Post & Reply" ? "#006CF9" : "#272727",
-          }}
+          className={"post_menu_item" + (curLabel === "Post & Reply"
+          ? " post_menu_item_selected"
+          : " post_menu_item_unselected")}
           variant="contained"
           onClick={() => {
             setListenData([]);

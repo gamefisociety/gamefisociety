@@ -240,6 +240,7 @@ const GRelayItem = (props) => {
                       sx={{}}
                       onClick={() => {
                         props.openDel();
+                        setOpenMore(false);
                       }}
                     ></Box>
                   </MenuItem>
