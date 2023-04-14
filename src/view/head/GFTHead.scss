@@ -7,6 +7,13 @@
     top: 0px;
     // border-radius: 12px;
 
+    .logo_menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-items: flex-start;
+    }
+
     .toolbar_bg {
         flex-shrink: 0;
         flex-direction: row;

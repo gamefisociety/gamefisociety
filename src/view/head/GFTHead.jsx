@@ -16,7 +16,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import CardMedia from "@mui/material/CardMedia";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -37,15 +36,7 @@ import {
 import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
 import ic_logo from "../../asset/image/logo/ic_logo.png";
-import ic_massage from "../../asset/image/home/ic_massage.png";
 import ic_wallet from "../../asset/image/home/ic_wallet.png";
-import ic_man from "../../asset/image/home/ic_man.png";
-import icon_profile from "../../asset/image/login/icon_profile.png";
-import icon_society from "../../asset/image/login/icon_society.png";
-import icon_relays from "../../asset/image/login/icon_relays.png";
-import icon_setting from "../../asset/image/login/icon_setting.png";
-import icon_qr from "../../asset/image/login/icon_qr.png";
-import icon_logout from "../../asset/image/login/icon_logout.png";
 import { EventKind } from "nostr/def";
 
 const ProfileTooltip = styled(({ className, ...props }) => (
@@ -266,9 +257,7 @@ const GFTHead = () => {
 
   const renderLogout = () => {
     return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
+      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
         <IconButton
           sx={{ mr: "12px" }}
           size="large"
@@ -293,9 +282,7 @@ const GFTHead = () => {
 
   const renderLogin = () => {
     return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
+      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
         <Box className="wallet_layout" onClick={openDialog}>
           <Button
             className={"btConnect"}
@@ -380,13 +367,24 @@ const GFTHead = () => {
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
-        <CardMedia
-          component="img"
-          sx={{ width: 160, cursor: "pointer" }}
-          image={ic_logo}
-          alt="Paella dish"
-          onClick={clickLogo}
-        />
+        <Box className={'logo_menu'}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 0 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            component="img"
+            sx={{ width: 160, cursor: "pointer" }}
+            src={ic_logo}
+            alt="Paella dish"
+            onClick={clickLogo}
+          />
+        </Box>
         <GSearch />
         {loggedOut === true ? renderLogout() : renderLogin()}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -402,7 +400,7 @@ const GFTHead = () => {
           </IconButton>
         </Box>
       </Toolbar >
-      {/* {renderMobileMenu} */}
+      {renderMobileMenu}
     </Box >
   );
 };
