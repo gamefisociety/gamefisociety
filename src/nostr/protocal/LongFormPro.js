@@ -9,6 +9,11 @@ export const useLongFormPro = () => {
   const nostrEvent = useNostrEvent();
 
   return {
+    getGlobal: () => {
+      const filter = NostrFactory.createFilter();
+      filter['kinds'] = [EventKind.LongForm];
+      return filter;
+    },
     getLongForm: (pubkey) => {
       if (pubkey) {
         const filter = NostrFactory.createFilter();

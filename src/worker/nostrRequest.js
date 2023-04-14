@@ -2,6 +2,7 @@ import {
   System
 } from "nostr/NostrSystem";
 import GlobalNoteCache from 'db/GlobalNoteCache';
+import GlobalLongFormCache from 'db/GlobalLongFormCache';
 import UserDataCache from 'db/UserDataCache';
 import DMCache from 'db/DMCache';
 import useNostrEvent from "nostr/NostrEvent";
@@ -110,16 +111,35 @@ export const fetch_global_notes = (sub, curRelay, callback) => {
   );
 }
 
+export const fetch_global_longform = (sub, curRelay, callback) => {
+  // console.log('fetch_global_notes111', curRelay);
+  let globalLongFormCache = GlobalLongFormCache();
+  System.BroadcastSub(sub, (tag, client, msg) => {
+    console.log('fetch_global_longform', tag, msg);
+    if (tag === 'EOSE') {
+      System.BroadcastClose(sub, client, null);
+      if (callback) {
+        let cache = globalLongFormCache.get();
+        callback(cache, client);
+      }
+    } else if (tag === 'EVENT' && msg.kind === EventKind.LongForm) {
+      globalLongFormCache.pushMsg(msg)
+    }
+  },
+    curRelay
+  );
+}
+
 //
 export const fetch_follow_notes = (sub, curRelay, callback) => {
   let globalNoteCache = GlobalNoteCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
     if (tag === 'EOSE') {
       System.BroadcastClose(sub, curRelay, null);
-        if (callback) {
-          let cache = globalNoteCache.get();
-          callback(cache, client);
-        }
+      if (callback) {
+        let cache = globalNoteCache.get();
+        callback(cache, client);
+      }
     } else if (tag === 'EVENT') {
       globalNoteCache.pushNote(msg);
     }

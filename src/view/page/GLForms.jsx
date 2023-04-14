@@ -25,7 +25,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { setIsOpen } from "module/store/features/dialogSlice";
-import { useTextNotePro } from "nostr/protocal/TextNotePro";
+import { useLongFormPro } from "nostr/protocal/LongFormPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
 import GlobalNoteCache from "db/GlobalNoteCache";
@@ -51,7 +51,7 @@ const GLForms = () => {
   const [newSujbect, setNewSubject] = React.useState("");
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
-  const textNotePro = useTextNotePro();
+  const longFormPro = useLongFormPro();
   const gNoteCache = GlobalNoteCache();
   const waittingSubjects = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12];
   // console.log('global label', label);
@@ -158,24 +158,25 @@ const GLForms = () => {
 
   const getNoteList = (tim) => {
     //build sub
-    const filterTextNote = textNotePro.get();
+    const filterTextNote = longFormPro.getGlobal();
     if (tim === 0) {
       filterTextNote.until = Date.now();
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 15;
+    filterTextNote.limit = 30;
     //add t tag
-    if (label != "all") {
+    if (label && label != "all") {
       filterTextNote["#t"] = [label];
     }
-    let subTextNode = BuildSub("global-textnode-" + Date.now(), [
+    let subLongForm = BuildSub("g-longform-" + Date.now(), [
       filterTextNote,
     ]);
     let targetAddr = curRelay ? curRelay.addr : null;
     targetAddr = null;
     setLoadOpen(true);
-    nostrWorker.fetch_global_notes(subTextNode, targetAddr, (data, client) => {
+    nostrWorker.fetch_global_longform(subLongForm, targetAddr, (data, client) => {
+      // console.log();
       setData(data.concat());
       setLoadOpen(false);
     });
@@ -419,7 +420,6 @@ const GLForms = () => {
               }}
             />
           </Box>
-
           <LoadingButton
             variant="contained"
             loading={createSubjectState === 1}
@@ -454,7 +454,7 @@ const GLForms = () => {
 
   return (
     <Paper className={"g_longforms_bg"} elevation={0}>
-      {account ? renderSujbects() : renderLoadSubjects()}
+      {/* {account ? renderSujbects() : renderLoadSubjects()} */}
       {renderContent()}
       {renderSubjectDialog()}
       <Backdrop

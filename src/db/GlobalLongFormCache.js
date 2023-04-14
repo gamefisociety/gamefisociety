@@ -1,12 +1,12 @@
 
-let g_longfrom_cache = [];
+let g_note_cache = [];
 let max_time = 0;
 let min_time = 0;
 
 const GlobalNoteCache = () => {
 
   const get = () => {
-    return g_longfrom_cache;
+    return g_note_cache;
   }
 
   const maxTime = () => {
@@ -18,35 +18,35 @@ const GlobalNoteCache = () => {
   }
 
   const clear = () => {
-    g_longfrom_cache = [];
+    g_note_cache = [];
     max_time = 0;
     min_time = 0;
   }
 
-  const hasNote = (msg) => {
-    for (let i = 0; i < g_longfrom_cache.length; i++) {
-      if (g_longfrom_cache[i].id === msg.id) {
+  const hasMsg = (msg) => {
+    for (let i = 0; i < g_note_cache.length; i++) {
+      if (g_note_cache[i].id === msg.id) {
         return true;
       }
     }
     return false;
   }
 
-  const getNote = (noteid) => {
-    for (let i = 0; i < g_longfrom_cache.length; i++) {
-      if (g_longfrom_cache[i].id === noteid) {
-        return g_longfrom_cache[i];
+  const getMsg = (noteid) => {
+    for (let i = 0; i < g_note_cache.length; i++) {
+      if (g_note_cache[i].id === noteid) {
+        return g_note_cache[i];
       }
     }
     return null;
   }
 
-  const pushNote = (msg) => {
-    if (hasNote(msg) === true) {
+  const pushMsg = (msg) => {
+    if (hasMsg(msg) === true) {
       return false;
     }
-    g_longfrom_cache.push(msg);
-    g_longfrom_cache.sort((a, b) => {
+    g_note_cache.push(msg);
+    g_note_cache.sort((a, b) => {
       return b.created_at - a.created_at;
     });
     if (max_time === 0) {
@@ -67,9 +67,9 @@ const GlobalNoteCache = () => {
     clear: clear,
     maxTime: maxTime,
     minTime: minTime,
-    hasNote: hasNote,
-    getNote: getNote,
-    pushNote: pushNote,
+    hasMsg: hasMsg,
+    getMsg: getMsg,
+    pushMsg: pushMsg,
   }
 }
 
