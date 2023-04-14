@@ -1,0 +1,256 @@
+.card_longform_bg {
+    background-color: transparent;
+
+    .base_info {
+        width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            &:hover{
+                transform: scale(1.08);
+            }
+        }
+
+        .base_ext {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+    }
+    
+    .content {
+        width: 100%; //calc( 100% - 120px);
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-top: 18px;
+        padding-bottom: 18px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items:flex-start ;
+        justify-content: flex-start;
+        cursor: pointer;
+        .inner_img {
+            height: 400px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            object-fit: contain;
+        }
+    }
+
+    .lable_frame {
+        width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .lable_title {
+        width: 100%;
+        margin-top: 12px;
+        color: #FFFFFF;
+        font-size: 20px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .lable_summary {
+        margin-top: 12px;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        // &:hover {
+        //     text-decoration:underline
+        // }
+    }
+
+    .lable_detail {
+        background-color: rgb(53, 53, 53);
+        color: #12d3ed;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        // text-decoration:underline;
+        margin-top: 12px;
+        padding-left: 4px;
+        padding-right: 4px;
+        border-radius: 4px;
+    }
+    
+    .bottom {
+        width: calc( 100% - 48px);
+        padding-left: 60px;
+        // padding-right: 24px;
+        padding-top: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1;
+        border-color: #191A1B;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .level1_lable {
+        color: #FFFFFF;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .level2_lable {
+        color: #666666;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .level2_lable_unhover {
+        color: #666666;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+    }
+
+    .level3_lable {
+        color: #00B7FF;
+        font-size: 14px;
+        font-family: Saira;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+            text-decoration:underline
+        }
+    }
+
+    .icon_more {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        background-image: url(../asset/image/logo/icon-more.png);
+        background-size: 100% 100%;
+        border-radius: 4px;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_chat {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        background-image: url(../asset/image/logo/icon_chat.png);
+        background-size: 100% 100%;
+        // pointer-events: none;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_chain_push {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_chain_push.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_pay {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_pay.png);
+        background-size: 100% 100%;
+        // pointer-events: none;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_trans {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_trans.png);
+        background-size: 100% 100%;
+        // background-color: transparent;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_trans_1 {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        filter: brightness(400%);
+        background-image: url(../asset/image/logo/icon_trans.png);
+        background-size: 100% 100%;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_trans.png);
+        }
+    }
+
+    .icon_right {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        background-image: url(../asset/image/logo/icon_praise.png);
+        background-size: 100% 100%;
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .icon_right_1 {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        margin-left: 26px;
+        filter: brightness(400%);
+        background-image: url(../asset/image/logo/icon_praise.png);
+        background-size: 100% 100%;
+        &:hover {
+            background-image: url(../asset/image/logo/icon_praise.png);
+        }
+    }
+
+
+}
+

@@ -9,7 +9,7 @@ import { useWeb3React } from "@web3-react/core";
 import GSTSubjectsBase from "web3/GSTSubjects";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import GCardNote from "components/GCardNote";
+import GCardLongForm from "components/GCardLongForm";
 import List from "@mui/material/List";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -333,7 +333,7 @@ const GLForms = () => {
           sx={{ width: "100%", overflow: "auto", backgroundColor: "transparent" }}
         >
           {data.map((item, index) => {
-            return <GCardNote key={"global-note-" + index} note={{ ...item }} />;
+            return <GCardLongForm key={"global-lform-" + index} note={{ ...item }} />;
           })}
         </List>
         <Typography
