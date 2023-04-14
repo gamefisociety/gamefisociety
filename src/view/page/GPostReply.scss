@@ -1,5 +1,5 @@
 .post_reply_bg {
-    min-height: calc( 100vh - 64px );
+    min-height: calc(100vh - 64px);
     width: 760px;
     background-color: #1B1B1B;
     // background-color: red;
@@ -10,7 +10,7 @@
     .post_menu {
         position: fixed;
         top: 64px;
-        left: calc( 50vw - 432px );
+        left: calc(50vw - 432px);
         cursor: pointer;
         display: flex;
         flex-direction: column;
@@ -18,18 +18,33 @@
     }
 
     .post_menu_item {
-        cursor: pointer;
         margin-top: 6px;
         width: 140px;
         height: 36px;
     }
+
+    .post_menu_item_selected {
+        background-color: #1C6CF9;
+        &:hover {
+            background-color: #368AF9;
+        }
+    }
+
+    .post_menu_item_unselected {
+        background-color: #272727;
+        &:hover {
+            background-color: #383838;
+        }
+    }
+
+
 
     .post_new_data {
         width: 160px;
         height: 38px;
         position: fixed;
         top: 70px;
-        right: calc( 50vw - 136px );
+        right: calc(50vw - 136px);
         cursor: pointer;
         border-radius: 29px;
         background-color: rgba(0, 108, 249, 1);
@@ -43,14 +58,14 @@
         padding-bottom: 8px;
         z-index: 10;
 
-        .new_data_avatars{
+        .new_data_avatars {
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: flex-end;
             position: relative;
 
-            .avatar{
+            .avatar {
                 margin-left: -6px;
                 width: 28px;
                 height: 28px;
@@ -71,8 +86,8 @@
         width: 58px;
         height: 58px;
         position: fixed;
-        top: calc( 64px + 6px );
-        right: calc( 50vw - 570px );
+        top: calc(64px + 6px);
+        right: calc(50vw - 570px);
         cursor: pointer;
         // background-color: white;
         border-radius: 29px;
@@ -86,7 +101,7 @@
         background-color: transparent;
     }
 
-    .post_loadmore{
+    .post_loadmore {
         width: 100%;
         font-size: 16px;
         font-family: Saira;
