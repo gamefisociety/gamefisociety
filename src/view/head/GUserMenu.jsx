@@ -4,49 +4,21 @@ import "./GUserMenu.scss";
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
-import { styled, alpha, useColorScheme } from "@mui/material/styles";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import GSearch from 'components/GSearch';
-import Stack from "@mui/material/Stack";
+import { setDrawer } from "module/store/features/dialogSlice";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import CardMedia from "@mui/material/CardMedia";
+import Menu from "@mui/material/Menu";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
+import Divider from "@mui/material/Divider";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import PublicIcon from "@mui/icons-material/Public";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import GFetchMetadata from "components/GFetchMetadata";
-import GListenDM from "components/GListenDM";
-import {
-  setIsOpen,
-  setIsOpenWallet,
-} from "module/store/features/dialogSlice";
-import { default_avatar } from "module/utils/xdef";
 import { logout } from "module/store/features/loginSlice";
-import ic_logo from "../../asset/image/logo/ic_logo.png";
-import ic_massage from "../../asset/image/home/ic_massage.png";
-import ic_wallet from "../../asset/image/home/ic_wallet.png";
-import ic_man from "../../asset/image/home/ic_man.png";
-import icon_profile from "../../asset/image/login/icon_profile.png";
-import icon_society from "../../asset/image/login/icon_society.png";
-import icon_relays from "../../asset/image/login/icon_relays.png";
-import icon_setting from "../../asset/image/login/icon_setting.png";
-import icon_qr from "../../asset/image/login/icon_qr.png";
-import icon_logout from "../../asset/image/login/icon_logout.png";
-import { EventKind } from "nostr/def";
-import { Divider } from "../../../node_modules/@mui/material/index";
 
 const GUserMenu = () => {
   const navigate = useNavigate();
@@ -102,6 +74,16 @@ const GUserMenu = () => {
   };
 
   const openSetting = () => {
+    handleMenuClose();
+    navigate("/setting");
+  };
+
+  const openBlacklist = () => {
+    handleMenuClose();
+    navigate("/setting");
+  };
+
+  const openMyNFT = () => {
     handleMenuClose();
     navigate("/setting");
   };
@@ -238,6 +220,18 @@ const GUserMenu = () => {
         <Box className={'icon_settings'} />
         <Typography className={'menu_label'}>
           {"Settings"}
+        </Typography>
+      </Box>
+      <Box className={'menu_item'} onClick={openMyNFT}>
+        <Box className={'icon_settings'} />
+        <Typography className={'menu_label'}>
+          {"My NFT"}
+        </Typography>
+      </Box>
+      <Box className={'menu_item'} onClick={openBlacklist}>
+        <Box className={'icon_settings'} />
+        <Typography className={'menu_label'}>
+          {"Black List"}
         </Typography>
       </Box>
       {/* <Button
