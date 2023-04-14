@@ -16,6 +16,7 @@ const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
 const GPostReply = Loadable(lazy(() => import("view/page/GPostReply")));
+const GLForms = Loadable(lazy(() => import("view/page/GLForms")));
 const GArticles = Loadable(lazy(() => import("view/page/GArticles")));
 const GNoteThread = Loadable(lazy(() => import("view/page/GNoteThread")));
 const GFTWallet = Loadable(lazy(() => import("view/page/GFTWallet")));
@@ -60,7 +61,19 @@ const MainRoutes = {
     >
       <GPostReply />
     </KeepAlive>,
-      
+    },
+    {
+      path: "/longform/:label",
+      element: (
+        // <KeepAlive
+        //   cacheKey="GlobalCache_ID"
+        //   name="GlobalCache"
+        //   when={() => true}
+        // >
+          <GLForms />
+        // </KeepAlive>
+      ),
+      // element: <GFTGlobal />,
     },
     {
       path: "/game",

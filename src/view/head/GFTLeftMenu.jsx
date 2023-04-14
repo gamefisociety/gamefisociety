@@ -58,9 +58,17 @@ const mapData = [
         // out: true
     },
     {
+        txt: 'DIVIDER',
+        img: ''
+    },
+    {
         txt: 'INTRODUCE',
         img: ic_sub,
         out: true
+    },
+    {
+        txt: 'DIVIDER',
+        img: ''
     },
     {
         txt: 'NFT',
@@ -68,6 +76,10 @@ const mapData = [
     },
     {
         txt: 'DAO',
+        img: ic_sub,
+    },
+    {
+        txt: 'LongForm',
         img: ic_sub,
     },
     // {
@@ -187,6 +199,9 @@ const GFTLeftMenu = () => {
                     cardDrawer: "society-chat-group",
                 })
             );
+        } else if (item.txt === 'LongForm') {
+            navigate('/longform/all');
+            openMainContent();
         } else if (item.txt === 'FOLLOW') {
             navigate('/follow');
         } else if (item.txt === 'MINT AVATAR') {

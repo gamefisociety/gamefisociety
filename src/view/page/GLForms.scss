@@ -1,0 +1,114 @@
+.g_longforms_bg {
+    width: 760px;
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    pointer-events: all;
+
+    .global_lables {
+        position: sticky;
+        top: 64px;
+        width: 120px;
+        // height: calc(100vh - 24px);
+        padding-top: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: transparent;
+        // overflow: auto;
+
+        .lable_btn {
+            display: block;
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+
+        .lable_btn_selected {
+            display: block;
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #259eea;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+    }
+
+    .global_content {
+        flex-grow: 1;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-sizing: border-box;
+        background-color: #131313;
+    }
+
+    .global_head {
+        // position: sticky;
+        // top: 64px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        // z-index: 1000;
+
+        .tip0 {
+            color: rgb(255, 255, 255);
+            margin-right: 12px;
+        }
+
+        .select0 {
+            min-width: 240px;
+            margin-right: 24px;
+            height: 24px;
+        }
+    }
+
+
+    .global_loadmore {
+        width: 100%;
+        font-size: 16px;
+        font-family: Saira;
+        font-weight: 500;
+        // line-height: 29px;
+        text-align: center;
+        color: #646464;
+        padding-bottom: 64px;
+        cursor: pointer;
+    }
+
+    .op {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .top_button {
+        cursor: pointer;
+    }
+}
