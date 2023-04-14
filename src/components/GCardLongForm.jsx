@@ -303,6 +303,23 @@ const GCardLongForm = (props) => {
     );
   }
 
+  const renderImage = () => {
+    if (!baseInfo || baseInfo.image === '') {
+      return null;
+    }
+    return (
+      <Box
+        component="img"
+        src={baseInfo.image}
+        className={expand === false ? 'lable_image' : 'lable_image_full'}
+        sx={{ ml: "12px" }}
+        onClick={(event) => {
+          event.stopPropagation();
+          setExpand(true);
+        }} />
+    );
+  }
+
   const renderSummary = () => {
     if (!baseInfo || baseInfo.summary === '') {
       return null;
@@ -564,7 +581,10 @@ const GCardLongForm = (props) => {
     <Card className={"card_longform_bg"} elevation={0}>
       {renderHead()}
       {renderTitle()}
-      {expand === false && renderSummary()}
+      <Box className={"context_summary"}>
+        {expand === false && renderSummary()}
+        {renderImage()}
+      </Box>
       {expand === true && renderContent(note.content)}
       {renderBottom()}
       {renderRepostDlg()}

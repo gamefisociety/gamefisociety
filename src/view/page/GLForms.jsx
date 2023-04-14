@@ -29,6 +29,7 @@ import { useLongFormPro } from "nostr/protocal/LongFormPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
 import GlobalNoteCache from "db/GlobalNoteCache";
+import GlobalLongFormCache from "db/GlobalLongFormCache";
 
 const createNostrWorker = createWorkerFactory(() =>
   import("worker/nostrRequest")
@@ -52,11 +53,11 @@ const GLForms = () => {
   const [dislogOpen, setDialogOpen] = React.useState(false);
   const [createSubjectState, setCreateSubjectState] = React.useState(0);
   const longFormPro = useLongFormPro();
-  const gNoteCache = GlobalNoteCache();
+  const gLFormCache = GlobalLongFormCache();
   const waittingSubjects = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12];
   // console.log('global label', label);
   useEffect(() => {
-    gNoteCache.clear();
+    gLFormCache.clear();
     getNoteList(0);
     return () => { };
   }, [label]);
@@ -153,7 +154,7 @@ const GLForms = () => {
   };
 
   const loadMore = () => {
-    getNoteList(gNoteCache.minTime());
+    getNoteList(gLFormCache.minTime());
   };
 
   const getNoteList = (tim) => {
@@ -164,7 +165,7 @@ const GLForms = () => {
     } else {
       filterTextNote.until = tim;
     }
-    filterTextNote.limit = 30;
+    filterTextNote.limit = 12;
     //add t tag
     if (label && label != "all") {
       filterTextNote["#t"] = [label];

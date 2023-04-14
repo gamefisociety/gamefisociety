@@ -115,7 +115,7 @@ export const fetch_global_longform = (sub, curRelay, callback) => {
   // console.log('fetch_global_notes111', curRelay);
   let globalLongFormCache = GlobalLongFormCache();
   System.BroadcastSub(sub, (tag, client, msg) => {
-    console.log('fetch_global_longform', tag, msg);
+    // console.log('fetch_global_longform', tag, msg);
     if (tag === 'EOSE') {
       System.BroadcastClose(sub, client, null);
       if (callback) {
