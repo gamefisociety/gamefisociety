@@ -272,15 +272,7 @@ const GNoteThread = () => {
   // console.log('GNoteThread', note, rootNote, replyNote, notesRoot, notesReply);
   return (
     <Paper className="node_thread_bg" elevation={1}>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box className={'thread_header'}>
         <Box
           sx={{
             display: "flex",
@@ -293,7 +285,7 @@ const GNoteThread = () => {
             navigate(-1);
           }}
         >
-          <img src={icon_back} width="38px" alt="icon_back" />
+          <Box component="img" src={icon_back} width="38px" alt="icon_back" />
           <Typography
             sx={{
               marginLeft: "5px",
@@ -306,14 +298,14 @@ const GNoteThread = () => {
             {"Global"}
           </Typography>
         </Box>
+        <Typography
+          align={"center"}
+          variant="h5"
+        >
+          {"THREAD"}
+        </Typography>
+        <Box sx={{ width: '2px', height: '2px' }}></Box>
       </Box>
-      <Typography
-        sx={{ width: "100%", py: "18px" }}
-        align={"center"}
-        variant="h5"
-      >
-        {"THREAD"}
-      </Typography>
       {renderContent()}
     </Paper>
   );

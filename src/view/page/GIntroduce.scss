@@ -5,16 +5,21 @@
     &:hover{
         transform: scale(1.05);
     }
+
+    .bt_launch {
+        background-image: linear-gradient(137deg,#f191fa,#83e3f0);
+    }
+
+    .ad {
+        cursor: pointer;
+    }
+    
+    .bg{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        // transform: scale(0.8);
+        z-index: 0;
+    }
 }
 
-.ad {
-    cursor: pointer;
-}
-
-.bg{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    // transform: scale(0.8);
-    z-index: 0;
-}
