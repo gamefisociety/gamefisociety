@@ -185,28 +185,28 @@ const GMetaFriend = forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
-        addFriend(follows);
+        // addFriend(follows);
     }, [follows]);
 
     useEffect(() => {
         console.log('follower main', publicKey);
-        if (!follower_main && curScene && publicKey !== '') {
-            follower_main = {};
-            follower_main.pubkey = publicKey;
-            follower_main.mesh = MeshBuilder.CreateBox('box', { size: 10 }, curScene);
-            follower_main.mesh.position.y = 200;
-            var mat = new StandardMaterial("mat1", curScene);
-            mat.alpha = 1.0;
-            mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
-            var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", curScene);
-            mat.diffuseTexture = texture;
-            follower_main.name = 'follower_main';
-            follower_main.mesh.material = mat;
-            createLabel(follower_main);
-            updateTarget(follower_main, profile);
-        } else {
-            updateTarget(follower_main, profile);
-        }
+        // if (!follower_main && curScene && publicKey !== '') {
+        //     follower_main = {};
+        //     follower_main.pubkey = publicKey;
+        //     follower_main.mesh = MeshBuilder.CreateBox('box', { size: 10 }, curScene);
+        //     follower_main.mesh.position.y = 200;
+        //     var mat = new StandardMaterial("mat1", curScene);
+        //     mat.alpha = 1.0;
+        //     mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
+        //     var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", curScene);
+        //     mat.diffuseTexture = texture;
+        //     follower_main.name = 'follower_main';
+        //     follower_main.mesh.material = mat;
+        //     createLabel(follower_main);
+        //     updateTarget(follower_main, profile);
+        // } else {
+        //     updateTarget(follower_main, profile);
+        // }
     }, [profile]);
 
     return null;

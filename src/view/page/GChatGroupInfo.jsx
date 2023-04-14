@@ -39,7 +39,7 @@ const GChatGroupInfo = (props) => {
   }, [ginfo]);
 
   return (
-    <Paper className={'chat_group_info_bg'} >
+    <Paper className={'chat_group_info_bg'} elevation={0}>
       <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CHANNEL INFO.'}</Typography>
       <Box className={'lable_part'}>
         <Typography className={'lable_flag'}>

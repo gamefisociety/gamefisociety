@@ -33,7 +33,7 @@ const GChatGroupCreate = (props) => {
   };
 
   return (
-    <Paper className={'chat_group_create_bg'} >
+    <Paper className={'chat_group_create_bg'} elevation={0}>
       <Typography sx={{ width: '100%', py: '18px' }} align={'center'} variant="h5" >{'CREATE CHANNEL'}</Typography>
       <Box className={'lable_part'}>
         <Typography className={'lable_flag'}>
