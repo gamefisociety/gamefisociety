@@ -72,7 +72,6 @@ const GReportDlg = (props) => {
       PaperProps={{
         style: {
           width: '400px',
-          height: '580px',
           boxShadow: 'none',
           backgroundColor: '#0F0F0F',
         },
