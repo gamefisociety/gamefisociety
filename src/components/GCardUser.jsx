@@ -136,7 +136,7 @@ const GCardUser = (props) => {
     if (profile && profile.picture && profile.picture !== '') {
       return profile.picture;
     }
-    return default_avatar;
+    return "";
   }
 
   const getName = () => {
@@ -256,7 +256,7 @@ const GCardUser = (props) => {
             <Avatar
               sx={{ width: "86px", height: "86px", mt: "-43px" }}
               edge="end"
-              alt="GameFi Society"
+              alt={getDisplayName()}
               src={getPictrue()}
             />
             <Button

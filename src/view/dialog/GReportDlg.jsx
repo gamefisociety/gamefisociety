@@ -71,7 +71,7 @@ const GReportDlg = (props) => {
       className={'report_dlg_bg'}
       PaperProps={{
         style: {
-          width: '400px',
+          // width: '500px',
           boxShadow: 'none',
           backgroundColor: '#0F0F0F',
         },
@@ -146,16 +146,16 @@ const GReportDlg = (props) => {
           })}
         </Stack>
         <TextField
-          inputProps={{ maxLength: 100 }}
+          inputProps={{ maxLength: 120 }}
           multiline
           rows={4}
           value={content}
           placeholder="Reason"
           sx={{
-            ml: "12px",
+            marginTop: "20px",
             "& .MuiInputBase-root": {
               color: "white",
-              width: "250px",
+              width: "300px",
               fontSize: "14px",
               fontFamily: "Saira",
               fontWeight: "500",
@@ -169,7 +169,7 @@ const GReportDlg = (props) => {
           variant="contained"
           sx={{
             marginTop: "30px",
-            width: "250px",
+            width: "300px",
             height: "48px",
             fontSize: "16px",
             fontFamily: "Saira",
@@ -191,8 +191,8 @@ const GReportDlg = (props) => {
         <Button
           variant="contained"
           sx={{
-            marginTop: "20px",
-            width: "250px",
+            marginTop: "10px",
+            width: "300px",
             height: "48px",
             fontSize: "16px",
             fontFamily: "Saira",

@@ -1,26 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardNote.scss";
-import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
-
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { default_avatar } from "module/utils/xdef";
-
-import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { useRepostPro } from "nostr/protocal/RepostPro";
-import { useReactionPro } from "nostr/protocal/ReactionPro";
-import { useRelayPro } from "nostr/protocal/RelayPro";
-
 import { BuildSub, ParseNote } from "nostr/NostrUtils";
-import { EventKind } from "nostr/def";
 import UserDataCache from "db/UserDataCache";
 
-const createNostrWorker = createWorkerFactory(() =>
-  import("worker/nostrRequest")
-);
-
 const GCardAvatar = (props) => {
-  const nostrWorker = useWorker(createNostrWorker);
   const { note } = props;
   const [meta, setMeta] = useState(null);
   const UserCache = UserDataCache();

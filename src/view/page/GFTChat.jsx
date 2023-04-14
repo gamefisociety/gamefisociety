@@ -37,7 +37,7 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
         flexDirection: "row",
         alignItems: "center",
         pt: "8px",
-        px: '16px',
+        px: "16px",
         // backgroundColor: '#FF0000',
         justifyContent: item.owner === chatPK ? "flex-start" : "flex-end",
       }}
@@ -53,7 +53,7 @@ const ListRow = ({ data, index, setSize, chatPK }) => {
           fontSize: "12px",
           color: "#FFFFFF",
           whiteSpace: "pre-line",
-          wordWrap:"break-word",
+          wordWrap: "break-word",
         }}
         align={"left"}
       >
@@ -90,13 +90,19 @@ const GFTChat = (props) => {
     let subDM = BuildSub("chat_with", [filterDM]);
     System.BroadcastSub(subDM, (tag, client, msg) => {
       if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
-        console.log('direct message', msg)
+        console.log("direct message", msg);
         try {
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
             .then((dmsg) => {
               if (dmsg) {
-                let flag = dm_cache.pushChat(targetPubkey, msg.id, msg.pubkey, msg.created_at, dmsg);
+                let flag = dm_cache.pushChat(
+                  targetPubkey,
+                  msg.id,
+                  msg.pubkey,
+                  msg.created_at,
+                  dmsg
+                );
                 if (flag === false) {
                   return;
                 }
@@ -127,7 +133,13 @@ const GFTChat = (props) => {
     const chatEv = await chatPro.sendDM(chatPK, inValue);
     System.BroadcastEvent(chatEv, (tag, client, msg) => {
       if (tag === "OK" && msg.ret && msg.ret === true) {
-        let flag = dm_cache.pushChat(chatPK, chatEv.Id, chatEv.PubKey, chatEv.CreatedAt, inValue);
+        let flag = dm_cache.pushChat(
+          chatPK,
+          chatEv.Id,
+          chatEv.PubKey,
+          chatEv.CreatedAt,
+          inValue
+        );
         if (flag === false) {
           return;
         }
@@ -142,6 +154,18 @@ const GFTChat = (props) => {
 
   const scrollToBottom = () => {
     listRef.current.scrollToItem(chatData.length, "smart");
+  };
+
+  const avatar = () => {
+    return chatProfile.picture && chatProfile.picture !== "default"
+      ? chatProfile.picture
+      : "";
+  };
+
+  const displayName = () => {
+    return chatProfile.display_name
+      ? chatProfile.display_name
+      : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length);
   };
 
   useEffect(() => {
@@ -162,12 +186,12 @@ const GFTChat = (props) => {
     if (chatData.length > 0) {
       scrollToBottom();
     }
-    return () => { };
+    return () => {};
   }, [chatData]);
 
   const renderHeader = () => {
     return (
-      <Box className={'dm_header'}>
+      <Box className={"dm_header"}>
         <Icon
           className="goback"
           onClick={() => {
@@ -175,7 +199,7 @@ const GFTChat = (props) => {
           }}
         >
           <img src={dmLeftImg} width="38px" alt="dmleft" />
-          {'DMs'}
+          {"DMs"}
         </Icon>
         <Box sx={{ flexGrow: 1 }}></Box>
         {/* <Button
@@ -192,20 +216,16 @@ const GFTChat = (props) => {
       </Button> */}
       </Box>
     );
-  }
+  };
 
   const renderMeta = () => {
     return (
-      <Box className='dm_meta'>
+      <Box className="dm_meta">
         <Avatar
           sx={{ width: "40px", height: "40px" }}
           edge="end"
-          alt="GameFi Society"
-          src={
-            chatProfile.picture && chatProfile.picture !== "default"
-              ? chatProfile.picture
-              : default_avatar
-          }
+          alt={displayName()}
+          src={avatar()}
         />
         <Typography
           sx={{
@@ -216,17 +236,15 @@ const GFTChat = (props) => {
             color: "#FFFFFF",
           }}
         >
-          {chatProfile.display_name
-            ? chatProfile.display_name
-            : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length)}
+          {displayName()}
         </Typography>
       </Box>
     );
-  }
+  };
 
   const renderContent = () => {
     return (
-      <Box className={'dm_content'}>
+      <Box className={"dm_content"}>
         <List
           ref={listRef}
           height={500}
@@ -248,49 +266,51 @@ const GFTChat = (props) => {
         </List>
       </Box>
     );
-  }
+  };
 
   const renderInput = () => {
-    return <Box className={'dm_input'}>
-      <TextField
-        vlabel="Multiline"
-        multiline
-        maxRows={4}
-        value={inValue}
-        sx={{
-          ml: '12px',
-          "& .MuiInputBase-root": {
-            color: "white",
-            width: "250px",
-            // height: "40px",
-            fontSize: "18px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-          },
-        }}
-        onChange={(e) => {
-          setInValue(e.target.value);
-        }}
-      />
-      <Button
-        variant="contained"
-        className={'dm_send_bt'}
-        onClick={() => {
-          sendDM();
-        }}
-      >
-        send
-      </Button>
-    </Box>;
-  }
+    return (
+      <Box className={"dm_input"}>
+        <TextField
+          vlabel="Multiline"
+          multiline
+          maxRows={4}
+          value={inValue}
+          sx={{
+            ml: "12px",
+            "& .MuiInputBase-root": {
+              color: "white",
+              width: "250px",
+              // height: "40px",
+              fontSize: "18px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+            },
+          }}
+          onChange={(e) => {
+            setInValue(e.target.value);
+          }}
+        />
+        <Button
+          variant="contained"
+          className={"dm_send_bt"}
+          onClick={() => {
+            sendDM();
+          }}
+        >
+          send
+        </Button>
+      </Box>
+    );
+  };
 
   return (
-    <Box className={'chat_dm_bg'}>
+    <Box className={"chat_dm_bg"}>
       {renderHeader()}
       {renderMeta()}
-      <Divider sx={{ width: '100%', py: '4px' }} />
+      <Divider sx={{ width: "100%", py: "4px" }} />
       {renderContent()}
-      <Divider sx={{ width: '100%', py: '4px' }} />
+      <Divider sx={{ width: "100%", py: "4px" }} />
       {renderInput()}
     </Box>
   );

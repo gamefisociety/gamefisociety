@@ -19,7 +19,6 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import { setPost } from "module/store/features/dialogSlice";
-import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
 import GReportDlg from "view/dialog/GReportDlg";
@@ -282,7 +281,7 @@ const GCardNote = (props) => {
     );
   };
 
-  let pictrue = default_avatar;
+  let pictrue = "";
   if (meta && meta.content !== "") {
     let metaCxt = JSON.parse(meta.content);
     pictrue = metaCxt.picture;
@@ -433,7 +432,7 @@ const GCardNote = (props) => {
           navigate("/userhome/" + note.pubkey);
         }}
       >
-        <Avatar className="avatar" alt="Avatar" src={pictrue} />
+        <Avatar className="avatar" alt={displayname()} src={pictrue} />
         <Box className={"base_ext"}>
           <Stack sx={{ width: "100%" }} direction="row" alignItems={"center"}>
             <Typography
