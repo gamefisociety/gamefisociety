@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./GFTHead.scss";
+import "./GUserMenu.scss";
 
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,7 +29,6 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import GFetchMetadata from "components/GFetchMetadata";
 import GListenDM from "components/GListenDM";
-import GUserMenu from 'view/head/GUserMenu';
 import {
   setIsOpen,
   setIsOpenWallet,
@@ -47,60 +46,17 @@ import icon_setting from "../../asset/image/login/icon_setting.png";
 import icon_qr from "../../asset/image/login/icon_qr.png";
 import icon_logout from "../../asset/image/login/icon_logout.png";
 import { EventKind } from "nostr/def";
+import { Divider } from "../../../node_modules/@mui/material/index";
 
-const ProfileTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#191A1B",
-    // color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: "220px",
-    // fontSize: theme.typography.pxToRem(12),
-  },
-}));
-
-const GFTHead = () => {
+const GUserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { loggedOut, publicKey } = useSelector((s) => s.login);
-  const { profile, relays } = useSelector((s) => s.profile);
+  const { profile } = useSelector((s) => s.profile);
   const { dms } = useSelector((s) => s.society);
-  const [profileOpen, setProfileOPen] = React.useState(false);
-  const [noticeNum, setNoticeNum] = React.useState(0);
-  const [dmNum, setDmNum] = React.useState(0);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleTooltipClose = () => {
-    setProfileOPen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setProfileOPen(true);
-  };
-
-  const openDialog = () => {
-    if (account) {
-      dispatch(setIsOpenWallet(true));
-    } else {
-      dispatch(setIsOpen(true));
-    }
-  };
-
-  const getChainLows = () => {
-    if (account) {
-      return (
-        account.substring(0, 5) +
-        "....." +
-        account.substring(account.length - 5, account.length)
-      );
-    }
-    return "CONNECT";
-  };
-  const clickLogo = () => {
-    navigate('/home');
-  };
 
   const handleProfileMenuOpen = (event) => { };
 
@@ -135,17 +91,6 @@ const GFTHead = () => {
     handleMenuClose();
   };
 
-  const openSocietyDM = () => {
-    dispatch(
-      setDrawer({
-        isDrawer: true,
-        placeDrawer: "right",
-        cardDrawer: "society-dm",
-      })
-    );
-    handleMenuClose();
-  };
-
   const openRelays = () => {
     dispatch(
       setDrawer({
@@ -164,11 +109,6 @@ const GFTHead = () => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
-  useEffect(() => {
-    // setDmNum(dms.length);
-    // setNotifycationNum(dms.length);
-  }, [dms]);
 
   const getAvatarPicture = () => {
     if (profile && profile.picture && profile.picture !== "default") {
@@ -196,8 +136,6 @@ const GFTHead = () => {
     }
     return '@gfs';
   }
-
-  const renderUserMenu = (<GUserMenu />);
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -264,147 +202,85 @@ const GFTHead = () => {
     </Menu>
   );
 
-  const renderLogout = () => {
-    return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
-        <IconButton
-          sx={{ mr: "12px" }}
-          size="large"
-          aria-label="relay icon"
-          color="inherit"
-          onClick={openRelays}
-        >
-          <PublicIcon />
-        </IconButton>
-        <Button
-          className={"btLogin"}
-          endIcon={<AccountCircle />}
-          onClick={() => {
-            dispatch(setOpenLogin(true));
-          }}
-        >
-          {'Login'}
-        </Button>
-      </Box>
-    );
-  }
-
-  const renderLogin = () => {
-    return (
-      <Box
-        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-      >
-        <Box className="wallet_layout" onClick={openDialog}>
-          <Button
-            className={"btConnect"}
-            startIcon={<img src={ic_wallet} width="28px" />}
-          >
-            {account ? getChainLows() : "CONNECT"}
-          </Button>
-        </Box>
-        <IconButton
-          sx={{ mr: "12px" }}
-          size="large"
-          aria-label="relay icon"
-          color="inherit"
-          onClick={openRelays}
-        >
-          <PublicIcon />
-        </IconButton>
-        <IconButton
-          size="large"
-          aria-label="show 4 new mails"
-          color="inherit"
-          onClick={openSocietyDM}
-        >
-          <Badge badgeContent={dmNum} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={noticeNum} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <ClickAwayListener onClickAway={handleTooltipClose}>
-          <Button className="button">
-            <ProfileTooltip
-              PopperProps={{
-                disablePortal: true,
-              }}
-              title={renderUserMenu}
-              onClose={handleTooltipClose}
-              open={profileOpen}
-              placement="top-end"
-            >
-              <Stack
-                sx={{
-                  px: "12px",
-                  py: "6px",
-                  borderRadius: "24px",
-                }}
-                direction="row"
-                alignItems="center"
-                onClick={handleTooltipOpen}
-              >
-                <Avatar
-                  sx={{ width: 32, height: 32 }}
-                  edge="end"
-                  alt={profile.display_name}
-                  src={
-                    profile.picture && profile.picture !== "default"
-                      ? profile.picture
-                      : ""
-                  }
-                />
-                <Typography sx={{ ml: "6px" }} color={"text.primary"}>
-                  {profile.display_name}
-                </Typography>
-              </Stack>
-            </ProfileTooltip>
-          </Button>
-        </ClickAwayListener>
-      </Box>
-    );
-  }
-
   // loggedOut, publicKey 
   return (
-    <Box className="head_bg">
-      <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
-      <GListenDM logout={loggedOut} pubkey={publicKey} />
-      <Toolbar className="toolbar_bg">
-        <CardMedia
-          component="img"
-          sx={{ width: 160, cursor: "pointer" }}
-          image={ic_logo}
-          alt="Paella dish"
-          onClick={clickLogo}
-        />
-        <GSearch />
-        {loggedOut === true ? renderLogout() : renderLogin()}
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
-          <IconButton
-            size="large"
-            aria-label="show more"
-            aria-controls={mobileMenuId}
-            aria-haspopup="true"
-            onClick={handleMobileMenuOpen}
-            color="inherit"
-          >
-            <MoreIcon />
-          </IconButton>
+    <Box className="user_menu_bg">
+      <Box className={'menu_first'} onClick={openUserHome}>
+        <Avatar sx={{ width: "40px", height: "40px" }} edge="end" alt={getDisplayName()} src={getAvatarPicture()} />
+        <Box className={'menu_first_name'}>
+          <Typography className={'menu_label'}>
+            {getDisplayName()}
+          </Typography>
+          <Typography className={'menu_label2'}>
+            {getName()}
+          </Typography>
         </Box>
-      </Toolbar >
-      {/* {renderMobileMenu} */}
-    </Box >
+      </Box>
+      <Box className={'menu_item'} onClick={openProfile}>
+        <Box className={'icon_profil'} />
+        <Typography className={'menu_label'}>
+          {"Profile"}
+        </Typography>
+      </Box>
+      <Box className={'menu_item'} onClick={openSociety}>
+        <Box className={'icon_society'} />
+        <Typography className={'menu_label'}>
+          {"Society"}
+        </Typography>
+      </Box>
+      <Box className={'menu_item'} onClick={openRelays}>
+        <Box className={'icon_relays'} />
+        <Typography className={'menu_label'}>
+          {"Relays"}
+        </Typography>
+      </Box>
+      <Box className={'menu_item'} onClick={openSetting}>
+        <Box className={'icon_settings'} />
+        <Typography className={'menu_label'}>
+          {"Settings"}
+        </Typography>
+      </Box>
+      {/* <Button
+                    sx={{
+                        borderTop: 1,
+                        borderColor: "#202122",
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        height: "68px",
+                    }}
+                    onClick={() => {
+                        // openProfile();
+                    }}
+                >
+                    <img className="iconimg" src={icon_qr} width="28px" alt="qr" />
+                    <Typography
+                        sx={{
+                            fontSize: "14px",
+                            fontFamily: "Saira",
+                            fontWeight: "500",
+                            align: "left",
+                        }}
+                        color={"#FFFFFF"}
+                    >
+                        {"QR Code"}
+                    </Typography>
+                </Button> */}
+      <Divider sx={{ width: '100%', py: '6px', backgroundColor: '0x0F0F0F' }} />
+      <Box className="menu_item"
+        onClick={() => {
+          dispatch(logout());
+        }}
+      >
+        <Box className={'icon_sign_out'} />
+        <Typography className={'menu_label'}>
+          {"Sign Out"}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 
-export default React.memo(GFTHead);
+export default React.memo(GUserMenu);

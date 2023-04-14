@@ -123,6 +123,7 @@ export const fetch_global_longform = (sub, curRelay, callback) => {
         callback(cache, client);
       }
     } else if (tag === 'EVENT' && msg.kind === EventKind.LongForm) {
+      console.log('fetch_global_longform', tag, msg);
       globalLongFormCache.pushMsg(msg)
     }
   },
