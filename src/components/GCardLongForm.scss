@@ -71,8 +71,19 @@
         }
     }
 
-    .lable_summary {
+    .context_summary {
+        width: 100%;
         margin-top: 12px;
+        // padding-left: 12px;
+        // padding-right: 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center ;
+        justify-content: center;
+    }
+
+    .lable_summary {
+        flex-grow: 1;
         color: #FFFFFF;
         font-size: 14px;
         font-family: Saira;
@@ -81,6 +92,11 @@
         // &:hover {
         //     text-decoration:underline
         // }
+    }
+
+    .lable_image {
+        width: 140px;
+        object-fit: contain;
     }
 
     .lable_detail {
