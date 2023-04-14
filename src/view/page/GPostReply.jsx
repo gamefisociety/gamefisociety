@@ -12,7 +12,8 @@ import GCardNoteRepost from "components/GCardNoteRepost";
 import GCardAvatar from "components/GCardAvatar";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
-
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
@@ -38,12 +39,17 @@ const GPostReply = () => {
   const [newData, setNewData] = useState([]);
   const [sinceTime, setSinceTime] = useState(0);
   const [inforData, setInforData] = useState(new Map());
+  const [fetching, setFetching] = useState(false);
   const textNotePro = useTextNotePro();
   const metadataPro = useMetadataPro();
   const gNoteCache = GlobalNoteCache();
   let listenSubNote = null;
 
   const fetchNotes = (time) => {
+    if(fetching){
+      return;
+    }
+    setFetching(true);
     const filterTextNote = textNotePro.getNoteAndRepost();
     let tmpAuthors = follows.concat([publicKey]);
     filterTextNote.authors = tmpAuthors;
@@ -56,11 +62,13 @@ const GPostReply = () => {
     filterTextNote.limit = 15;
     let subTextNode = BuildSub("textnode-follows", [filterTextNote]);
     nostrWorker.fetch_follow_notes(subTextNode, null, (cacheData, client) => {
+      setFetching(false);
       setData(cacheData.concat());
-      console.log("addListenNotes AAAAAAÀ");
       // fetchInfo(cacheData);
-      //
       if (time === 0) {
+        if (curLabel === "Post") {
+          removeListenNotes();
+        } else if (curLabel === "Post & Reply") removeListenNotes();
         setSinceTime(gNoteCache.maxTime());
         addListenNotes();
       }
@@ -81,10 +89,16 @@ const GPostReply = () => {
     return subTextNode;
   };
 
-  const addListenNotes = () => {
+  const removeListenNotes = () => {
     if (listenSubNote) {
       nostrWorker.unlisten_follow_notes(listenSubNote, null, null);
       listenSubNote = null;
+    }
+  };
+
+  const addListenNotes = () => {
+    if (listenSubNote) {
+      return;
     }
     listenSubNote = getListenSubNote(sinceTime);
     nostrWorker.listen_follow_notes(
@@ -122,9 +136,7 @@ const GPostReply = () => {
     setData([]);
     fetchNotes(0);
     return () => {
-      if (listenSubNote) {
-        nostrWorker.unlisten_follow_notes(listenSubNote, null, null);
-      }
+      removeListenNotes();
     };
   }, [follows, curLabel]);
 
@@ -295,6 +307,13 @@ const GPostReply = () => {
       >
         {"LOAD MORE"}
       </Typography>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={fetching}
+        onClick={() => {}}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Paper>
   );
 };
