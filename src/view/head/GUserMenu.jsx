@@ -85,7 +85,7 @@ const GUserMenu = () => {
 
   const openMyNFT = () => {
     handleMenuClose();
-    navigate("/setting");
+    navigate("/mynft/" + publicKey);
   };
 
   const handleMobileMenuOpen = (event) => {

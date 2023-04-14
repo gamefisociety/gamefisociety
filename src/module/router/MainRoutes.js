@@ -12,6 +12,7 @@ const GVideoPage = Loadable(lazy(() => import("view/page/GVideoPage")));
 const GFTMintNFT = Loadable(lazy(() => import("view/home/GFTMintNFT")));
 const GHall = Loadable(lazy(() => import("view/page/GHall")));
 const GUserHome = Loadable(lazy(() => import("view/page/GUserHome")));
+const GMyNFT = Loadable(lazy(() => import("view/page/GMyNFT")));
 const GProfile = Loadable(lazy(() => import("view/page/GProfile")));
 const GSetting = Loadable(lazy(() => import("view/page/GSetting")));
 const GFTGlobal = Loadable(lazy(() => import("view/page/GFTGlobal")));
@@ -55,12 +56,12 @@ const MainRoutes = {
     {
       path: "/post-reply",
       element: <KeepAlive
-      cacheKey="PostReplyCache_ID"
-      name="PostReplyCache"
-      when={() => true}
-    >
-      <GPostReply />
-    </KeepAlive>,
+        cacheKey="PostReplyCache_ID"
+        name="PostReplyCache"
+        when={() => true}
+      >
+        <GPostReply />
+      </KeepAlive>,
     },
     {
       path: "/longform/:label",
@@ -70,7 +71,7 @@ const MainRoutes = {
         //   name="GlobalCache"
         //   when={() => true}
         // >
-          <GLForms />
+        <GLForms />
         // </KeepAlive>
       ),
       // element: <GFTGlobal />,
@@ -106,6 +107,10 @@ const MainRoutes = {
     {
       path: "/userhome/:pubkey",
       element: <GUserHome />,
+    },
+    {
+      path: "/mynft/:pubkey",
+      element: <GMyNFT />,
     },
     {
       path: "/profile",
