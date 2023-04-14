@@ -45,6 +45,31 @@ const GPostReply = () => {
   const gNoteCache = GlobalNoteCache();
   let listenSubNote = null;
 
+  useEffect(() => {
+    setData([]);
+    fetchNotes(0);
+    return () => {
+      removeListenNotes();
+    };
+  }, [follows, curLabel]);
+
+  useEffect(() => {
+    if (listenData.length > 0) {
+      let tempData = [];
+      let i = 0;
+      while (i < listenData.length) {
+        const t_data = listenData[i];
+        if (t_data.created_at > sinceTime) {
+          tempData.push(t_data);
+        } else {
+          break;
+        }
+        i++;
+      }
+      setNewData(tempData.concat());
+    }
+  }, [listenData]);
+
   const fetchNotes = (time) => {
     if(fetching){
       return;
@@ -132,30 +157,28 @@ const GPostReply = () => {
     dispatch(setPost({ post: true, target: note }));
   };
 
-  useEffect(() => {
-    setData([]);
-    fetchNotes(0);
-    return () => {
-      removeListenNotes();
-    };
-  }, [follows, curLabel]);
+  const parseNote = (target) => {
+    let eNum = 0;
+    let pNum = 0;
+    let eArray = [];
+    let pArray = [];
 
-  useEffect(() => {
-    if (listenData.length > 0) {
-      let tempData = [];
-      let i = 0;
-      while (i < listenData.length) {
-        const t_data = listenData[i];
-        if (t_data.created_at > sinceTime) {
-          tempData.push(t_data);
-        } else {
-          break;
-        }
-        i++;
+    target.tags.map((item) => {
+      if (item[0] === "e") {
+        eNum = eNum + 1;
+        eArray.push(item[1]);
+      } else if (item[0] === "p") {
+        pNum = pNum + 1;
+        pArray.push(item[1]);
       }
-      setNewData(tempData.concat());
-    }
-  }, [listenData]);
+    });
+    return {
+      eNum: eNum,
+      pNum: pNum,
+      eArray: eArray.concat(),
+      pArray: pArray.concat(),
+    };
+  };
 
   const renderMenu = () => {
     return (
@@ -191,29 +214,6 @@ const GPostReply = () => {
         </Button>
       </Box>
     );
-  };
-
-  const parseNote = (target) => {
-    let eNum = 0;
-    let pNum = 0;
-    let eArray = [];
-    let pArray = [];
-
-    target.tags.map((item) => {
-      if (item[0] === "e") {
-        eNum = eNum + 1;
-        eArray.push(item[1]);
-      } else if (item[0] === "p") {
-        pNum = pNum + 1;
-        pArray.push(item[1]);
-      }
-    });
-    return {
-      eNum: eNum,
-      pNum: pNum,
-      eArray: eArray.concat(),
-      pArray: pArray.concat(),
-    };
   };
 
   const renderNewAvatar = () => {

@@ -54,11 +54,11 @@ const GProfile = () => {
             height: "86px",
           }}
           edge="end"
-          alt="GameFi Society"
+          alt={localProfile.display_name}
           src={
             localProfile.picture && localProfile.picture !== "default"
               ? localProfile.picture
-              : default_avatar
+              : ""
           }
         />
         {localProfile.created ? (

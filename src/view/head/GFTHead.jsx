@@ -173,7 +173,7 @@ const GFTHead = () => {
     if (profile && profile.picture && profile.picture !== "default") {
       return profile.picture;
     }
-    return default_avatar;
+    return "";
   }
 
   const getDisplayName = () => {
@@ -218,7 +218,7 @@ const GFTHead = () => {
             openUserHome();
           }}
         >
-          <Avatar sx={{ width: "40px", height: "40px" }} alt="GameFi Society" src={getAvatarPicture()} />
+          <Avatar sx={{ width: "40px", height: "40px" }} edge="end" alt={getDisplayName()} src={getAvatarPicture()} />
           <Box
             sx={{
               position: "absolute",
@@ -608,11 +608,11 @@ const GFTHead = () => {
                 <Avatar
                   sx={{ width: 32, height: 32 }}
                   edge="end"
-                  alt="GameFi Society"
+                  alt={profile.display_name}
                   src={
                     profile.picture && profile.picture !== "default"
                       ? profile.picture
-                      : default_avatar
+                      : ""
                   }
                 />
                 <Typography sx={{ ml: "6px" }} color={"text.primary"}>
