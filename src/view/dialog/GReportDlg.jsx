@@ -83,15 +83,14 @@ const GReportDlg = (props) => {
         <Typography
           sx={{
             marginTop: "25px",
-            fontSize: "24px",
+            fontSize: "22px",
             fontFamily: "Saira",
-            fontWeight: "500",
-            lineHeight: "29px",
+            fontWeight: "800",
             textAlign: "center",
             color: "#FFFFFF",
           }}
         >
-          {"Report This Note"}
+          {"REPORT THIS NOTE"}
         </Typography>
         <Stack
           sx={{
@@ -119,7 +118,7 @@ const GReportDlg = (props) => {
                 />
                 <Typography
                   sx={{
-                    fontSize: "14px",
+                    fontSize: "16px",
                     fontFamily: "Saira",
                     fontWeight: "500",
                     textAlign: "center",
