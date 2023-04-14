@@ -9,14 +9,14 @@ import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { alpha, styled } from "@mui/material/styles";
 import { setRelays } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
@@ -258,6 +258,7 @@ const GRelayItem = (props) => {
         <Typography
           className={"lable_relay"}
           onClick={(event) => {
+            event.stopPropagation();
             props.openDetail();
           }}
         >
@@ -267,9 +268,9 @@ const GRelayItem = (props) => {
           sx={{
             cursor: "pointer",
             ml: "10px",
-            width: "16px",
-            height: "16px",
-            borderRadius: "8px",
+            width: "10px",
+            height: "10px",
+            borderRadius: "5px",
             backgroundColor: relayInfo.canRead === true ? "#4B8B1F" : "#D9D9D9",
           }}
           onClick={(event) => {
@@ -288,10 +289,10 @@ const GRelayItem = (props) => {
         <Box
           sx={{
             cursor: "pointer",
-            ml: "10px",
-            width: "16px",
-            height: "16px",
-            borderRadius: "8px",
+            ml: "5px",
+            width: "10px",
+            height: "10px",
+            borderRadius: "5px",
             backgroundColor:
               relayInfo.canWrite === true ? "#F5A900" : "#D9D9D9",
           }}
@@ -376,31 +377,6 @@ const GRelays = () => {
       saveRelays(tmps);
     }
     return null;
-  };
-
-  const renderCacheRelays = () => {
-    return (
-      <List className="list_bg">
-        {relays.map((cfg, index) => {
-          return (
-            <ListItem key={"relay-" + index}>
-              <GRelayItem
-                relay={cfg}
-                openDetail={() => {
-                  setMode("detail");
-                  setDetailRelay(cfg);
-                }}
-                openDel={() => {
-                  delInfo.open = true;
-                  delInfo.relay = cfg;
-                  setDelInfo({ ...delInfo });
-                }}
-              />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
   };
 
   //
@@ -533,7 +509,7 @@ const GRelays = () => {
                 event.stopPropagation();
                 for (let index = 0; index < newRelays.length; index++) {
                   const t_relay = newRelays[index];
-                  if(t_relay.length > 6 && (t_relay.indexOf("wss://") === 0)){
+                  if (t_relay.length > 6 && t_relay.indexOf("wss://") === 0) {
                     addRelay(t_relay);
                   }
                 }
@@ -578,7 +554,59 @@ const GRelays = () => {
         >
           {"+"}
         </Button>
-        {renderCacheRelays()}
+        {/* {renderCacheRelays()} */}
+
+        {/* <List className="list_bg">
+  //       {relays.map((cfg, index) => {
+  //         return (
+  //           <ListItem key={"relay-" + index}>
+  //             <GRelayItem
+  //               relay={cfg}
+  //               openDetail={() => {
+  //                 setMode("detail");
+  //                 setDetailRelay(cfg);
+  //               }}
+  //               openDel={() => {
+  //                 delInfo.open = true;
+  //                 delInfo.relay = cfg;
+  //                 setDelInfo({ ...delInfo });
+  //               }}
+  //             />
+  //           </ListItem>
+  //         );
+  //       })}
+  //     </List> */}
+        <AutoSizer>
+          {({ height, width }) => (
+            // <Box sx={{
+            //   width:width,
+            //   height:height,
+            //   backgroundColor:"green"
+            // }}></Box>
+            <FixedSizeList
+              height={height}
+              width={width}
+              itemSize={40}
+              itemCount={relays.length}
+              itemData={relays}
+            >
+              {({ data, index, style }) => (
+                <GRelayItem
+                  relay={data[index]}
+                  openDetail={() => {
+                    setMode("detail");
+                    setDetailRelay(data[index]);
+                  }}
+                  openDel={() => {
+                    delInfo.open = true;
+                    delInfo.relay = data[index];
+                    setDelInfo({ ...delInfo });
+                  }}
+                />
+              )}
+            </FixedSizeList>
+          )}
+        </AutoSizer>
       </Box>
     );
   };
