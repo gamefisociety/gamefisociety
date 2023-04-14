@@ -345,7 +345,7 @@ const GCardLongForm = (props) => {
       <Box
         className={"content"}
         onClick={() => {
-          navigate("/notethread/" + note.id);
+          // navigate("/notethread/" + note.id);
         }}
       >
         {Helpers.highlightEverything(str.trim(), null, {

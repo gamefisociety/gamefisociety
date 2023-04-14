@@ -7,6 +7,7 @@ import GMetaLight from './GMetaLight';
 import GMetaGround from './GMetaGround';
 import GMetaCamera from './GMetaCamera';
 import GMetaFriend from './GMetaFriend';
+import GMetaObjTest from './GMetaObjTest';
 
 const GFTHomeMeta = () => {
 
@@ -14,6 +15,7 @@ const GFTHomeMeta = () => {
     const metaGroundRef = useRef(null);
     const metaCameraRef = useRef(null);
     const metaFriendRef = useRef(null);
+    const metaObjTest = useRef(null);
 
     const onSceneReady = (scene) => {
 
@@ -32,6 +34,10 @@ const GFTHomeMeta = () => {
         if (metaFriendRef.current && metaFriendRef.current.init) {
             metaFriendRef.current.init(scene);
         }
+
+        if (metaObjTest.current && metaObjTest.current.init) {
+            metaObjTest.current.init(scene);
+        }
     }
 
     const onRender = (scene) => {
@@ -48,6 +54,10 @@ const GFTHomeMeta = () => {
         if (metaFriendRef.current && metaFriendRef.current.render) {
             metaFriendRef.current.render(dt, scene);
         }
+
+        if (metaObjTest.current && metaObjTest.current.render) {
+            metaObjTest.current.render(dt, scene);
+        }
     }
 
     return <GMetaBase
@@ -60,6 +70,7 @@ const GFTHomeMeta = () => {
         <GMetaGround ref={metaGroundRef}></GMetaGround>
         <GMetaLight ref={metaLightRef}></GMetaLight>
         <GMetaFriend ref={metaFriendRef}></GMetaFriend>
+        <GMetaObjTest ref={metaObjTest}></GMetaObjTest>
     </GMetaBase>
 }
 
