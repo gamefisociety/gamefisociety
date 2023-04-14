@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import { useReportPro } from "nostr/protocal/ReportPro";
 import { System } from "nostr/NostrSystem";
+
 const GReportDlg = (props) => {
   const [curType, setCurType] = React.useState("nudity");
   const [content, setContent] = React.useState("");
@@ -66,20 +67,8 @@ const GReportDlg = (props) => {
   };
 
   return (
-    <Dialog open={props.open} onClose={handleDialogClose}>
-      <Box
-        sx={{
-          // width: "400px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          backgroundColor: "#0F0F0F",
-          paddingLeft: "24px",
-          paddingRight: "24px",
-          paddingBottom: "30px",
-        }}
-      >
+    <Dialog className={'report_dlg_bg'} elevation={0} open={props.open} onClose={handleDialogClose}>
+      <Box className={'inner'}>
         <Typography
           sx={{
             marginTop: "25px",

@@ -22,7 +22,7 @@ import { setPost } from "module/store/features/dialogSlice";
 import { default_avatar } from "module/utils/xdef";
 import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
-import GReportDlg from "./GReportDlg";
+import GReportDlg from "view/dialog/GReportDlg";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
 import { useReactionPro } from "nostr/protocal/ReactionPro";

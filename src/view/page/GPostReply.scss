@@ -1,10 +1,12 @@
 .post_reply_bg {
     min-height: calc( 100vh - 64px );
     width: 760px;
-    background-color: rgba(27, 27, 27, 0.95);
+    background-color: #1B1B1B;
+    // background-color: red;
     z-index: 0;
     pointer-events: all;
     position: relative;
+
     .post_menu {
         position: fixed;
         top: 64px;

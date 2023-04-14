@@ -95,11 +95,13 @@ const GPostDialog = () => {
                     width: '400px',
                     height: '580px',
                     boxShadow: 'none',
+                    backgroundColor: '#0F0F0F',
                 },
             }}
+            elevation={0}
         >
-            {renderHeader()}
             <DialogContent className={'post_context'} >
+                {renderHeader()}
                 <TextField
                     className={'post_text'}
                     InputProps={{

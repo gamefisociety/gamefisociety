@@ -8,10 +8,16 @@
         height: auto;
         margin: 0 auto;
         padding-top: 12px;
+        // background-color: #0F0F0F;
     }
 
     .target_tips {
         color: #9d9c9c;
+    }
+
+    .post_text {
+        // height: 100%,
+        background-color: #131313;
     }
 
     .labels {
@@ -22,6 +28,7 @@
         align-items: center;
         justify-content: flex-start;
         flex-wrap: wrap;
+        background-color: #131313;
     }
 
     .lable_tag {
@@ -49,16 +56,15 @@
         width: 100%;
         // height: 80%;
         // padding-top: 16px;
-        // background-color: red;
-    }
-
-    .post_text {
-        // height: 100%,
+        background-color: #131313;
     }
 
     .post_op {
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
+        padding-left: 24px;
+        padding-right: 24px;
         padding-bottom: 24px;
+        background-color: #0F0F0F;
     }
 }
