@@ -30,7 +30,7 @@ const GReportDlg = (props) => {
   ];
   let reporting = false;
   const reportPro = useReportPro();
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const handleDialogClose = () => {
     props.close();
@@ -67,7 +67,20 @@ const GReportDlg = (props) => {
   };
 
   return (
-    <Dialog className={'report_dlg_bg'} elevation={0} open={props.open} onClose={handleDialogClose}>
+    <Dialog
+      className={'report_dlg_bg'}
+      PaperProps={{
+        style: {
+          width: '400px',
+          height: '580px',
+          boxShadow: 'none',
+          backgroundColor: '#0F0F0F',
+        },
+      }}
+      elevation={0}
+      open={props.open}
+      onClose={handleDialogClose}
+    >
       <Box className={'inner'}>
         <Typography
           sx={{

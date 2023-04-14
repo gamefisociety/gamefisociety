@@ -203,7 +203,7 @@ const GCardNote = (props) => {
   useEffect(() => {
     fetch_relative_info();
     // console.log('renderContent111', note);
-    return () => {};
+    return () => { };
   }, [note]);
 
   const renderContent = (str) => {
@@ -291,7 +291,18 @@ const GCardNote = (props) => {
   const renderRepostDlg = () => {
     // onClose={handleDialogClose}
     return (
-      <Dialog open={repostOpen.open}>
+      <Dialog
+        open={repostOpen.open}
+        PaperProps={{
+          style: {
+            width: '400px',
+            // height: '580px',
+            // boxShadow: 'none',
+            backgroundColor: '#0F0F0F',
+          },
+        }}
+        elevation={1}
+      >
         <Box
           sx={{
             width: "400px",
@@ -299,7 +310,7 @@ const GCardNote = (props) => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-start",
-            backgroundColor: "#656565",
+            backgroundColor: "#0F0F0F",
             padding: "24px",
           }}
         >
@@ -363,10 +374,10 @@ const GCardNote = (props) => {
     );
   };
 
-  const renderReportDlg = () =>{
-    return <GReportDlg open={openReport.open} note={openReport.note} close={()=>{
+  const renderReportDlg = () => {
+    return <GReportDlg open={openReport.open} note={openReport.note} close={() => {
       openReport.open = false;
-      setOpenReport({...openReport});
+      setOpenReport({ ...openReport });
     }} />;
   }
 
@@ -394,13 +405,13 @@ const GCardNote = (props) => {
                   <MenuItem
                     onClick={(event) => {
                       event.stopPropagation();
-                      if(openReport.open){
+                      if (openReport.open) {
                         openReport.open = false;
-                        setOpenReport({...openReport});
-                      }else {
+                        setOpenReport({ ...openReport });
+                      } else {
                         openReport.open = true;
                         openReport.note = { ...note };
-                        setOpenReport({...openReport});
+                        setOpenReport({ ...openReport });
                         console.log(note);
                       }
                     }}
@@ -451,7 +462,7 @@ const GCardNote = (props) => {
           onClick={(event) => {
             event.stopPropagation();
             if (openMore === false) {
-              handleOpenMore(event,null);
+              handleOpenMore(event, null);
             } else {
               handleCloseMore(event);
             }
