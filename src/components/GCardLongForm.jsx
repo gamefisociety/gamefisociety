@@ -308,10 +308,15 @@ const GCardLongForm = (props) => {
       return null;
     }
     return (
-      <Box component="img" src={baseInfo.image} className="lable_image" sx={{ ml: "12px" }} onClick={(event) => {
-        event.stopPropagation();
-        setExpand(true);
-      }} />
+      <Box
+        component="img"
+        src={baseInfo.image}
+        className={expand === false ? 'lable_image' : 'lable_image_full'}
+        sx={{ ml: "12px" }}
+        onClick={(event) => {
+          event.stopPropagation();
+          setExpand(true);
+        }} />
     );
   }
 
