@@ -74,6 +74,10 @@ export class NostrSystem {
     window.localStorage.setItem(key_write_relay, JSON.stringify(this.writeQuene));
   }
 
+  getWRelays(){
+    return this.writeQuene;
+  }
+
   rmWrite(addr) {
     let ret = this.writeQuene.indexOf(addr);
     if (ret >= 0) {
