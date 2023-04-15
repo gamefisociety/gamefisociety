@@ -1,24 +1,43 @@
 .post_reply_bg {
+    position: relative;
     min-height: calc(100vh - 64px);
     width: 760px;
     background-color: #1B1B1B;
     // background-color: red;
     z-index: 0;
     pointer-events: all;
-    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;//auto;
+    }
 
     .post_menu {
-        position: fixed;
+        position: sticky;
         top: 64px;
-        left: calc(50vw - 432px);
+        background-color: #1B1B1B;
+        // padding-top: 4px;
+        // padding-bottom: 4px;
+        // left: calc(50vw - 432px);
         cursor: pointer;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
+        justify-content: space-around;
+        width: 100%;
+        height: 42px;
+        z-index: 100;
+        // @media screen and (max-width: 768px) {
+        //     left: 0;
+        // }
     }
 
     .post_menu_item {
-        margin-top: 6px;
+        // margin-top: 6px;
         width: 140px;
         height: 36px;
     }
@@ -37,17 +56,15 @@
         }
     }
 
-
-
     .post_new_data {
-        width: 160px;
+        // width: 160px;
         height: 38px;
-        position: fixed;
-        top: 70px;
-        right: calc(50vw - 136px);
+        position: sticky;
+        top: 110px;
+        // right: calc(50vw - 136px);
         cursor: pointer;
         border-radius: 29px;
-        background-color: rgba(0, 108, 249, 1);
+        background-color: #368AF9;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -56,7 +73,11 @@
         padding-right: 40px;
         padding-top: 8px;
         padding-bottom: 8px;
-        z-index: 10;
+        z-index: 100;
+
+        // @media screen and (max-width: 768px) {
+        //     right: 0;
+        // }
 
         .new_data_avatars {
             display: flex;
@@ -73,8 +94,9 @@
         }
 
         .new_data_num {
-            position: absolute;
-            right: 15px;
+            // position: absolute;
+            // right: 15px;
+            margin-left: 15px;
             font-family: Saira;
             font-size: 14px;
             font-weight: 500;
@@ -86,13 +108,16 @@
         width: 58px;
         height: 58px;
         position: fixed;
-        top: calc(64px + 6px);
-        right: calc(50vw - 570px);
+        bottom: 12px;
+        right: 12px;
+        // top: calc(64px + 6px);
+        // right: calc(50vw - 570px);
         cursor: pointer;
         // background-color: white;
         border-radius: 29px;
         background-image: url(../../asset/image/logo/icon_post.png);
         background-size: 100% 100%;
+        z-index: 1000;
     }
 
     .list_bg {

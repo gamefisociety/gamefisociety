@@ -200,8 +200,8 @@ const GPostReply = () => {
         </Button>
         <Button
           className={"post_menu_item" + (curLabel === "Post & Reply"
-          ? " post_menu_item_selected"
-          : " post_menu_item_unselected")}
+            ? " post_menu_item_selected"
+            : " post_menu_item_unselected")}
           variant="contained"
           onClick={() => {
             setListenData([]);
@@ -309,7 +309,7 @@ const GPostReply = () => {
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={fetching}
-        onClick={() => {}}
+        onClick={() => { }}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
