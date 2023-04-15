@@ -152,7 +152,14 @@ const GChatGroup = () => {
             if (!item.content || item.content === '') {
               return null;
             }
-            let profile = JSON.parse(item.content);
+            
+            let profile = {};
+            try{
+              profile = JSON.parse(item.content);
+            }catch(e){
+              profile = {};
+            }
+            
             return (
               <ListItem key={'channel-' + index}>
                 <Box

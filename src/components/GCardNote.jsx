@@ -22,6 +22,7 @@ import { setPost } from "module/store/features/dialogSlice";
 import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
 import GReportDlg from "view/dialog/GReportDlg";
+import GZapDialog from "view/dialog/GZapDialog";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
 import { useReactionPro } from "nostr/protocal/ReactionPro";
@@ -48,12 +49,14 @@ const GCardNote = (props) => {
   });
   const [repostData, setRepostData] = useState([]);
   const [reactData, setReactData] = useState([]);
+  const [showZapModal, setShowZapModal] = useState(false);
   const [openMore, setOpenMore] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openReport, setOpenReport] = useState({
     open: false,
     note: null,
   });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UserCache = UserDataCache();
@@ -235,6 +238,34 @@ const GCardNote = (props) => {
     }
     return tmp_display_name;
   };
+
+  const zapIcon = () => {
+    if (meta && meta.content !== "") {
+      let metaCxt = JSON.parse(meta.content);
+      let linght = metaCxt.lud16 || metaCxt.lud06;
+      if (linght) {
+        return <Box className="icon_pay" onClick={()=>{
+          setShowZapModal(true)
+        }}/>
+      }
+      return;
+    } else {
+      return;
+    }
+  };
+  const renderZapModal = () => {
+    return (
+      <GZapDialog
+        show={true}
+        note={note}
+        meta={meta.content}
+        recipient={note.pubkey}
+        onClose={()=>{
+          setShowZapModal(false);
+        }}
+      />
+    );
+  }
 
   const username = () => {
     let tmp_user_name = "@anonymous";
@@ -483,7 +514,8 @@ const GCardNote = (props) => {
           }}
         />
         <Box className="icon_chain_push" />
-        <Box className="icon_pay" />
+        {zapIcon()}
+        {showZapModal && renderZapModal()}
         <Box
           className={isYourRepost() ? "icon_trans_1" : "icon_trans"}
           onClick={(event) => {
@@ -510,7 +542,7 @@ const GCardNote = (props) => {
         </Typography>
       </Box>
       {renderRepostDlg()}
-      {renderReportDlg()}
+      {renderRepostDlg()}
     </Card>
   );
 };
