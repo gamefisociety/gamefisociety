@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
 
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
@@ -14,7 +14,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
-
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import "./GSociety.scss";
 
 import { useFollowPro } from "nostr/protocal/FollowPro";
@@ -24,9 +25,11 @@ import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
 
-import UserDataCache from 'db/UserDataCache';
+import UserDataCache from "db/UserDataCache";
 
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,6 +54,99 @@ TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
+};
+
+const GFollowItem = (props) => {
+  const UserCache = UserDataCache();
+  const following = props.following;
+  const pubkey = props.pubkey;
+  const type = props.type;
+  const info = UserCache.getMetadata(pubkey);
+
+  const avatar = () => {
+    let pictrue = "";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      pictrue = infoCxt.picture;
+    }
+    return pictrue;
+  };
+
+  const displayname = () => {
+    let tmp_display_name = "N";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      tmp_display_name = infoCxt.display_name;
+    }
+    return tmp_display_name;
+  };
+
+  const about = () => {
+    let t_about = "no about";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      if (infoCxt.about.length > 0) {
+        t_about = infoCxt.about;
+      }
+    }
+    return t_about;
+  };
+
+  const renderButton = () => {
+    if (type === "follower") {
+      return (
+        <Button
+          variant="contained"
+          className={"button"}
+          onClick={() => {
+            if (following === true) {
+              props.removeFollow(pubkey);
+            } else {
+              props.addFollow(pubkey);
+            }
+          }}
+        >
+          {following === true ? "unfollow" : "follow"}
+        </Button>
+      );
+    } else if (type === "following") {
+      return (
+        <Button
+          variant="contained"
+          className={"button"}
+          onClick={() => {
+            props.removeFollow(pubkey);
+          }}
+        >
+          {"unfollow"}
+        </Button>
+      );
+    }
+    return null;
+  };
+
+  const renderItem = () => {
+    console.log("renderItem", info);
+    if (!info) return null;
+    return (
+      <Box className={"follow_item"}>
+        <Avatar
+          className={"avatar"}
+          alt={displayname()}
+          src={avatar()}
+          onClick={() => {
+            props.navCallback(pubkey);
+          }}
+        />
+        <Box className="text_item">
+          <Typography className={"txt"}>{displayname()}</Typography>
+          <Typography className={"txt_about"}>{about()}</Typography>
+        </Box>
+        {renderButton()}
+      </Box>
+    );
+  };
+  return renderItem();
 };
 
 const GSociety = (props) => {
@@ -95,7 +191,7 @@ const GSociety = (props) => {
     let newFollows = follows.concat();
     newFollows.push(pubkey);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      console.log('addFollow', event, msg);
+      console.log("addFollow", event, msg);
       if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
@@ -112,7 +208,7 @@ const GSociety = (props) => {
     let newFollows = follows.concat();
     newFollows.splice(follows.indexOf(pubkey), 1);
     System.BroadcastEvent(event, (tags, client, msg) => {
-      console.log('removeFollow', event, msg);
+      console.log("removeFollow", event, msg);
       if (tags === "OK" && msg.ret === true) {
         let followsInfo = {
           create_at: event.CreatedAt,
@@ -144,14 +240,14 @@ const GSociety = (props) => {
       });
       fetchAllMeta(pubkeys);
     }
-    return () => { };
+    return () => {};
   }, [tabIndex]);
 
   useEffect(() => {
     if (followers.length === 0) {
       fetchFollowers();
     }
-    return () => { };
+    return () => {};
   }, []);
 
   const renderFollowing = () => {
@@ -159,56 +255,97 @@ const GSociety = (props) => {
       return null;
     }
     return (
-      <List className="list_bg">
-        {follows.map((pubkey, index) => {
-          const info = UserCache.getMetadata(pubkey);
-          // console.log('info111', pubkey, info);
-          if (!info) {
-            return null;
-          }
-          let cxt = JSON.parse(info.content);
-          return (
-            <ListItem
-              sx={{ my: "2px" }}
-              key={"following-list-" + index}
-              secondaryAction={
-                <Button
-                  variant="contained"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px", backgroundColor: "#202122" }}
-                  onClick={() => {
+      <Box className={"inner_list"}>
+        <AutoSizer>
+          {({ height, width }) => (
+            // <Box sx={{
+            //   width:width,
+            //   height: height,
+            //   backgroundColor:"red"
+            // }}></Box>
+            <FixedSizeList
+              height={height}
+              width={width}
+              itemSize={60}
+              itemCount={follows.length}
+              itemData={follows}
+            >
+              {({ data, index, style }) => (
+                <GFollowItem
+                  pubkey={follows[index]}
+                  following={true}
+                  type={"following"}
+                  removeFollow={(pubkey) => {
                     removeFollow(pubkey);
                   }}
-                >
-                  {"unfollow"}
-                </Button>
-              }
-              disablePadding
-            >
-              <ListItemButton
-                sx={{ my: "2px", alignItems: "start" }}
-              >
-                <ListItemAvatar
-                  onClick={() => {
+                  addFollow={(pubkey) => {
+                    addFollow(pubkey);
+                  }}
+                  navCallback={(pubkey) => {
                     navigate("/userhome/" + pubkey);
                     if (callback) {
                       callback();
                     }
                   }}
-                >
-                  <Avatar
-                    alt={"GameFi Society"}
-                    src={cxt.picture ? cxt.picture : ""}
-                  />
-                </ListItemAvatar>
-                <div className="gsociety_text_item">
-                  <span className="txt">{cxt.name} </span>
-                  <span className="txt_about">{cxt.about} </span>
-                </div>
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
+                />
+              )}
+            </FixedSizeList>
+          )}
+        </AutoSizer>
+      </Box>
+      // <List className="list_bg">
+      //   {follows.map((pubkey, index) => {
+      //     const info = UserCache.getMetadata(pubkey);
+      //     // console.log('info111', pubkey, info);
+      //     if (!info) {
+      //       return null;
+      //     }
+      //     let cxt = JSON.parse(info.content);
+      //     return (
+      //       <ListItem
+      //         sx={{ my: "2px" }}
+      //         key={"following-list-" + index}
+      //         secondaryAction={
+      //           <Button
+      //             variant="contained"
+      //             sx={{
+      //               width: "80px",
+      //               height: "24px",
+      //               fontSize: "12px",
+      //               backgroundColor: "#202122",
+      //             }}
+      //             onClick={() => {
+      //               removeFollow(pubkey);
+      //             }}
+      //           >
+      //             {"unfollow"}
+      //           </Button>
+      //         }
+      //         disablePadding
+      //       >
+      //         <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
+      //           <ListItemAvatar
+      //             onClick={() => {
+      //               navigate("/userhome/" + pubkey);
+      //               if (callback) {
+      //                 callback();
+      //               }
+      //             }}
+      //           >
+      //             <Avatar
+      //               alt={"GameFi Society"}
+      //               src={cxt.picture ? cxt.picture : ""}
+      //             />
+      //           </ListItemAvatar>
+      //           <div className="gsociety_text_item">
+      //             <span className="txt">{cxt.name} </span>
+      //             <span className="txt_about">{cxt.about} </span>
+      //           </div>
+      //         </ListItemButton>
+      //       </ListItem>
+      //     );
+      //   })}
+      // </List>
     );
   };
 
@@ -217,65 +354,54 @@ const GSociety = (props) => {
       return null;
     }
     return (
-      <List className="list_bg">
-        {followers.map((item, index) => {
-          const info = UserCache.getMetadata(item.pubkey);
-          if (!info) {
-            return null;
-          }
-          let cxt = JSON.parse(info.content);
-          return (
-            <ListItem
-              sx={{ my: "2px" }}
-              key={"followers-list-" + index}
-              secondaryAction={
-                <Button
-                  variant="contained"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px", backgroundColor: "#202122" }}
-                  onClick={() => {
-                    if (isFollowYou(item.pubkey) === true) {
-                      removeFollow(item.pubkey);
-                    } else {
-                      addFollow(item.pubkey);
-                    }
-                    //
-                  }}
-                >
-                  {isFollowYou(item.pubkey) === true ? "unfollow" : "follow"}
-                </Button>
-              }
-              disablePadding
+      <Box className={"inner_list"}>
+        <AutoSizer>
+          {({ height, width }) => (
+            <FixedSizeList
+              height={height}
+              width={width}
+              itemSize={60}
+              itemCount={followers.length}
+              itemData={followers}
             >
-              <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
-                <ListItemAvatar
-                  onClick={() => {
-                    navigate("/userhome/" + item.pubkey);
+              {({ data, index, style }) => (
+                <GFollowItem
+                  pubkey={followers[index].pubkey}
+                  following={isFollowYou(followers[index].pubkey)}
+                  type={"follower"}
+                  removeFollow={(pubkey) => {
+                    removeFollow(pubkey);
+                  }}
+                  addFollow={(pubkey) => {
+                    addFollow(pubkey);
+                  }}
+                  navCallback={(pubkey) => {
+                    navigate("/userhome/" + pubkey);
                     if (callback) {
                       callback();
                     }
-                  }}>
-                  <Avatar
-                    alt={"GameFi Society"}
-                    src={cxt.picture ? cxt.picture : ""}
-                  />
-                </ListItemAvatar>
-                <div className="gsociety_text_item">
-                  <span className="txt">{cxt.name} </span>
-                  <span className="txt_about">{cxt.about} </span>
-                </div>
-
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
+                  }}
+                />
+              )}
+            </FixedSizeList>
+          )}
+        </AutoSizer>
+      </Box>
     );
   };
 
   return (
-    <Box className={'gsociety_box_bg'}>
-      <Box className={'header_bg'}>
-        <Button className={'header_btn'} variant="contained" sx={{ backgroundColor: tabIndex === 0 ? "#4900BD" : "#202122", }}
+    <Box className={"gsociety_box_bg"}>
+      <Box className={"header_bg"}>
+        <Button
+          className={"header_btn"}
+          variant="contained"
+          sx={{
+            backgroundColor: tabIndex === 0 ? "#1C6CF9" : "#272727",
+            "&:hover": {
+              backgroundColor: tabIndex === 0 ? "#368AF9" : "#383838",
+            },
+          }}
           onClick={() => {
             if (tabIndex !== 0) {
               setTabIndex(0);
@@ -284,7 +410,15 @@ const GSociety = (props) => {
         >
           {"Following " + follows.length}
         </Button>
-        <Button className={'header_btn'} variant="contained" sx={{ backgroundColor: tabIndex === 1 ? "#4900BD" : "#202122", }}
+        <Button
+          className={"header_btn"}
+          variant="contained"
+          sx={{
+            backgroundColor: tabIndex === 1 ? "#1C6CF9" : "#272727",
+            "&:hover": {
+              backgroundColor: tabIndex === 1 ? "#368AF9" : "#383838",
+            },
+          }}
           onClick={() => {
             if (tabIndex !== 1) {
               setTabIndex(1);

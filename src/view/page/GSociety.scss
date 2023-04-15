@@ -26,8 +26,70 @@
         font-weight: 500;
     }
 
+    .inner_list {
+        width: 100%;
+        min-height: calc(100vh - 200px);
+    }
+
+    .follow_item {
+        position: relative;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-bottom: 10px;
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .text_item {
+            margin-left: 10px;
+            width: 150px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-sizing: border-box;
+
+            .txt {
+                font-family: Saira;
+                font-size: 14px;
+                color: #FFFFFF;
+            }
+
+            .txt_about {
+                font-family: Saira;
+                font-size: 12px;
+                width: 150px;
+                color: #4e4b4b;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-break: keep-all;
+            }
+
+        }
+
+        .button {
+            position: absolute;
+            right: 20px;
+            width: 80px;
+            height: 24px;
+            font-family: Saira;
+            font-size: 12px;
+            background-color: #202122;
+        }
+
+    }
+
     .list_bg {
-        // min-height: 100vh;
+        min-height: calc(100vh - 200px);
         flex: 1;
         height: 0;
         overflow: auto;
