@@ -12,4 +12,23 @@
     // & :hover {
     //     transition: box-shadow 0.25s ease-in-out 0s, transform 0.25s ease 0s;
     // }
+
+    .bt_price {
+        width: 50%;
+        color: white;
+        // border-right: #0F0F0F;
+        // border: 1;
+        background-color: #0F0F0F;
+    }
+
+    .bt_buy {
+        width: 50%;
+        color: white;
+        // border-left: #0F0F0F;
+        // border: 1;
+        background-color: #0F0F0F;
+        &:hover{
+            background-color: #4f1fed;
+        }
+    }
 }

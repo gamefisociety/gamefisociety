@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import { BuildSub, ParseNote } from "nostr/NostrUtils";
 import UserDataCache from "db/UserDataCache";
 
+import { default_banner, default_avatar } from "module/utils/xdef";
+
 const GCardNFT = (props) => {
   const { note } = props;
   const [meta, setMeta] = useState(null);
@@ -52,8 +54,8 @@ const GCardNFT = (props) => {
     <Card className={"card_nft_bg"}>
       <CardMedia
         sx={{ height: 140 }}
-        image={''}
-        title="green iguana"
+        image={default_avatar}
+        title="nft"
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -61,8 +63,8 @@ const GCardNFT = (props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button className={'bt_price'}>{'0.03ETH'}</Button>
+        <Button className={'bt_buy'}>{'BUY'}</Button>
       </CardActions>
     </Card>
   );
