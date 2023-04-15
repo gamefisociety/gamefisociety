@@ -2,6 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import "./GCardNFT.scss";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import { BuildSub, ParseNote } from "nostr/NostrUtils";
 import UserDataCache from "db/UserDataCache";
 
@@ -19,32 +26,49 @@ const GCardNFT = (props) => {
   };
 
   useEffect(() => {
-    fetch_relative_info();
-    return () => {};
+    // fetch_relative_info();
+    return () => { };
   }, [note]);
 
-  const avatar = () => {
-    let pictrue = "";
-    if (meta && meta.content !== "") {
-      let metaCxt = JSON.parse(meta.content);
-      pictrue = metaCxt.picture;
-    }
-    return pictrue;
-  };
+  // const avatar = () => {
+  //   let pictrue = "";
+  //   if (meta && meta.content !== "") {
+  //     let metaCxt = JSON.parse(meta.content);
+  //     pictrue = metaCxt.picture;
+  //   }
+  //   return pictrue;
+  // };
 
-  const displayname = () => {
-    let tmp_display_name = "anonymous";
-    if (meta && meta.content !== "") {
-      let metaCxt = JSON.parse(meta.content);
-      tmp_display_name = metaCxt.display_name;
-    }
-    return tmp_display_name;
-  };
+  // const displayname = () => {
+  //   let tmp_display_name = "anonymous";
+  //   if (meta && meta.content !== "") {
+  //     let metaCxt = JSON.parse(meta.content);
+  //     tmp_display_name = metaCxt.display_name;
+  //   }
+  //   return tmp_display_name;
+  // };
 
   return (
-    <Box className={"card_nft_bg"} elevation={0}>
-      <Avatar className="avatar" alt={displayname()} src={avatar()} />
-    </Box>
+    <Card className={"card_nft_bg"}>
+      <CardMedia
+        sx={{ height: 140 }}
+        image="/static/images/cards/contemplative-reptile.jpg"
+        title="green iguana"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Lizard
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Lizards are a widespread group of squamate reptiles, with over 6,000
+          species, ranging across all continents except Antarctica
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Share</Button>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
   );
 };
 

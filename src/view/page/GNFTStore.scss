@@ -1,12 +1,27 @@
 .nft_store_bg{
     width: 100%;
     min-height: calc( 100vh - 64px );
-    background-color: #131313;
+    background-color: #131313;// #131313;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     pointer-events: all;
+
+    .nft_list {
+        background-color: aqua;
+        width: 100%;
+        display: grid;
+        grid-gap: 4px;
+        grid-auto-rows: minmax(0px, 1fr);
+        grid-template-columns: auto auto auto auto;
+        // flex-direction: row;
+        // justify-content: flex-start;
+        // align-items: flex-start;
+        // flex-wrap: wrap;
+        box-sizing: border-box;
+        
+    }
 
 }
 
