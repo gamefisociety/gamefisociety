@@ -23,12 +23,17 @@
     }
 
     .main_content {
-        width: calc( 100% - 200px );//auto;
+        flex-grow: 1;
+        // width: auto;//calc( 100% - 200px );//auto;
         min-height: calc( 100vh - 64px );
         display: flex;
         flex-direction: column;
         align-items: center;
         pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            width: 100%;//auto;
+        }
     }
 
     .main_right_drawer {

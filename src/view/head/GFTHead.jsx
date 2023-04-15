@@ -385,7 +385,9 @@ const GFTHead = () => {
             onClick={clickLogo}
           />
         </Box>
-        <GSearch />
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <GSearch />
+        </Box>
         {loggedOut === true ? renderLogout() : renderLogin()}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton

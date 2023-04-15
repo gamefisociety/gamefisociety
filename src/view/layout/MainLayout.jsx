@@ -57,7 +57,10 @@ const MainLayout = () => {
     <Box className="main_bg">
       <GFTHead />
       <Box className={'main_frame'}>
-        <Box className={'main_menu'}>
+        {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <GSearch />
+        </Box> */}
+        <Box className={'main_menu'} sx={{ display: { xs: "none", md: "flex" } }}>
           <GFTLeftMenu />
         </Box>
         <Box className="main_content">
