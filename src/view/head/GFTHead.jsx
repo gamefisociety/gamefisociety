@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./GFTHead.scss";
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -63,6 +63,8 @@ const GFTHead = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const matches = useMediaQuery('(min-width:600px)');
+
   const handleTooltipClose = () => {
     setProfileOPen(false);
   };
@@ -103,26 +105,10 @@ const GFTHead = () => {
     handleMobileMenuClose();
   };
 
-  const openUserHome = () => {
-    navigate("/userhome/" + publicKey);
-    handleMenuClose();
-  };
-
   const openProfile = () => {
     navigate("/profile", {
       state: { info: { ...profile }, pubkey: publicKey },
     });
-    handleMenuClose();
-  };
-
-  const openSociety = () => {
-    dispatch(
-      setDrawer({
-        isDrawer: true,
-        placeDrawer: "right",
-        cardDrawer: "follow",
-      })
-    );
     handleMenuClose();
   };
 
@@ -147,11 +133,6 @@ const GFTHead = () => {
     );
   };
 
-  const openSetting = () => {
-    handleMenuClose();
-    navigate("/setting");
-  };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -161,32 +142,6 @@ const GFTHead = () => {
     // setNotifycationNum(dms.length);
   }, [dms]);
 
-  const getAvatarPicture = () => {
-    if (profile && profile.picture && profile.picture !== "default") {
-      return profile.picture;
-    }
-    return "";
-  }
-
-  const getDisplayName = () => {
-    if (profile && profile.display_name) {
-      return profile.display_name;
-    }
-    if (publicKey !== "") {
-      return 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length)
-    }
-    return 'gfs';
-  }
-
-  const getName = () => {
-    if (profile && profile.name) {
-      return profile.name;
-    }
-    if (publicKey !== "") {
-      return '@' + publicKey.substring(publicKey.length - 4, publicKey.length)
-    }
-    return '@gfs';
-  }
 
   const renderUserMenu = (<GUserMenu />);
 
