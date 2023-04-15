@@ -3,14 +3,13 @@
     min-height: calc(100vh - 64px);
     width: 760px;
     background-color: #1B1B1B;
-    // background-color: red;
     z-index: 0;
-    pointer-events: all;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    box-sizing: border-box;
+    pointer-events: all;
 
     @media screen and (max-width: 768px) {
         width: 100%;//auto;
@@ -110,8 +109,6 @@
         position: fixed;
         bottom: 12px;
         right: 12px;
-        // top: calc(64px + 6px);
-        // right: calc(50vw - 570px);
         cursor: pointer;
         // background-color: white;
         border-radius: 29px;
