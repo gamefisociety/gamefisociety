@@ -554,35 +554,8 @@ const GRelays = () => {
         >
           {"+"}
         </Button>
-        {/* {renderCacheRelays()} */}
-
-        {/* <List className="list_bg">
-  //       {relays.map((cfg, index) => {
-  //         return (
-  //           <ListItem key={"relay-" + index}>
-  //             <GRelayItem
-  //               relay={cfg}
-  //               openDetail={() => {
-  //                 setMode("detail");
-  //                 setDetailRelay(cfg);
-  //               }}
-  //               openDel={() => {
-  //                 delInfo.open = true;
-  //                 delInfo.relay = cfg;
-  //                 setDelInfo({ ...delInfo });
-  //               }}
-  //             />
-  //           </ListItem>
-  //         );
-  //       })}
-  //     </List> */}
         <AutoSizer>
           {({ height, width }) => (
-            // <Box sx={{
-            //   width:width,
-            //   height:height,
-            //   backgroundColor:"green"
-            // }}></Box>
             <FixedSizeList
               height={height}
               width={width}
