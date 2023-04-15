@@ -13,6 +13,8 @@ import {
     OBJFileLoader
 } from '@babylonjs/loaders';
 
+// console.log('OBJFileLoader', OBJFileLoader);
+
 const GMetaObjTest = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => (
@@ -24,7 +26,8 @@ const GMetaObjTest = forwardRef((props, ref) => {
                 //     // scene.createDefaultCameraOrLight(true, true, true);
                 //     // scene.createDefaultEnvironment();
                 // });
-                SceneLoader.ImportMesh("", '/asset/model/obj01/ferris_chair.obj', '', scene, function (meshes) {
+                // onSuccess = null, onProgress = null, onError = null, pluginExtension = null
+                SceneLoader.ImportMesh("", 'asset/model/obj01/', 'cup_ferris.obj', scene, (meshes) => {
                     // let mesh = meshes[0];
                     // mesh.showBoundingBox = true;
                     // mesh.scaling.x = 100;
@@ -38,8 +41,8 @@ const GMetaObjTest = forwardRef((props, ref) => {
                     // // mat.emissiveTexture = texture;
                     // mesh.material = mat;
                     console.log('SceneLoader.ImportMesh', meshes, scene);
-                    scene.createDefaultCameraOrLight(true, true, true);
-                    scene.createDefaultEnvironment();
+                    // scene.createDefaultCameraOrLight(true, true, true);
+                    // scene.createDefaultEnvironment();
                 });
             },
             render: (dt, scene) => {

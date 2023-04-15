@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import "./GIntroduce.scss";
+
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -14,11 +16,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { Stepper, Step, StepLabel, StepContent } from "@mui/material";
-
-import "./GIntroduce.scss";
-
 import footer_logo from "../../asset/image/logo/footer_logo.png";
-import image_bg from "../../asset/image/introduce/bg.png";
 import logo_nostr from "../../asset/image/introduce/logo_nostr.png";
 import logo_twitter from "../../asset/image/introduce/logo_twitter.png";
 import logo_github from "../../asset/image/introduce/logo_github.png";
@@ -63,7 +61,7 @@ const steps = [
 const GIntroduce = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
 
   const renderPartOne = () => {
@@ -1555,15 +1553,7 @@ const GIntroduce = () => {
 
   const renderHeader = () => {
     return (
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box className={'introduce_head'}>
         <Box
           sx={{
             width: "1172px",
@@ -1581,21 +1571,9 @@ const GIntroduce = () => {
 
   const renderAD = () => {
     return (
-      <Box
-        className={"ad"}
-        sx={{
-          width: "100%",
-          height: "54px",
-          backgroundColor: "#33AFFF",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 2,
-        }}
-        onClick={() => {
-          navigate("/mint");
-        }}
+      <Box className={"introduce_tip"} onClick={() => {
+        navigate("/mint");
+      }}
       >
         <Typography
           sx={{
@@ -1612,106 +1590,16 @@ const GIntroduce = () => {
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        position: "relative",
-        backgroundColor: "#0F0F0F",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <Box className={'introduce_bg'}>
+      <Box className={'first_bg'} />
       {renderAD()}
-      <Grid
-        sx={{
-          flexGrow: 1,
-          width: "1420px",
-          //   backgroundColor: "red",
-          position: "relative",
-        }}
-        container
-        spacing={2}
-      >
-        {/* <img className="bg" src={image_bg} width="1300px" alt="image_bg" /> */}
-        <Box
-          sx={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            zIndex: 0,
-          }}
-        >
-          <img className="bg" src={image_bg} width="1420px" alt="image_bg" />
-        </Box>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderHeader()}
-        </Grid>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderPartOne()}
-        </Grid>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderTwoNet()}
-        </Grid>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderFeatures()}
-        </Grid>
-        {/* <Grid item xs={12}>
-                    {renderToken()}
-                </Grid> */}
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderRoadMap()}
-        </Grid>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderUs()}
-        </Grid>
-        <Grid
-          sx={{
-            zIndex: 2,
-          }}
-          item
-          xs={12}
-        >
-          {renderFooter()}
-        </Grid>
-      </Grid>
+      {renderHeader()}
+      {renderPartOne()}
+      {renderTwoNet()}
+      {renderFeatures()}
+      {renderRoadMap()}
+      {renderUs()}
+      {renderFooter()}
     </Box>
   );
 };

@@ -1,0 +1,183 @@
+.dialog_zap_bg {
+    .invoice{
+        padding: 20px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .purl {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .title {
+            margin-top: 10px;
+            color: #FFFFFF;
+            width: 100%;
+            font-size: 20px;
+            font-family: Saira;
+            font-weight: 900;
+            text-align: left;
+            cursor: pointer;
+        }
+        .link_open{
+            color: #00B7FF;
+        }
+        .copy_send {
+            width: auto;
+            margin-top: 10px;
+            padding: 10px;
+            outline: none;
+            border: 0;
+            font-size: 16px;
+            font-family: Saira;
+            border-radius: 50px;
+            text-align: center;
+            background: #8e44ad;
+            color: rgb(219, 220, 222);
+            cursor: pointer;
+
+            &:hover,
+            &:focus,
+            &:active {
+                background: #5a488b;
+                color: #fff;
+            }
+            &:disabled {
+                background: rgb(239, 239, 239);
+                color: rgba(16, 16, 16, 0.3);
+            }
+        }
+    }
+    .box_bg {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+
+        .purl {
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: Saira;
+            font-weight: 500;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .title {
+            margin-top: 10px;
+            color: #FFFFFF;
+            width: 100%;
+            font-size: 20px;
+            font-family: Saira;
+            font-weight: 900;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .amounts {
+
+            .sat_amount {
+                color: var(--text-color);
+                display: inline-block;
+                cursor: pointer;
+                padding: 10px;
+                border-radius: 100px;
+                font-family: Saira;
+                margin: 5px;
+                border: 1px solid transparent;
+                background: var(--body-bg);
+
+                &.active {
+                    background: #000;
+                }
+            }
+
+        }
+
+        .custom-amount {
+            width: 100%;
+            height: auto;
+
+            .input_custom {
+                padding: 10px;
+                outline: none;
+                border: 0;
+                font-size: 16px;
+                font-family: Saira;
+                border-radius: 50px;
+                background: rgb(31, 35, 39);
+                color: rgb(219, 220, 222);
+            }
+
+            .bt_custom {
+                margin-left: 20px;
+                padding: 10px;
+                outline: none;
+                border: 0;
+                font-size: 16px;
+                font-family: Saira;
+                border-radius: 50px;
+                background: rgb(31, 35, 39);
+                color: rgb(219, 220, 222);
+                cursor: pointer;
+
+                &:disabled {
+                    background: rgb(239, 239, 239);
+                    color: rgba(16, 16, 16, 0.3);
+                }
+            }
+
+        }
+
+        .input_comment {
+            margin-top: 10px;
+            padding: 10px;
+            outline: none;
+            border: 0;
+            font-size: 16px;
+            font-family: Saira;
+            border-radius: 50px;
+            background: rgb(31, 35, 39);
+            color: rgb(219, 220, 222);
+        }
+
+
+        .btn_send {
+            margin-top: 10px;
+            padding: 10px;
+            outline: none;
+            border: 0;
+            font-size: 16px;
+            font-family: Saira;
+            border-radius: 50px;
+            text-align: center;
+            background: #8e44ad;
+            color: rgb(219, 220, 222);
+            cursor: pointer;
+
+            &:hover,
+            &:focus,
+            &:active {
+                background: #5a488b;
+                color: #fff;
+            }
+            &:disabled {
+                background: rgb(239, 239, 239);
+                color: rgba(16, 16, 16, 0.3);
+            }
+        }
+
+    }
+
+}

@@ -47,6 +47,7 @@ export var EventKind = {
   ChannelHideMessage: 43, //NIP-28
   ChannelMuteUser: 44, //NIP-28
   Reporting: 1984, //NIP-56
+  ZapNode: 9734,
   MuteList: 10000, // NIP-51
   PinList: 10001, // NIP-51
   Relays: 10002, // NIP-65
