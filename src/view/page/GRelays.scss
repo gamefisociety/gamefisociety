@@ -1,6 +1,6 @@
 .relay_bg {
     width: 400px;
-    // min-height: calc( 100vh - 64px );
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +9,7 @@
     background-color: #0F0F0F;
     .inner_relays {
         width: 100%;
+        min-height: calc( 100vh - 200px );
     }
 
     .tips_relay {
@@ -31,15 +32,17 @@
     .relay_item {
         position: relative;
         width: 100%;
-        // height: 36px;
+        height: 40px;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .lable_relay {
-        width: 50%;
+        // width: 55%;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
@@ -87,7 +90,7 @@
 
     .icon_more {
         position:absolute;
-        right: 0px;
+        right: 10px;
         cursor: pointer;
         width: 32px;
         height: 32px;

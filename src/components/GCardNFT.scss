@@ -1,0 +1,55 @@
+.card_nft_bg {
+    position: relative;
+    width: auto;
+    height: 100%;
+    background-color: #656565;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all .3s cubic-bezier(.17,.67,.83,.67);
+    overflow: hidden;
+    &:hover{
+        transform: scale(1.03);
+    }
+    // & :hover {
+    //     transition: box-shadow 0.25s ease-in-out 0s, transform 0.25s ease 0s;
+    // }
+
+    .ent_nft {
+        height: 140px;
+        filter: brightness(15%);
+    }
+
+    .bt_price {
+        width: 50%;
+        color: white;
+        background-color: #0F0F0F;
+    }
+
+    .bt_buy {
+        width: 50%;
+        color: white;
+        // border-left: #0F0F0F;
+        // border: 1;
+        background-color: #0F0F0F;
+        &:hover{
+            background-color: #4f1fed;
+        }
+    }
+
+    .chain_icon {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+        // background-color: red;
+        background-image: url(../asset/image/home/ic_polgon.png);
+        background-size: 100% 100%;
+        filter: brightness(75%);
+        z-index: 100;
+        // &:hover {
+        //     filter: brightness(180%);
+        // }
+    }
+}
