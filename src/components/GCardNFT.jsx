@@ -53,7 +53,7 @@ const GCardNFT = (props) => {
   return (
     <Card className={"card_nft_bg"}>
       <CardMedia
-        sx={{ height: 140 }}
+        className={'ent_nft'}
         image={default_avatar}
         title="nft"
       />
