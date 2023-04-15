@@ -58,14 +58,18 @@ const GCardNFT = (props) => {
         title="nft"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography variant="h5" gutterBottom component="div">
           {'NFT Name'}
+        </Typography>
+        <Typography gutterBottom variant="h6" component="div">
+          {'#1024'}
         </Typography>
       </CardContent>
       <CardActions>
         <Button className={'bt_price'}>{'0.03ETH'}</Button>
         <Button className={'bt_buy'}>{'BUY'}</Button>
       </CardActions>
+      <Box className={'chain_icon'}></Box>
     </Card>
   );
 };

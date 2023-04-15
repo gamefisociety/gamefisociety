@@ -31,4 +31,21 @@
             background-color: #4f1fed;
         }
     }
+
+    .chain_icon {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        // background-color: red;
+        background-image: url(../asset/image/login/icon_society.png);
+        background-size: 100% 100%;
+        filter: brightness(180%);
+        z-index: 100;
+        // &:hover {
+        //     filter: brightness(180%);
+        // }
+    }
 }
