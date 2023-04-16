@@ -19,7 +19,7 @@ import GFTChat from "view/page/GFTChat";
 
 import GLoginDialog from "view/dialog/GLoginDialog";
 
-import { setDrawer } from "module/store/features/dialogSlice";
+import { setDrawer, setOpenMenuLeft } from "module/store/features/dialogSlice";
 
 const MainLayout = () => {
   const match_mobile = useMediaQuery('(max-width:768px)');
@@ -100,11 +100,12 @@ const MainLayout = () => {
         ModalProps={{
           keepMounted: true,
         }}
-        variant={'persistent'}
+        variant={'temporary'}
         anchor={"left"}
         open={isOpenMenuLeft}
         onClose={() => {
           //
+          dispatch(setOpenMenuLeft(false));
         }}
       >
         {renderLeftMenu()}
