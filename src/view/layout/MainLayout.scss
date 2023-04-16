@@ -1,4 +1,5 @@
 .main_bg {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -20,6 +21,13 @@
         width: 200px;
         height: calc( 100vh - 64px);
         overflow-y: auto;
+        z-index: 1000;
+        background-color: #0F0F0F;
+
+        @media screen and (max-width: 768px) {
+            position: absolute;
+            width: 200px;//auto;
+        }
     }
 
     .main_content {

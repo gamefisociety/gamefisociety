@@ -32,12 +32,10 @@ import GUserMenu from 'view/head/GUserMenu';
 import {
   setIsOpen,
   setIsOpenWallet,
+  setOpenMenuLeft,
 } from "module/store/features/dialogSlice";
-import { default_avatar } from "module/utils/xdef";
-import { logout } from "module/store/features/loginSlice";
 import ic_logo from "../../asset/image/logo/ic_logo.png";
 import ic_wallet from "../../asset/image/home/ic_wallet.png";
-import { EventKind } from "nostr/def";
 
 const ProfileTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -55,6 +53,7 @@ const GFTHead = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { loggedOut, publicKey } = useSelector((s) => s.login);
+  const { isOpenMenuLeft } = useSelector((s) => s.dialog);
   const { profile, relays } = useSelector((s) => s.profile);
   const { dms } = useSelector((s) => s.society);
   const [profileOpen, setProfileOPen] = React.useState(false);
@@ -322,7 +321,10 @@ const GFTHead = () => {
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
-        <Box className={'logo_menu'}>
+        <Box className={'logo_menu'} onClick={() => {
+          console.log('isOpenMenuLeft', isOpenMenuLeft);
+          dispatch(setOpenMenuLeft(!isOpenMenuLeft));
+        }}>
           <IconButton
             size="large"
             edge="start"

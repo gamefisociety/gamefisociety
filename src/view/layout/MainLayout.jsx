@@ -39,6 +39,7 @@ const MainLayout = () => {
     chatPubKey,
     chatProfile,
     isBottomDrawer,
+    isOpenMenuLeft,
     bottomPage,
     isRightDrawer,
     rightPage,
@@ -52,17 +53,20 @@ const MainLayout = () => {
     return right_draw_method;
   }
 
+  const renderLeftMenu = () => {
+    return (
+      <Box className={'main_menu'} >
+        <GFTLeftMenu />
+      </Box>
+    );
+  }
+
   //
   return (
     <Box className="main_bg">
       <GFTHead />
       <Box className={'main_frame'}>
-        {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <GSearch />
-        </Box> */}
-        <Box className={'main_menu'} sx={{ display: { xs: "none", md: "flex" } }}>
-          <GFTLeftMenu />
-        </Box>
+        {isOpenMenuLeft && renderLeftMenu()}
         <Box className="main_content">
           <Outlet />
         </Box>
