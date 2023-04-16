@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./GFTHead.scss";
 import useMediaQuery from '@mui/material/useMediaQuery';
+
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -49,6 +50,8 @@ const ProfileTooltip = styled(({ className, ...props }) => (
 }));
 
 const GFTHead = () => {
+  const match_mobile = useMediaQuery('(max-width:768px)');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -61,8 +64,6 @@ const GFTHead = () => {
   const [dmNum, setDmNum] = React.useState(0);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const matches = useMediaQuery('(min-width:600px)');
 
   const handleTooltipClose = () => {
     setProfileOPen(false);
@@ -211,7 +212,7 @@ const GFTHead = () => {
 
   const renderLogout = () => {
     return (
-      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
+      <Box sx={{ alignItems: "center" }}>
         <IconButton
           sx={{ mr: "12px" }}
           size="large"
@@ -342,11 +343,9 @@ const GFTHead = () => {
             onClick={clickLogo}
           />
         </Box>
-        <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <GSearch />
-        </Box>
+        {!match_mobile && <GSearch />}
         {loggedOut === true ? renderLogout() : renderLogin()}
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+        {/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
             aria-label="show more"
@@ -357,9 +356,9 @@ const GFTHead = () => {
           >
             <MoreIcon />
           </IconButton>
-        </Box>
+        </Box> */}
       </Toolbar >
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
     </Box >
   );
 };
