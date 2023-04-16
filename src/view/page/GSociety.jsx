@@ -127,7 +127,7 @@ const GFollowItem = (props) => {
 
   const renderItem = () => {
     console.log("renderItem", info);
-    if (!info) return null;
+    // if (!info) return null;
     return (
       <Box className={"follow_item"}>
         <Avatar
@@ -180,7 +180,7 @@ const GSociety = (props) => {
     let filterFollowing = followPro.getFollowings(publicKey);
     let subFollowing = BuildSub("followings_metadata", [filterFollowing]);
     nostrWorker.fetch_user_profile(subFollowing, null, (datas, client) => {
-      // console.log('followings_metadata', datas);
+      console.log("followings_metadata", datas);
       setFollowers(datas.concat());
     });
   };
@@ -258,11 +258,6 @@ const GSociety = (props) => {
       <Box className={"inner_list"}>
         <AutoSizer>
           {({ height, width }) => (
-            // <Box sx={{
-            //   width:width,
-            //   height: height,
-            //   backgroundColor:"red"
-            // }}></Box>
             <FixedSizeList
               height={height}
               width={width}
@@ -293,59 +288,6 @@ const GSociety = (props) => {
           )}
         </AutoSizer>
       </Box>
-      // <List className="list_bg">
-      //   {follows.map((pubkey, index) => {
-      //     const info = UserCache.getMetadata(pubkey);
-      //     // console.log('info111', pubkey, info);
-      //     if (!info) {
-      //       return null;
-      //     }
-      //     let cxt = JSON.parse(info.content);
-      //     return (
-      //       <ListItem
-      //         sx={{ my: "2px" }}
-      //         key={"following-list-" + index}
-      //         secondaryAction={
-      //           <Button
-      //             variant="contained"
-      //             sx={{
-      //               width: "80px",
-      //               height: "24px",
-      //               fontSize: "12px",
-      //               backgroundColor: "#202122",
-      //             }}
-      //             onClick={() => {
-      //               removeFollow(pubkey);
-      //             }}
-      //           >
-      //             {"unfollow"}
-      //           </Button>
-      //         }
-      //         disablePadding
-      //       >
-      //         <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
-      //           <ListItemAvatar
-      //             onClick={() => {
-      //               navigate("/userhome/" + pubkey);
-      //               if (callback) {
-      //                 callback();
-      //               }
-      //             }}
-      //           >
-      //             <Avatar
-      //               alt={"GameFi Society"}
-      //               src={cxt.picture ? cxt.picture : ""}
-      //             />
-      //           </ListItemAvatar>
-      //           <div className="gsociety_text_item">
-      //             <span className="txt">{cxt.name} </span>
-      //             <span className="txt_about">{cxt.about} </span>
-      //           </div>
-      //         </ListItemButton>
-      //       </ListItem>
-      //     );
-      //   })}
-      // </List>
     );
   };
 
