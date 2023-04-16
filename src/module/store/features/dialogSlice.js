@@ -22,10 +22,7 @@ const initialState = {
   relayDrawer: null,
   followerDrawer: [],
   followingDrawer: [],
-  //
-  chatDrawer: false,
-  chatPubKey: "",
-  chatProfile: {}
+  chatPubKey: null,
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -78,11 +75,11 @@ export const dialogSlice = createSlice({
       if (action.payload.followerDrawer) {
         state.followerDrawer = action.payload.followerDrawer.concat();
       }
-    },
-    setChatDrawer: (state, action) => {
-      state.chatDrawer = action.payload.chatDrawer;
-      state.chatPubKey = action.payload.chatPubKey;
-      state.chatProfile = action.payload.chatProfile;
+      if (action.payload.chatPubKey) {
+        state.chatPubKey = action.payload.chatPubKey;
+      } else {
+        state.chatPubKey = null;
+      }
     },
     setBottomDrawer: (state, action) => {
       state.isBottomDrawer = action.payload.bottomDrawer;
@@ -117,7 +114,6 @@ export const {
   setOpenMenuLeft,
   setPost,
   setDrawer,
-  setChatDrawer,
   setBottomDrawer,
   setRightDrawer,
 }

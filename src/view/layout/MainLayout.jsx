@@ -6,8 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
-
 import GFTHead from "view/head/GFTHead";
 // import GBottomMenu from "view/head/GBottomMenu";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
@@ -21,6 +19,8 @@ import GFTChat from "view/page/GFTChat";
 
 import GLoginDialog from "view/dialog/GLoginDialog";
 
+import { setDrawer } from "module/store/features/dialogSlice";
+
 const MainLayout = () => {
   const match_mobile = useMediaQuery('(max-width:768px)');
   const dispatch = useDispatch();
@@ -31,9 +31,7 @@ const MainLayout = () => {
     cardDrawer,
     isBottomDrawer,
     isOpenMenuLeft,
-    chatDrawer,
     chatPubKey,
-    chatProfile,
     bottomPage,
     isRightDrawer,
     rightPage,
@@ -106,29 +104,10 @@ const MainLayout = () => {
         anchor={"left"}
         open={isOpenMenuLeft}
         onClose={() => {
-          // dispatch(
-          //   setChatDrawer({
-          //     chatDrawer: false,
-          //     chatPubKey: chatPubKey,
-          //     chatProfile: chatProfile,
-          //   })
-          // );
+          //
         }}
       >
         {renderLeftMenu()}
-        {/* <GFTChat
-        chatPK={chatPubKey}
-        chatProfile={chatProfile}
-        closeHandle={() => {
-          dispatch(
-            setChatDrawer({
-              chatDrawer: false,
-              chatPubKey: chatPubKey,
-              chatProfile: chatProfile,
-            })
-          );
-        }}
-      /> */}
       </Drawer>
     );
   }
@@ -144,13 +123,7 @@ const MainLayout = () => {
         anchor={"bottom"}
         open={isBottomDrawer}
         onClose={() => {
-          // dispatch(
-          //   setChatDrawer({
-          //     chatDrawer: false,
-          //     chatPubKey: chatPubKey,
-          //     chatProfile: chatProfile,
-          //   })
-          // );
+          //
         }}
       ></Drawer>
     );

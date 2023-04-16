@@ -63,8 +63,6 @@ const GSocietyDM = (props) => {
   const [chatPubkey, setChatPubkey] = useState(null);
   const [datas, setDatas] = useState([]);
 
-  const dispatch = useDispatch();
-  //
   const fetchAllChats = (pubkeys) => {
     let array = [];
     const filterDM = chatPro.getMyDM();

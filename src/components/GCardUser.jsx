@@ -12,7 +12,6 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, Link } from "@mui/material";
 import copy from "copy-to-clipboard";
-import { setChatDrawer } from "module/store/features/dialogSlice";
 import { default_banner, default_avatar } from "module/utils/xdef";
 import logo_chat from "../asset/image/social/logo_chat.png";
 import logo_lighting from "../asset/image/social/logo_lighting.png";
@@ -279,10 +278,11 @@ const GCardUser = (props) => {
                 event.stopPropagation();
                 if (profile) {
                   dispatch(
-                    setChatDrawer({
-                      chatDrawer: true,
+                    setDrawer({
+                      isDrawer: true,
+                      placeDrawer: "right",
+                      cardDrawer: "society-chat",
                       chatPubKey: pubkey,
-                      chatProfile: profile,
                     })
                   );
                 }

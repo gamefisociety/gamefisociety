@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useRef, useCallback } from "react";
 import "./GFTChat.scss";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,12 +10,12 @@ import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { VariableSizeList as List } from "react-window";
-import closeImg from "./../../asset/image/social/close.png";
 import dmLeftImg from "./../../asset/image/social/dm_left.png";
 import { useChatPro } from "nostr/protocal/ChatPro";
 import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
+import { setDrawer } from "module/store/features/dialogSlice";
 import useNostrEvent from "nostr/NostrEvent";
 import DMCache from "db/DMCache";
 import { default_avatar } from "module/utils/xdef";
@@ -70,12 +70,14 @@ let subDM = null;
 const GFTChat = (props) => {
   const listRef = useRef();
   const { chatPK, callback } = props;
-  const { publicKey, privateKey } = useSelector((s) => s.login);
-  const chatPro = useChatPro();
+  const dispatch = useDispatch();
+
+  const { privateKey } = useSelector((s) => s.login);
   const [chatProfile, setChatProfile] = useState(null);
   const [chatData, setChatData] = useState([]);
   const [inValue, setInValue] = useState("");
 
+  const chatPro = useChatPro();
   const nostrEvent = useNostrEvent();
   const user_cache = UserDataCache();
   const dm_cache = DMCache();
@@ -230,6 +232,15 @@ const GFTChat = (props) => {
           onClick={() => {
             if (callback) {
               callback('msg_back');
+            } else {
+              dispatch(
+                setDrawer({
+                  isDrawer: false,
+                  placeDrawer: "right",
+                  cardDrawer: "society-chat",
+                  chatPubKey: null,
+                })
+              );
             }
           }}
         >
