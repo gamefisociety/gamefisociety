@@ -6,16 +6,15 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import GFTHead from "view/head/GFTHead";
+import GMetaUI from 'view/meta/GMetaUI';
 
 // ==============================|| MINIMAL LAYOUT ||============================== //
 
 const MetaLayout = () => {
   return (
     <Box className="meta_layout">
-      <GFTHead />
-      <Box className="meta_layout_content">
-        <Outlet />
-      </Box>
+      <Outlet />
+      <GMetaUI />
     </Box>
   );
 };

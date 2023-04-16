@@ -1,21 +1,23 @@
 .meta_layout {
+    position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    height: 100vh;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
     background-color: azure;
 
-    .meta_layout_content {
-        width: 100%;
-        min-height: 100vh;
-        // margin-top: 64px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        z-index: 1;
-        // pointer-events: none;
-    }
+    // .meta_layout_content {
+    //     width: 100%;
+    //     min-height: 100vh;
+    //     // margin-top: 64px;
+    //     position: relative;
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: center;
+    //     z-index: 1;
+    //     // pointer-events: none;
+    // }
 
 }
 
