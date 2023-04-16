@@ -8,5 +8,9 @@
     padding-top: 24px;
     padding-bottom: 66px;
     pointer-events: all;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;//auto;
+    }
 }
 

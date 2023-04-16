@@ -1,5 +1,5 @@
 .global_bg {
-    width: 760px;
+    width: 768px;
     min-height: calc(100vh - 64px);
     display: flex;
     flex-direction: row;
@@ -7,6 +7,10 @@
     justify-content: center;
     box-sizing: border-box;
     pointer-events: all;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;//auto;
+    }
 
     .global_lables {
         position: sticky;

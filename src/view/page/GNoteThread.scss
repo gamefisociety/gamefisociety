@@ -7,6 +7,10 @@
     padding-bottom: 64px;
     pointer-events: all;
 
+    @media screen and (max-width: 768px) {
+        width: 100%;//auto;
+    }
+
     .thread_header {
         width: 100%;
         margin-top: 24px;

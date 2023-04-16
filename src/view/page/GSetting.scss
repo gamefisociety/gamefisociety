@@ -8,6 +8,10 @@
     align-items: flex-start;
     pointer-events: all;
 
+    @media screen and (max-width: 768px) {
+        width: 100%;//auto;
+    }
+
     .setting_title {
         margin-left: 26px;
         color: #FFFFFF;

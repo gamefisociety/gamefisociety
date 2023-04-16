@@ -89,7 +89,6 @@ const GPostReply = () => {
     nostrWorker.fetch_follow_notes(subTextNode, null, (cacheData, client) => {
       setFetching(false);
       setData(cacheData.concat());
-      // fetchInfo(cacheData);
       if (time === 0) {
         if (curLabel === "Post") {
           removeListenNotes();
@@ -134,23 +133,6 @@ const GPostReply = () => {
         setListenData(cacheData.concat());
       }
     );
-  };
-
-  const fetchInfo = (cacheData) => {
-    const pubkeys = [];
-    cacheData.map((item) => {
-      pubkeys.push(item.pubkey);
-    });
-    const pubkyes_filter = new Set(pubkeys);
-    getInfor(pubkyes_filter, null);
-  };
-
-  const getInfor = (pkeys, curRelay) => {
-    const filterMetaData = metadataPro.get(Array.from(pkeys));
-    let subTextNode = BuildSub("metadata", [filterMetaData]);
-    nostrWorker.fetch_user_metadata(subTextNode, curRelay, (data, client) => {
-      setInforData(data);
-    });
   };
 
   const postNote = (note) => {
@@ -200,8 +182,8 @@ const GPostReply = () => {
         </Button>
         <Button
           className={"post_menu_item" + (curLabel === "Post & Reply"
-          ? " post_menu_item_selected"
-          : " post_menu_item_unselected")}
+            ? " post_menu_item_selected"
+            : " post_menu_item_unselected")}
           variant="contained"
           onClick={() => {
             setListenData([]);
@@ -288,7 +270,7 @@ const GPostReply = () => {
   };
 
   return (
-    <Paper className={"post_reply_bg"} elevation={0}>
+    <Box className={"post_reply_bg"}>
       {renderMenu()}
       <Button
         className={"post_button"}
@@ -309,11 +291,11 @@ const GPostReply = () => {
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={fetching}
-        onClick={() => {}}
+        onClick={() => { }}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Paper>
+    </Box>
   );
 };
 

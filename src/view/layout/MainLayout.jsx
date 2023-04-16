@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
+import "./MainLayout.scss";
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import { useSelector, useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
-
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { setDrawer, setChatDrawer } from "module/store/features/dialogSlice";
-
 import GFTHead from "view/head/GFTHead";
 // import GBottomMenu from "view/head/GBottomMenu";
 import GFTLeftMenu from "view/head/GFTLeftMenu";
-import GFTHomeMeta from "view/meta/GFTHomeMeta";
 import GSociety from "view/page/GSociety";
 import GSocietyDM from "view/page/GSocietyDM";
 import GChatGroup from "view/page/GChatGroup";
@@ -22,23 +19,19 @@ import GFTChat from "view/page/GFTChat";
 
 import GLoginDialog from "view/dialog/GLoginDialog";
 
-import { System } from "nostr/NostrSystem";
-import { init } from "module/store/features/loginSlice";
-import { initRelays } from "module/store/features/profileSlice";
-
-import "./MainLayout.scss";
+import { setDrawer } from "module/store/features/dialogSlice";
 
 const MainLayout = () => {
+  const match_mobile = useMediaQuery('(max-width:768px)');
   const dispatch = useDispatch();
   const { loggedOut } = useSelector((s) => s.login);
   const {
     isDrawer,
     placeDrawer,
     cardDrawer,
-    chatDrawer,
-    chatPubKey,
-    chatProfile,
     isBottomDrawer,
+    isOpenMenuLeft,
+    chatPubKey,
     bottomPage,
     isRightDrawer,
     rightPage,
@@ -52,20 +45,17 @@ const MainLayout = () => {
     return right_draw_method;
   }
 
-  //
-  return (
-    <Box className="main_bg">
-      <GFTHead />
-      <Box className={'main_frame'}>
-        <Box className={'main_menu'}>
-          <GFTLeftMenu />
-        </Box>
-        <Box className="main_content">
-          <Outlet />
-        </Box>
+  const renderLeftMenu = () => {
+    return (
+      <Box className={'main_menu'} >
+        <GFTLeftMenu />
       </Box>
-      <Drawer
-        elevation={0}
+    );
+  }
+
+  const rednerRightDrawer = () => {
+    return (
+      <Drawer elevation={0}
         PaperProps={{
           style: {
             marginTop: "64px",
@@ -86,108 +76,46 @@ const MainLayout = () => {
           );
         }}
       >
-        {cardDrawer === "follow" && (
-          <GSociety
-            callback={() => {
-              dispatch(
-                setDrawer({
-                  isDrawer: false,
-                  placeDrawer: "right",
-                  cardDrawer: "default",
-                })
-              );
-            }}
-          />
-        )}
+        {cardDrawer === "follow" && <GSociety />}
         {cardDrawer === "society-dm" && <GSocietyDM />}
+        {cardDrawer === "society-chat" && <GFTChat chatPK={chatPubKey} />}
         {cardDrawer === "society-chat-group" && <GChatGroup />}
         {cardDrawer === "relays" && <GRelays />}
         {cardDrawer === "relay-show" && <GRelaysShow />}
         {cardDrawer === "follower-show" && <GSocietyShow />}
       </Drawer>
+    );
+  }
+
+  const renderLeftDrawer = () => {
+    return (
       <Drawer
         PaperProps={{
           sx: {
             marginTop: "64px",
-            backgroundColor: "transparent",
+            backgroundColor: "#0F0F0F",
             borderWidth: 0,
           },
         }}
-        variant={'persistent'}
-        anchor={"right"}
-        open={chatDrawer}
-        onClose={() => {
-          dispatch(
-            setChatDrawer({
-              chatDrawer: false,
-              chatPubKey: chatPubKey,
-              chatProfile: chatProfile,
-            })
-          );
-        }}
-      >
-        <GFTChat
-          chatPK={chatPubKey}
-          chatProfile={chatProfile}
-          closeHandle={() => {
-            dispatch(
-              setChatDrawer({
-                chatDrawer: false,
-                chatPubKey: chatPubKey,
-                chatProfile: chatProfile,
-              })
-            );
-          }}
-        />
-      </Drawer>
-      {/* <Drawer
-        className='main_right_drawer'
-        // swipeAreaWidth='80%'
-        PaperProps={{
-          // className: 'main_bottom_drawer_inner',
-          sx: {
-            height: '82vh',
-            maxWidth: '36.5vw',
-            mt: '66px',
-            mb: '66px',
-            // right: '12px',
-            backgroundColor: 'rgba(0,0,0,0.85)',
-            borderWidth: 0,
-            borderRadius: '12px',
-          },
-        }}
-        // variant="temporary"
-        variant="persistent"
         ModalProps={{
           keepMounted: true,
         }}
-        anchor={"right"}
-        open={isRightDrawer}
+        variant={'persistent'}
+        anchor={"left"}
+        open={isOpenMenuLeft}
         onClose={() => {
-          dispatch(
-            setRightDrawer({
-              rightDrawer: false,
-              rightPage: null,
-            })
-          );
+          //
         }}
       >
-      </Drawer> */}
+        {renderLeftMenu()}
+      </Drawer>
+    );
+  }
+
+  const renderBottomDrawer = () => {
+    return (
       <Drawer
         className="main_bottom_drawer"
-        // swipeAreaWidth='80%'
-        // PaperProps={{
-        //   className: 'main_bottom_drawer_inner',
-        //   sx: {
-
-        //     height: '80vh',
-        //     maxWidth: '940px',
-        //     mb: "50px",
-        //     backgroundColor: 'rgba(0,0,0,0.2)',
-        //     borderWidth: 0,
-        //   },
-        // }}
-        // variant="temporary"
         variant="persistent"
         ModalProps={{
           keepMounted: true,
@@ -195,15 +123,25 @@ const MainLayout = () => {
         anchor={"bottom"}
         open={isBottomDrawer}
         onClose={() => {
-          // dispatch(
-          //   setChatDrawer({
-          //     chatDrawer: false,
-          //     chatPubKey: chatPubKey,
-          //     chatProfile: chatProfile,
-          //   })
-          // );
+          //
         }}
       ></Drawer>
+    );
+  }
+
+  //
+  return (
+    <Box className="main_bg">
+      <GFTHead />
+      <Box className={'main_frame'}>
+        {!match_mobile && isOpenMenuLeft && renderLeftMenu()}
+        <Box className="main_content">
+          <Outlet />
+        </Box>
+      </Box>
+      {rednerRightDrawer()}
+      {match_mobile && renderLeftDrawer()}
+      {renderBottomDrawer()}
       <GLoginDialog />
       {/* {loggedOut === true && <GLoginDialog />} */}
     </Box>

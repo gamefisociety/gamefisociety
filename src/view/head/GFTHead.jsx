@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./GFTHead.scss";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useWeb3React } from "@web3-react/core";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,12 +33,10 @@ import GUserMenu from 'view/head/GUserMenu';
 import {
   setIsOpen,
   setIsOpenWallet,
+  setOpenMenuLeft,
 } from "module/store/features/dialogSlice";
-import { default_avatar } from "module/utils/xdef";
-import { logout } from "module/store/features/loginSlice";
 import ic_logo from "../../asset/image/logo/ic_logo.png";
 import ic_wallet from "../../asset/image/home/ic_wallet.png";
-import { EventKind } from "nostr/def";
 
 const ProfileTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -51,10 +50,13 @@ const ProfileTooltip = styled(({ className, ...props }) => (
 }));
 
 const GFTHead = () => {
+  const match_mobile = useMediaQuery('(max-width:768px)');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { loggedOut, publicKey } = useSelector((s) => s.login);
+  const { isOpenMenuLeft } = useSelector((s) => s.dialog);
   const { profile, relays } = useSelector((s) => s.profile);
   const { dms } = useSelector((s) => s.society);
   const [profileOpen, setProfileOPen] = React.useState(false);
@@ -103,26 +105,10 @@ const GFTHead = () => {
     handleMobileMenuClose();
   };
 
-  const openUserHome = () => {
-    navigate("/userhome/" + publicKey);
-    handleMenuClose();
-  };
-
   const openProfile = () => {
     navigate("/profile", {
       state: { info: { ...profile }, pubkey: publicKey },
     });
-    handleMenuClose();
-  };
-
-  const openSociety = () => {
-    dispatch(
-      setDrawer({
-        isDrawer: true,
-        placeDrawer: "right",
-        cardDrawer: "follow",
-      })
-    );
     handleMenuClose();
   };
 
@@ -147,11 +133,6 @@ const GFTHead = () => {
     );
   };
 
-  const openSetting = () => {
-    handleMenuClose();
-    navigate("/setting");
-  };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -161,32 +142,6 @@ const GFTHead = () => {
     // setNotifycationNum(dms.length);
   }, [dms]);
 
-  const getAvatarPicture = () => {
-    if (profile && profile.picture && profile.picture !== "default") {
-      return profile.picture;
-    }
-    return "";
-  }
-
-  const getDisplayName = () => {
-    if (profile && profile.display_name) {
-      return profile.display_name;
-    }
-    if (publicKey !== "") {
-      return 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length)
-    }
-    return 'gfs';
-  }
-
-  const getName = () => {
-    if (profile && profile.name) {
-      return profile.name;
-    }
-    if (publicKey !== "") {
-      return '@' + publicKey.substring(publicKey.length - 4, publicKey.length)
-    }
-    return '@gfs';
-  }
 
   const renderUserMenu = (<GUserMenu />);
 
@@ -257,7 +212,7 @@ const GFTHead = () => {
 
   const renderLogout = () => {
     return (
-      <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
+      <Box sx={{ alignItems: "center" }}>
         <IconButton
           sx={{ mr: "12px" }}
           size="large"
@@ -367,7 +322,10 @@ const GFTHead = () => {
       <GFetchMetadata logout={loggedOut} pubkey={publicKey} />
       <GListenDM logout={loggedOut} pubkey={publicKey} />
       <Toolbar className="toolbar_bg">
-        <Box className={'logo_menu'}>
+        <Box className={'logo_menu'} onClick={() => {
+          console.log('isOpenMenuLeft', isOpenMenuLeft);
+          dispatch(setOpenMenuLeft(!isOpenMenuLeft));
+        }}>
           <IconButton
             size="large"
             edge="start"
@@ -385,9 +343,9 @@ const GFTHead = () => {
             onClick={clickLogo}
           />
         </Box>
-        <GSearch />
+        {!match_mobile && <GSearch />}
         {loggedOut === true ? renderLogout() : renderLogin()}
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+        {/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
             aria-label="show more"
@@ -398,9 +356,9 @@ const GFTHead = () => {
           >
             <MoreIcon />
           </IconButton>
-        </Box>
+        </Box> */}
       </Toolbar >
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
     </Box >
   );
 };
