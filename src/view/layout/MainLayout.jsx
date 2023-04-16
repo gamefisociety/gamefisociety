@@ -80,6 +80,7 @@ const MainLayout = () => {
       >
         {cardDrawer === "follow" && <GSociety />}
         {cardDrawer === "society-dm" && <GSocietyDM />}
+        {cardDrawer === "society-chat" && <GFTChat chatPK={chatPubKey} />}
         {cardDrawer === "society-chat-group" && <GChatGroup />}
         {cardDrawer === "relays" && <GRelays />}
         {cardDrawer === "relay-show" && <GRelaysShow />}

@@ -9,20 +9,17 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
-
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import PropTypes from "prop-types";
+import GFTChat from "view/page/GFTChat";
 
-import { useFollowPro } from "nostr/protocal/FollowPro";
+import PropTypes from "prop-types";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub } from "nostr/NostrUtils";
-//
 import { useChatPro } from "nostr/protocal/ChatPro";
 import UserDataCache from 'db/UserDataCache';
-import { setChatDrawer } from "module/store/features/dialogSlice";
 
 import logo_chat from "../../asset/image/social/logo_chat.png";
 
@@ -62,6 +59,8 @@ const GSocietyDM = (props) => {
   const navigate = useNavigate();
   const MetadataPro = useMetadataPro();
   const { publicKey, privateKey } = useSelector((s) => s.login);
+  const [chatState, setChatState] = useState(0);
+  const [chatPubkey, setChatPubkey] = useState(null);
   const [datas, setDatas] = useState([]);
 
   const dispatch = useDispatch();
@@ -103,19 +102,11 @@ const GSocietyDM = (props) => {
 
   //
   useEffect(() => {
-
     fetchAllChats(publicKey);
-
-    return () => { };
-  }, []);
-
-  useEffect(() => {
-
     return () => { };
   }, []);
 
   const renderFollowing = () => {
-
     return (
       <List className="list_bg">
         {datas.map((item, index) => {
@@ -137,13 +128,8 @@ const GSocietyDM = (props) => {
                     height: "40px",
                   }}
                   onClick={() => {
-                    dispatch(
-                      setChatDrawer({
-                        chatDrawer: true,
-                        chatPubKey: item.msg.pubkey,
-                        chatProfile: info,
-                      })
-                    );
+                    setChatState(1);
+                    setChatPubkey(item.msg.pubkey);
                   }}
                 >
                   <img src={logo_chat} width="40px" alt="chat" />
@@ -181,7 +167,13 @@ const GSocietyDM = (props) => {
 
   return (
     <Box className={'society_dm_box_bg'}>
-      {renderFollowing()}
+      {chatState === 0 && renderFollowing()}
+      {chatState === 1 && <GFTChat chatPK={chatPubkey} callback={(msg) => {
+        if (msg === 'msg_back') {
+          setChatState(0);
+          setChatPubkey(null);
+        }
+      }} />}
     </Box>
   );
 };

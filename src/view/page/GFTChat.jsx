@@ -1,4 +1,6 @@
 import { React, useEffect, useState, useRef, useCallback } from "react";
+import "./GFTChat.scss";
+
 import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -6,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import { VariableSizeList as List } from "react-window";
 import closeImg from "./../../asset/image/social/close.png";
 import dmLeftImg from "./../../asset/image/social/dm_left.png";
@@ -16,8 +19,7 @@ import { EventKind } from "nostr/def";
 import useNostrEvent from "nostr/NostrEvent";
 import DMCache from "db/DMCache";
 import { default_avatar } from "module/utils/xdef";
-import "./GFTChat.scss";
-import { Divider } from "../../../node_modules/@mui/material/index";
+import UserDataCache from 'db/UserDataCache';
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
   const rowRef = useRef();
@@ -67,14 +69,15 @@ let subDM = null;
 
 const GFTChat = (props) => {
   const listRef = useRef();
-  const { chatPK, chatProfile } = props;
+  const { chatPK, callback } = props;
   const { publicKey, privateKey } = useSelector((s) => s.login);
   const chatPro = useChatPro();
+  const [chatProfile, setChatProfile] = useState(null);
   const [chatData, setChatData] = useState([]);
   const [inValue, setInValue] = useState("");
 
   const nostrEvent = useNostrEvent();
-
+  const user_cache = UserDataCache();
   const dm_cache = DMCache();
 
   const sizeMap = useRef({});
@@ -157,18 +160,48 @@ const GFTChat = (props) => {
   };
 
   const avatar = () => {
-    return chatProfile.picture && chatProfile.picture !== "default"
-      ? chatProfile.picture
-      : "";
+    if (chatProfile && chatProfile.content && chatProfile.content !== '') {
+      try {
+        let cxt = JSON.parse(chatProfile.content);
+        if (cxt.picture) {
+          return cxt.picture;
+        }
+        return default_avatar;
+      } catch (e) {
+        return default_avatar;
+      }
+    }
+    return default_avatar;
   };
 
   const displayName = () => {
-    return chatProfile.display_name
-      ? chatProfile.display_name
-      : "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length);
+    if (chatProfile && chatProfile.content && chatProfile.content !== '') {
+      try {
+        let cxt = JSON.parse(chatProfile.content);
+        // console.log("displayName", cxt);
+        if (cxt.display_name) {
+          return cxt.display_name;
+        }
+        if (cxt.displayName) {
+          return cxt.displayName;
+        }
+        return "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length);
+      } catch (e) {
+        return "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length);
+      }
+    }
+    return "Nostr#" + chatPK.substring(chatPK.length - 4, chatPK.length);
   };
 
   useEffect(() => {
+    let profile = user_cache.getMetadata(chatPK);
+    console.log('chat111', profile);
+    if (profile) {
+      setChatProfile({ ...profile });
+    } else {
+      //
+    }
+    //
     let chat_datas = dm_cache.get(chatPK);
     if (chat_datas) {
       setChatData(chat_datas.concat());
@@ -186,7 +219,7 @@ const GFTChat = (props) => {
     if (chatData.length > 0) {
       scrollToBottom();
     }
-    return () => {};
+    return () => { };
   }, [chatData]);
 
   const renderHeader = () => {
@@ -195,7 +228,9 @@ const GFTChat = (props) => {
         <Icon
           className="goback"
           onClick={() => {
-            props.closeHandle();
+            if (callback) {
+              callback('msg_back');
+            }
           }}
         >
           <img src={dmLeftImg} width="38px" alt="dmleft" />
