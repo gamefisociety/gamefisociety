@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./GNoteTags.scss";
 import { useWeb3React } from "@web3-react/core";
-import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setIsOpen } from "module/store/features/dialogSlice";
 import GSTSubjectsBase from "web3/GSTSubjects";
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import CircularProgress from "@mui/material/CircularProgress";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
@@ -184,10 +183,14 @@ const GNoteTags = (props) => {
           sx={{
             width: "80%",
             marginBottom: "10px",
+            backgroundColor: "#1C6CF9",
+            "&:hover": {
+              backgroundColor: "#368AF9",
+            },
           }}
           onClick={handleClickOpen}
         >
-          {"Create"}
+          {"CREATE"}
         </Button>
         <Button
           className={curTag === "all" ? "tag_btn_selected" : "tag_btn"}
@@ -198,6 +201,37 @@ const GNoteTags = (props) => {
         >
           {"#ALL"}
         </Button>
+        {/* <AutoSizer>
+          {({ height, width }) => (
+            <FixedSizeList
+              height={height}
+              width={width}
+              itemSize={40}
+              itemCount={tags.length}
+              itemData={tags}
+            >
+              {({ data, index, style }) => (
+                <Box style={style}>
+                  <Tooltip
+                    title={"#" + data[index].name}
+                    placement="right"
+                    key={"tag-index-" + index}
+                  >
+                    <Button
+                      className={data[index].name === curTag ? "tag_btn_selected" : "tag_btn"}
+                      onClick={() => {
+                        setCurTag(data[index].name);
+                        props.clickCallback(data[index].name);
+                      }}
+                    >
+                      {"#" + data[index].name}
+                    </Button>
+                  </Tooltip>
+                </Box>
+              )}
+            </FixedSizeList>
+          )}
+        </AutoSizer> */}
         {tags.map((item, index) => {
           let isSelect = item.name === curTag;
           const title = "#" + item.name;
@@ -236,7 +270,7 @@ const GNoteTags = (props) => {
             dispatch(setIsOpen(true));
           }}
         >
-          {"Load Tags"}
+          {"LOAD TAGS"}
         </Button>
       </Box>
     );
@@ -265,7 +299,7 @@ const GNoteTags = (props) => {
               color: "#FFFFFF",
             }}
           >
-            {"Create A Tag"}
+            {"CREATE A TAG"}
           </Typography>
           <Box
             sx={{

@@ -453,7 +453,7 @@ const GRelays = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "flex-start",
+                  justifyContent: "space-between",
                 }}
               >
                 <TextField
@@ -516,7 +516,7 @@ const GRelays = () => {
                 setMode("list");
               }}
             >
-              {"Save"}
+              {"SAVE"}
             </Button>
           ) : null}
         </Box>
