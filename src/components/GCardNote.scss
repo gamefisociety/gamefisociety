@@ -35,12 +35,16 @@
         padding-right: 60px;
         padding-top: 18px;
         padding-bottom: 18px;
-        height: auto;
-        display: flex;
+        display: block;
+        // display: flex;
         flex-direction: column;
         align-items:flex-start ;
         justify-content: flex-start;
         cursor: pointer;
+        white-space: pre-line;
+        word-wrap: break-word;
+        // word-break:break-all;
+        // overflow-wrap:break-word;
         .inner_img {
             height: 400px;
             margin-top: 4px;

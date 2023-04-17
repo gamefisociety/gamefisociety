@@ -542,7 +542,7 @@ const GCardNote = (props) => {
         </Typography>
       </Box>
       {renderRepostDlg()}
-      {renderRepostDlg()}
+      {renderReportDlg()}
     </Card>
   );
 };
