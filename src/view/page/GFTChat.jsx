@@ -300,14 +300,14 @@ const GFTChat = (props) => {
           itemData={chatData}
         >
           {({ data, index, style }) => (
-            <div style={style}>
+            <Box style={style}>
               <ListRow
                 data={data}
                 index={index}
                 setSize={setSize}
                 chatPK={chatPK}
               />
-            </div>
+            </Box>
           )}
         </List>
       </Box>

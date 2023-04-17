@@ -564,18 +564,21 @@ const GRelays = () => {
               itemData={relays}
             >
               {({ data, index, style }) => (
-                <GRelayItem
-                  relay={data[index]}
-                  openDetail={() => {
-                    setMode("detail");
-                    setDetailRelay(data[index]);
-                  }}
-                  openDel={() => {
-                    delInfo.open = true;
-                    delInfo.relay = data[index];
-                    setDelInfo({ ...delInfo });
-                  }}
-                />
+                <Box style={style}>
+                  <GRelayItem
+                    style={style}
+                    relay={data[index]}
+                    openDetail={() => {
+                      setMode("detail");
+                      setDetailRelay(data[index]);
+                    }}
+                    openDel={() => {
+                      delInfo.open = true;
+                      delInfo.relay = data[index];
+                      setDelInfo({ ...delInfo });
+                    }}
+                  />
+                </Box>
               )}
             </FixedSizeList>
           )}
