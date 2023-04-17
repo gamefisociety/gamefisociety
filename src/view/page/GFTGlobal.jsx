@@ -120,25 +120,32 @@ const GFTGlobal = () => {
             );
           })}
         </List>
-        <Typography
-          className={"global_loadmore"}
-          onClick={() => {
-            loadMore();
-          }}
-        >
-          {"LOAD MORE"}
-        </Typography>
+        {data.length > 0 ? (
+          <Typography
+            className={"global_loadmore"}
+            onClick={() => {
+              loadMore();
+            }}
+          >
+            {"LOAD MORE"}
+          </Typography>
+        ) : null}
       </Box>
     );
   };
 
   return (
-    <Paper className={"global_bg"} elevation={0}>
-      {<GNoteTags label={label} clickCallback={(tag)=>{
-        if(label !== tag){
-          navigate("/global/" + tag);
-        }
-      }}/>}
+    <Box className={"global_bg"}>
+      {
+        <GNoteTags
+          label={label}
+          clickCallback={(tag) => {
+            if (label !== tag) {
+              navigate("/global/" + tag);
+            }
+          }}
+        />
+      }
       {renderContent()}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -149,7 +156,7 @@ const GFTGlobal = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Paper>
+    </Box>
   );
 };
 
