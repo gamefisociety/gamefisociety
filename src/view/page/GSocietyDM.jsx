@@ -70,8 +70,17 @@ const GSocietyDM = (props) => {
     nostrWorker.fetch_chatCache_notes(privateKey, publicKey, subDM, null, (info, client) => {
       chatArrayInfo(array, info);
     });
+    const filterOtherDM = chatPro.getMyOtherDM();
+    subDM = BuildSub("dm_cha_other_meta", [filterOtherDM]);
+    nostrWorker.fetch_chatCache_notes(privateKey, publicKey, subDM, null, (info, client) => {
+      console.log(info);
+    });
   };
+
+
+
   const chatArrayInfo = (array, info) => {
+    console.log(info);
     let forData = [];
     array.push(info);
     array.sort((a, b) => {

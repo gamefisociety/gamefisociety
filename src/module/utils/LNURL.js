@@ -5,8 +5,6 @@ import Helpers from '../../view/utils/Helpers';
 
 const PayServiceTag = 'payRequest';
 
-
-
 export class LNURLError extends Error {
 
   constructor(code, msg) {
@@ -66,7 +64,6 @@ export class LNURL {
   async getInvoice(amount, comment, zap) {
     const callback = new URL(this.#service?.callback);
     const query = new Map();
-
     if (callback.search.length > 0) {
       callback.search
         .slice(1)

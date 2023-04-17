@@ -28,10 +28,9 @@ const GChatItem = forwardRef((props, ref) => {
   const { publicKey } = useSelector((s) => s.login);
   const dispatch = useDispatch();
   const followPro = useFollowPro();
-  const [metaInfo, setMetaInfo] = useState(null);
-
   const metadataPro = useMetadataPro();
   const userCache = UserDataCache();
+  const [metaInfo, setMetaInfo] = useState(userCache.getMetadata(pubkey));
 
   useImperativeHandle(ref, () => (
     {

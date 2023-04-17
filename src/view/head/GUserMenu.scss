@@ -7,8 +7,7 @@
     flex-direction: column;
     align-items: center;
     justify-items: flex-start;
-    background-color: 191A1B;
-    
+    background-color: #191A1B;
     .menu_first {
         width: 100%;
         padding-left: 8px;
@@ -68,6 +67,7 @@
         font-weight: 500;
         text-align: left;
         color:#666666;
+        white-space: nowrap;
     }
 
     .icon_profil {

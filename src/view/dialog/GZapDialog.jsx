@@ -13,8 +13,8 @@ import { useZapPro } from "nostr/protocal/ZapPro";
 class ZapType {
     static PublicZap = 1;
     static AnonZap = 2;
-    static  PrivateZap = 3;
-    static  NonZap = 4;
+    static PrivateZap = 3;
+    static NonZap = 4;
   }
 
 const GZapDialog = (props) => {
@@ -36,8 +36,6 @@ const canComment = handler
 ? (canZap && zapType !== ZapType.NonZap) || handler.maxCommentLength > 0
 : false;
 
-
- 
 const emojis= {
     1_000: '👍',
     5_000: '💜',
@@ -47,7 +45,6 @@ const emojis= {
     100_000: '🚀',
     1_000_000: '🤯',
   };
-
 
   function chunks(arr, length) {
     const result = [];
@@ -95,8 +92,7 @@ function renderAmounts(amount, amounts) {
           <div
             className={amount === a ? 'sat_amount active' : 'sat_amount'}
             key={a}
-            onClick={() => selectAmount(a)}
-          >
+            onClick={() => selectAmount(a)}>
             {emojis[a] && <>{emojis[a]}&nbsp;</>}
             {Helpers.formatAmount(a, 0)}
           </div>
@@ -120,10 +116,9 @@ function renderAmounts(amount, amounts) {
   const  loadInvoice = async ()=>{
     console.log(props.note);
       const chatEv = await zapPro.sendZap(comment, {id:props.note.id,pubKey:props.note.pubkey,relays:System.getWRelays()});
-    console.log(chatEv,"chat");
     try {
         const rsp = await handler.getInvoice(amount, comment, chatEv);
-        console.log(rsp,"bbbbbbbb");
+
         if (rsp.pr) {
           setInvoice(rsp.pr);
         //   await payWithWallet(rsp);
@@ -195,10 +190,10 @@ function renderAmounts(amount, amounts) {
     const renderwallet=()=>{
         return <div className="invoice">
             <Typography className="purl">
-              {lnurl }
+              {lnurl}
             </Typography>
             <Typography className="title">
-            Send zap to  @{JSON.parse(props.meta).name }
+            Send zap to  @{JSON.parse(props.meta).name}
             </Typography>
           {invoice && (
             <>
@@ -213,7 +208,7 @@ function renderAmounts(amount, amounts) {
             <div className='copy_send'  onClick={() => {
                 Helpers.copyToClipboard(invoice+"")
             }}>
-            Copy invoice
+                Copy invoice
             </div>
             <a className="link_open" href={`lightning:${invoice}`}>
                 Open wallet
@@ -224,8 +219,6 @@ function renderAmounts(amount, amounts) {
         </div>
     }
 
- 
-    
     return (
         <Dialog
             className={'dialog_zap_bg'}
@@ -239,9 +232,7 @@ function renderAmounts(amount, amounts) {
                     backgroundColor: 'rgba(15, 15, 15, 1)',
                     boxShadow: 'none',
                 },
-            }}
-        >
-
+            }}>
             {invoice!=null? renderwallet():renderContent()}
         </Dialog>
     );

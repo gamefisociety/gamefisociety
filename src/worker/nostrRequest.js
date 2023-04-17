@@ -8,23 +8,25 @@ import { EventKind } from "nostr/def";
 
 export const fetch_user_profile = (sub, curRelay, callback) => {
   let userDataCache = UserDataCache();
-  const newMsg = [];
+  const newMsg = new Map();
   System.BroadcastSub(
     sub,
     (tag, client, msg) => {
       if (tag === "EOSE") {
         System.BroadcastClose(sub, client, null);
         if (callback) {
-          callback(newMsg, client);
+          callback(Array.from(newMsg.values()), client);
         }
       } else if (tag === "EVENT") {
-        const ret = newMsg.find((item) => {
-          return item.id === msg.id;
-        });
-        if (!ret) {
-          newMsg.push(msg);
+        console.log("fetch_user_profile", msg);
+        const ret = newMsg.get(msg.pubkey);
+        if (ret) {
+          if (ret.created_at < msg.created_at) {
+            newMsg.set(msg.pubkey, msg);
+          }
+        } else {
+          newMsg.set(msg.pubkey, msg);
         }
-        // console.log("fetch_user_profile", msg);
         if (msg.kind === EventKind.SetMetadata) {
           userDataCache.pushMetadata(msg);
         }
@@ -218,13 +220,17 @@ export const fetch_chatCache_notes = (
         // globalNoteCache.pushNote(msg)
         let nostrEvent = useNostrEvent();
         try {
+          let keyp = msg.pubkey;
+          if(msg.pubkey===pubkey){
+            keyp = msg.tags[0][1]
+          }
           nostrEvent
-            .DecryptData(msg.content, privateKey, msg.pubkey)
+            .DecryptData(msg.content, privateKey, keyp)
             .then((dmsg) => {
               console.log(dmsg);
               if (dmsg) {
                 let flag = chatCache.pushChat(
-                  pubkey,
+                  keyp,
                   msg.id,
                   msg.pubkey,
                   msg.created_at,

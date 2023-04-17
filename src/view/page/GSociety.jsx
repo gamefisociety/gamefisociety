@@ -7,12 +7,6 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
-
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -264,25 +258,28 @@ const GSociety = (props) => {
               itemSize={60}
               itemCount={follows.length}
               itemData={follows}
+              overscanRowsCount={2}
             >
               {({ data, index, style }) => (
-                <GFollowItem
-                  pubkey={follows[index]}
-                  following={true}
-                  type={"following"}
-                  removeFollow={(pubkey) => {
-                    removeFollow(pubkey);
-                  }}
-                  addFollow={(pubkey) => {
-                    addFollow(pubkey);
-                  }}
-                  navCallback={(pubkey) => {
-                    navigate("/userhome/" + pubkey);
-                    if (callback) {
-                      callback();
-                    }
-                  }}
-                />
+                <Box style={style}>
+                  <GFollowItem
+                    pubkey={follows[index]}
+                    following={true}
+                    type={"following"}
+                    removeFollow={(pubkey) => {
+                      removeFollow(pubkey);
+                    }}
+                    addFollow={(pubkey) => {
+                      addFollow(pubkey);
+                    }}
+                    navCallback={(pubkey) => {
+                      navigate("/userhome/" + pubkey);
+                      if (callback) {
+                        callback();
+                      }
+                    }}
+                  />
+                </Box>
               )}
             </FixedSizeList>
           )}
@@ -333,7 +330,7 @@ const GSociety = (props) => {
   };
 
   return (
-    <Box className={"gsociety_box_bg"}>
+    <Box className={"bg"}>
       <Box className={"header_bg"}>
         <Button
           className={"header_btn"}

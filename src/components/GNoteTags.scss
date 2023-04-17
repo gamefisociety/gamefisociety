@@ -1,0 +1,48 @@
+.bg {
+    width: 120px;
+    height: calc(100vh - 24px);
+    .tags {
+        position: sticky;
+        top: 64px;
+        width: 100%;
+        height: 100%;
+        padding-top: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: transparent;
+
+        .tag_btn {
+            display: block;
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+
+        .tag_btn_selected {
+            display: block;
+            width: 100%;
+            font-family: Saira;
+            font-size: 14px;
+            color: #259eea;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+    }
+}

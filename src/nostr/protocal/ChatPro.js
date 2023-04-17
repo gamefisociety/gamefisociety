@@ -16,9 +16,16 @@ export const useChatPro = () => {
       filter['#p'] = [publicKey];
       return filter;
     },
+    getMyOtherDM: () => {
+      const filter = NostrFactory.createFilter();
+      filter['kinds'] = [EventKind.DirectMessage];
+      filter['authors'] = [publicKey];
+      return filter;
+    },
     getDM: (targetPubkey) => {
       const filter = NostrFactory.createFilter();
       filter['kinds'] = [EventKind.DirectMessage];
+      filter['authors'] = [publicKey,targetPubkey];
       filter['#p'] = [publicKey, targetPubkey];
       return filter;
     },
