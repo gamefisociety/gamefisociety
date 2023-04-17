@@ -97,9 +97,11 @@ const GFTChat = (props) => {
       if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
         console.log("direct message", msg);
         try {
+        
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
             .then((dmsg) => {
+              console.log(dmsg);
               if (dmsg) {
                 let flag = dm_cache.pushChat(
                   targetPubkey,
