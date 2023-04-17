@@ -27,7 +27,9 @@ const GMetaObjTest = forwardRef((props, ref) => {
                 //     // scene.createDefaultEnvironment();
                 // });
                 // onSuccess = null, onProgress = null, onError = null, pluginExtension = null
-                SceneLoader.ImportMesh("", 'asset/model/obj01/', 'cup_ferris.obj', scene, (meshes) => {
+
+                //"scenes/BrainStem/", "BrainStem.gltf"
+                SceneLoader.ImportMesh("", "./asset/model/", "baloons.obj", scene, (meshes) => {
                     // let mesh = meshes[0];
                     // mesh.showBoundingBox = true;
                     // mesh.scaling.x = 100;
