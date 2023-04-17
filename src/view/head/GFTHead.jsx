@@ -59,18 +59,18 @@ const GFTHead = () => {
   const { isOpenMenuLeft } = useSelector((s) => s.dialog);
   const { profile, relays } = useSelector((s) => s.profile);
   const { dms } = useSelector((s) => s.society);
-  const [profileOpen, setProfileOPen] = React.useState(false);
+  const [profileOpen, setProfileOpen] = React.useState(false);
   const [noticeNum, setNoticeNum] = React.useState(0);
   const [dmNum, setDmNum] = React.useState(0);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleTooltipClose = () => {
-    setProfileOPen(false);
+    setProfileOpen(false);
   };
 
   const handleTooltipOpen = () => {
-    setProfileOPen(true);
+    setProfileOpen(true);
   };
 
   const openDialog = () => {
