@@ -220,13 +220,17 @@ export const fetch_chatCache_notes = (
         // globalNoteCache.pushNote(msg)
         let nostrEvent = useNostrEvent();
         try {
+          let keyp = msg.pubkey;
+          if(msg.pubkey===pubkey){
+            keyp = msg.tags[0][1]
+          }
           nostrEvent
-            .DecryptData(msg.content, privateKey, msg.pubkey)
+            .DecryptData(msg.content, privateKey, keyp)
             .then((dmsg) => {
               console.log(dmsg);
               if (dmsg) {
                 let flag = chatCache.pushChat(
-                  pubkey,
+                  keyp,
                   msg.id,
                   msg.pubkey,
                   msg.created_at,
