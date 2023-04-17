@@ -29,19 +29,19 @@ const GMetaObjTest = forwardRef((props, ref) => {
                 // onSuccess = null, onProgress = null, onError = null, pluginExtension = null
 
                 //"scenes/BrainStem/", "BrainStem.gltf"
-                SceneLoader.ImportMesh("", "./asset/model/", "baloons.obj", scene, (meshes) => {
-                    // let mesh = meshes[0];
-                    // mesh.showBoundingBox = true;
+                SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/obj01/", "hotdog.obj", scene, (meshes) => {
+                    let mesh = meshes[0];
+                    mesh.showBoundingBox = true;
                     // mesh.scaling.x = 100;
                     // mesh.scaling.y = 100;
                     // mesh.scaling.z = 100;
-                    // var mat = new StandardMaterial("mat1", scene);
-                    // mat.alpha = 1.0;
-                    // mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
+                    var mat = new StandardMaterial("mat1", scene);
+                    mat.alpha = 1.0;
+                    mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
                     // var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", scene);
                     // mat.diffuseTexture = texture;
-                    // // mat.emissiveTexture = texture;
-                    // mesh.material = mat;
+                    // mat.emissiveTexture = texture;
+                    mesh.material = mat;
                     console.log('SceneLoader.ImportMesh', meshes, scene);
                     // scene.createDefaultCameraOrLight(true, true, true);
                     // scene.createDefaultEnvironment();
