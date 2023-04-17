@@ -30,7 +30,7 @@ const GUserMenu = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => { };
+  const handleProfileMenuOpen = (event) => {};
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -97,77 +97,68 @@ const GUserMenu = () => {
       return profile.picture;
     }
     return "";
-  }
+  };
 
   const getDisplayName = () => {
     if (profile && profile.display_name) {
       return profile.display_name;
     }
     if (publicKey !== "") {
-      return 'Nostr#' + publicKey.substring(publicKey.length - 4, publicKey.length)
+      return (
+        "Nostr#" + publicKey.substring(publicKey.length - 4, publicKey.length)
+      );
     }
-    return 'gfs';
-  }
+    return "gfs";
+  };
 
   const getName = () => {
     if (profile && profile.name) {
       return profile.name;
     }
     if (publicKey !== "") {
-      return '@' + publicKey.substring(publicKey.length - 4, publicKey.length)
+      return "@" + publicKey.substring(publicKey.length - 4, publicKey.length);
     }
-    return '@gfs';
-  }
+    return "@gfs";
+  };
 
-  // loggedOut, publicKey 
+  // loggedOut, publicKey
   return (
     <Box className="user_menu_bg">
-      <Box className={'menu_first'} onClick={openUserHome}>
-        <Avatar sx={{ width: "40px", height: "40px" }} edge="end" alt={getDisplayName()} src={getAvatarPicture()} />
-        <Box className={'menu_first_name'}>
-          <Typography className={'menu_label'}>
-            {getDisplayName()}
-          </Typography>
-          <Typography className={'menu_label2'}>
-            {getName()}
-          </Typography>
+      <Box className={"menu_first"} onClick={openUserHome}>
+        <Avatar
+          sx={{ width: "40px", height: "40px" }}
+          edge="end"
+          alt={getDisplayName()}
+          src={getAvatarPicture()}
+        />
+        <Box className={"menu_first_name"}>
+          <Typography className={"menu_label"}>{getDisplayName()}</Typography>
+          <Typography className={"menu_label2"}>{getName()}</Typography>
         </Box>
       </Box>
-      <Box className={'menu_item'} onClick={openProfile}>
-        <Box className={'icon_profil'} />
-        <Typography className={'menu_label'}>
-          {"Profile"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openProfile}>
+        <Box className={"icon_profil"} />
+        <Typography className={"menu_label"}>{"Profile"}</Typography>
       </Box>
-      <Box className={'menu_item'} onClick={openSociety}>
-        <Box className={'icon_society'} />
-        <Typography className={'menu_label'}>
-          {"Society"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openSociety}>
+        <Box className={"icon_society"} />
+        <Typography className={"menu_label"}>{"Society"}</Typography>
       </Box>
-      <Box className={'menu_item'} onClick={openRelays}>
-        <Box className={'icon_relays'} />
-        <Typography className={'menu_label'}>
-          {"Relays"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openRelays}>
+        <Box className={"icon_relays"} />
+        <Typography className={"menu_label"}>{"Relays"}</Typography>
       </Box>
-      <Box className={'menu_item'} onClick={openSetting}>
-        <Box className={'icon_settings'} />
-        <Typography className={'menu_label'}>
-          {"Settings"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openSetting}>
+        <Box className={"icon_settings"} />
+        <Typography className={"menu_label"}>{"Settings"}</Typography>
       </Box>
-      <Box className={'menu_item'} onClick={openMyNFT}>
-        <Box className={'icon_settings'} />
-        <Typography className={'menu_label'}>
-          {"My NFT"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openMyNFT}>
+        <Box className={"icon_settings"} />
+        <Typography className={"menu_label"}>{"My NFT"}</Typography>
       </Box>
-      <Box className={'menu_item'} onClick={openBlacklist}>
-        <Box className={'icon_settings'} />
-        <Typography className={'menu_label'}>
-          {"Black List"}
-        </Typography>
+      <Box className={"menu_item"} onClick={openBlacklist}>
+        <Box className={"icon_settings"} />
+        <Typography className={"menu_label"}>{"Black List"}</Typography>
       </Box>
       {/* <Button
                     sx={{
@@ -197,16 +188,15 @@ const GUserMenu = () => {
                         {"QR Code"}
                     </Typography>
                 </Button> */}
-      <Divider sx={{ width: '100%', py: '6px', backgroundColor: '0x0F0F0F' }} />
-      <Box className="menu_item"
+      <Divider sx={{ width: "100%", py: "6px", backgroundColor: "0x0F0F0F" }} />
+      <Box
+        className="menu_item"
         onClick={() => {
           dispatch(logout());
         }}
       >
-        <Box className={'icon_sign_out'} />
-        <Typography className={'menu_label'}>
-          {"Sign Out"}
-        </Typography>
+        <Box className={"icon_sign_out"} />
+        <Typography className={"menu_label"}>{"Sign Out"}</Typography>
       </Box>
     </Box>
   );
