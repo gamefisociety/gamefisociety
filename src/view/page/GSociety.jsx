@@ -330,7 +330,7 @@ const GSociety = (props) => {
   };
 
   return (
-    <Box className={"bg"}>
+    <Box className={"society_bg"}>
       <Box className={"header_bg"}>
         <Button
           className={"header_btn"}
