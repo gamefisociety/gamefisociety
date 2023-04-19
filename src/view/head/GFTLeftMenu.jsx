@@ -153,6 +153,7 @@ const GFTLeftMenu = () => {
     const navigate = useNavigate();
     const { activate, account, chainId, active, library, deactivate } = useWeb3React();
     const dispatch = useDispatch();
+    const { loggedOut, publicKey } = useSelector((s) => s.login);
 
     useEffect(() => {
         return () => {
@@ -181,9 +182,17 @@ const GFTLeftMenu = () => {
             navigate('/global/all');
             openMainContent();
         } else if (item.txt === 'POST & REPLY') {
+            if(loggedOut){
+                dispatch(setOpenLogin(true));
+                return;
+            }
             navigate('/post-reply');
             openMainContent();
         } else if (item.txt === 'DM') {
+            if(loggedOut){
+                dispatch(setOpenLogin(true));
+                return;
+            }
             dispatch(
                 setDrawer({
                     isDrawer: true,
@@ -192,6 +201,10 @@ const GFTLeftMenu = () => {
                 })
             );
         } else if (item.txt === 'CHANNEL') {
+            if(loggedOut){
+                dispatch(setOpenLogin(true));
+                return;
+            }
             dispatch(
                 setDrawer({
                     isDrawer: true,

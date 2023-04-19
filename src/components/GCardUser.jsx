@@ -19,7 +19,7 @@ import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 
-import { setDrawer } from "module/store/features/dialogSlice";
+import {setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setFollows } from "module/store/features/profileSlice";
@@ -33,7 +33,7 @@ const GCardUser = (props) => {
 
   const nostrWorker = useWorker(createNostrWorker);
   const { follows } = useSelector((s) => s.profile);
-  const { publicKey } = useSelector((s) => s.login);
+  const { loggedOut,publicKey } = useSelector((s) => s.login);
   const { pubkey } = props;
   const dispatch = useDispatch();
   //
@@ -264,7 +264,12 @@ const GCardUser = (props) => {
                 width: "40px",
                 height: "40px",
               }}
-              onClick={() => { }}
+              onClick={() => {
+                if(loggedOut){
+                  dispatch(setOpenLogin(true));
+                  return;
+                }
+               }}
             >
               <img src={logo_lighting} width="40px" alt="lighting" />
             </Button>
@@ -276,6 +281,10 @@ const GCardUser = (props) => {
               }}
               onClick={(event) => {
                 event.stopPropagation();
+                if(loggedOut){
+                  dispatch(setOpenLogin(true));
+                  return;
+                }
                 if (profile) {
                   dispatch(
                     setDrawer({
@@ -299,7 +308,12 @@ const GCardUser = (props) => {
                 borderRadius: "18px",
                 color: "text.primary",
               }}
-              onClick={() => {
+              onClick={() => {  
+                if(loggedOut){
+                dispatch(setOpenLogin(true));
+                return;
+              }
+
                 if (isFollow(pubkey) === true) {
                   removeFollow(pubkey);
                 } else {
