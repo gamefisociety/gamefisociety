@@ -91,7 +91,7 @@ const GFollowItem = (props) => {
       return (
         <Button
           variant="contained"
-          className={"button"}
+          className={following === true ? "button_unfollow" : "button_follow"}
           onClick={() => {
             if (following === true) {
               props.removeFollow(pubkey);
@@ -107,7 +107,7 @@ const GFollowItem = (props) => {
       return (
         <Button
           variant="contained"
-          className={"button"}
+          className={following === true ? "button_unfollow" : "button_follow"}
           onClick={() => {
             props.removeFollow(pubkey);
           }}

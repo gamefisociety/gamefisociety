@@ -52,7 +52,7 @@
     }
 
     .header_bg {
-        margin-top: 32px;
+        margin-top: 20px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -129,6 +129,34 @@
             font-family: Saira;
             font-size: 12px;
             background-color: #202122;
+        }
+
+        .button_follow {
+            position: absolute;
+            right: 20px;
+            width: 87px;
+            height: 32px;
+            font-family: Saira;
+            font-size: 12px;
+            background-color: #1C6CF9;
+
+            &:hover {
+                background-color: #368AF9,
+            }
+        }
+
+        .button_unfollow {
+            position: absolute;
+            right: 20px;
+            width: 87px;
+            height: 32px;
+            font-family: Saira;
+            font-size: 12px;
+            background-color: #272727;
+
+            &:hover {
+                background-color: #383838,
+            }
         }
 
     }
