@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "./GRelays.scss";
 
 import { useSelector, useDispatch } from "react-redux";
+import { setDrawer } from "module/store/features/dialogSlice";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
@@ -22,7 +23,6 @@ import { setRelays } from "module/store/features/profileSlice";
 import { useRelayPro } from "nostr/protocal/RelayPro";
 import logo_delete from "asset/image/social/icon_delete.png";
 import icon_detail from "asset/image/social/icon_detail.png";
-import icon_save from "asset/image/social/icon_save.png";
 import icon_back_white from "../../asset/image/social/icon_back_white.png";
 import { System } from "nostr/NostrSystem";
 
@@ -1013,8 +1013,31 @@ const GRelays = () => {
     }
     return null;
   };
+  const renderHeader = () => {
+    return (
+      <Box className={"header"}>
+        <Box
+          className="goback"
+          onClick={() => {
+            dispatch(
+              setDrawer({
+                isDrawer: false,
+                placeDrawer: "right",
+                cardDrawer: "relays",
+              })
+            );
+          }}
+        >
+          <img src={icon_back_white} width="38px" alt="Back" />
+          {"Back"}
+        </Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
+      </Box>
+    );
+  };
   return (
     <Box className={"relay_bg"}>
+      {renderHeader()}
       {renderContent()}
       {renderDlg()}
     </Box>

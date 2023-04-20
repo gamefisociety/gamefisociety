@@ -247,21 +247,9 @@ const GFTChat = (props) => {
           }}
         >
           <img src={dmLeftImg} width="38px" alt="dmleft" />
-          {"DMs"}
+          {"Back"}
         </Icon>
         <Box sx={{ flexGrow: 1 }}></Box>
-        {/* <Button
-        className="button"
-        sx={{
-          width: "38px",
-          height: "38px",
-        }}
-        onClick={() => {
-          props.closeHandle();
-        }}
-      >
-        <img src={closeImg} width="38px" alt="close" />
-      </Button> */}
       </Box>
     );
   };

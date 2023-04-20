@@ -5,6 +5,35 @@
     background-color: #0F0F0F;
     width: 400px;
     overflow: hidden;
+
+    .header {
+        width: 100%;
+        margin-top: 10px;
+        // padding-left: 14px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        .goback {
+            width: 100px;
+            height: 38px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            color: #FFFFFF;
+            font-size: 18px;
+            font-family: Saira;
+            font-weight: 500;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+    }
+
     .header_bg {
         margin-top: 32px;
         display: flex;
