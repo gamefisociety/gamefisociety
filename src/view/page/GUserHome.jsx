@@ -2,8 +2,8 @@ import { React, useEffect, useState } from "react";
 import "./GUserHome.scss";
 
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
-
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
+import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import GCardUser from "components/GCardUser";
@@ -20,14 +20,16 @@ import { BuildSub } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
 import icon_back from "../../asset/image/social/icon_back.png";
 
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 const GUserHome = (props) => {
-
   const nostrWorker = useWorker(createNostrWorker);
   const { pubkey } = useParams();
   // console.log("GUserHome enter", pubkey);
   const navigate = useNavigate();
+  const { publicKey } = useSelector((s) => s.login);
   const user_note_cache = UserNoteCache();
   const [info, setInfo] = useState(null);
   const [notes, setNotes] = useState([]);
@@ -43,7 +45,10 @@ const GUserHome = (props) => {
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
     const filterReactionPro = reactionPro.get(pub);
-    let profileTextNote = BuildSub("profile_textnote", [filterTextNote, filterReactionPro,]);
+    let profileTextNote = BuildSub("profile_textnote", [
+      filterTextNote,
+      filterReactionPro,
+    ]);
     nostrWorker.fetch_user_profile(profileTextNote, null, (data, client) => {
       // console.log('fetch_user_textnote data', data);
       data.map((item) => {
@@ -72,8 +77,12 @@ const GUserHome = (props) => {
     };
   }, [pubkey]);
 
-  return (
-    <Box className='userhome-bg'>
+  const isSelf = (key) => {
+    return publicKey === key;
+  };
+
+  const renderBack = () => {
+    return (
       <Box
         sx={{
           width: "100%",
@@ -109,17 +118,30 @@ const GUserHome = (props) => {
           </Typography>
         </Box>
       </Box>
-      {/* //  profile={{ ...info }}
-        // ownFollows={ownFollows.concat()}
-        // ownRelays={ownRelays} */}
+    );
+  };
+
+  return (
+    <Box className="userhome-bg">
+      {isSelf(pubkey) === false ? renderBack() : null}
       <GCardUser pubkey={pubkey} />
       <List sx={{ width: "100%", minHeight: "800px", overflow: "auto" }}>
         {notes.map((item, index) => {
           // console.log('userhome-note-index', item);
           if (item.kind === EventKind.TextNote) {
-            return <GCardNote key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />;
+            return (
+              <GCardNote
+                key={"userhome-note-index" + index + "-" + pubkey}
+                note={{ ...item }}
+              />
+            );
           } else if (item.kind === EventKind.Repost) {
-            return <GCardNoteRepost key={"userhome-note-index" + index + '-' + pubkey} note={{ ...item }} />;
+            return (
+              <GCardNoteRepost
+                key={"userhome-note-index" + index + "-" + pubkey}
+                note={{ ...item }}
+              />
+            );
           } else {
             return null;
           }
