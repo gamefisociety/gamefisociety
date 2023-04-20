@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { setDrawer } from "module/store/features/dialogSlice";
 import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
-
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -18,7 +18,7 @@ import { System } from "nostr/NostrSystem";
 import { BuildSub } from "nostr/NostrUtils";
 //
 import { setFollows } from "module/store/features/profileSlice";
-
+import icon_back_white from "../../asset/image/social/icon_back_white.png";
 import UserDataCache from "db/UserDataCache";
 
 const createNostrWorker = createWorkerFactory(() =>
@@ -91,7 +91,7 @@ const GFollowItem = (props) => {
       return (
         <Button
           variant="contained"
-          className={"button"}
+          className={following === true ? "button_unfollow" : "button_follow"}
           onClick={() => {
             if (following === true) {
               props.removeFollow(pubkey);
@@ -107,7 +107,7 @@ const GFollowItem = (props) => {
       return (
         <Button
           variant="contained"
-          className={"button"}
+          className={following === true ? "button_unfollow" : "button_follow"}
           onClick={() => {
             props.removeFollow(pubkey);
           }}
@@ -329,8 +329,32 @@ const GSociety = (props) => {
     );
   };
 
+  const renderHeader = () => {
+    return (
+      <Box className={"header"}>
+        <Box
+          className="goback"
+          onClick={() => {
+            dispatch(
+              setDrawer({
+                isDrawer: false,
+                placeDrawer: "right",
+                cardDrawer: "follow",
+              })
+            );
+          }}
+        >
+          <Box className="icon_back" />
+          <Typography className="text_back">{"Back"}</Typography>
+        </Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
+      </Box>
+    );
+  };
+
   return (
     <Box className={"society_bg"}>
+      {renderHeader()}
       <Box className={"header_bg"}>
         <Button
           className={"header_btn"}

@@ -18,14 +18,14 @@ export const fetch_user_profile = (sub, curRelay, callback) => {
           callback(Array.from(newMsg.values()), client);
         }
       } else if (tag === "EVENT") {
-        console.log("fetch_user_profile", msg);
-        const ret = newMsg.get(msg.pubkey);
+        // console.log("fetch_user_profile", msg);
+        const ret = newMsg.get(msg.id);
         if (ret) {
           if (ret.created_at < msg.created_at) {
-            newMsg.set(msg.pubkey, msg);
+            newMsg.set(msg.id, msg);
           }
         } else {
-          newMsg.set(msg.pubkey, msg);
+          newMsg.set(msg.id, msg);
         }
         if (msg.kind === EventKind.SetMetadata) {
           userDataCache.pushMetadata(msg);

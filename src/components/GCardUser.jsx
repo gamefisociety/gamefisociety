@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardUser.scss";
 
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
-import { hexToBech32 } from 'nostr/Util';
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
+import { hexToBech32 } from "nostr/Util";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -13,13 +13,11 @@ import Typography from "@mui/material/Typography";
 import { Button, Link } from "@mui/material";
 import copy from "copy-to-clipboard";
 import { default_banner, default_avatar } from "module/utils/xdef";
-import logo_chat from "../asset/image/social/logo_chat.png";
-import logo_lighting from "../asset/image/social/logo_lighting.png";
 import logo_key from "../asset/image/social/logo_key.png";
 import logo_copy from "../asset/image/social/logo_copy.png";
 import logo_link from "../asset/image/social/logo_link.png";
 
-import {setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
+import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { System } from "nostr/NostrSystem";
 import { setFollows } from "module/store/features/profileSlice";
@@ -27,13 +25,14 @@ import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { BuildSub, BuildCount } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
 //
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 const GCardUser = (props) => {
-
   const nostrWorker = useWorker(createNostrWorker);
   const { follows } = useSelector((s) => s.profile);
-  const { loggedOut,publicKey } = useSelector((s) => s.login);
+  const { loggedOut, publicKey } = useSelector((s) => s.login);
   const { pubkey } = props;
   const dispatch = useDispatch();
   //
@@ -52,10 +51,17 @@ const GCardUser = (props) => {
     let tmp_meta = null;
     nostrWorker.fetch_user_info(userInfoNote, null, (data, client) => {
       data.map((item) => {
-        if (item.kind === EventKind.SetMetadata && (tmp_meta === null || tmp_meta.created_at < item.created_at)) {
+        if (
+          item.kind === EventKind.SetMetadata &&
+          (tmp_meta === null || tmp_meta.created_at < item.created_at)
+        ) {
           tmp_meta = { ...item };
           SetMetadata({ ...item });
-        } else if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
+        } else if (
+          item.kind === EventKind.ContactList &&
+          (tmp_contactlist === null ||
+            tmp_contactlist.created_at < item.created_at)
+        ) {
           tmp_contactlist = { ...item };
           setContact({ ...item });
         }
@@ -67,7 +73,7 @@ const GCardUser = (props) => {
     const filterFollowingPro = followPro.getFollowings(pub);
     let userFollowing = BuildCount("userinfo", [filterFollowingPro]);
     nostrWorker.fetch_user_info(userFollowing, null, (data, client) => {
-      console.log('data count', data);
+      console.log("data count", data);
       data.map((item) => {
         // if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
         //   setContact({ ...item });
@@ -107,87 +113,93 @@ const GCardUser = (props) => {
   };
 
   useEffect(() => {
-    if (metadata && metadata.content !== '') {
+    if (metadata && metadata.content !== "") {
       try {
         let tmp_profile = JSON.parse(metadata.content);
         setProfile({ ...tmp_profile });
       } catch (e) {
-        console.log('parse user profile error!', metadata.content);
+        console.log("parse user profile error!", metadata.content);
       }
     }
-    return () => { };
+    return () => {};
   }, [metadata]);
 
   useEffect(() => {
     fetchUserInfo(pubkey);
     // fetchFollowingCount(pubkey);
-    return () => { };
+    return () => {};
   }, [props]);
 
   const getBanner = () => {
-    if (profile && profile.banner && profile.banner !== '') {
+    if (profile && profile.banner && profile.banner !== "") {
       return profile.banner;
     }
     return default_banner;
-  }
+  };
 
   const getPictrue = () => {
-    if (profile && profile.picture && profile.picture !== '') {
+    if (profile && profile.picture && profile.picture !== "") {
       return profile.picture;
     }
     return "";
-  }
+  };
 
   const getName = () => {
-    if (profile && profile.name && profile.name !== '') {
-      return '@' + profile.name;
+    if (profile && profile.name && profile.name !== "") {
+      return "@" + profile.name;
     }
-    if (profile && profile.username && profile.username !== '') {
-      return '@' + profile.username;
+    if (profile && profile.username && profile.username !== "") {
+      return "@" + profile.username;
     }
-    return '@default';
-  }
+    return "@default";
+  };
 
   const getDisplayName = () => {
-    if (profile && profile.displayName && profile.displayName !== '') {
+    if (profile && profile.displayName && profile.displayName !== "") {
       return profile.displayName;
     }
-    if (profile && profile.display_name && profile.display_name !== '') {
+    if (profile && profile.display_name && profile.display_name !== "") {
       return profile.display_name;
     }
     if (metadata) {
-      return "Nostr#" + metadata.pubkey.substring(metadata.pubkey.length - 4, metadata.pubkey.length);
+      return (
+        "Nostr#" +
+        metadata.pubkey.substring(
+          metadata.pubkey.length - 4,
+          metadata.pubkey.length
+        )
+      );
     }
-    return 'default';
-  }
+    return "default";
+  };
 
   const getAbout = () => {
-    if (profile && profile.about && profile.about !== '') {
+    if (profile && profile.about && profile.about !== "") {
       return profile.about;
     }
-    return 'no about';
-  }
+    return "no about";
+  };
 
   const getWebsite = () => {
-    if (profile && profile.website && profile.website !== '') {
+    if (profile && profile.website && profile.website !== "") {
       return profile.website;
     }
-    return 'no website';
-  }
+    return "no website";
+  };
 
   const getFollowers = () => {
     if (contact) {
       return contact.tags.length;
     }
     return 0;
-  }
+  };
 
   const getFollowings = () => {
     return 0;
-  }
+  };
 
   const getRelayNum = () => {
-    if (contact && contact.content && contact.content !== '') {
+    if (contact && contact.content && contact.content !== "") {
       try {
         let tmp_relays = JSON.parse(contact.content);
         let num = 0;
@@ -203,12 +215,12 @@ const GCardUser = (props) => {
         }
         return num;
       } catch (e) {
-        console.log('parse user relay num error!', contact.content);
+        console.log("parse user relay num error!", contact.content);
         return 0;
       }
     }
     return 0;
-  }
+  };
 
   const isSelf = (key) => {
     return publicKey === key;
@@ -218,10 +230,9 @@ const GCardUser = (props) => {
     return follows.includes(key);
   };
 
-
   //#1F1F1F
   return (
-    <Card className='carduser-bg'>
+    <Card className="carduser-bg">
       <CardContent
         sx={{
           padding: "12px",
@@ -258,30 +269,20 @@ const GCardUser = (props) => {
               alt={getDisplayName()}
               src={getPictrue()}
             />
-            <Button
-              className="button"
-              sx={{
-                width: "40px",
-                height: "40px",
-              }}
+            <Box
+              className="btn_Lighting"
               onClick={() => {
-                if(loggedOut){
+                if (loggedOut) {
                   dispatch(setOpenLogin(true));
                   return;
                 }
-               }}
-            >
-              <img src={logo_lighting} width="40px" alt="lighting" />
-            </Button>
-            <Button
-              className="button"
-              sx={{
-                width: "40px",
-                height: "40px",
               }}
+            />
+            <Box
+              className="btn_dm"
               onClick={(event) => {
                 event.stopPropagation();
-                if(loggedOut){
+                if (loggedOut) {
                   dispatch(setOpenLogin(true));
                   return;
                 }
@@ -296,33 +297,31 @@ const GCardUser = (props) => {
                   );
                 }
               }}
-            >
-              <img src={logo_chat} width="40px" alt="chat" />
-            </Button>
-            {isSelf(pubkey) === false && <Button
-              variant="contained"
-              sx={{
-                width: "96px",
-                height: "36px",
-                backgroundColor: "#006CF9",
-                borderRadius: "18px",
-                color: "text.primary",
-              }}
-              onClick={() => {  
-                if(loggedOut){
-                dispatch(setOpenLogin(true));
-                return;
-              }
-
-                if (isFollow(pubkey) === true) {
-                  removeFollow(pubkey);
-                } else {
-                  addFollow(pubkey);
+            />
+            {isSelf(pubkey) === false && (
+              <Button
+                variant="contained"
+                className={
+                  isFollow(pubkey) === true
+                    ? "button_unfollow"
+                    : "button_follow"
                 }
-              }}
-            >
-              {isFollow(pubkey) === true ? "Unfollow" : "Follow"}
-            </Button>}
+                onClick={() => {
+                  if (loggedOut) {
+                    dispatch(setOpenLogin(true));
+                    return;
+                  }
+
+                  if (isFollow(pubkey) === true) {
+                    removeFollow(pubkey);
+                  } else {
+                    addFollow(pubkey);
+                  }
+                }}
+              >
+                {isFollow(pubkey) === true ? "Unfollow" : "Follow"}
+              </Button>
+            )}
           </Box>
           <Box
             sx={{
@@ -393,7 +392,7 @@ const GCardUser = (props) => {
                   color="#919191"
                   align={"left"}
                 >
-                  {hexToBech32('npub', pubkey)}
+                  {hexToBech32("npub", pubkey)}
                 </Typography>
               </Box>
               <Button
@@ -402,7 +401,7 @@ const GCardUser = (props) => {
                   height: "36px",
                 }}
                 onClick={() => {
-                  if (copy(hexToBech32('npub', pubkey))) {
+                  if (copy(hexToBech32("npub", pubkey))) {
                     console.log("copy success");
                   } else {
                     console.log("copy failed");
@@ -464,92 +463,78 @@ const GCardUser = (props) => {
               borderColor: "#191A1B",
             }}
           >
+            <Box className={"labelBox"}>
+              <Typography
+                className={"lable_1"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (contact && Array.isArray(contact.tags)) {
+                    dispatch(
+                      setDrawer({
+                        isDrawer: true,
+                        placeDrawer: "right",
+                        cardDrawer: "follower-show",
+                        followerDrawer: contact.tags.concat(),
+                      })
+                    );
+                  }
+                }}
+              >
+                {getFollowers()}
+              </Typography>
+              <Typography className={"lable_2"}>{"Following"}</Typography>
+            </Box>
             <Box
-              sx={{
-                marginRight: "28px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
+              className={"labelBox"}
             >
-              <Typography className={'lable_1'} onClick={(event) => {
-                event.stopPropagation();
-                if (contact && Array.isArray(contact.tags)) {
+              <Typography
+                className={"lable_1"}
+                onClick={(event) => {
+                  event.stopPropagation();
                   dispatch(
                     setDrawer({
                       isDrawer: true,
                       placeDrawer: "right",
                       cardDrawer: "follower-show",
-                      followerDrawer: contact.tags.concat()
+                      followerDrawer: ownFollowings.concat(),
                     })
                   );
-                }
-              }}>
-                {getFollowers()}
-              </Typography>
-              <Typography className={'lable_2'}>
-                {"Following"}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                marginRight: "28px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
-            >
-              <Typography className={'lable_1'} onClick={(event) => {
-                event.stopPropagation();
-                dispatch(
-                  setDrawer({
-                    isDrawer: true,
-                    placeDrawer: "right",
-                    cardDrawer: "follower-show",
-                    followerDrawer: ownFollowings.concat(),
-                  })
-                );
-              }}>
+                }}
+              >
                 {getFollowings()}
               </Typography>
-              <Typography className={'lable_2'}>
-                {"Followers"}
-              </Typography>
+              <Typography className={"lable_2"}>{"Followers"}</Typography>
             </Box>
             <Box
-              sx={{
-                marginRight: "28px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
+              className={"labelBox"}
             >
-              <Typography className={'lable_1'} onClick={(event) => {
-                event.stopPropagation();
-                if (contact && contact.content && contact.content !== '') {
-                  try {
-                    let tmp_relays = JSON.parse(contact.content);
-                    dispatch(
-                      setDrawer({
-                        isDrawer: true,
-                        placeDrawer: "right",
-                        cardDrawer: "relay-show",
-                        relayDrawer: { ...tmp_relays }
-                      })
-                    );
-                  } catch (e) {
-                    console.log('parse user relay num error!', contact.content);
+              <Typography
+                className={"lable_1"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (contact && contact.content && contact.content !== "") {
+                    try {
+                      let tmp_relays = JSON.parse(contact.content);
+                      dispatch(
+                        setDrawer({
+                          isDrawer: true,
+                          placeDrawer: "right",
+                          cardDrawer: "relay-show",
+                          relayDrawer: { ...tmp_relays },
+                        })
+                      );
+                    } catch (e) {
+                      console.log(
+                        "parse user relay num error!",
+                        contact.content
+                      );
+                    }
                   }
-                }
-              }}>
+                }}
+              >
                 {getRelayNum()}
               </Typography>
-              <Typography className={'lable_2'}>
-                {"Relays"}
-              </Typography>
+              <Typography className={"lable_2"}>{"Relays"}</Typography>
             </Box>
           </Box>
         </Box>

@@ -19,7 +19,7 @@ import { setDrawer } from "module/store/features/dialogSlice";
 import useNostrEvent from "nostr/NostrEvent";
 import DMCache from "db/DMCache";
 import { default_avatar } from "module/utils/xdef";
-import UserDataCache from 'db/UserDataCache';
+import UserDataCache from "db/UserDataCache";
 
 const ListRow = ({ data, index, setSize, chatPK }) => {
   const rowRef = useRef();
@@ -97,7 +97,6 @@ const GFTChat = (props) => {
       if (tag === "EVENT" && msg && msg.kind === EventKind.DirectMessage) {
         console.log("direct message", msg);
         try {
-        
           nostrEvent
             .DecryptData(msg.content, privateKey, targetPubkey)
             .then((dmsg) => {
@@ -164,7 +163,7 @@ const GFTChat = (props) => {
   };
 
   const avatar = () => {
-    if (chatProfile && chatProfile.content && chatProfile.content !== '') {
+    if (chatProfile && chatProfile.content && chatProfile.content !== "") {
       try {
         let cxt = JSON.parse(chatProfile.content);
         if (cxt.picture) {
@@ -179,7 +178,7 @@ const GFTChat = (props) => {
   };
 
   const displayName = () => {
-    if (chatProfile && chatProfile.content && chatProfile.content !== '') {
+    if (chatProfile && chatProfile.content && chatProfile.content !== "") {
       try {
         let cxt = JSON.parse(chatProfile.content);
         // console.log("displayName", cxt);
@@ -199,7 +198,7 @@ const GFTChat = (props) => {
 
   useEffect(() => {
     let profile = user_cache.getMetadata(chatPK);
-    console.log('chat111', profile);
+    console.log("chat111", profile);
     if (profile) {
       setChatProfile({ ...profile });
     } else {
@@ -223,17 +222,17 @@ const GFTChat = (props) => {
     if (chatData.length > 0) {
       scrollToBottom();
     }
-    return () => { };
+    return () => {};
   }, [chatData]);
 
   const renderHeader = () => {
     return (
-      <Box className={"dm_header"}>
+      <Box className={"header"}>
         <Icon
           className="goback"
           onClick={() => {
             if (callback) {
-              callback('msg_back');
+              callback("msg_back");
             } else {
               dispatch(
                 setDrawer({
@@ -246,22 +245,10 @@ const GFTChat = (props) => {
             }
           }}
         >
-          <img src={dmLeftImg} width="38px" alt="dmleft" />
-          {"DMs"}
+          <Box className="icon_back" />
+          <Typography className="text_back">{"Back"}</Typography>
         </Icon>
         <Box sx={{ flexGrow: 1 }}></Box>
-        {/* <Button
-        className="button"
-        sx={{
-          width: "38px",
-          height: "38px",
-        }}
-        onClick={() => {
-          props.closeHandle();
-        }}
-      >
-        <img src={closeImg} width="38px" alt="close" />
-      </Button> */}
       </Box>
     );
   };
