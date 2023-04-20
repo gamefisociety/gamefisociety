@@ -10,6 +10,8 @@ import GCardUser from "components/GCardUser";
 import GCardNote from "components/GCardNote";
 import GCardNoteRepost from "components/GCardNoteRepost";
 import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import UserNoteCache from "db/UserNoteCache";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useTextNotePro } from "nostr/protocal/TextNotePro";
@@ -33,6 +35,7 @@ const GUserHome = (props) => {
   const user_note_cache = UserNoteCache();
   const [info, setInfo] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [ownRelays, setOwnRelays] = useState(null);
   const [ownFollows, setOwnFollows] = useState([]);
   const textNotePro = useTextNotePro();
@@ -40,22 +43,27 @@ const GUserHome = (props) => {
   const followPro = useFollowPro();
   const reactionPro = useReactionPro();
   //
-  const fetchTextNote = (pub) => {
+  const fetchTextNote = (pub, time) => {
     const filterTextNote = textNotePro.getNoteAndRepost();
     filterTextNote.authors = [pub];
     filterTextNote.limit = 50;
+    if (time === 0) {
+      filterTextNote.until = Date.now();
+    } else {
+      filterTextNote.until = time;
+    }
     const filterReactionPro = reactionPro.get(pub);
     let profileTextNote = BuildSub("profile_textnote", [
       filterTextNote,
       filterReactionPro,
     ]);
+    setLoading(true);
     nostrWorker.fetch_user_profile(profileTextNote, null, (data, client) => {
       // console.log('fetch_user_textnote data', data);
       data.map((item) => {
         if (item.kind === EventKind.TextNote) {
           user_note_cache.pushNote(item.pubkey, item);
         } else if (item.kind === EventKind.Repost) {
-          // console.log('fetch_user_profile Repost', item);
           user_note_cache.pushNote(item.pubkey, item);
         }
       });
@@ -64,18 +72,24 @@ const GUserHome = (props) => {
       if (target_note_cache) {
         setNotes(target_note_cache.concat());
       }
-      // console.log('user home', target_note_cache);
+      setLoading(false);
     });
   };
 
   useEffect(() => {
     setNotes([]);
     setInfo(null);
-    fetchTextNote(pubkey);
+    fetchTextNote(pubkey, 0);
     return () => {
       //
     };
   }, [pubkey]);
+
+  const loadMore = () => {
+    if (notes.length > 0) {
+      fetchTextNote(pubkey, notes[notes.length - 1].created_at);
+    }
+  };
 
   const isSelf = (key) => {
     return publicKey === key;
@@ -147,6 +161,25 @@ const GUserHome = (props) => {
           }
         })}
       </List>
+      {notes.length > 0 ? (
+        <Typography
+          className={"loadmore"}
+          onClick={() => {
+            loadMore();
+          }}
+        >
+          {"LOAD MORE"}
+        </Typography>
+      ) : null}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+        onClick={() => {
+          setLoading(false);
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   );
 };
