@@ -23,6 +23,7 @@ import xhelp from "module/utils/xhelp";
 import Helpers from "../../src/view/utils/Helpers";
 import GReportDlg from "view/dialog/GReportDlg";
 import GZapDialog from "view/dialog/GZapDialog";
+import { setOpenLogin, setDrawer } from "module/store/features/dialogSlice";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { useRepostPro } from "nostr/protocal/RepostPro";
 import { useReactionPro } from "nostr/protocal/ReactionPro";
@@ -245,6 +246,10 @@ const GCardNote = (props) => {
       let linght = metaCxt.lud16 || metaCxt.lud06;
       if (linght) {
         return <Box className="icon_pay" onClick={()=>{
+          if(loggedOut){
+            dispatch(setOpenLogin(true));
+            return;
+          }
           setShowZapModal(true)
         }}/>
       }
@@ -505,6 +510,10 @@ const GCardNote = (props) => {
         <Box
           className="icon_chat"
           onClick={() => {
+            if(loggedOut){
+              dispatch(setOpenLogin(true));
+              return;
+            }
             dispatch(
               setPost({
                 post: true,
@@ -519,6 +528,10 @@ const GCardNote = (props) => {
         <Box
           className={isYourRepost() ? "icon_trans_1" : "icon_trans"}
           onClick={(event) => {
+            if(loggedOut){
+              dispatch(setOpenLogin(true));
+              return;
+            }
             event.stopPropagation();
             repostOpen.open = true;
             repostOpen.note = { ...note };
@@ -531,6 +544,10 @@ const GCardNote = (props) => {
         <Box
           className={isYourReact() ? "icon_right_1" : "icon_right"}
           onClick={(event) => {
+            if(loggedOut){
+              dispatch(setOpenLogin(true));
+              return;
+            }
             event.stopPropagation();
             if (isYourReact() === false) {
               likeNote(note);

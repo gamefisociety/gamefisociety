@@ -31,11 +31,11 @@ export const createGround = (scene) => {
     const skybox = MeshBuilder.CreateBox("skyBox", { size: 5000.0 }, scene);
     skybox.material = skyMaterial;
 
-    const ground = MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
-    ground.material = new GridMaterial("groundMat");
-    ground.material.backFaceCulling = false;
-    ground.material.gridRatio = 10;
-    ground.material.mainColor = new Color3(163 / 255, 157 / 255, 157 / 255);
+    // const ground = MeshBuilder.CreateGround('ground', { width: 1000, height: 1000 }, scene);
+    // ground.material = new GridMaterial("groundMat");
+    // ground.material.backFaceCulling = false;
+    // ground.material.gridRatio = 10;
+    // ground.material.mainColor = new Color3(163 / 255, 157 / 255, 157 / 255);
     // ground.material.needAlphaBlend = true;
     // ground.material.alpha = 0.2;
     // ground.material.fogEnabled = false;

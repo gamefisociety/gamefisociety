@@ -27,34 +27,14 @@ const GMetaObjTest = forwardRef((props, ref) => {
                 //     // scene.createDefaultEnvironment();
                 // });
                 // onSuccess = null, onProgress = null, onError = null, pluginExtension = null
-
                 //"scenes/BrainStem/", "BrainStem.gltf"
-                SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/obj01/", "hotdog.obj", scene, (meshes) => {
+                // https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene/scene01.glb
+                SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene/", "scene01.glb", scene, (meshes) => {
                     // let mesh = meshes[0];
-                    meshes.map((item) => {
-                        if (item && item.material) {
-                            // item.material.ambientColor.r = 0.5;
-                            // item.material.ambientColor.g = 0.5;
-                            // item.material.ambientColor.b = 0.5;
-                            item.material.diffuseColor.r = 1.0;
-                            item.material.diffuseColor.g = 1.0;
-                            item.material.diffuseColor.b = 1.0;
-                        }
-                    });
-                    // mesh.showBoundingBox = true;
-                    // // mesh.scaling.x = 100;
-                    // // mesh.scaling.y = 100;
-                    // // mesh.scaling.z = 100;
-                    // var mat = new StandardMaterial("mat1", scene);
-                    // mat.alpha = 1.0;
-                    // mat.diffuseColor = new Color3(1.0, 1.0, 1.0);
-                    // // var texture = new Texture("https://i.postimg.cc/Vkj3nYx2/LOGO512-2.png", scene);
-                    // // mat.diffuseTexture = texture;
-                    // // mat.emissiveTexture = texture;
-                    // mesh.material = mat;
+                    // meshes.map((item) => {
+                    //     if (item && item.material) {}
+                    // });
                     console.log('SceneLoader.ImportMesh', meshes, scene);
-                    // scene.createDefaultCameraOrLight(true, true, true);
-                    // scene.createDefaultEnvironment();
                 });
             },
             render: (dt, scene) => {
