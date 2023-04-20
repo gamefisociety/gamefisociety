@@ -1,5 +1,5 @@
-.carduser-bg{
-    
+.carduser-bg {
+
     width: 100%;
     background-color: transparent;
 
@@ -7,27 +7,79 @@
         background-color: #0F0F0F !important;
     }
 
-    .lable_1 {
+    .labelBox {
+        margin-right: 28px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
         cursor: pointer;
-        color: #FFFFFF;
-        &:hover{
-            text-decoration:underline
+        &:hover {
+            filter: brightness(180%);
+            text-decoration: underline;
+        }
+
+        .lable_1 {
+            color: #FFFFFF;
+        }
+    
+        .lable_2 {
+            margin-left: 8px;
+            color: #666666;
         }
     }
 
-    .lable_2 {
-        margin-left: 8px;
-        // cursor: pointer;
-        color: #666666;
-        // &:hover{
-        //     // background-color: #3c3d3d00;
-        // }
+    .btn_Lighting {
+        margin-left: 12px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        background-image: url(../asset/image/social/logo_lighting.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            filter: brightness(180%);
+        }
     }
 
-    .button{
-        &:hover{
-            background-color: #3c3d3d00;
+    .btn_dm {
+        margin-left: 12px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        background-image: url(../asset/image/social/logo_chat.png);
+        background-size: 100% 100%;
+
+        &:hover {
+            filter: brightness(180%);
+        }
+    }
+
+    .button_follow {
+        margin-left: 12px;
+        width: 96px;
+        height: 36px;
+        font-family: Saira;
+        font-size: 14px;
+        background-color: #1C6CF9;
+        border-radius: 18px;
+
+        &:hover {
+            background-color: #368AF9,
+        }
+    }
+
+    .button_unfollow {
+        margin-left: 12px;
+        width: 96px;
+        height: 36px;
+        font-family: Saira;
+        font-size: 14px;
+        border-radius: 18px;
+        background-color: #272727;
+
+        &:hover {
+            background-color: #383838,
         }
     }
 }
-

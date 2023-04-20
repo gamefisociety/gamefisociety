@@ -97,39 +97,15 @@ const GUserHome = (props) => {
 
   const renderBack = () => {
     return (
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box className={"header"}>
         <Box
-          sx={{
-            cursor: "pointer",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
+          className="goback"
           onClick={() => {
             navigate(-1);
           }}
         >
-          <img src={icon_back} width="38px" alt="icon_back" />
-          <Typography
-            sx={{
-              marginLeft: "5px",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-          >
-            {"Global"}
-          </Typography>
+          <Box className="icon_back" />
+          <Typography className="text_back">{"Back"}</Typography>
         </Box>
       </Box>
     );
