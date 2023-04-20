@@ -30,10 +30,18 @@ const GMetaObjTest = forwardRef((props, ref) => {
                 //"scenes/BrainStem/", "BrainStem.gltf"
                 // https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene/scene01.glb
                 SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene/", "scene01.glb", scene, (meshes) => {
-                    // let mesh = meshes[0];
-                    // meshes.map((item) => {
-                    //     if (item && item.material) {}
-                    // });
+                    meshes.map((item) => {
+                        if (item) {
+                            item.convertToFlatShadedMesh();
+                        }
+                    });
+                    //
+                    for (var mat of scene.materials) {
+                        if (mat.albedoColor) {
+                            mat.originalAlbedo = mat.albedoColor.clone();
+                            mat.unlit = true;
+                        }
+                    }
                     console.log('SceneLoader.ImportMesh', meshes, scene);
                 });
             },
