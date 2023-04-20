@@ -299,7 +299,7 @@ const GCardNote = (props) => {
     // console.log('renderReplyLable', showName);
     return (
       <Stack direction={"row"} alignItems={"center"}>
-        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+        <Typography className="level2_lable_unhover" sx={{ ml: "12px" }}>
           {"reply to "}
         </Typography>
         <Typography

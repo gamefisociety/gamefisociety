@@ -444,7 +444,10 @@ const GCardUser = (props) => {
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
-                fontColor: "#00B7FF",
+                fontColor: "#0694fa",
+                "&:hover": {
+                  color: "#00a6ff",
+                },
               }}
             >
               {getWebsite()}
@@ -484,9 +487,7 @@ const GCardUser = (props) => {
               </Typography>
               <Typography className={"lable_2"}>{"Following"}</Typography>
             </Box>
-            <Box
-              className={"labelBox"}
-            >
+            <Box className={"labelBox"}>
               <Typography
                 className={"lable_1"}
                 onClick={(event) => {
@@ -505,9 +506,7 @@ const GCardUser = (props) => {
               </Typography>
               <Typography className={"lable_2"}>{"Followers"}</Typography>
             </Box>
-            <Box
-              className={"labelBox"}
-            >
+            <Box className={"labelBox"}>
               <Typography
                 className={"lable_1"}
                 onClick={(event) => {

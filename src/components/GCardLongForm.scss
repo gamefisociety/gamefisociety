@@ -162,13 +162,15 @@
     }
 
     .level3_lable {
-        color: #00B7FF;
+        color: #0694fa;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            color: #00a6ff;
+
         }
     }
 
