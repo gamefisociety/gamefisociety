@@ -344,8 +344,8 @@ const GSociety = (props) => {
             );
           }}
         >
-          <img src={icon_back_white} width="38px" alt="Back" />
-          {"Back"}
+          <Box className="icon_back" />
+          <Typography className="text_back">{"Back"}</Typography>
         </Box>
         <Box sx={{ flexGrow: 1 }}></Box>
       </Box>

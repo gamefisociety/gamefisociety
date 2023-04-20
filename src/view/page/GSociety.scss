@@ -9,7 +9,7 @@
     .header {
         width: 100%;
         margin-top: 10px;
-        // padding-left: 14px;
+        padding-left: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -22,15 +22,32 @@
             flex-direction: row;
             align-items: center;
             justify-content: flex-start;
-            color: #FFFFFF;
-            font-size: 18px;
-            font-family: Saira;
-            font-weight: 500;
+            border-radius: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
             cursor: pointer;
 
             &:hover {
                 background-color: #3c3d3d;
             }
+        }
+
+        .icon_back {
+            width: 28px;
+            height: 28px;
+            background-image: url(../../asset/image/social/icon_back_white.png);
+            background-size: 100% 100%;
+
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+
+        .text_back {
+            color: #FFFFFF;
+            font-size: 18px;
+            font-family: Saira;
+            font-weight: 500;
         }
     }
 
