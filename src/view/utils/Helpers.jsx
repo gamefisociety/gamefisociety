@@ -1,5 +1,6 @@
 import reactStringReplace from "react-string-replace";
-
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import { bech32 } from "bech32";
 import $ from "jquery";
 
@@ -294,18 +295,22 @@ export default {
         match = `lightning:${match}`;
       }
       return (
-        <a
-          style={{
-            color: "#0694fa",
-            hover: {
+        <Link
+          href={match}
+          underline="always"
+          sx={{
+            fontSize: "14px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            fontColor: "#0694fa",
+            "&:hover": {
               color: "#00a6ff",
             },
           }}
-          href={match}
           onClick={(e) => this.handleLightningLinkClick(e)}
         >
-          ⚡ Pay with lightning
-        </a>
+          {"⚡ Pay with lightning"}
+        </Link>
       );
     });
 
@@ -336,17 +341,23 @@ export default {
       return (
         <>
           {" "}
-          <a
-            style={{
-              color: "#0694fa",
-              hover: {
+          <Link
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            href={link}
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              fontColor: "#0694fa",
+              "&:hover": {
                 color: "#00a6ff",
               },
             }}
-            href={link}
           >
             @{link}
-          </a>
+          </Link>
         </>
       );
     });
@@ -357,11 +368,23 @@ export default {
       return (
         <>
           {" "}
-          <a style={{ color: "#0694fa",hover: {
+          <Link
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            href={link}
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              fontColor: "#0694fa",
+              "&:hover": {
                 color: "#00a6ff",
-              }, }} href={link}>
+              },
+            }}
+          >
             {match}
-          </a>
+          </Link>
         </>
       );
     });
@@ -372,17 +395,26 @@ export default {
       (match, i) => {
         const url = match.replace(/^(https:\/\/)?iris.to/, "");
         return (
-          <a
-            style={{ color: "#0694fa",hover: {
-              color: "#00a6ff",
-            }, }}
+          <Link
             key={match + i}
             target="_blank"
-            onClick={(e) => {}}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             href={url}
+            underline="always"
+            sx={{
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              fontColor: "#0694fa",
+              "&:hover": {
+                color: "#00a6ff",
+              },
+            }}
           >
             {match.replace(/^https?:\/\//, "").replace(/\/$/, "")}
-          </a>
+          </Link>
         );
       }
     );
@@ -410,15 +442,24 @@ export default {
     // highlight hashtags, link to /search/${encodeUriComponent(hashtag)}
     s = reactStringReplace(s, hashtagRegex, (match) => {
       return (
-        <a
-          style={{ color: "#0694fa",
-          "&:hover": {
-            color: "#00a6ff",
-          }, }}
+        <Link
           href={`/#/global/${match.replaceAll("#", "")}`}
+          underline="always"
+          sx={{
+            fontSize: "14px",
+            fontFamily: "Saira",
+            fontWeight: "500",
+            fontColor: "#0694fa",
+            "&:hover": {
+              color: "#00a6ff",
+            },
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           {match}
-        </a>
+        </Link>
       );
     });
 
