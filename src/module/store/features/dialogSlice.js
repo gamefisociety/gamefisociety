@@ -20,8 +20,8 @@ const initialState = {
   placeDrawer: 'right',
   cardDrawer: 'follow',
   relayDrawer: null,
-  followerDrawer: [],
-  followingDrawer: [],
+  followDrawer: [],
+  followType:"",
   chatPubKey: null,
 };
 
@@ -72,8 +72,11 @@ export const dialogSlice = createSlice({
       if (action.payload.relayDrawer) {
         state.relayDrawer = { ...action.payload.relayDrawer }
       }
-      if (action.payload.followerDrawer) {
-        state.followerDrawer = action.payload.followerDrawer.concat();
+      if (action.payload.followDrawer) {
+        state.followDrawer = action.payload.followDrawer.concat();
+      }
+      if(action.payload.followType){
+        state.followType = action.payload.followType;
       }
       if (action.payload.chatPubKey) {
         state.chatPubKey = action.payload.chatPubKey;

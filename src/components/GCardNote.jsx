@@ -206,18 +206,13 @@ const GCardNote = (props) => {
   useEffect(() => {
     fetch_relative_info();
     // console.log('renderContent111', note);
-    return () => { };
+    return () => {};
   }, [note]);
 
   const renderContent = (str) => {
     // console.log('renderContent111', str.trim());
     return (
-      <Box
-        className={"content"}
-        onClick={() => {
-          navigate("/notethread/" + note.id);
-        }}
-      >
+      <Box className={"content"}>
         {Helpers.highlightEverything(str.trim(), null, {
           showMentionedMessages: true,
         })}
@@ -245,13 +240,18 @@ const GCardNote = (props) => {
       let metaCxt = JSON.parse(meta.content);
       let linght = metaCxt.lud16 || metaCxt.lud06;
       if (linght) {
-        return <Box className="icon_pay" onClick={()=>{
-          if(loggedOut){
-            dispatch(setOpenLogin(true));
-            return;
-          }
-          setShowZapModal(true)
-        }}/>
+        return (
+          <Box
+            className="icon_pay"
+            onClick={() => {
+              if (loggedOut) {
+                dispatch(setOpenLogin(true));
+                return;
+              }
+              setShowZapModal(true);
+            }}
+          />
+        );
       }
       return;
     } else {
@@ -265,12 +265,12 @@ const GCardNote = (props) => {
         note={note}
         meta={meta.content}
         recipient={note.pubkey}
-        onClose={()=>{
+        onClose={() => {
           setShowZapModal(false);
         }}
       />
     );
-  }
+  };
 
   const username = () => {
     let tmp_user_name = "@anonymous";
@@ -299,7 +299,7 @@ const GCardNote = (props) => {
     // console.log('renderReplyLable', showName);
     return (
       <Stack direction={"row"} alignItems={"center"}>
-        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+        <Typography className="level2_lable_unhover" sx={{ ml: "12px" }}>
           {"reply to "}
         </Typography>
         <Typography
@@ -330,10 +330,10 @@ const GCardNote = (props) => {
         open={repostOpen.open}
         PaperProps={{
           style: {
-            width: '400px',
+            width: "400px",
             // height: '580px',
             // boxShadow: 'none',
-            backgroundColor: '#0F0F0F',
+            backgroundColor: "#0F0F0F",
           },
         }}
         elevation={1}
@@ -410,11 +410,17 @@ const GCardNote = (props) => {
   };
 
   const renderReportDlg = () => {
-    return <GReportDlg open={openReport.open} note={openReport.note} close={() => {
-      openReport.open = false;
-      setOpenReport({ ...openReport });
-    }} />;
-  }
+    return (
+      <GReportDlg
+        open={openReport.open}
+        note={openReport.note}
+        close={() => {
+          openReport.open = false;
+          setOpenReport({ ...openReport });
+        }}
+      />
+    );
+  };
 
   const renderMoreMenu = () => {
     return (
@@ -450,7 +456,9 @@ const GCardNote = (props) => {
                         setOpenMore(false);
                       }
                     }}
-                  >{"Report"}</MenuItem>
+                  >
+                    {"Report"}
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -461,14 +469,24 @@ const GCardNote = (props) => {
   };
 
   return (
-    <Card className={"card_note_bg"} elevation={0}>
-      <Box
-        className={"base_info"}
-        onClick={() => {
-          navigate("/userhome/" + note.pubkey);
-        }}
-      >
-        <Avatar className="avatar" alt={displayname()} src={pictrue} />
+    <Card
+      className={"card_note_bg"}
+      elevation={0}
+      onClick={(event) => {
+        event.stopPropagation();
+        navigate("/notethread/" + note.id);
+      }}
+    >
+      <Box className={"base_info"}>
+        <Avatar
+          className="avatar"
+          alt={displayname()}
+          src={pictrue}
+          onClick={(event) => {
+            event.stopPropagation();
+            navigate("/userhome/" + note.pubkey);
+          }}
+        />
         <Box className={"base_ext"}>
           <Stack sx={{ width: "100%" }} direction="row" alignItems={"center"}>
             <Typography
@@ -479,10 +497,21 @@ const GCardNote = (props) => {
                 overflow: "hidden",
               }}
               noWrap={true}
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate("/userhome/" + note.pubkey);
+              }}
             >
               {displayname()}
             </Typography>
-            <Typography className="level2_lable" sx={{ ml: "12px" }}>
+            <Typography
+              className="level2_lable"
+              sx={{ ml: "12px" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate("/userhome/" + note.pubkey);
+              }}
+            >
               {username()}
             </Typography>
             <Typography className="level2_lable_unhover" sx={{ ml: "12px" }}>
@@ -510,7 +539,7 @@ const GCardNote = (props) => {
         <Box
           className="icon_chat"
           onClick={() => {
-            if(loggedOut){
+            if (loggedOut) {
               dispatch(setOpenLogin(true));
               return;
             }
@@ -528,7 +557,7 @@ const GCardNote = (props) => {
         <Box
           className={isYourRepost() ? "icon_trans_1" : "icon_trans"}
           onClick={(event) => {
-            if(loggedOut){
+            if (loggedOut) {
               dispatch(setOpenLogin(true));
               return;
             }
@@ -544,7 +573,7 @@ const GCardNote = (props) => {
         <Box
           className={isYourReact() ? "icon_right_1" : "icon_right"}
           onClick={(event) => {
-            if(loggedOut){
+            if (loggedOut) {
               dispatch(setOpenLogin(true));
               return;
             }

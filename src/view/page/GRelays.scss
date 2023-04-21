@@ -56,7 +56,7 @@
     .inner_relays {
         margin-top: 10px;
         width: 100%;
-        min-height: calc( 100vh - 200px );
+        min-height: calc(100vh - 200px);
     }
 
     .tips_relay {
@@ -97,8 +97,9 @@
         cursor: pointer;
         white-space: pre-wrap;
         word-wrap: break-word;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline
         }
     }
 
@@ -109,18 +110,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-bottom: 100px;
 
-        .relay_detail_header {
-            margin-top: 24px;
+        .relay_detail_content {
             width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1;
-            border-color: #202122;
+            padding-bottom: 100px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
+
     }
 
     .icon_del {
@@ -130,13 +127,14 @@
         background-image: url(../../asset/image/logo/icon_delete.png);
         background-size: 100% 100%;
         border-radius: 4px;
+
         &:hover {
             background-image: url(../../asset/image/logo/icon_delete.png);
         }
     }
 
     .icon_more {
-        position:absolute;
+        position: absolute;
         right: 10px;
         cursor: pointer;
         width: 32px;
@@ -144,6 +142,7 @@
         background-image: url(../../asset/image/logo/icon-more.png);
         background-size: 100% 100%;
         border-radius: 4px;
+
         // background-color: #c3c3c3;
         // pointer-events: none;
         &:hover {
@@ -152,15 +151,11 @@
         }
     }
 
-    .button{
+    .button {
+
         // pointer-events: fill;
-        &:hover{
+        &:hover {
             background-color: #191A1B;
         }
     }
-    
-    .goback{
-        cursor: pointer;
-    }
 }
-

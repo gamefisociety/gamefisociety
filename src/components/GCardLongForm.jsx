@@ -236,18 +236,21 @@ const GCardLongForm = (props) => {
     setBaseInfo({ ...ret });
     fetch_relative_info();
     // console.log('renderContent111', note);
-    return () => { };
+    return () => {};
   }, [note]);
 
   const renderHead = () => {
     return (
-      <Box
-        className={"base_info"}
-        onClick={() => {
-          navigate("/userhome/" + note.pubkey);
-        }}
-      >
-        <Avatar className="avatar" alt={displayname()} src={pictrue} />
+      <Box className={"base_info"}>
+        <Avatar
+          className="avatar"
+          alt={displayname()}
+          src={pictrue}
+          onClick={(event) => {
+            event.stopPropagation();
+            navigate("/userhome/" + note.pubkey);
+          }}
+        />
         <Box className={"base_ext"}>
           <Stack sx={{ width: "100%" }} direction="row" alignItems={"center"}>
             <Typography
@@ -258,10 +261,21 @@ const GCardLongForm = (props) => {
                 overflow: "hidden",
               }}
               noWrap={true}
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate("/userhome/" + note.pubkey);
+              }}
             >
               {displayname()}
             </Typography>
-            <Typography className="level2_lable" sx={{ ml: "12px" }}>
+            <Typography
+              className="level2_lable"
+              sx={{ ml: "12px" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate("/userhome/" + note.pubkey);
+              }}
+            >
               {username()}
             </Typography>
             <Typography className="level2_lable_unhover" sx={{ ml: "12px" }}>
@@ -285,59 +299,68 @@ const GCardLongForm = (props) => {
         {renderMoreMenu()}
       </Box>
     );
-  }
+  };
 
   const renderTitle = () => {
-    if (!baseInfo || baseInfo.title === '') {
+    if (!baseInfo || baseInfo.title === "") {
       return null;
     }
     return (
       <Box className={"lable_frame"}>
-        <Typography className="lable_title" sx={{ ml: "12px" }} onClick={(event) => {
-          event.stopPropagation();
-          setExpand(true);
-        }}>
+        <Typography
+          className="lable_title"
+          sx={{ ml: "12px" }}
+          onClick={(event) => {
+            event.stopPropagation();
+            setExpand(true);
+          }}
+        >
           {baseInfo.title}
         </Typography>
       </Box>
     );
-  }
+  };
 
   const renderImage = () => {
-    if (!baseInfo || baseInfo.image === '') {
+    if (!baseInfo || baseInfo.image === "") {
       return null;
     }
     return (
       <Box
         component="img"
         src={baseInfo.image}
-        className={expand === false ? 'lable_image' : 'lable_image_full'}
+        className={expand === false ? "lable_image" : "lable_image_full"}
         sx={{ ml: "12px" }}
         onClick={(event) => {
           event.stopPropagation();
           setExpand(true);
-        }} />
+        }}
+      />
     );
-  }
+  };
 
   const renderSummary = () => {
-    if (!baseInfo || baseInfo.summary === '') {
+    if (!baseInfo || baseInfo.summary === "") {
       return null;
     }
     return (
       <Box className={"lable_frame"}>
-        <Typography className="lable_summary" sx={{ ml: "12px" }} >
+        <Typography className="lable_summary" sx={{ ml: "12px" }}>
           {baseInfo.summary}
         </Typography>
-        <Typography className="lable_detail" sx={{ ml: "12px" }} onClick={(event) => {
-          event.stopPropagation();
-          setExpand(true);
-        }}>
-          {'Expand'}
+        <Typography
+          className="lable_detail"
+          sx={{ ml: "12px" }}
+          onClick={(event) => {
+            event.stopPropagation();
+            setExpand(true);
+          }}
+        >
+          {"Expand"}
         </Typography>
       </Box>
     );
-  }
+  };
 
   const renderContent = (str) => {
     // console.log('renderContent111', str.trim());
@@ -351,11 +374,14 @@ const GCardLongForm = (props) => {
         {Helpers.highlightEverything(str.trim(), null, {
           showMentionedMessages: true,
         })}
-        <Typography className="lable_detail" onClick={(event) => {
-          event.stopPropagation();
-          setExpand(false);
-        }}>
-          {'Collapse'}
+        <Typography
+          className="lable_detail"
+          onClick={(event) => {
+            event.stopPropagation();
+            setExpand(false);
+          }}
+        >
+          {"Collapse"}
         </Typography>
       </Box>
     );
@@ -403,7 +429,7 @@ const GCardLongForm = (props) => {
         </Typography>
       </Box>
     );
-  }
+  };
 
   const renderReplyLable = () => {
     if (replyMeta === null) {
@@ -448,10 +474,10 @@ const GCardLongForm = (props) => {
         open={repostOpen.open}
         PaperProps={{
           style: {
-            width: '400px',
+            width: "400px",
             // height: '580px',
             // boxShadow: 'none',
-            backgroundColor: '#0F0F0F',
+            backgroundColor: "#0F0F0F",
           },
         }}
         elevation={1}
@@ -527,11 +553,17 @@ const GCardLongForm = (props) => {
   };
 
   const renderReportDlg = () => {
-    return <GReportDlg open={openReport.open} note={openReport.note} close={() => {
-      openReport.open = false;
-      setOpenReport({ ...openReport });
-    }} />;
-  }
+    return (
+      <GReportDlg
+        open={openReport.open}
+        note={openReport.note}
+        close={() => {
+          openReport.open = false;
+          setOpenReport({ ...openReport });
+        }}
+      />
+    );
+  };
 
   const renderMoreMenu = () => {
     return (
@@ -567,7 +599,9 @@ const GCardLongForm = (props) => {
                         console.log(note);
                       }
                     }}
-                  >{"Report"}</MenuItem>
+                  >
+                    {"Report"}
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

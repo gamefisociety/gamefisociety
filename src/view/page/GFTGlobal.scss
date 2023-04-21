@@ -51,11 +51,14 @@
         font-size: 16px;
         font-family: Saira;
         font-weight: 500;
-        // line-height: 29px;
         text-align: center;
         color: #646464;
-        padding-bottom: 64px;
+        padding-top: 20px;
+        padding-bottom: 60px;
         cursor: pointer;
+        &:hover {
+            filter: brightness(180%);
+        }
     }
 
     .op {

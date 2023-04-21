@@ -1,6 +1,13 @@
 .card_note_bg {
+    padding-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: transparent;
     box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+        background-color: #1a1a1a;
+    }
     .base_info {
         width: 100%;
         padding-left: 24px;
@@ -14,8 +21,9 @@
             width: 36px;
             height: 36px;
             cursor: pointer;
-            &:hover{
-                transform: scale(1.08);
+
+            &:hover {
+                transform: scale(1.04);
             }
         }
 
@@ -37,13 +45,13 @@
         display: block;
         // display: flex;
         flex-direction: column;
-        align-items:flex-start ;
+        align-items: flex-start;
         justify-content: flex-start;
         white-space: pre-wrap;
         overflow-wrap: anywhere;
-        cursor: pointer;
         white-space: pre-line;
         word-wrap: break-word;
+
         // word-break:break-all;
         // overflow-wrap:break-word;
         .inner_img {
@@ -53,11 +61,10 @@
             object-fit: contain;
         }
     }
-    
+
     .bottom {
         // width: calc( 100% - 48px);
         padding-left: 60px;
-        // padding-right: 24px;
         padding-top: 24px;
         padding-bottom: 24px;
         border-bottom: 1;
@@ -74,8 +81,10 @@
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            filter: brightness(180%);
         }
     }
 
@@ -85,8 +94,10 @@
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            filter: brightness(180%);
         }
     }
 
@@ -98,13 +109,15 @@
     }
 
     .level3_lable {
-        color: #00B7FF;
+        color: #0694fa;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            color: #00a6ff;
         }
     }
 
@@ -115,6 +128,7 @@
         background-image: url(../asset/image/logo/icon-more.png);
         background-size: 100% 100%;
         border-radius: 4px;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -126,6 +140,7 @@
         height: 28px;
         background-image: url(../asset/image/logo/icon_chat.png);
         background-size: 100% 100%;
+
         // pointer-events: none;
         &:hover {
             filter: brightness(180%);
@@ -139,6 +154,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_chain_push.png);
         background-size: 100% 100%;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -151,6 +167,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_pay.png);
         background-size: 100% 100%;
+
         // pointer-events: none;
         &:hover {
             filter: brightness(180%);
@@ -164,6 +181,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_trans.png);
         background-size: 100% 100%;
+
         // background-color: transparent;
         &:hover {
             filter: brightness(180%);
@@ -178,6 +196,7 @@
         filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_trans.png);
         background-size: 100% 100%;
+
         &:hover {
             background-image: url(../asset/image/logo/icon_trans.png);
         }
@@ -190,6 +209,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -203,6 +223,7 @@
         filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
+
         &:hover {
             background-image: url(../asset/image/logo/icon_praise.png);
         }
@@ -210,4 +231,3 @@
 
 
 }
-

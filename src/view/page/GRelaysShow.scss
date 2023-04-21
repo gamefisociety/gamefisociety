@@ -8,40 +8,88 @@
     padding-right: 8px;
     background-color: transparent;
 
-    .inner_relays {
+    .header {
         width: 100%;
-    }
-
-    .list_bg {
-        width: 100%;
-        height: auto;
-        padding-bottom: 64px;
-        box-sizing: border-box;
-    }
-
-    .relay_item {
-        width: 100%;
-        // height: 36px;
+        margin-top: 10px;
+        // padding-left: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-        cursor: pointer;
-        // background-color: #191A1B;
+
+        .goback {
+            width: 100px;
+            height: 38px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            border-radius: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #3c3d3d;
+            }
+        }
+
+        .icon_back {
+            width: 28px;
+            height: 28px;
+            background-image: url(../../asset/image/social/icon_back_white.png);
+            background-size: 100% 100%;
+
+            &:hover {
+                filter: brightness(180%);
+            }
+        }
+
+        .text_back {
+            color: #FFFFFF;
+            font-size: 18px;
+            font-family: Saira;
+            font-weight: 500;
+        }
+    }
+
+    .inner_relays {
+        margin-top: 10px;
+        width: 100%;
+        min-height: calc( 100vh - 200px );
     }
 
     .tips_relay {
         width: 100%;
         margin-top: 12px;
-        margin-left: 24px;
+        padding-left: 12px;
         font-size: 20px;
         font-family: Saira;
         font-weight: 500;
         color: #FFFFFF;
     }
 
+    .list_bg {
+        width: 100%;
+        height: auto;
+        padding-bottom: 100px;
+        box-sizing: border-box;
+    }
+
+    .relay_item {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
     .lable_relay {
-        width: 60%;
+        // width: 55%;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
@@ -50,25 +98,27 @@
         word-wrap: break-word;
     }
 
-    .circle_button{
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
-        margin-left: 6px;
+    .button_add {
+        position: absolute;
+        right: 20px;
+        width: 87px;
+        height: 32px;
+        font-family: Saira;
+        font-size: 12px;
+        background-color: #1C6CF9;
+
+        &:hover {
+            background-color: #368AF9,
+        }
     }
 
-    .add_button{
-        width: 32px;
-        height: 24px;
-        background-color: #363637;
-        
+    
+
+    .button{
+        // pointer-events: fill;
         &:hover{
             background-color: #191A1B;
         }
-    }
-    
-    .goback{
-        cursor: pointer;
     }
 }
 

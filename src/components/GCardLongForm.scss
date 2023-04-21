@@ -1,5 +1,13 @@
 .card_longform_bg {
+    padding-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #1a1a1a;
+    }
 
     .base_info {
         width: 100%;
@@ -14,8 +22,9 @@
             width: 36px;
             height: 36px;
             cursor: pointer;
-            &:hover{
-                transform: scale(1.08);
+
+            &:hover {
+                transform: scale(1.04);
             }
         }
 
@@ -27,7 +36,7 @@
             justify-content: center;
         }
     }
-    
+
     .content {
         width: 100%; //calc( 100% - 120px);
         padding-left: 60px;
@@ -37,9 +46,10 @@
         height: auto;
         display: flex;
         flex-direction: column;
-        align-items:flex-start ;
+        align-items: flex-start;
         justify-content: flex-start;
         cursor: pointer;
+
         .inner_img {
             height: 400px;
             margin-top: 4px;
@@ -66,8 +76,9 @@
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
         }
     }
 
@@ -75,10 +86,10 @@
         width: 100%;
         margin-top: 12px;
         // padding-left: 12px;
-        // padding-right: 12px;
+        padding-right: 22px;
         display: flex;
         flex-direction: row;
-        align-items: center ;
+        align-items: center;
         justify-content: center;
     }
 
@@ -106,20 +117,23 @@
 
     .lable_detail {
         background-color: rgb(53, 53, 53);
-        color: #12d3ed;
+        color: #0694fa;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
-        // text-decoration:underline;
         margin-top: 12px;
-        padding-left: 4px;
-        padding-right: 4px;
+        padding-left: 6px;
+        padding-right: 6px;
         border-radius: 4px;
+
+        &:hover {
+            color: #00a6ff;
+        }
     }
-    
+
     .bottom {
-        width: calc( 100% - 48px);
+        width: calc(100% - 48px);
         padding-left: 60px;
         // padding-right: 24px;
         padding-top: 24px;
@@ -138,8 +152,9 @@
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline
         }
     }
 
@@ -149,8 +164,10 @@
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            filter: brightness(180%);
         }
     }
 
@@ -162,13 +179,16 @@
     }
 
     .level3_lable {
-        color: #00B7FF;
+        color: #0694fa;
         font-size: 14px;
         font-family: Saira;
         font-weight: 500;
         cursor: pointer;
+
         &:hover {
-            text-decoration:underline
+            text-decoration: underline;
+            color: #00a6ff;
+
         }
     }
 
@@ -179,6 +199,7 @@
         background-image: url(../asset/image/logo/icon-more.png);
         background-size: 100% 100%;
         border-radius: 4px;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -190,6 +211,7 @@
         height: 28px;
         background-image: url(../asset/image/logo/icon_chat.png);
         background-size: 100% 100%;
+
         // pointer-events: none;
         &:hover {
             filter: brightness(180%);
@@ -203,6 +225,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_chain_push.png);
         background-size: 100% 100%;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -215,6 +238,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_pay.png);
         background-size: 100% 100%;
+
         // pointer-events: none;
         &:hover {
             filter: brightness(180%);
@@ -228,6 +252,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_trans.png);
         background-size: 100% 100%;
+
         // background-color: transparent;
         &:hover {
             filter: brightness(180%);
@@ -242,6 +267,7 @@
         filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_trans.png);
         background-size: 100% 100%;
+
         &:hover {
             background-image: url(../asset/image/logo/icon_trans.png);
         }
@@ -254,6 +280,7 @@
         margin-left: 26px;
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
+
         &:hover {
             filter: brightness(180%);
         }
@@ -267,6 +294,7 @@
         filter: brightness(400%);
         background-image: url(../asset/image/logo/icon_praise.png);
         background-size: 100% 100%;
+
         &:hover {
             background-image: url(../asset/image/logo/icon_praise.png);
         }
@@ -274,4 +302,3 @@
 
 
 }
-
