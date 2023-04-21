@@ -383,32 +383,17 @@ const GRelays = () => {
   const renderNewRelay = () => {
     return (
       <Box className={"relay_detail_bg"}>
-        <Box className={"relay_detail_header"}>
+        <Box className={"header"}>
           <Box
-            className={"goback"}
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
+            className="goback"
             onClick={() => {
               setMode("list");
             }}
           >
-            <img src={icon_back_white} width="38px" alt="icon_back_white" />
-            <Typography
-              sx={{
-                marginLeft: "5px",
-                fontSize: "18px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-            >
-              {"Relays"}
-            </Typography>
+            <Box className="icon_back" />
+            <Typography className="text_back">{"Relays"}</Typography>
           </Box>
+          <Box sx={{ flexGrow: 1 }}></Box>
         </Box>
         <Box
           sx={{
@@ -421,6 +406,7 @@ const GRelays = () => {
             variant="contained"
             sx={{
               marginBottom: "10px",
+              marginTop: "12px",
               width: "100%",
               height: "48px",
               fontSize: "40px",
@@ -593,321 +579,308 @@ const GRelays = () => {
     }
     return (
       <Box className={"relay_detail_bg"}>
-        <Box className={"relay_detail_header"}>
+        <Box className={"header"}>
           <Box
-            className={"goback"}
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
+            className="goback"
             onClick={() => {
               setMode("list");
             }}
           >
-            <img src={icon_back_white} width="38px" alt="icon_back_white" />
-            <Typography
-              sx={{
-                marginLeft: "5px",
-                fontSize: "18px",
-                fontFamily: "Saira",
-                fontWeight: "500",
-                color: "#FFFFFF",
-              }}
-            >
-              {"Relays"}
-            </Typography>
+            <Box className="icon_back" />
+            <Typography className="text_back">{"Relays"}</Typography>
           </Box>
+          <Box sx={{ flexGrow: 1 }}></Box>
         </Box>
-        <Typography
-          sx={{
-            marginTop: "34px",
-            width: "100%",
-            fontSize: "14px",
-            fontFamily: "Saira",
-            fontWeight: "500",
-            textAlign: "left",
-            color: "#919191",
-          }}
-        >
-          {"Administrator"}
-        </Typography>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <Box className="relay_detail_content">
+          <Typography
+            sx={{
+              marginTop: "12px",
+              width: "100%",
+              fontSize: "14px",
+              fontFamily: "Saira",
+              fontWeight: "500",
+              textAlign: "left",
+              color: "#919191",
+            }}
+          >
+            {"Administrator"}
+          </Typography>
           <Box
             sx={{
               width: "100%",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "flex-start",
+              justifyContent: "space-between",
             }}
           >
-            <Avatar
-              sx={{ width: "48px", height: "48px" }}
-              edge="end"
-              alt="GameFi Society"
-              // src={}
-            />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Avatar
+                sx={{ width: "48px", height: "48px" }}
+                edge="end"
+                alt="GameFi Society"
+                // src={}
+              />
+              <Typography
+                sx={{
+                  marginLeft: "16px",
+                  fontSize: "14px",
+                  fontFamily: "Saira",
+                  fontWeight: "500",
+                  color: "#FFFFFF",
+                }}
+              >
+                {"Administrator Name"}
+              </Typography>
+            </Box>
+            <Button
+              className="button"
+              variant="contained"
+              sx={{
+                width: "36px",
+                backgroundColor: "transparent",
+              }}
+              onClick={() => {}}
+            >
+              <img src={icon_detail} width="36px" alt="icon_detail" />
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              marginTop: "20px",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
             <Typography
               sx={{
-                marginLeft: "16px",
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Repeater"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
                 fontSize: "14px",
                 fontFamily: "Saira",
                 fontWeight: "500",
                 color: "#FFFFFF",
               }}
-            >
-              {"Administrator Name"}
-            </Typography>
+              value={"Repeater Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
           </Box>
-          <Button
-            className="button"
-            variant="contained"
+          <Box
             sx={{
-              width: "36px",
-              backgroundColor: "transparent",
-            }}
-            onClick={() => {}}
-          >
-            <img src={icon_detail} width="36px" alt="icon_detail" />
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
+              marginTop: "20px",
               width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            {"Repeater"}
-          </Typography>
-          <TextField
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Describe"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              value={"Describe Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
+          </Box>
+          <Box
             sx={{
+              marginTop: "20px",
               width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            value={"Repeater Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
-            }}
-          >
-            {"Describe"}
-          </Typography>
-          <TextField
-            sx={{
-              width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            value={"Describe Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            {"Contact Person"}
-          </Typography>
-          <TextField
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Contact Person"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              value={"Contact Person Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
+          </Box>
+          <Box
             sx={{
+              marginTop: "20px",
               width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            value={"Contact Person Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
-            }}
-          >
-            {"Software"}
-          </Typography>
-          <TextField
-            sx={{
-              width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            value={"Software Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            {"Version"}
-          </Typography>
-          <TextField
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Software"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              value={"Software Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
+          </Box>
+          <Box
             sx={{
+              marginTop: "20px",
               width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
-            }}
-            value={"Version Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
-        </Box>
-        <Box
-          sx={{
-            marginTop: "20px",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#919191",
-              textAlign: "left",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            {"Supported NIPs"}
-          </Typography>
-          <TextField
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Version"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              value={"Version Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
+          </Box>
+          <Box
             sx={{
+              marginTop: "20px",
               width: "100%",
-              borderRadius: "5px",
-              borderColor: "#323232",
-              backgroundColor: "#202122",
-              fontSize: "14px",
-              fontFamily: "Saira",
-              fontWeight: "500",
-              color: "#FFFFFF",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
-            value={"Supported NIPs Content"}
-            variant="outlined"
-            onChange={(event) => {}}
-          />
+          >
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#919191",
+                textAlign: "left",
+              }}
+            >
+              {"Supported NIPs"}
+            </Typography>
+            <TextField
+              sx={{
+                width: "100%",
+                borderRadius: "5px",
+                borderColor: "#323232",
+                backgroundColor: "#202122",
+                fontSize: "14px",
+                fontFamily: "Saira",
+                fontWeight: "500",
+                color: "#FFFFFF",
+              }}
+              value={"Supported NIPs Content"}
+              variant="outlined"
+              onChange={(event) => {}}
+            />
+          </Box>
         </Box>
       </Box>
     );
@@ -1013,7 +986,7 @@ const GRelays = () => {
     }
     return null;
   };
-  const renderHeader = () => {
+  const renderBack = () => {
     return (
       <Box className={"header"}>
         <Box
@@ -1037,7 +1010,7 @@ const GRelays = () => {
   };
   return (
     <Box className={"relay_bg"}>
-      {renderHeader()}
+      {mode === "list" && renderBack()}
       {renderContent()}
       {renderDlg()}
     </Box>
