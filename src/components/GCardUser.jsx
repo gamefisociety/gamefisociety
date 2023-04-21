@@ -37,9 +37,9 @@ const GCardUser = (props) => {
   const dispatch = useDispatch();
   //
   const [metadata, SetMetadata] = useState(null);
-  const [contact, setContact] = useState(null);
+  const [followings, setFollowings] = useState(null);
+  const [followers, setFollowers] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [ownFollowings, setOwnFollowings] = useState(null);
   const MetaPro = useMetadataPro();
   const followPro = useFollowPro();
   //
@@ -63,23 +63,29 @@ const GCardUser = (props) => {
             tmp_contactlist.created_at < item.created_at)
         ) {
           tmp_contactlist = { ...item };
-          setContact({ ...item });
+          setFollowings({ ...item });
         }
       });
     });
   };
   //
-  const fetchFollowingCount = (pub) => {
-    const filterFollowingPro = followPro.getFollowings(pub);
-    let userFollowing = BuildCount("userinfo", [filterFollowingPro]);
-    nostrWorker.fetch_user_info(userFollowing, null, (data, client) => {
-      console.log("data count", data);
-      data.map((item) => {
-        // if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
-        //   setContact({ ...item });
-        // }
-      });
+  const fetchFollowers = (pub) => {
+    let filterFollowing = followPro.getFollowings(pub);
+    let subFollowing = BuildSub("followings_metadata", [filterFollowing]);
+    nostrWorker.fetch_user_profile(subFollowing, null, (datas, client) => {
+      console.log("followings_metadata", datas);
+      setFollowers(datas.concat());
     });
+    // const filterFollowingPro = followPro.getFollowings(pub);
+    // let userFollowing = BuildCount("userinfo", [filterFollowingPro]);
+    // nostrWorker.fetch_user_info(userFollowing, null, (data, client) => {
+    //   console.log("data count", data);
+    //   data.map((item) => {
+    //     // if (item.kind === EventKind.ContactList && (tmp_contactlist === null || tmp_contactlist.created_at < item.created_at)) {
+    //     //   setContact({ ...item });
+    //     // }
+    //   });
+    // });
   };
 
   const addFollow = async (pubkey) => {
@@ -126,7 +132,7 @@ const GCardUser = (props) => {
 
   useEffect(() => {
     fetchUserInfo(pubkey);
-    // fetchFollowingCount(pubkey);
+    fetchFollowers(pubkey);
     return () => {};
   }, [props]);
 
@@ -187,21 +193,24 @@ const GCardUser = (props) => {
     return "no website";
   };
 
-  const getFollowers = () => {
-    if (contact) {
-      return contact.tags.length;
+  const getFollowings = () => {
+    if (followings) {
+      return followings.tags.length;
     }
     return 0;
   };
 
-  const getFollowings = () => {
+  const getFollowers = () => {
+    if (followers) {
+      return followers.length;
+    }
     return 0;
   };
 
   const getRelayNum = () => {
-    if (contact && contact.content && contact.content !== "") {
+    if (followings && followings.content && followings.content !== "") {
       try {
-        let tmp_relays = JSON.parse(contact.content);
+        let tmp_relays = JSON.parse(followings.content);
         let num = 0;
         for (let key in tmp_relays) {
           num = num + 1;
@@ -215,7 +224,7 @@ const GCardUser = (props) => {
         }
         return num;
       } catch (e) {
-        console.log("parse user relay num error!", contact.content);
+        console.log("parse user relay num error!", followings.content);
         return 0;
       }
     }
@@ -230,7 +239,6 @@ const GCardUser = (props) => {
     return follows.includes(key);
   };
 
-  //#1F1F1F
   return (
     <Card className="carduser-bg">
       <CardContent
@@ -466,44 +474,42 @@ const GCardUser = (props) => {
               borderColor: "#191A1B",
             }}
           >
-            <Box className={"labelBox"}>
-              <Typography
-                className={"lable_1"}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (contact && Array.isArray(contact.tags)) {
-                    dispatch(
-                      setDrawer({
-                        isDrawer: true,
-                        placeDrawer: "right",
-                        cardDrawer: "follower-show",
-                        followerDrawer: contact.tags.concat(),
-                      })
-                    );
-                  }
-                }}
-              >
-                {getFollowers()}
-              </Typography>
-              <Typography className={"lable_2"}>{"Following"}</Typography>
-            </Box>
-            <Box className={"labelBox"}>
-              <Typography
-                className={"lable_1"}
-                onClick={(event) => {
-                  event.stopPropagation();
+            <Box
+              className={"labelBox"}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (followings && Array.isArray(followings.tags)) {
                   dispatch(
                     setDrawer({
                       isDrawer: true,
                       placeDrawer: "right",
-                      cardDrawer: "follower-show",
-                      followerDrawer: ownFollowings.concat(),
+                      cardDrawer: "society-show",
+                      followDrawer: followings.tags.concat(),
+                      followType: "following",
                     })
                   );
-                }}
-              >
-                {getFollowings()}
-              </Typography>
+                }
+              }}
+            >
+              <Typography className={"lable_1"}>{getFollowings()}</Typography>
+              <Typography className={"lable_2"}>{"Following"}</Typography>
+            </Box>
+            <Box
+              className={"labelBox"}
+              onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  setDrawer({
+                    isDrawer: true,
+                    placeDrawer: "right",
+                    cardDrawer: "society-show",
+                    followDrawer: followers.concat(),
+                    followType: "follower",
+                  })
+                );
+              }}
+            >
+              <Typography className={"lable_1"}>{getFollowers()}</Typography>
               <Typography className={"lable_2"}>{"Followers"}</Typography>
             </Box>
             <Box className={"labelBox"}>
@@ -511,9 +517,9 @@ const GCardUser = (props) => {
                 className={"lable_1"}
                 onClick={(event) => {
                   event.stopPropagation();
-                  if (contact && contact.content && contact.content !== "") {
+                  if (followings && followings.content && followings.content !== "") {
                     try {
-                      let tmp_relays = JSON.parse(contact.content);
+                      let tmp_relays = JSON.parse(followings.content);
                       dispatch(
                         setDrawer({
                           isDrawer: true,
@@ -525,7 +531,7 @@ const GCardUser = (props) => {
                     } catch (e) {
                       console.log(
                         "parse user relay num error!",
-                        contact.content
+                        followings.content
                       );
                     }
                   }

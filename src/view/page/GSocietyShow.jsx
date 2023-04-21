@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./GSocietyShow.scss";
-
+import { setDrawer } from "module/store/features/dialogSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 
@@ -9,11 +9,8 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { useFollowPro } from "nostr/protocal/FollowPro";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
 import { System } from "nostr/NostrSystem";
@@ -25,17 +22,89 @@ import UserDataCache from 'db/UserDataCache';
 
 const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
 
+const GFollowItem = (props) => {
+  const UserCache = UserDataCache();
+  const following = props.following;
+  const pubkey = props.pubkey;
+  const info = UserCache.getMetadata(pubkey);
+
+  const avatar = () => {
+    let pictrue = "";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      pictrue = infoCxt.picture;
+    }
+    return pictrue;
+  };
+
+  const displayname = () => {
+    let tmp_display_name = "N";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      tmp_display_name = infoCxt.display_name;
+    }
+    return tmp_display_name;
+  };
+
+  const about = () => {
+    let t_about = "no about";
+    if (info && info.content !== "") {
+      let infoCxt = JSON.parse(info.content);
+      if (infoCxt.about.length > 0) {
+        t_about = infoCxt.about;
+      }
+    }
+    return t_about;
+  };
+
+  const renderButton = () => {
+    return (
+      <Button
+        variant="contained"
+        className={following === true ? "button_unfollow" : "button_follow"}
+        onClick={() => {
+          if (following === true) {
+            props.removeFollow(pubkey);
+          } else {
+            props.addFollow(pubkey);
+          }
+        }}
+      >
+        {following === true ? "unfollow" : "follow"}
+      </Button>
+    );
+  };
+
+  const renderItem = () => {
+    console.log("renderItem", info);
+    // if (!info) return null;
+    return (
+      <Box className={"follow_item"}>
+        <Avatar
+          className={"avatar"}
+          alt={displayname()}
+          src={avatar()}
+          onClick={() => {
+            props.navCallback(pubkey);
+          }}
+        />
+        <Box className="text_item">
+          <Typography className={"txt"}>{displayname()}</Typography>
+          <Typography className={"txt_about"}>{about()}</Typography>
+        </Box>
+        {renderButton()}
+      </Box>
+    );
+  };
+  return renderItem();
+};
+
 const GSocietyShow = (props) => {
   const { callback } = props;
-
-  const { followerDrawer } = useSelector((s) => s.dialog);
-
+  const { followDrawer, followType } = useSelector((s) => s.dialog);
   const nostrWorker = useWorker(createNostrWorker);
-  const UserCache = UserDataCache();
-
   const navigate = useNavigate();
   const followPro = useFollowPro();
-
   const MetadataPro = useMetadataPro();
   const { publicKey } = useSelector((s) => s.login);
   const { follows } = useSelector((s) => s.profile);
@@ -96,7 +165,7 @@ const GSocietyShow = (props) => {
     });
   };
 
-  const isFollows = (pubkey) => {
+  const isFollowing = (pubkey) => {
     for (let i = 0; i < follows.length; i++) {
       if (pubkey === follows[i]) {
         return true;
@@ -106,10 +175,10 @@ const GSocietyShow = (props) => {
   };
 
   useEffect(() => {
-    console.log('GSocietyShow', followerDrawer);
-    if (followerDrawer.length !== 0) {
+    console.log('GSocietyShow', followDrawer);
+    if (followDrawer.length !== 0) {
       let pubkeys = [];
-      followerDrawer.map((item) => {
+      followDrawer.map((item) => {
         if (item[0] && item[0] === 'p' && item[1]) {
           pubkeys.push(item[1]);
         }
@@ -117,70 +186,89 @@ const GSocietyShow = (props) => {
       fetchAllMeta(pubkeys);
     }
     return () => { };
-  }, [followerDrawer]);
+  }, [followDrawer]);
 
-  const renderFollowing = () => {
-    if (followerDrawer.length === 0) {
+  const getFollowPubKey = (index) => {
+    if(followDrawer.length > 0 && index < followDrawer.length){
+      if(followType === "following"){
+        return followDrawer[index][1];
+      }else if(followType === "follower"){
+        return followDrawer[index].pubkey;
+      }
+    }
+    return "";
+  }
+
+  const renderFollows = () => {
+    if (followDrawer.length === 0) {
       return null;
     }
     return (
-      <List className="list_bg">
-        {followerDrawer.map((item, index) => {
-          let tmp_pubkey = item[1];
-          const info = UserCache.getMetadata(tmp_pubkey);
-          if (!info) {
-            return null;
-          }
-          let cxt = JSON.parse(info.content);
-          let follow_flag = isFollows(tmp_pubkey);
-          return (
-            <ListItem
-              sx={{ my: "2px" }}
-              key={"following-list-" + index}
-              secondaryAction={
-                <Button
-                  variant="contained"
-                  sx={{ width: "80px", height: "24px", fontSize: "12px", backgroundColor: "#202122" }}
-                  onClick={() => {
-                    // removeFollow(tmp_pubkey);
-                  }}
-                >
-                  {follow_flag === true ? "Unfollow" : 'Follow'}
-                </Button>
-              }
-              disablePadding
+      <Box className={"inner_list"}>
+        <AutoSizer>
+          {({ height, width }) => (
+            <FixedSizeList
+              height={height}
+              width={width}
+              itemSize={60}
+              itemCount={followDrawer.length}
+              itemData={followDrawer}
+              overscanRowsCount={2}
             >
-              <ListItemButton sx={{ my: "2px", alignItems: "start" }}>
-                <ListItemAvatar
-                  onClick={() => {
-                    navigate("/userhome/" + tmp_pubkey);
-                    if (callback) {
-                      callback();
-                    }
-                  }}
-                >
-                  <Avatar
-                    alt={"GameFi Society"}
-                    src={cxt.picture ? cxt.picture : ""}
+              {({ data, index, style }) => (
+                <Box style={style}>
+                  <GFollowItem
+                    pubkey={getFollowPubKey(index)}
+                    following={isFollowing(getFollowPubKey(index))}
+                    removeFollow={(pubkey) => {
+                      removeFollow(pubkey);
+                    }}
+                    addFollow={(pubkey) => {
+                      addFollow(pubkey);
+                    }}
+                    navCallback={(pubkey) => {
+                      navigate("/userhome/" + pubkey);
+                      if (callback) {
+                        callback();
+                      }
+                    }}
                   />
-                </ListItemAvatar>
-                <div className="gsociety_text_item">
-                  <span className="txt">{cxt.name} </span>
-                  <span className="txt_about">{cxt.about} </span>
-                </div>
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
+                </Box>
+              )}
+            </FixedSizeList>
+          )}
+        </AutoSizer>
+      </Box>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <Box className={"header"}>
+        <Box
+          className="goback"
+          onClick={() => {
+            dispatch(
+              setDrawer({
+                isDrawer: false,
+                placeDrawer: "right",
+                cardDrawer: "society-show",
+              })
+            );
+          }}
+        >
+          <Box className="icon_back" />
+          <Typography className="text_back">{"Back"}</Typography>
+        </Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
+      </Box>
     );
   };
 
   return (
     <Box className={'society_show_bg'}>
-      <Box className={'header_bg'}>
-      </Box>
-      {renderFollowing()}
+      {renderHeader()}
+      {renderFollows()}
     </Box>
   );
 };

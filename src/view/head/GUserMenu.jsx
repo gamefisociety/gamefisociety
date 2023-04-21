@@ -57,7 +57,7 @@ const GUserMenu = () => {
       setDrawer({
         isDrawer: true,
         placeDrawer: "right",
-        cardDrawer: "follow",
+        cardDrawer: "society",
       })
     );
     handleMenuClose();

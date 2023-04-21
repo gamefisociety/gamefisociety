@@ -339,7 +339,7 @@ const GSociety = (props) => {
               setDrawer({
                 isDrawer: false,
                 placeDrawer: "right",
-                cardDrawer: "follow",
+                cardDrawer: "society",
               })
             );
           }}
