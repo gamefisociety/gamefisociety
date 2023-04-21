@@ -512,33 +512,35 @@ const GCardUser = (props) => {
               <Typography className={"lable_1"}>{getFollowers()}</Typography>
               <Typography className={"lable_2"}>{"Followers"}</Typography>
             </Box>
-            <Box className={"labelBox"}>
-              <Typography
-                className={"lable_1"}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (followings && followings.content && followings.content !== "") {
-                    try {
-                      let tmp_relays = JSON.parse(followings.content);
-                      dispatch(
-                        setDrawer({
-                          isDrawer: true,
-                          placeDrawer: "right",
-                          cardDrawer: "relay-show",
-                          relayDrawer: { ...tmp_relays },
-                        })
-                      );
-                    } catch (e) {
-                      console.log(
-                        "parse user relay num error!",
-                        followings.content
-                      );
-                    }
+            <Box
+              className={"labelBox"}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (
+                  followings &&
+                  followings.content &&
+                  followings.content !== ""
+                ) {
+                  try {
+                    let tmp_relays = JSON.parse(followings.content);
+                    dispatch(
+                      setDrawer({
+                        isDrawer: true,
+                        placeDrawer: "right",
+                        cardDrawer: "relay-show",
+                        relayDrawer: { ...tmp_relays },
+                      })
+                    );
+                  } catch (e) {
+                    console.log(
+                      "parse user relay num error!",
+                      followings.content
+                    );
                   }
-                }}
-              >
-                {getRelayNum()}
-              </Typography>
+                }
+              }}
+            >
+              <Typography className={"lable_1"}>{getRelayNum()}</Typography>
               <Typography className={"lable_2"}>{"Relays"}</Typography>
             </Box>
           </Box>
