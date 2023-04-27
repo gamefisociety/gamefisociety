@@ -19,7 +19,7 @@ const GMetaObjTest = forwardRef((props, ref) => {
 
                 let flagShader = getFlatShader(scene);
 
-                SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene/", "scene01.glb", scene, (meshes) => {
+                SceneLoader.ImportMesh("", "https://storage.fleek.zone/a25570b2-75f1-4598-9285-01ac6c424f4b-bucket/scene02/", "scene02.babylon", scene, (meshes) => {
                     console.log('SceneLoader.ImportMesh', meshes);
                     meshes.map((item) => {
                         // console.log('SceneLoader.ImportMesh', item.name);
