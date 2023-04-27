@@ -1,18 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./GCardNoteRepost.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
+import { createWorkerFactory, useWorker } from "@shopify/react-web-worker";
 import { useNavigate } from "react-router-dom";
 import GCardNote from "components/GCardNote";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import { useMetadataPro } from "nostr/protocal/MetadataPro";
-import { BuildSub } from "nostr/NostrUtils"
+import { BuildSub } from "nostr/NostrUtils";
 import { EventKind } from "nostr/def";
-import UserDataCache from 'db/UserDataCache';
+import UserDataCache from "db/UserDataCache";
 
-const createNostrWorker = createWorkerFactory(() => import('worker/nostrRequest'));
+const createNostrWorker = createWorkerFactory(() =>
+  import("worker/nostrRequest")
+);
 
 const GCardNoteRepost = (props) => {
   const nostrWorker = useWorker(createNostrWorker);
@@ -26,12 +28,12 @@ const GCardNoteRepost = (props) => {
 
   const fetch_relative_info = (target) => {
     try {
-      if (target.content && target.content !== '') {
+      if (target.content && target.content !== "") {
         let t_note = JSON.parse(target.content);
         setRelaNote({ ...t_note });
       }
     } catch (e) {
-      console.log('err fetch_relative_info', target);
+      console.log("err fetch_relative_info", target);
     }
     let metaKeys = [];
     let metaInfo = UserCache.getMetadata(target.pubkey);
@@ -43,7 +45,7 @@ const GCardNoteRepost = (props) => {
     let filter = [];
     if (metaKeys.length > 0) {
       let filterMeta = MetaPro.get(metaKeys);
-      filter.push(filterMeta)
+      filter.push(filterMeta);
     }
     if (filter.length === 0) {
       return;
@@ -67,41 +69,43 @@ const GCardNoteRepost = (props) => {
           //
         }
       });
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    console.log('GCardNoteRepost', note);
+    console.log("GCardNoteRepost", note);
     fetch_relative_info(note);
-    return () => { };
+    return () => {};
   }, [note]);
 
   const username = () => {
-    let tmp_user_name = '@anonymous';
-    if (meta && meta.content !== '') {
+    let tmp_user_name = "@anonymous";
+    if (meta && meta.content !== "") {
       let metaCxt = JSON.parse(meta.content);
-      tmp_user_name = '@' + metaCxt.name;
+      tmp_user_name = "@" + metaCxt.name;
     } else {
       if (note && note.pubkey) {
-        tmp_user_name = "@Nostr#" + note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
+        tmp_user_name =
+          "@Nostr#" +
+          note.pubkey.substring(note.pubkey.length - 4, note.pubkey.length);
       }
     }
     return tmp_user_name;
   };
 
   return (
-    <Card className={'card_note_repost_bg'} elevation={0}>
-      <Box className={'repost_header'}
-        onClick={() => {
-          navigate("/userhome/" + meta.pubkey);
-        }}>
+    <Card className={"card_note_repost_bg"} elevation={0}>
+      <Box className={"repost_header"}>
         <Box className="icon_trans" />
-        <Typography className="level2_lable" sx={{ ml: "12px" }}>
+        <Typography
+          className="level2_label"
+          onClick={() => {
+            navigate("/userhome/" + meta.pubkey);
+          }}
+        >
           {username()}
         </Typography>
-        <Typography className="level2_lable" sx={{ ml: "12px" }}>
-          {'Reposted'}
-        </Typography>
+        <Typography className="level2_label_unhover">{"Reposted"}</Typography>
         {/* <Box className={'base_ext'}>
           <Stack direction='row'>
             <Typography className="level1_lable"
