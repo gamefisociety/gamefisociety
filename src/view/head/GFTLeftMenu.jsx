@@ -82,10 +82,10 @@ const mapData = [
         txt: 'LongForm',
         img: ic_sub,
     },
-    // {
-    //     txt: 'ARTICLE',
-    //     img: ic_create
-    // },
+    {
+        txt: 'ARTICLE',
+        img: ic_create
+    },
     // {
     //     txt: 'DIVIDER',
     //     img: ''
