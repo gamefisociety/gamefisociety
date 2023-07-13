@@ -79,7 +79,7 @@ const GFollowItem = (props) => {
     let t_about = "no about";
     if (info && info.content !== "") {
       let infoCxt = JSON.parse(info.content);
-      if (infoCxt.about.length > 0) {
+      if (infoCxt.about && infoCxt.about.length > 0) {
         t_about = infoCxt.about;
       }
     }
